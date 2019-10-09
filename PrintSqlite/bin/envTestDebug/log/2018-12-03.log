@@ -1,0 +1,3153 @@
+10:39:20：Not Found
+10:39:20：开始轮询(2018/12/3 10:39:20)：1
+10:39:20：开始定时打印(2018/12/3 10:39:20)：2
+10:39:20：开始请求出品数据
+10:39:20：成功获得出品数据，耗时 17.9525 毫秒
+10:39:20：Not Found
+10:39:25：开始请求出品数据
+10:39:25：成功获得出品数据，耗时 13.9236 毫秒
+10:39:25：Not Found
+10:39:35：Not Found
+10:39:35：开始轮询(2018/12/3 10:39:35)：1
+10:39:35：开始定时打印(2018/12/3 10:39:35)：2
+10:39:35：开始请求出品数据
+10:39:35：成功获得出品数据，耗时 10.9714 毫秒
+10:39:35：Not Found
+10:39:40：开始请求出品数据
+10:39:40：成功获得出品数据，耗时 14.8993 毫秒
+10:39:40：Not Found
+10:39:45：开始请求出品数据
+10:39:45：成功获得出品数据，耗时 2.0197 毫秒
+10:39:45：Not Found
+10:39:50：开始请求出品数据
+10:39:50：成功获得出品数据，耗时 2.9119 毫秒
+10:39:50：Not Found
+10:39:55：开始请求出品数据
+10:39:55：成功获得出品数据，耗时 11.9927 毫秒
+10:39:55：Not Found
+10:40:00：开始请求出品数据
+10:40:00：成功获得出品数据，耗时 1.9143 毫秒
+10:40:00：Not Found
+10:40:09：开始轮询(2018/12/3 10:40:09)：1
+10:40:09：开始定时打印(2018/12/3 10:40:09)：2
+10:40:09：开始请求出品数据
+10:40:09：成功获得出品数据，耗时 72.8051 毫秒
+10:40:14：开始请求出品数据
+10:40:14：成功获得出品数据，耗时 14.9586 毫秒
+10:40:19：开始请求出品数据
+10:40:19：成功获得出品数据，耗时 12.9619 毫秒
+10:40:24：开始请求出品数据
+10:40:24：成功获得出品数据，耗时 15.9524 毫秒
+10:40:29：开始请求出品数据
+10:40:29：成功获得出品数据，耗时 15.895 毫秒
+10:40:34：开始请求出品数据
+10:40:34：成功获得出品数据，耗时 13.9603 毫秒
+10:40:39：开始请求出品数据
+10:40:39：成功获得出品数据，耗时 12.9892 毫秒
+10:40:44：开始请求出品数据
+10:40:52：成功获得出品数据，耗时 7487.5132 毫秒
+10:40:57：开始请求出品数据
+10:40:57：成功获得出品数据，耗时 69.809 毫秒
+10:41:02：开始请求出品数据
+10:41:02：成功获得出品数据，耗时 57.8446 毫秒
+10:41:02：开始轮询(2018/12/3 10:41:02)：4
+10:41:02：开始请求出品数据
+10:41:02：成功获得出品数据，耗时 54.8557 毫秒
+10:41:04：开始轮询(2018/12/3 10:41:04)：6
+10:41:04：开始请求出品数据
+10:41:04：成功获得出品数据，耗时 56.8225 毫秒
+10:41:05：开始定时打印(2018/12/3 10:41:05)：7
+10:41:07：开始请求出品数据
+10:41:07：成功获得出品数据，耗时 65.8248 毫秒
+10:41:07：开始请求出品数据
+10:41:07：成功获得出品数据，耗时 56.802 毫秒
+10:41:09：开始请求出品数据
+10:41:09：成功获得出品数据，耗时 54.4634 毫秒
+10:41:12：开始请求出品数据
+10:41:12：成功获得出品数据，耗时 53.795 毫秒
+10:41:12：开始请求出品数据
+10:41:12：成功获得出品数据，耗时 52.7552 毫秒
+**********【10:41:13】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】System.Management
+【信息提示】找不到 
+【堆栈跟踪】   在 System.Management.ManagementException.ThrowWithExtendedInfo(ManagementStatus errorCode)
+   在 System.Management.ManagementObject.Initialize(Boolean getObject)
+   在 System.Management.ManagementObject.get_ClassPath()
+   在 System.Management.ManagementObject.GetMethodParameters(String methodName, ManagementBaseObject& inParameters, IWbemClassObjectFreeThreaded& inParametersClass, IWbemClassObjectFreeThreaded& outParametersClass)
+   在 System.Management.ManagementObject.GetMethodParameters(String methodName)
+   在 PrintSqlite.FrmMain.tsmiRestorePrint_Click(Object sender, EventArgs e) 位置 D:\work\Pos\PrintSqlite\FrmMain.cs:行号 1095
+【目标位置】Void ThrowWithExtendedInfo(System.Management.ManagementStatus)
+【异常实例】
+
+10:41:14：开始请求出品数据
+10:41:14：成功获得出品数据，耗时 56.8471 毫秒
+10:41:17：开始请求出品数据
+10:41:17：成功获得出品数据，耗时 53.4666 毫秒
+10:41:17：开始请求出品数据
+10:41:17：成功获得出品数据，耗时 52.7797 毫秒
+10:41:19：开始请求出品数据
+10:41:19：成功获得出品数据，耗时 55.8853 毫秒
+10:41:22：开始请求出品数据
+10:41:31：成功获得出品数据，耗时 8703.6967 毫秒
+10:41:32：开始请求出品数据
+10:41:32：成功获得出品数据，耗时 93.7325 毫秒
+10:41:34：开始请求出品数据
+10:41:34：成功获得出品数据，耗时 61.7752 毫秒
+10:41:36：开始请求出品数据
+10:41:36：成功获得出品数据，耗时 59.853 毫秒
+10:41:37：开始请求出品数据
+10:41:37：成功获得出品数据，耗时 56.8478 毫秒
+10:41:39：开始请求出品数据
+10:41:40：成功获得出品数据，耗时 65.8248 毫秒
+10:41:41：开始请求出品数据
+10:41:41：成功获得出品数据，耗时 56.8678 毫秒
+10:41:42：开始请求出品数据
+10:41:42：成功获得出品数据，耗时 132.5988 毫秒
+10:41:45：开始请求出品数据
+10:41:45：成功获得出品数据，耗时 56.8475 毫秒
+10:41:46：开始请求出品数据
+10:41:46：成功获得出品数据，耗时 57.0158 毫秒
+10:41:47：开始请求出品数据
+10:41:48：成功获得出品数据，耗时 55.382 毫秒
+10:42:10：开始轮询(2018/12/3 10:42:10)：1
+10:42:10：开始定时打印(2018/12/3 10:42:10)：2
+10:42:10：开始请求出品数据
+10:42:10：成功获得出品数据，耗时 105.7169 毫秒
+10:42:15：开始请求出品数据
+10:42:15：成功获得出品数据，耗时 53.8566 毫秒
+10:42:20：开始请求出品数据
+10:42:21：成功获得出品数据，耗时 86.7692 毫秒
+10:42:26：开始请求出品数据
+10:45:31：开始轮询(2018/12/3 10:45:31)：1
+10:45:31：开始定时打印(2018/12/3 10:45:31)：2
+10:45:31：开始请求出品数据
+10:45:31：成功获得出品数据，耗时 38.4117 毫秒
+**********【10:45:31】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:45:36：开始请求出品数据
+10:45:36：成功获得出品数据，耗时 13.8787 毫秒
+**********【10:45:36】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:45:41：开始请求出品数据
+10:45:41：成功获得出品数据，耗时 14.9564 毫秒
+**********【10:45:41】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:45:46：开始请求出品数据
+10:45:46：成功获得出品数据，耗时 22.9622 毫秒
+**********【10:45:46】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:45:51：开始请求出品数据
+10:45:51：成功获得出品数据，耗时 13.9875 毫秒
+**********【10:45:51】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:45:56：开始请求出品数据
+10:45:56：成功获得出品数据，耗时 13.8021 毫秒
+**********【10:45:56】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:46:01：开始请求出品数据
+10:46:01：成功获得出品数据，耗时 14.9292 毫秒
+**********【10:46:01】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:46:06：开始请求出品数据
+10:46:06：成功获得出品数据，耗时 14.9586 毫秒
+**********【10:46:06】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:46:11：开始请求出品数据
+10:46:11：成功获得出品数据，耗时 13.7877 毫秒
+**********【10:46:11】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:46:16：开始请求出品数据
+10:46:16：成功获得出品数据，耗时 11.9931 毫秒
+**********【10:46:16】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:46:21：开始请求出品数据
+10:46:21：成功获得出品数据，耗时 21.7954 毫秒
+**********【10:46:21】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:46:26：开始请求出品数据
+10:46:27：成功获得出品数据，耗时 15.4906 毫秒
+**********【10:46:27】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:46:32：开始请求出品数据
+10:46:32：成功获得出品数据，耗时 14.8638 毫秒
+**********【10:46:32】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:46:39：开始请求出品数据
+10:46:39：成功获得出品数据，耗时 29.9187 毫秒
+**********【10:46:39】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:46:48：开始轮询(2018/12/3 10:46:48)：1
+10:46:48：开始定时打印(2018/12/3 10:46:48)：2
+10:46:48：开始请求出品数据
+10:46:48：成功获得出品数据，耗时 31.915 毫秒
+**********【10:46:48】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:46:53：开始请求出品数据
+10:46:53：成功获得出品数据，耗时 45.8032 毫秒
+**********【10:46:53】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:46:58：开始请求出品数据
+10:46:58：成功获得出品数据，耗时 14.9597 毫秒
+**********【10:46:58】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:47:03：开始请求出品数据
+10:47:03：成功获得出品数据，耗时 16.9484 毫秒
+**********【10:47:03】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:47:08：开始请求出品数据
+10:47:08：成功获得出品数据，耗时 13.963 毫秒
+**********【10:47:08】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:47:13：开始请求出品数据
+10:47:13：成功获得出品数据，耗时 13.9716 毫秒
+**********【10:47:13】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:47:18：开始请求出品数据
+10:47:18：成功获得出品数据，耗时 91.4138 毫秒
+**********【10:47:18】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:47:23：开始请求出品数据
+10:47:58：成功获得出品数据，耗时 35388.9217 毫秒
+**********【10:47:58】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:48:03：开始请求出品数据
+10:48:03：成功获得出品数据，耗时 26.9169 毫秒
+**********【10:48:03】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:48:08：开始请求出品数据
+10:48:08：成功获得出品数据，耗时 18.9489 毫秒
+**********【10:48:08】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:48:13：开始请求出品数据
+10:48:13：成功获得出品数据，耗时 15.9007 毫秒
+**********【10:48:14】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:48:19：开始请求出品数据
+10:48:20：成功获得出品数据，耗时 1019.3011 毫秒
+10:48:20：Internal Server Error
+10:48:25：开始请求出品数据
+10:48:38：成功获得出品数据，耗时 13251.9418 毫秒
+**********【10:48:38】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:48:41：开始定时打印(2018/12/3 10:48:41)：6
+10:48:41：开始请求出品数据
+10:48:41：成功获得出品数据，耗时 61.2534 毫秒
+**********【10:48:41】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:48:43：开始请求出品数据
+10:48:43：成功获得出品数据，耗时 53.8796 毫秒
+**********【10:48:43】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:48:46：开始请求出品数据
+10:48:46：成功获得出品数据，耗时 65.6737 毫秒
+**********【10:48:46】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:48:48：开始请求出品数据
+10:48:48：成功获得出品数据，耗时 59.8102 毫秒
+**********【10:48:48】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:48:51：开始请求出品数据
+10:48:51：成功获得出品数据，耗时 61.765 毫秒
+**********【10:48:51】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:48:53：开始请求出品数据
+10:48:53：成功获得出品数据，耗时 54.8836 毫秒
+**********【10:48:53】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:48:56：开始请求出品数据
+10:48:56：成功获得出品数据，耗时 63.7987 毫秒
+**********【10:48:56】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:48:58：开始请求出品数据
+10:48:58：成功获得出品数据，耗时 71.8048 毫秒
+**********【10:48:58】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:49:01：开始请求出品数据
+10:49:01：成功获得出品数据，耗时 53.88 毫秒
+**********【10:49:01】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:49:03：开始请求出品数据
+10:49:04：成功获得出品数据，耗时 58.5069 毫秒
+**********【10:49:04】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:49:06：开始请求出品数据
+10:49:06：成功获得出品数据，耗时 57.8801 毫秒
+**********【10:49:06】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:49:09：开始定时打印(2018/12/3 10:49:09)：2
+10:49:09：开始轮询(2018/12/3 10:49:09)：1
+10:49:09：开始请求出品数据
+10:49:09：成功获得出品数据，耗时 69.8132 毫秒
+**********【10:49:09】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:49:14：开始请求出品数据
+10:49:14：成功获得出品数据，耗时 61.7836 毫秒
+**********【10:49:14】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:49:19：开始请求出品数据
+10:49:19：成功获得出品数据，耗时 85.7693 毫秒
+**********【10:49:19】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:49:24：开始请求出品数据
+10:51:04：成功获得出品数据，耗时 100017.8974 毫秒
+10:51:04：请求被中止: 操作超时。
+10:51:09：开始请求出品数据
+10:52:38：成功获得出品数据，耗时 89155.8381 毫秒
+**********【10:52:39】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:52:44：开始请求出品数据
+10:52:44：成功获得出品数据，耗时 12.8887 毫秒
+**********【10:52:44】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:52:49：开始请求出品数据
+10:52:49：成功获得出品数据，耗时 17.912 毫秒
+**********【10:52:49】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:52:54：开始请求出品数据
+10:52:54：成功获得出品数据，耗时 12.9442 毫秒
+**********【10:52:54】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:52:59：开始请求出品数据
+10:52:59：成功获得出品数据，耗时 12.9933 毫秒
+**********【10:52:59】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:53:04：开始请求出品数据
+10:53:06：成功获得出品数据，耗时 2006.2452 毫秒
+10:53:06：无法连接到远程服务器
+10:53:11：开始请求出品数据
+10:53:12：成功获得出品数据，耗时 1005.6796 毫秒
+10:53:12：无法连接到远程服务器
+10:53:17：开始请求出品数据
+10:53:18：成功获得出品数据，耗时 1001.8932 毫秒
+10:53:18：无法连接到远程服务器
+10:53:23：开始请求出品数据
+10:53:24：成功获得出品数据，耗时 1002.6121 毫秒
+10:53:24：无法连接到远程服务器
+10:53:29：开始请求出品数据
+10:53:30：成功获得出品数据，耗时 1002.3636 毫秒
+10:53:30：无法连接到远程服务器
+10:53:35：开始请求出品数据
+10:53:36：成功获得出品数据，耗时 1002.7103 毫秒
+10:53:36：无法连接到远程服务器
+10:53:41：开始请求出品数据
+10:53:44：成功获得出品数据，耗时 3440.5234 毫秒
+**********【10:53:44】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:53:49：开始请求出品数据
+10:53:49：成功获得出品数据，耗时 18.9722 毫秒
+**********【10:53:49】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:53:54：开始请求出品数据
+10:53:54：成功获得出品数据，耗时 13.7779 毫秒
+**********【10:53:54】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:53:59：开始请求出品数据
+10:53:59：成功获得出品数据，耗时 15.9255 毫秒
+**********【10:53:59】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:54:04：开始请求出品数据
+10:54:04：成功获得出品数据，耗时 12.985 毫秒
+**********【10:54:04】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:54:09：开始请求出品数据
+10:54:09：成功获得出品数据，耗时 13.9618 毫秒
+**********【10:54:09】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:54:14：开始请求出品数据
+10:54:14：成功获得出品数据，耗时 12.8075 毫秒
+**********【10:54:14】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:54:19：开始请求出品数据
+10:54:19：成功获得出品数据，耗时 11.9671 毫秒
+**********【10:54:19】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:54:24：开始请求出品数据
+10:54:24：成功获得出品数据，耗时 17.9653 毫秒
+**********【10:54:24】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:54:29：开始请求出品数据
+10:54:29：成功获得出品数据，耗时 20.9724 毫秒
+**********【10:54:29】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:54:34：开始请求出品数据
+10:54:34：成功获得出品数据，耗时 28.9205 毫秒
+**********【10:54:34】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:54:39：开始请求出品数据
+10:54:39：成功获得出品数据，耗时 14.8204 毫秒
+**********【10:54:39】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:54:44：开始请求出品数据
+10:54:44：成功获得出品数据，耗时 14.9526 毫秒
+**********【10:54:44】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:54:49：开始请求出品数据
+10:54:49：成功获得出品数据，耗时 14.8751 毫秒
+**********【10:54:49】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:54:54：开始请求出品数据
+10:54:54：成功获得出品数据，耗时 23.9337 毫秒
+**********【10:54:54】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:55:00：开始请求出品数据
+10:55:00：成功获得出品数据，耗时 19.8188 毫秒
+**********【10:55:00】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:55:05：开始请求出品数据
+10:55:05：成功获得出品数据，耗时 23.8053 毫秒
+**********【10:55:05】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:55:10：开始请求出品数据
+10:55:10：成功获得出品数据，耗时 16.9836 毫秒
+**********【10:55:10】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:55:15：开始请求出品数据
+10:55:15：成功获得出品数据，耗时 14.7986 毫秒
+**********【10:55:15】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:55:20：开始请求出品数据
+10:55:20：成功获得出品数据，耗时 13.8866 毫秒
+**********【10:55:20】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:55:25：开始请求出品数据
+10:55:25：成功获得出品数据，耗时 14.7876 毫秒
+**********【10:55:25】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:55:30：开始请求出品数据
+10:55:30：成功获得出品数据，耗时 13.8017 毫秒
+**********【10:55:30】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:55:35：开始请求出品数据
+10:55:35：成功获得出品数据，耗时 15.7734 毫秒
+**********【10:55:35】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:55:40：开始请求出品数据
+10:55:40：成功获得出品数据，耗时 12.9646 毫秒
+**********【10:55:40】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:55:45：开始请求出品数据
+10:55:45：成功获得出品数据，耗时 16.9556 毫秒
+**********【10:55:45】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:55:50：开始请求出品数据
+10:55:50：成功获得出品数据，耗时 20.969 毫秒
+**********【10:55:50】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:55:55：开始请求出品数据
+10:55:55：成功获得出品数据，耗时 14.8098 毫秒
+**********【10:55:55】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:56:00：开始请求出品数据
+10:56:00：成功获得出品数据，耗时 11.8791 毫秒
+**********【10:56:00】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:57:40：开始轮询(2018/12/3 10:57:40)：1
+10:57:40：开始定时打印(2018/12/3 10:57:40)：2
+10:57:40：开始请求出品数据
+10:57:40：成功获得出品数据，耗时 142.6182 毫秒
+**********【10:57:40】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:57:45：开始请求出品数据
+10:57:45：成功获得出品数据，耗时 56.7542 毫秒
+**********【10:57:45】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:57:50：开始请求出品数据
+10:57:50：成功获得出品数据，耗时 56.7832 毫秒
+**********【10:57:50】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:57:53：开始轮询(2018/12/3 10:57:53)：5
+10:57:53：开始请求出品数据
+10:57:53：成功获得出品数据，耗时 56.8474 毫秒
+**********【10:57:53】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:57:55：开始请求出品数据
+10:57:55：成功获得出品数据，耗时 54.8537 毫秒
+**********【10:57:55】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:57:58：开始请求出品数据
+10:57:58：成功获得出品数据，耗时 71.8071 毫秒
+**********【10:57:58】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:00：开始请求出品数据
+10:58:00：成功获得出品数据，耗时 56.7696 毫秒
+**********【10:58:00】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:03：开始请求出品数据
+10:58:03：成功获得出品数据，耗时 61.8084 毫秒
+**********【10:58:03】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:05：开始请求出品数据
+10:58:05：成功获得出品数据，耗时 56.8044 毫秒
+**********【10:58:05】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:08：开始请求出品数据
+10:58:08：成功获得出品数据，耗时 71.7389 毫秒
+**********【10:58:08】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:10：开始请求出品数据
+10:58:10：成功获得出品数据，耗时 63.8281 毫秒
+**********【10:58:10】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:13：开始请求出品数据
+10:58:13：成功获得出品数据，耗时 56.8312 毫秒
+**********【10:58:13】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:15：开始请求出品数据
+10:58:15：成功获得出品数据，耗时 63.8327 毫秒
+**********【10:58:15】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:18：开始请求出品数据
+10:58:18：成功获得出品数据，耗时 62.8193 毫秒
+**********【10:58:18】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:20：开始请求出品数据
+10:58:21：成功获得出品数据，耗时 58.9913 毫秒
+**********【10:58:21】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:23：开始请求出品数据
+10:58:23：成功获得出品数据，耗时 57.2944 毫秒
+**********【10:58:23】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:26：开始请求出品数据
+10:58:26：成功获得出品数据，耗时 56.7794 毫秒
+**********【10:58:26】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:28：开始请求出品数据
+10:58:28：成功获得出品数据，耗时 64.8412 毫秒
+**********【10:58:28】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:31：开始请求出品数据
+10:58:31：成功获得出品数据，耗时 71.7331 毫秒
+**********【10:58:31】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:33：开始请求出品数据
+10:58:33：成功获得出品数据，耗时 59.7657 毫秒
+**********【10:58:33】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:36：开始请求出品数据
+10:58:36：成功获得出品数据，耗时 58.8127 毫秒
+**********【10:58:36】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:38：开始请求出品数据
+10:58:39：成功获得出品数据，耗时 60.789 毫秒
+**********【10:58:39】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:41：开始请求出品数据
+10:58:41：成功获得出品数据，耗时 63.7768 毫秒
+**********【10:58:41】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:44：开始请求出品数据
+10:58:44：成功获得出品数据，耗时 60.8355 毫秒
+**********【10:58:44】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:46：开始请求出品数据
+10:58:46：成功获得出品数据，耗时 55.3847 毫秒
+**********【10:58:46】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:49：开始请求出品数据
+10:58:49：成功获得出品数据，耗时 63.7624 毫秒
+**********【10:58:49】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:51：开始请求出品数据
+10:58:51：成功获得出品数据，耗时 63.8474 毫秒
+**********【10:58:51】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:54：开始请求出品数据
+10:58:54：成功获得出品数据，耗时 70.7978 毫秒
+**********【10:58:54】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:56：开始请求出品数据
+10:58:56：成功获得出品数据，耗时 74.7599 毫秒
+**********【10:58:56】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:58:59：开始请求出品数据
+10:58:59：成功获得出品数据，耗时 59.7657 毫秒
+**********【10:58:59】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:01：开始请求出品数据
+10:59:01：成功获得出品数据，耗时 58.8422 毫秒
+**********【10:59:01】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:04：开始请求出品数据
+10:59:04：成功获得出品数据，耗时 60.7633 毫秒
+**********【10:59:04】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:06：开始请求出品数据
+10:59:06：成功获得出品数据，耗时 57.7687 毫秒
+**********【10:59:06】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:09：开始请求出品数据
+10:59:09：成功获得出品数据，耗时 62.3736 毫秒
+**********【10:59:09】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:11：开始请求出品数据
+10:59:11：成功获得出品数据，耗时 60.7739 毫秒
+**********【10:59:11】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:14：开始请求出品数据
+10:59:14：成功获得出品数据，耗时 62.8623 毫秒
+**********【10:59:14】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:16：开始请求出品数据
+10:59:16：成功获得出品数据，耗时 77.7175 毫秒
+**********【10:59:16】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:19：开始请求出品数据
+10:59:19：成功获得出品数据，耗时 67.803 毫秒
+**********【10:59:19】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:21：开始请求出品数据
+10:59:21：成功获得出品数据，耗时 60.8377 毫秒
+**********【10:59:21】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:24：开始请求出品数据
+10:59:24：成功获得出品数据，耗时 66.8212 毫秒
+**********【10:59:24】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:26：开始请求出品数据
+10:59:26：成功获得出品数据，耗时 60.6836 毫秒
+**********【10:59:27】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:29：开始请求出品数据
+10:59:29：成功获得出品数据，耗时 66.6569 毫秒
+**********【10:59:29】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:32：开始请求出品数据
+10:59:32：成功获得出品数据，耗时 114.692 毫秒
+**********【10:59:32】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:34：开始请求出品数据
+10:59:34：成功获得出品数据，耗时 66.6562 毫秒
+**********【10:59:34】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:37：开始请求出品数据
+10:59:37：成功获得出品数据，耗时 59.683 毫秒
+**********【10:59:37】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:39：开始请求出品数据
+10:59:39：成功获得出品数据，耗时 70.6385 毫秒
+**********【10:59:39】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:42：开始请求出品数据
+10:59:42：成功获得出品数据，耗时 60.8641 毫秒
+**********【10:59:42】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:44：开始请求出品数据
+10:59:44：成功获得出品数据，耗时 58.6964 毫秒
+**********【10:59:45】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:47：开始请求出品数据
+10:59:47：成功获得出品数据，耗时 67.7357 毫秒
+**********【10:59:47】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:50：开始请求出品数据
+10:59:50：成功获得出品数据，耗时 60.6647 毫秒
+**********【10:59:50】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:52：开始请求出品数据
+10:59:52：成功获得出品数据，耗时 61.665 毫秒
+**********【10:59:52】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:55：开始请求出品数据
+10:59:55：成功获得出品数据，耗时 64.8264 毫秒
+**********【10:59:55】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+10:59:57：开始请求出品数据
+10:59:57：成功获得出品数据，耗时 63.8576 毫秒
+**********【10:59:57】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:00：开始请求出品数据
+11:00:00：成功获得出品数据，耗时 61.8281 毫秒
+**********【11:00:00】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:02：开始请求出品数据
+11:00:02：成功获得出品数据，耗时 61.7817 毫秒
+**********【11:00:02】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:05：开始请求出品数据
+11:00:05：成功获得出品数据，耗时 66.8201 毫秒
+**********【11:00:05】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:07：开始请求出品数据
+11:00:07：成功获得出品数据，耗时 72.6764 毫秒
+**********【11:00:07】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:10：开始请求出品数据
+11:00:10：成功获得出品数据，耗时 60.8373 毫秒
+**********【11:00:10】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:12：开始请求出品数据
+11:00:12：成功获得出品数据，耗时 56.7459 毫秒
+**********【11:00:12】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:15：开始请求出品数据
+11:00:15：成功获得出品数据，耗时 58.8116 毫秒
+**********【11:00:15】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:17：开始请求出品数据
+11:00:17：成功获得出品数据，耗时 14.7675 毫秒
+**********【11:00:17】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:20：开始请求出品数据
+11:00:20：成功获得出品数据，耗时 13.9546 毫秒
+**********【11:00:20】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:22：开始请求出品数据
+11:00:22：成功获得出品数据，耗时 13.8357 毫秒
+**********【11:00:22】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:25：开始请求出品数据
+11:00:25：成功获得出品数据，耗时 14.8182 毫秒
+**********【11:00:25】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:27：开始请求出品数据
+11:00:27：成功获得出品数据，耗时 17.9789 毫秒
+**********【11:00:27】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:30：开始请求出品数据
+11:00:30：成功获得出品数据，耗时 174.5333 毫秒
+**********【11:00:30】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:32：开始请求出品数据
+11:00:32：成功获得出品数据，耗时 19.9457 毫秒
+**********【11:00:32】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:35：开始请求出品数据
+11:00:35：成功获得出品数据，耗时 12.965 毫秒
+**********【11:00:35】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:37：开始请求出品数据
+11:00:37：成功获得出品数据，耗时 12.8302 毫秒
+**********【11:00:37】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:40：开始请求出品数据
+11:00:44：成功获得出品数据，耗时 3479.3873 毫秒
+**********【11:00:44】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:00:47：开始请求出品数据
+11:01:05：成功获得出品数据，耗时 17140.1723 毫秒
+**********【11:01:05】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:01:09：开始请求出品数据
+11:01:09：成功获得出品数据，耗时 22.9693 毫秒
+**********【11:01:09】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:01:10：开始请求出品数据
+11:01:10：成功获得出品数据，耗时 12.9665 毫秒
+**********【11:01:10】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:01:14：开始请求出品数据
+11:01:14：成功获得出品数据，耗时 11.9983 毫秒
+**********【11:01:14】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:01:15：开始请求出品数据
+11:01:15：成功获得出品数据，耗时 11.9678 毫秒
+**********【11:01:15】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:01:19：开始请求出品数据
+11:01:19：成功获得出品数据，耗时 131.4925 毫秒
+**********【11:01:19】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:01:20：开始请求出品数据
+11:01:20：成功获得出品数据，耗时 13.9633 毫秒
+**********【11:01:20】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:01:24：开始请求出品数据
+11:01:24：成功获得出品数据，耗时 13.9482 毫秒
+**********【11:01:24】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:01:25：开始请求出品数据
+11:01:25：成功获得出品数据，耗时 13.9603 毫秒
+**********【11:01:25】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:01:29：开始请求出品数据
+11:01:29：成功获得出品数据，耗时 12.9642 毫秒
+**********【11:01:29】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:01:30：开始请求出品数据
+11:01:30：成功获得出品数据，耗时 12.9616 毫秒
+**********【11:01:30】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:01:34：开始请求出品数据
+11:01:34：成功获得出品数据，耗时 13.4951 毫秒
+**********【11:01:34】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:01:35：开始请求出品数据
+11:01:35：成功获得出品数据，耗时 14.9605 毫秒
+**********【11:01:35】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:01:39：开始请求出品数据
+11:01:39：成功获得出品数据，耗时 32.9129 毫秒
+**********【11:01:39】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:01:40：开始请求出品数据
+11:01:40：成功获得出品数据，耗时 20.4547 毫秒
+**********【11:01:40】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:01:44：开始请求出品数据
+11:01:44：成功获得出品数据，耗时 106.7148 毫秒
+**********【11:01:44】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:01:45：开始请求出品数据
+11:01:45：成功获得出品数据，耗时 89.7604 毫秒
+**********【11:01:45】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:01:49：开始请求出品数据
+11:02:06：成功获得出品数据，耗时 17199.3834 毫秒
+**********【11:02:06】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:10：开始请求出品数据
+11:02:10：成功获得出品数据，耗时 24.935 毫秒
+**********【11:02:10】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:11：开始请求出品数据
+11:02:11：成功获得出品数据，耗时 18.9496 毫秒
+**********【11:02:12】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:15：开始请求出品数据
+11:02:15：成功获得出品数据，耗时 12.9306 毫秒
+**********【11:02:15】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:17：开始请求出品数据
+11:02:17：成功获得出品数据，耗时 21.9412 毫秒
+**********【11:02:17】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:20：开始请求出品数据
+11:02:20：成功获得出品数据，耗时 85.7705 毫秒
+**********【11:02:20】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:22：开始请求出品数据
+11:02:22：成功获得出品数据，耗时 23.9367 毫秒
+**********【11:02:22】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:25：开始请求出品数据
+11:02:25：成功获得出品数据，耗时 39.9858 毫秒
+**********【11:02:25】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:27：开始请求出品数据
+11:02:27：成功获得出品数据，耗时 12.9658 毫秒
+**********【11:02:27】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:30：开始请求出品数据
+11:02:30：成功获得出品数据，耗时 12.9926 毫秒
+**********【11:02:30】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:32：开始请求出品数据
+11:02:32：成功获得出品数据，耗时 16.9707 毫秒
+**********【11:02:32】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:35：开始请求出品数据
+11:02:35：成功获得出品数据，耗时 17.7686 毫秒
+**********【11:02:35】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:37：开始请求出品数据
+11:02:37：成功获得出品数据，耗时 13.7881 毫秒
+**********【11:02:37】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:40：开始请求出品数据
+11:02:40：成功获得出品数据，耗时 13.9645 毫秒
+**********【11:02:40】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:42：开始请求出品数据
+11:02:42：成功获得出品数据，耗时 12.9642 毫秒
+**********【11:02:42】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:45：开始请求出品数据
+11:02:45：成功获得出品数据，耗时 23.9583 毫秒
+**********【11:02:45】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:47：开始请求出品数据
+11:02:47：成功获得出品数据，耗时 15.7761 毫秒
+**********【11:02:47】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:50：开始请求出品数据
+11:02:50：成功获得出品数据，耗时 16.9005 毫秒
+**********【11:02:50】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:52：开始请求出品数据
+11:02:52：成功获得出品数据，耗时 12.8381 毫秒
+**********【11:02:52】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:55：开始请求出品数据
+11:02:55：成功获得出品数据，耗时 12.9612 毫秒
+**********【11:02:55】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:02:57：开始请求出品数据
+11:02:57：成功获得出品数据，耗时 196.4431 毫秒
+**********【11:02:57】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:03:00：开始请求出品数据
+11:03:00：成功获得出品数据，耗时 41.8888 毫秒
+**********【11:03:00】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:03:02：开始请求出品数据
+11:03:02：成功获得出品数据，耗时 14.9805 毫秒
+**********【11:03:02】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:03:05：开始请求出品数据
+11:03:05：成功获得出品数据，耗时 17.9309 毫秒
+**********【11:03:05】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:03:07：开始请求出品数据
+11:03:07：成功获得出品数据，耗时 14.9937 毫秒
+**********【11:03:07】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:03:10：开始请求出品数据
+11:03:10：成功获得出品数据，耗时 158.0587 毫秒
+**********【11:03:10】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:03:12：开始请求出品数据
+11:03:12：成功获得出品数据，耗时 15.912 毫秒
+**********【11:03:12】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:03:20：开始轮询(2018/12/3 11:03:20)：2
+11:03:20：开始请求出品数据
+11:03:20：开始定时打印(2018/12/3 11:03:20)：3
+11:03:20：成功获得出品数据，耗时 24.9332 毫秒
+**********【11:03:20】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:03:25：开始请求出品数据
+11:03:25：成功获得出品数据，耗时 23.9356 毫秒
+**********【11:03:25】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:03:30：开始请求出品数据
+11:03:30：成功获得出品数据，耗时 14.956 毫秒
+**********【11:03:30】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:03:35：开始请求出品数据
+11:03:35：成功获得出品数据，耗时 14.9367 毫秒
+**********【11:04:11】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:04:21：开始请求出品数据
+11:04:21：成功获得出品数据，耗时 42.8958 毫秒
+**********【11:04:33】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:04:45：开始请求出品数据
+11:04:45：成功获得出品数据，耗时 19.9442 毫秒
+11:08:11：开始轮询(2018/12/3 11:08:11)：2
+11:08:11：开始定时打印(2018/12/3 11:08:11)：3
+11:08:58：开始请求出品数据
+11:09:26：成功获得出品数据，耗时 27042.1622 毫秒
+**********【11:10:18】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:10:30：开始请求出品数据
+11:10:30：成功获得出品数据，耗时 19.9382 毫秒
+**********【11:10:30】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:10:35：开始请求出品数据
+11:10:35：成功获得出品数据，耗时 11.9527 毫秒
+**********【11:10:35】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:10:40：开始请求出品数据
+11:10:40：成功获得出品数据，耗时 14.8559 毫秒
+**********【11:10:40】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:10:45：开始请求出品数据
+11:10:45：成功获得出品数据，耗时 38.8938 毫秒
+**********【11:10:45】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:10:50：开始请求出品数据
+11:10:50：成功获得出品数据，耗时 30.9126 毫秒
+**********【11:10:50】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:10:55：开始请求出品数据
+11:10:55：成功获得出品数据，耗时 14.7691 毫秒
+**********【11:10:55】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:11:00：开始请求出品数据
+11:11:00：成功获得出品数据，耗时 13.9592 毫秒
+**********【11:11:01】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:11:06：开始请求出品数据
+11:11:06：成功获得出品数据，耗时 13.7881 毫秒
+**********【11:11:06】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:11:11：开始请求出品数据
+11:11:11：成功获得出品数据，耗时 15.7882 毫秒
+**********【11:11:11】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:11:16：开始请求出品数据
+11:11:16：成功获得出品数据，耗时 11.8413 毫秒
+**********【11:11:16】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:11:21：开始请求出品数据
+11:11:21：成功获得出品数据，耗时 16.9538 毫秒
+**********【11:11:21】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:11:26：开始请求出品数据
+11:11:26：成功获得出品数据，耗时 11.9958 毫秒
+**********【11:11:26】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:11:31：开始请求出品数据
+11:11:31：成功获得出品数据，耗时 11.99 毫秒
+**********【11:11:31】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:11:36：开始请求出品数据
+11:11:36：成功获得出品数据，耗时 15.9562 毫秒
+**********【11:11:36】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:11:41：开始请求出品数据
+11:11:41：成功获得出品数据，耗时 15.7655 毫秒
+**********【11:11:41】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:11:46：开始请求出品数据
+11:11:46：成功获得出品数据，耗时 33.9147 毫秒
+**********【11:11:46】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:11:51：开始请求出品数据
+11:11:51：成功获得出品数据，耗时 17.952 毫秒
+**********【11:11:51】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:11:56：开始请求出品数据
+11:11:56：成功获得出品数据，耗时 13.7874 毫秒
+**********【11:11:56】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:12:01：开始请求出品数据
+11:12:01：成功获得出品数据，耗时 13.8183 毫秒
+**********【11:12:01】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:12:06：开始请求出品数据
+11:12:06：成功获得出品数据，耗时 74.7605 毫秒
+**********【11:12:06】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:12:11：开始请求出品数据
+11:12:11：成功获得出品数据，耗时 13.9905 毫秒
+**********【11:12:11】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:12:16：开始请求出品数据
+11:12:16：成功获得出品数据，耗时 18.9497 毫秒
+**********【11:12:16】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSqlTran(ArrayList SQLStringList) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 168
+   在 PrintSqlite.SQLiteHelper.BatchImportDataTable(String tableName, String removeColumns, DataTable dataTable) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 592
+【目标位置】Void ExecuteSqlTran(System.Collections.ArrayList)
+【异常实例】
+
+11:15:52：开始轮询(2018/12/3 11:15:52)：2
+11:15:52：开始定时打印(2018/12/3 11:15:52)：3
+11:15:52：开始请求出品数据
+11:15:52：成功获得出品数据，耗时 74.8002 毫秒
+11:16:06：请求接口数据：347,348,355,356,358,359,350,352,353,354,357,349,351,347,348,355,356,358,359,350,352,353,354,357,349,351,
+11:16:10：开始打印(逐条)：中厨打印机；19号餐台；日式煎薄饼
+11:16:10：开始打印(整单)：西厨打印机；19号餐台
+11:19:16：开始轮询(2018/12/3 11:19:16)：2
+11:19:26：开始轮询(2018/12/3 11:19:26)：1
+11:19:26：开始定时打印(2018/12/3 11:19:26)：2
+11:19:26：开始请求出品数据
+11:19:26：成功获得出品数据，耗时 39.8929 毫秒
+11:19:31：开始请求出品数据
+11:19:31：成功获得出品数据，耗时 10.8233 毫秒
+11:19:36：开始请求出品数据
+11:19:36：成功获得出品数据，耗时 28.7706 毫秒
+11:19:41：开始请求出品数据
+11:19:41：成功获得出品数据，耗时 19.9465 毫秒
+11:19:46：开始请求出品数据
+11:19:46：成功获得出品数据，耗时 26.9238 毫秒
+11:19:51：开始请求出品数据
+11:19:51：成功获得出品数据，耗时 13.813 毫秒
+11:19:56：开始请求出品数据
+11:19:56：成功获得出品数据，耗时 13.9637 毫秒
+11:20:01：开始请求出品数据
+11:20:01：成功获得出品数据，耗时 14.959 毫秒
+11:20:06：开始请求出品数据
+11:20:06：成功获得出品数据，耗时 19.9181 毫秒
+11:20:11：开始请求出品数据
+11:20:11：成功获得出品数据，耗时 10.9937 毫秒
+11:20:16：开始请求出品数据
+11:20:16：成功获得出品数据，耗时 10.9257 毫秒
+11:20:21：开始请求出品数据
+11:20:21：成功获得出品数据，耗时 11.9107 毫秒
+11:20:26：开始请求出品数据
+11:20:26：成功获得出品数据，耗时 12.9654 毫秒
+11:20:31：开始请求出品数据
+11:20:31：成功获得出品数据，耗时 13.9626 毫秒
+11:20:36：开始请求出品数据
+11:20:36：成功获得出品数据，耗时 10.9714 毫秒
+11:20:41：开始请求出品数据
+11:20:41：成功获得出品数据，耗时 12.9654 毫秒
+11:20:46：开始请求出品数据
+11:20:46：成功获得出品数据，耗时 11.9965 毫秒
+11:20:51：开始请求出品数据
+11:20:51：成功获得出品数据，耗时 13.9626 毫秒
+11:20:51：请求接口数据：360,361,362,363,360,361,362,363,
+11:20:52：{"Success":false,"Data":"输入字符串的格式不正确。","ErrorCode":0}，删除8条出品数据失败：360,361,362,363,360,361,362,363
+11:20:53：开始打印(逐条)：中厨打印机；7号餐台；姜葱爆原条辽参
+11:20:54：开始打印(整单)：西厨打印机；7号餐台
+11:20:57：开始请求出品数据
+11:20:57：成功获得出品数据，耗时 14.7842 毫秒
+11:20:57：开始打印(逐条)：中厨打印机；7号餐台；姜葱爆原条辽参
+11:21:00：开始打印(逐条)：中厨打印机；7号餐台；路端烧串牛仔粒
+11:21:02：开始请求出品数据
+11:21:02：成功获得出品数据，耗时 11.9636 毫秒
+11:21:03：开始打印(逐条)：中厨打印机；7号餐台；日式煎薄饼
+11:21:07：开始请求出品数据
+11:21:07：成功获得出品数据，耗时 10.9782 毫秒
+11:21:12：开始请求出品数据
+11:21:12：成功获得出品数据，耗时 12.9941 毫秒
+11:21:17：开始请求出品数据
+11:21:17：成功获得出品数据，耗时 11.9655 毫秒
+11:21:22：开始请求出品数据
+11:21:22：成功获得出品数据，耗时 10.8158 毫秒
+11:21:27：开始请求出品数据
+11:21:27：成功获得出品数据，耗时 14.8197 毫秒
+11:21:32：开始请求出品数据
+11:21:32：成功获得出品数据，耗时 18.8201 毫秒
+11:21:37：开始请求出品数据
+11:21:37：成功获得出品数据，耗时 17.9521 毫秒
+11:21:42：开始请求出品数据
+11:21:42：成功获得出品数据，耗时 10.971 毫秒
+11:21:47：开始请求出品数据
+11:21:47：成功获得出品数据，耗时 34.9066 毫秒
+11:21:52：开始请求出品数据
+11:21:52：成功获得出品数据，耗时 10.8161 毫秒
+11:21:53：打印成功(逐条)：中厨打印机；7号餐台；7号餐台；日式煎薄饼
+11:21:53：打印成功(逐条)：中厨打印机；7号餐台；7号餐台；路端烧串牛仔粒
+11:21:54：打印成功(逐条)：中厨打印机；7号餐台；7号餐台；姜葱爆原条辽参
+11:21:55：打印成功(整单)：西厨打印机；7号餐台
+11:21:55：打印成功(逐条)：中厨打印机；7号餐台；7号餐台；姜葱爆原条辽参
+11:21:57：开始请求出品数据
+11:21:57：成功获得出品数据，耗时 9.9697 毫秒
+11:22:02：开始请求出品数据
+11:22:02：成功获得出品数据，耗时 20.9482 毫秒
+11:22:07：开始请求出品数据
+11:22:07：成功获得出品数据，耗时 11.7885 毫秒
+11:22:12：开始请求出品数据
+11:22:12：成功获得出品数据，耗时 9.9983 毫秒
+11:22:17：开始请求出品数据
+11:22:17：成功获得出品数据，耗时 13.9327 毫秒
+11:22:22：开始请求出品数据
+11:22:22：成功获得出品数据，耗时 116.7087 毫秒
+11:22:27：开始请求出品数据
+11:22:27：成功获得出品数据，耗时 84.7733 毫秒
+11:22:27：请求接口数据：364,365,364,365,
+11:22:28：开始打印(逐条)：中厨打印机；7号餐台；路端烧串牛仔粒
+11:22:28：开始打印(整单)：西厨打印机；7号餐台
+11:22:31：开始打印(逐条)：中厨打印机；7号餐台；日式煎薄饼
+11:22:39：打印成功(逐条)：中厨打印机；7号餐台；7号餐台；日式煎薄饼
+11:23:55：{"Success":false,"Data":"输入字符串的格式不正确。","ErrorCode":0}，删除4条出品数据失败：364,365,364,365
+11:23:58：打印成功(整单)：西厨打印机；7号餐台
+11:23:58：打印成功(逐条)：中厨打印机；7号餐台；7号餐台；路端烧串牛仔粒
+11:24:00：开始请求出品数据
+11:24:00：成功获得出品数据，耗时 63.8296 毫秒
+11:24:05：开始请求出品数据
+11:24:05：成功获得出品数据，耗时 54.6608 毫秒
+11:24:10：开始请求出品数据
+11:24:10：成功获得出品数据，耗时 52.6932 毫秒
+11:24:15：开始请求出品数据
+11:24:15：成功获得出品数据，耗时 50.8628 毫秒
+11:24:20：开始请求出品数据
+11:24:20：成功获得出品数据，耗时 93.2575 毫秒
+11:24:25：开始请求出品数据
+11:24:25：成功获得出品数据，耗时 52.3603 毫秒
+11:24:30：开始请求出品数据
+11:24:31：成功获得出品数据，耗时 52.7707 毫秒
+11:24:36：开始请求出品数据
+11:24:36：成功获得出品数据，耗时 52.8621 毫秒
+11:24:36：请求接口数据：366,367,366,367,
+11:24:37：开始打印(逐条)：中厨打印机；7号餐台；路端烧串牛仔粒
+11:24:37：开始打印(整单)：西厨打印机；7号餐台
+11:24:41：打印成功(整单)：西厨打印机；7号餐台
+11:24:41：开始打印(逐条)：中厨打印机；7号餐台；路端烧牛晨豆腐
+11:24:41：打印成功(逐条)：中厨打印机；7号餐台；7号餐台；路端烧串牛仔粒
+11:24:42：打印成功(逐条)：中厨打印机；7号餐台；7号餐台；路端烧牛晨豆腐
+11:25:39：{"Success":false,"Data":"输入字符串的格式不正确。","ErrorCode":0}，删除4条出品数据失败：366,367,366,367
+11:25:44：开始请求出品数据
+11:25:44：成功获得出品数据，耗时 11.9674 毫秒
+11:25:49：开始请求出品数据
+11:25:49：成功获得出品数据，耗时 10.8237 毫秒
+11:25:54：开始请求出品数据
+11:25:54：成功获得出品数据，耗时 11.8096 毫秒
+11:25:59：开始请求出品数据
+11:25:59：成功获得出品数据，耗时 22.9362 毫秒
+11:26:04：开始请求出品数据
+11:26:04：成功获得出品数据，耗时 30.9049 毫秒
+11:26:09：开始请求出品数据
+11:26:09：成功获得出品数据，耗时 11.9916 毫秒
+11:26:14：开始请求出品数据
+11:26:14：成功获得出品数据，耗时 12.9654 毫秒
+11:26:19：开始请求出品数据
+11:26:19：成功获得出品数据，耗时 11.9436 毫秒
+11:26:24：开始请求出品数据
+11:26:24：成功获得出品数据，耗时 51.8849 毫秒
+11:26:29：开始请求出品数据
+11:26:29：成功获得出品数据，耗时 12.8121 毫秒
+11:26:34：开始请求出品数据
+11:26:34：成功获得出品数据，耗时 15.926 毫秒
+11:26:39：开始请求出品数据
+11:26:39：成功获得出品数据，耗时 11.9851 毫秒
+11:26:44：开始请求出品数据
+11:26:44：成功获得出品数据，耗时 10.9691 毫秒
+11:26:49：开始请求出品数据
+11:26:49：成功获得出品数据，耗时 12.9658 毫秒
+11:26:54：开始请求出品数据
+11:26:54：成功获得出品数据，耗时 11.9395 毫秒
+11:26:59：开始请求出品数据
+11:26:59：成功获得出品数据，耗时 10.9702 毫秒
+11:27:04：开始请求出品数据
+11:27:04：成功获得出品数据，耗时 11.7945 毫秒
+11:27:09：开始请求出品数据
+11:27:09：成功获得出品数据，耗时 11.899 毫秒
+11:27:14：开始请求出品数据
+11:27:14：成功获得出品数据，耗时 11.9652 毫秒
+11:27:19：开始请求出品数据
+11:27:19：成功获得出品数据，耗时 13.7843 毫秒
+11:27:24：开始请求出品数据
+11:27:24：成功获得出品数据，耗时 9.9549 毫秒
+11:27:29：开始请求出品数据
+11:27:29：成功获得出品数据，耗时 10.826 毫秒
+11:27:34：开始请求出品数据
+11:27:34：成功获得出品数据，耗时 10.7946 毫秒
+11:27:39：开始请求出品数据
+11:27:39：成功获得出品数据，耗时 25.9304 毫秒
+11:27:44：开始请求出品数据
+11:27:44：成功获得出品数据，耗时 13.79 毫秒
+11:27:49：开始请求出品数据
+11:27:49：成功获得出品数据，耗时 13.9618 毫秒
+11:27:54：开始请求出品数据
+11:27:54：成功获得出品数据，耗时 10.8306 毫秒
+11:27:59：开始请求出品数据
+11:27:59：成功获得出品数据，耗时 12.937 毫秒
+11:28:04：开始请求出品数据
+11:28:04：成功获得出品数据，耗时 10.9993 毫秒
+11:28:09：开始请求出品数据
+11:28:09：成功获得出品数据，耗时 9.9726 毫秒
+11:28:14：开始请求出品数据
+11:28:14：成功获得出品数据，耗时 12.9389 毫秒
+11:28:19：开始请求出品数据
+11:28:19：成功获得出品数据，耗时 12.9367 毫秒
+11:28:24：开始请求出品数据
+11:28:24：成功获得出品数据，耗时 13.8168 毫秒
+11:28:29：开始请求出品数据
+11:28:29：成功获得出品数据，耗时 11.9002 毫秒
+11:28:34：开始请求出品数据
+11:28:34：成功获得出品数据，耗时 12.7876 毫秒
+11:28:39：开始请求出品数据
+11:28:39：成功获得出品数据，耗时 18.9462 毫秒
+11:28:44：开始请求出品数据
+11:28:44：成功获得出品数据，耗时 12.94 毫秒
+11:28:49：开始请求出品数据
+11:28:49：成功获得出品数据，耗时 15.7877 毫秒
+11:28:54：开始请求出品数据
+11:28:54：成功获得出品数据，耗时 12.5893 毫秒
+11:28:59：开始请求出品数据
+11:28:59：成功获得出品数据，耗时 10.001 毫秒
+11:29:04：开始请求出品数据
+11:29:04：成功获得出品数据，耗时 12.9643 毫秒
+11:29:09：开始请求出品数据
+11:29:09：成功获得出品数据，耗时 10.8792 毫秒
+11:29:14：开始请求出品数据
+11:29:14：成功获得出品数据，耗时 11.8129 毫秒
+11:29:19：开始请求出品数据
+11:29:19：成功获得出品数据，耗时 13.9622 毫秒
+11:29:24：开始请求出品数据
+11:29:24：成功获得出品数据，耗时 11.7978 毫秒
+11:29:29：开始请求出品数据
+11:29:29：成功获得出品数据，耗时 21.8271 毫秒
+11:29:34：开始请求出品数据
+11:29:34：成功获得出品数据，耗时 11.9802 毫秒
+11:29:39：开始请求出品数据
+11:29:39：成功获得出品数据，耗时 9.9685 毫秒
+11:29:44：开始请求出品数据
+11:29:44：成功获得出品数据，耗时 10.7962 毫秒
+11:29:49：开始请求出品数据
+11:29:49：成功获得出品数据，耗时 12.9639 毫秒
+11:29:54：开始请求出品数据
+11:29:54：成功获得出品数据，耗时 10.9668 毫秒
+11:29:59：开始请求出品数据
+11:29:59：成功获得出品数据，耗时 10.9831 毫秒
+11:30:04：开始请求出品数据
+11:30:04：成功获得出品数据，耗时 10.9653 毫秒
+11:30:09：开始请求出品数据
+11:30:09：成功获得出品数据，耗时 10.9842 毫秒
+11:30:14：开始请求出品数据
+11:30:14：成功获得出品数据，耗时 10.8257 毫秒
+11:30:19：开始请求出品数据
+11:30:19：成功获得出品数据，耗时 10.9982 毫秒
+11:30:24：开始请求出品数据
+11:30:24：成功获得出品数据，耗时 12.0089 毫秒
+11:30:29：开始请求出品数据
+11:30:29：成功获得出品数据，耗时 13.7877 毫秒
+11:30:34：开始请求出品数据
+11:30:34：成功获得出品数据，耗时 10.001 毫秒
+11:30:39：开始请求出品数据
+11:30:39：成功获得出品数据，耗时 10.0055 毫秒
+11:30:44：开始请求出品数据
+11:30:45：成功获得出品数据，耗时 11.8145 毫秒
+11:30:50：开始请求出品数据
+11:30:50：成功获得出品数据，耗时 11.0005 毫秒
+11:30:55：开始请求出品数据
+11:30:55：成功获得出品数据，耗时 11.9671 毫秒
+11:31:00：开始请求出品数据
+11:31:00：成功获得出品数据，耗时 19.9148 毫秒
+11:31:05：开始请求出品数据
+11:31:05：成功获得出品数据，耗时 10.9688 毫秒
+11:31:10：开始请求出品数据
+11:31:10：成功获得出品数据，耗时 11.9693 毫秒
+11:31:15：开始请求出品数据
+11:31:15：成功获得出品数据，耗时 10.9676 毫秒
+11:31:20：开始请求出品数据
+11:31:20：成功获得出品数据，耗时 9.9734 毫秒
+11:31:25：开始请求出品数据
+11:31:25：成功获得出品数据，耗时 13.853 毫秒
+11:31:30：开始请求出品数据
+11:31:30：成功获得出品数据，耗时 11.7953 毫秒
+11:31:35：开始请求出品数据
+11:31:35：成功获得出品数据，耗时 11.8262 毫秒
+11:31:40：开始请求出品数据
+11:31:40：成功获得出品数据，耗时 42.8766 毫秒
+11:31:45：开始请求出品数据
+11:31:45：成功获得出品数据，耗时 12.9654 毫秒
+11:31:50：开始请求出品数据
+11:31:50：成功获得出品数据，耗时 13.964 毫秒
+11:31:55：开始请求出品数据
+11:31:55：成功获得出品数据，耗时 27.9221 毫秒
+11:32:00：开始请求出品数据
+11:32:00：成功获得出品数据，耗时 17.9517 毫秒
+11:32:05：开始请求出品数据
+11:32:05：成功获得出品数据，耗时 15.9581 毫秒
+11:32:10：开始请求出品数据
+11:32:10：成功获得出品数据，耗时 11.9655 毫秒
+11:32:15：开始请求出品数据
+11:32:15：成功获得出品数据，耗时 27.9225 毫秒
+11:32:20：开始请求出品数据
+11:32:20：成功获得出品数据，耗时 9.8979 毫秒
+11:32:25：开始请求出品数据
+11:32:25：成功获得出品数据，耗时 10.9672 毫秒
+11:32:30：开始请求出品数据
+11:32:30：成功获得出品数据，耗时 10.8343 毫秒
+11:32:35：开始请求出品数据
+11:32:35：成功获得出品数据，耗时 12.8246 毫秒
+11:32:40：开始请求出品数据
+11:32:40：成功获得出品数据，耗时 11.958 毫秒
+11:32:45：开始请求出品数据
+11:32:45：成功获得出品数据，耗时 11.7907 毫秒
+11:32:50：开始请求出品数据
+11:32:50：成功获得出品数据，耗时 10.943 毫秒
+11:32:55：开始请求出品数据
+11:32:55：成功获得出品数据，耗时 14.834 毫秒
+11:33:00：开始请求出品数据
+11:33:00：成功获得出品数据，耗时 10.9668 毫秒
+11:33:05：开始请求出品数据
+11:33:05：成功获得出品数据，耗时 12.7936 毫秒
+11:33:10：开始请求出品数据
+11:33:10：成功获得出品数据，耗时 9.973 毫秒
+11:33:15：开始请求出品数据
+11:33:15：成功获得出品数据，耗时 10.7973 毫秒
+11:33:20：开始请求出品数据
+11:33:20：成功获得出品数据，耗时 12.9665 毫秒
+11:33:25：开始请求出品数据
+11:33:25：成功获得出品数据，耗时 14.9598 毫秒
+11:33:30：开始请求出品数据
+11:33:30：成功获得出品数据，耗时 22.918 毫秒
+11:33:35：开始请求出品数据
+11:33:35：成功获得出品数据，耗时 13.7964 毫秒
+11:33:40：开始请求出品数据
+11:33:40：成功获得出品数据，耗时 9.975 毫秒
+11:33:45：开始请求出品数据
+11:33:45：成功获得出品数据，耗时 12.8064 毫秒
+11:33:50：开始请求出品数据
+11:33:50：成功获得出品数据，耗时 11.9962 毫秒
+11:33:55：开始请求出品数据
+11:33:55：成功获得出品数据，耗时 15.9298 毫秒
+11:34:00：开始请求出品数据
+11:34:00：成功获得出品数据，耗时 14.9609 毫秒
+11:34:05：开始请求出品数据
+11:34:05：成功获得出品数据，耗时 12.9654 毫秒
+11:34:10：开始请求出品数据
+11:34:10：成功获得出品数据，耗时 11.7861 毫秒
+11:34:15：开始请求出品数据
+11:34:15：成功获得出品数据，耗时 27.9243 毫秒
+11:34:20：开始请求出品数据
+11:34:20：成功获得出品数据，耗时 10.9491 毫秒
+11:34:25：开始请求出品数据
+11:34:25：成功获得出品数据，耗时 9.9734 毫秒
+12:10:32：开始定时打印(2018/12/3 12:10:30)：3
+12:10:32：开始轮询(2018/12/3 12:10:32)：2
+14:09:57：开始定时打印(2018/12/3 14:09:57)：3
+14:09:57：开始轮询(2018/12/3 14:09:57)：2
+14:10:02：开始请求出品数据
+14:10:02：成功获得出品数据，耗时 99.733 毫秒
+14:10:39：开始请求出品数据
+14:10:39：成功获得出品数据，耗时 17.9513 毫秒
+14:10:49：开始请求出品数据
+14:10:49：成功获得出品数据，耗时 13.9908 毫秒
+14:11:00：开始请求出品数据
+14:11:00：成功获得出品数据，耗时 13.9939 毫秒
+14:11:05：开始请求出品数据
+14:11:05：成功获得出品数据，耗时 11.9636 毫秒
+14:11:10：开始请求出品数据
+14:11:10：成功获得出品数据，耗时 17.9475 毫秒
+14:11:15：开始请求出品数据
+14:11:15：成功获得出品数据，耗时 20.9414 毫秒
+14:11:20：开始请求出品数据
+14:11:20：成功获得出品数据，耗时 12.0022 毫秒
+14:11:25：开始请求出品数据
+14:11:25：成功获得出品数据，耗时 27.9244 毫秒
+14:11:37：开始轮询(2018/12/3 14:11:37)：2
+14:11:37：开始定时打印(2018/12/3 14:11:37)：3
+14:11:37：开始请求出品数据
+14:11:37：成功获得出品数据，耗时 44.8819 毫秒
+14:11:42：开始请求出品数据
+14:11:42：成功获得出品数据，耗时 13.992 毫秒
+14:11:47：开始请求出品数据
+14:11:47：成功获得出品数据，耗时 10.9706 毫秒
+14:11:52：开始请求出品数据
+14:11:52：成功获得出品数据，耗时 10.9691 毫秒
+14:11:57：开始请求出品数据
+14:11:57：成功获得出品数据，耗时 11.9554 毫秒
+14:12:02：开始请求出品数据
+14:12:02：成功获得出品数据，耗时 10.9703 毫秒
+14:12:07：开始请求出品数据
+14:12:07：成功获得出品数据，耗时 12.9926 毫秒
+14:12:12：开始请求出品数据
+14:12:12：成功获得出品数据，耗时 16.9764 毫秒
+14:12:17：开始请求出品数据
+14:12:17：成功获得出品数据，耗时 12.9654 毫秒
+14:12:22：开始请求出品数据
+14:12:22：成功获得出品数据，耗时 10.9694 毫秒
+14:12:27：开始请求出品数据
+14:12:27：成功获得出品数据，耗时 12.8853 毫秒
+14:12:32：开始请求出品数据
+14:12:32：成功获得出品数据，耗时 13.9611 毫秒
+14:12:37：开始请求出品数据
+14:12:37：成功获得出品数据，耗时 12.7785 毫秒
+14:12:42：开始请求出品数据
+14:12:42：成功获得出品数据，耗时 12.9517 毫秒
+14:12:47：开始请求出品数据
+14:12:47：成功获得出品数据，耗时 11.9372 毫秒
+14:12:52：开始请求出品数据
+14:12:52：成功获得出品数据，耗时 10.9661 毫秒
+14:12:59：开始请求出品数据
+14:12:59：开始定时打印(2018/12/3 14:12:59)：5
+14:12:59：成功获得出品数据，耗时 652.5914 毫秒
+14:12:59：开始轮询(2018/12/3 14:12:59)：4
+14:13:05：开始请求出品数据
+14:13:05：开始请求出品数据
+14:13:05：成功获得出品数据，耗时 18.9398 毫秒
+14:13:05：成功获得出品数据，耗时 30.9382 毫秒
+14:13:10：开始请求出品数据
+14:13:10：成功获得出品数据，耗时 12.9612 毫秒
+14:13:27：开始请求出品数据
+14:13:28：开始请求出品数据
+14:13:47：成功获得出品数据，耗时 7216.359 毫秒
+14:13:49：成功获得出品数据，耗时 6529.1989 毫秒
+14:14:18：开始请求出品数据
+14:14:30：成功获得出品数据，耗时 10989.7139 毫秒
+14:14:32：开始请求出品数据
+14:14:34：成功获得出品数据，耗时 977.1269 毫秒

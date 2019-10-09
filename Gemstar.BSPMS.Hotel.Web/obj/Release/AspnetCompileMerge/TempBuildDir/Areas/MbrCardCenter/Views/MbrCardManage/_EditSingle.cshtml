@@ -1,0 +1,171 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MbrCardCenter.Models.MbrCardManage.MbrCardEditSingleViewModel
+@using (Html.BeginForm("EditSingle", "MbrCardManage",new { area= "MbrCardCenter" },FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m=>m.Type)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.MbrCardNo)</td>
+            <td>@Html.DisplayFor(m => m.MbrCardNo)</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.GuestName)</td>
+            <td>@Html.DisplayFor(m => m.GuestName)</td>
+            <td></td>
+        </tr>
+        @switch (Model.Type)
+        {
+            case "MbrCardNo":
+                {
+                    <tr>
+                        <td class="textright"><span>新</span>@Html.LabelFor(m => m.MbrCardNo)</td>
+                        <td>@Html.TextBox("MbrCardNo", Model.MbrCardNo, new { @class = "k-textbox", style = "width:95%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.MbrCardNo, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.InductionCar)</td>
+                        <td>@Html.TextBoxFor(m=>m.InductionCar, new { @class = "k-textbox", style = "width:95%;" })
+                            <img class="res-icon-img" src="~/images/auth/mk.png" title="读卡" id="scanIdButton"><input type="hidden" id="MbrCardScan" value="mbrCard" />
+                        </td>
+                        <td>@Html.ValidationMessageFor(m => m.InductionCar, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+                        <td>@Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:95%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+                    </tr>
+                }
+                break;
+            case "Sales":
+                {
+                    <tr>
+                        <td class="textright"><span>原</span>@Html.LabelFor(m => m.Sales)</td>
+                        <td>@Html.DisplayFor(m => m.Sales)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="textright"><span>新</span>@Html.LabelFor(m => m.Sales)</td>
+                        <td>
+                            @Html.Kendo().DropDownListFor(e => e.Sales).HtmlAttributes(new { style = " width:100%;" }).OptionLabel("请选择").DataTextField("Text").DataValueField("Value").DataSource(e => e.Read(r => { r.Action("GetSalesnameSelectLists", "MbrCardManage", new { rnd = new Random().NextDouble() }); }))
+                        </td>
+                        <td>@Html.ValidationMessageFor(m => m.Sales, "*")</td>
+                    </tr>
+                }
+                break;
+            case "Status":
+                {
+                    <tr>
+                        <td class="textright"><span>原</span>@Html.LabelFor(m => m.Status)</td>
+                        <td>
+                            @{var StatusList = (ViewBag.StatusSelectList as List<SelectListItem>);}
+                            @if (StatusList != null)
+                            {
+                                int i = 0;
+                                foreach (SelectListItem item in StatusList)
+                                {
+                                    if ((byte.Parse(item.Value)) == Model.Status)
+                                    {
+                                        @item.Text
+                                        break;
+                                    }
+                                    i++;
+                                }
+                                StatusList.RemoveAt(i);
+                            }
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="textright"><span>新</span>@Html.LabelFor(m => m.Status)</td>
+                        <td>@Html.Kendo().DropDownListFor(m => m.Status).BindTo((ViewBag.StatusSelectList as List<SelectListItem>)).OptionLabel("--请选择--").HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Status, "*")</td>
+                    </tr>
+                }
+                break;
+            case "IsAudit":
+                {
+                    <tr>
+                        <td class="textright"><span>原</span>@Html.LabelFor(m => m.IsAudit)</td>
+                        <td>@(Model.IsAudit == true ? "已审核" : "未审核")</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="textright"><span>新</span>@Html.LabelFor(m => m.IsAudit)</td>
+                        @if (Model.IsAudit == true)
+                        {
+                            <td>@Html.Kendo().DropDownListFor(m => m.IsAudit).BindTo(new List<DropDownListItem>() { new DropDownListItem() { Value = "false", Text = "未审核" } }).OptionLabel("--请选择--").HtmlAttributes(new { style = "width:100%;" })</td>
+                        }
+                        else
+                        {
+                            <td>@Html.Kendo().DropDownListFor(m => m.IsAudit).BindTo(new List<DropDownListItem>() { new DropDownListItem() { Value = "true", Text = "已审核" } }).OptionLabel("--请选择--").HtmlAttributes(new { style = "width:100%;" })</td>
+                        }
+                        <td>@Html.ValidationMessageFor(m => m.IsAudit, "*")</td>
+                    </tr>
+                }
+                break;
+            case "ValidDate":
+                {
+                    <tr>
+                        <td class="textright"><span>原</span>@Html.LabelFor(m => m.ValidDate)</td>
+                        <td>@(Model.ValidDate == null ? "" : ((DateTime)Model.ValidDate).ToString("yyyy-MM-dd"))</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="textright"><span>新</span>@Html.LabelFor(m => m.ValidDate)</td>
+                        <td>@Html.Kendo().DatePickerFor(m => m.ValidDate).Format("yyyy-MM-dd").HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.ValidDate, "*")</td>
+                    </tr>
+                }
+                break;
+            }
+        @if(Model.Type!="MbrCardNo")
+        { 
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+                <td>@Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+            </tr>
+        }
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+    }
+
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"), function () { $("#dataDiv", $("#mainContent iframe")[0].contentWindow.document).load($("#mainContent iframe")[0].src + "?viewType=false"); });
+        });
+        //会员卡扫描
+        $("#scanIdButton").click(function (e) { MbrCardButton_clicked(e); });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        if (document.getElementById("Status") != null) {
+            $("#Status").data("kendoDropDownList").select(0);
+        }
+        if (document.getElementById("IsAudit") != null) {
+            $("#IsAudit").data("kendoDropDownList").select(0);
+        }
+        if (document.getElementById("ValidDate") != null) {
+            $("#ValidDate").data("kendoDatePicker").value("");
+        }
+    });
+    if (document.getElementById("MbrCardNo") != null) {
+        setTimeout(function () { document.getElementById("MbrCardNo").focus(); }, 500);
+    }
+</script>
+<script type="text/javascript">
+    var CustomerCommonValues = {
+        mbrType: '@ViewBag.mbrType',
+        mbrCode: '@ViewBag.mbrCode',
+        mbrEditionName: '@ViewBag.mbrEditionName',
+    };
+</script>

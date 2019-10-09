@@ -1,0 +1,66 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.ResManage.ResAdjustPriceInfo.AdjustPriceResultModel>
+
+<div>
+    <input type="hidden" id="authorizationWindow_Url" value="@Url.Action("SubmitAuthByAdjustPrice", "ResOrderCustomer",new { area = "ResManage" })" />
+    <input type="hidden" id="authorizationWindow_UrlCallBack" value="@Url.Action("GetAuthResultByAdjustPrice", "ResOrderCustomer",new { area = "ResManage" })" />
+    <input type="hidden" id="authorizationWindow_Type" value="1" />
+    <input type="hidden" id="authorizationWindow_Content" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model)" />
+</div>
+<div class="k-grid k-widget" style="max-height: 500px;overflow:hidden;">
+    <div class="k-grid-header" style="padding-right: 17px;">
+        <div class="k-grid-header-wrap k-auto-scrollable">
+            <table>
+                <colgroup>
+                    <col style="width:90px;">
+                    <col>
+                    <col>
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="k-header">日期</th>
+                        <th class="k-header">原价格</th>
+                        <th class="k-header">价格体系</th>
+                        <th class="k-header">新价格</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="k-grid-content k-auto-scrollable" style="max-height: 140px;">
+        <table style="height: auto;">
+            <colgroup>
+                <col style="width:90px;">
+                <col>
+                <col>
+                <col>
+            </colgroup>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var entity in Model)
+                    {
+                        <tr style="background-color: #cce4ff;">
+                            <td>价格代码<br />房间类型</td>
+                            <td>@entity.OriginRateCodeName<br />@entity.OriginRoomTypeName</td>
+                            <td>=></td>
+                            <td style="border-left:0px;">@entity.RateCodeName<br />@entity.RoomTypeName</td>
+                        </tr>
+                        if (entity.AdjustPriceList != null && entity.AdjustPriceList.Count > 0)
+                        {
+                            foreach (var item in entity.AdjustPriceList)
+                            {
+                                <tr>
+                                    <td>@item.Ratedate.ToString("yyyy-MM-dd")</td>
+                                    <td>@item.OriginPrice</td>
+                                    <td>@item.PlanPrice</td>
+                                    <td>@item.Price</td>
+                                </tr>
+                            }
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

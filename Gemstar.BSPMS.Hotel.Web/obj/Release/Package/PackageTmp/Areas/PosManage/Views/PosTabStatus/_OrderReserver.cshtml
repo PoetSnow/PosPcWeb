@@ -1,0 +1,31 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPos;
+@(Html.Kendo().Grid<PosBill>()
+        .Name("gridServer")
+        .Columns(columns =>
+        {
+            columns.Bound(m => m.Billid).Hidden();
+            columns.Bound(m => m.Billid).HeaderTemplate("<span></span>").Width(30)
+                .ClientTemplate("<input type='checkbox' value='#: Billid #' onclick='checkedRowReserver()'/>");
+            columns.Bound(m => m.BillNo).Title("订单号").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(80);
+            columns.Bound(m => m.Name).Title("客人姓名").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+            columns.Bound(m => m.Mobile).Title("手机号码").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(100);
+            columns.Bound(m => m.IGuest).Title("人数").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(40);
+            columns.Bound(m => m.OrderDate).Format("{0:yyyy-MM-dd HH:mm:ss}").Title("预抵日期").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(180);
+        })
+        .HtmlAttributes(new { style = "height:calc(100% - 6rem);" })
+        .Scrollable()
+        .Selectable(s => s.Mode(GridSelectionMode.Multiple).Enabled(false))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("ListOrderReserver", "PosTabStatus", new { rnd = new Random().NextDouble(), tabId = ViewBag.TabId }))
+        )
+)
+<div class="foot">
+    <input type="button" value="预订开台" class="button" onclick="openTabByOrder('@ViewBag.TabId','@ViewBag.Tabno','@ViewBag.Billid','@ViewBag.Status')"/>
+    <input type="button" value="非预订开台" class="button" onclick="isLockTab('@ViewBag.TabId','@ViewBag.Tabno','@ViewBag.Billid','7')"/>
+    <input type="button" value="退出" class="button" style="background-color:#f55858" onclick="layer.closeAll()"/>
+</div>
+@*<div class="formButtons">
+    <button id="saveEditFormButton" role="button" data-role="button" onclick="UpdateRestoration()">确定</button>
+    <button id="closeEditFormButton" role="button" data-role="button" onclick="closeRestoration()">关闭</button>
+</div>*@

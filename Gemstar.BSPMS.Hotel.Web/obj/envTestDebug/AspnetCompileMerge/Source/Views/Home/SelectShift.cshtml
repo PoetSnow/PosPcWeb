@@ -1,0 +1,241 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Models.Home.SelectShiftViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+    var product = ViewBag.product as Gemstar.BSPMS.Common.Services.Entities.M_v_products;
+}
+    <img src="~/images/priture-11-15/roomStatus-1-18.png"  style="display:none"/>
+    <style type="text/css">
+        .tr a:hover {
+            color: #428BCA;
+        }
+
+        .info-table {
+            font-size: 20px;
+        }
+
+         .info-table h2 {
+             color: #428bca;
+             display: inline-block;
+             margin-left: 60px;
+         }
+
+         .info-table tr {
+             line-height: 3;
+         }
+
+          .info-table td {
+              text-align: left;
+          }
+
+        .lefttd {
+            width: 170px;
+        }
+
+        .div {
+            width: 330px;
+            float: left;
+            margin-top: 10px;
+            line-height: 2;
+        }
+
+        .towdiv {
+            border: 1px solid #ccc;
+            width: 280px;
+            border-radius: 6px;
+        }
+
+        .spandiv {
+            float: left;
+            text-align: left;
+            margin-left: 20px;
+            width: 85px;
+        }
+
+        .timediv {
+            float: left;
+        }
+
+        .imgdiv {
+            margin-left: 15px;
+            vertical-align:sub;
+        }
+
+        .divMaion {
+            background: rgba(235, 235, 235, 0.12);
+            border-radius: 10px;
+            color: black;
+        }
+
+        .bnttr a:hover {
+            color: white !important;
+        }
+
+        .bnttr a {
+            color: black !important;
+        }
+
+        .span {
+            display: block;
+            height: 90px;
+            line-height: 90px;
+        }
+
+        .bgcolor {
+            background-color: #004793;
+            border:1px  solid red;
+        }
+        .font-color {
+            font-weight: bold;
+            font-style: normal;
+            color: rgb(85, 85, 85);
+            font-size:18px;
+        }
+        .black {
+            margin-top: 6px;
+            font-size: 18px;
+            padding-top: 0px;
+            padding-bottom: 5px;
+        }
+    </style>
+    <div class="divMaion">
+        <h3>选择班次<a id="bntReturn" style="font-weight: normal" class="k-primary k-button a-back black" href="javascript: history.back(-1);">返回</a></h3>
+        <div class="info-list">
+            <table class="info-table">
+                <tr>
+                    <td class="lefttd font-color">当前酒店：</td>
+                    <td class="font-color">@ViewBag.HotelId &nbsp; @ViewBag.Title</td>
+                </tr>
+                <tr class="tr" id="liShifts">
+                    <td class="lefttd font-color" valign="top">
+                        班次选择：
+                    </td>
+                    <td class="font-color">
+                        @{
+                            foreach (var shift in Model.Shifts)
+                            {
+                                <div class="div">
+                                    <div class="towdiv">
+                                       
+                                            <a href="javascript:void(0)" data-shiftid="@shift.Id" data-shiftstatus="@shift.LoginStatus" data-shiftname="@shift.ShiftName" onclick="selectShift(this)">
+                                                <div class="spandiv">@shift.ShiftName</div>
+                                                <div class="timediv">(@shift.BeginTime-@shift.EndTime)</div>
+                                                @if (shift.LoginStatus.ToString() == "已关闭")
+                                                {
+                                                    <span class="imgdiv"><img src="~/images/selectShift/guanbi.png" /></span>
+                                                }
+                                                else if (shift.LoginStatus.ToString() == "未开")
+                                                {
+                                                    <span class="imgdiv"><img src="~/images/selectShift/weikai.png" /></span>
+                                                }
+                                                else if (shift.LoginStatus.ToString() == "已开")
+                                                {
+                                                    <span class="imgdiv"><img src="~/images/selectShift/kai.png" /></span>
+                                                }
+
+                                            </a>
+                                        </div>
+                                    
+                                </div>
+                            }
+                        }
+                        <input type="hidden" id="selectedShiftId" value="@Model.CurrentShiftId" />
+                        <input type="hidden" id="selectedShiftName" value="@Model.CurrentShiftName" />
+                        <input type="hidden" id="checkShiftStatu" value="1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                       
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            var shifts = $(".div");
+            if (shifts.length <= 0) {//没有班次
+                setSelectedValue();
+            }
+            $("#bannerDiv").removeClass("apply-banner");
+            $("#bannerDiv").addClass("apply-banner-shift");
+            var shiftid="@Model.CurrentShiftId";
+                var data= $(".div a");
+                for (var i = 0; i < data.length; i++) {
+                    var id = $(data[i]).attr("data-shiftid");
+                    var name = $(data[i]).attr("data-shiftname");
+                    if (name.length > 4) {
+                        $(data[i]).parent().css("height", "80px");
+                    }
+                    if (shiftid == id && shiftid != "") {
+                        $(data[i]).parent().addClass("bgcolor");
+                        $(data[i]).css("color", "white");
+                        var status = $(data[i]).attr("data-shiftstatus")
+                        var src = "";
+                        if (status == "已关闭") {
+                            src = "/images/selectShift/guanbi-1.png"
+                        }
+                        else if (status == "未开") {
+                            src = "/images/selectShift/weikai-1.png"
+                        }
+                        else if (status == "已开") {
+                            src = "/images/selectShift/kai-1.png"
+                        }
+                            $(data[i]).find("img").attr("src", src)
+                        }
+                }
+        })
+        //缓存图片
+        //function preloader() {
+        //    if (document.images) {
+        //        var img = new Image();
+        //        img.src = "../../../images/priture-11-15/roomStatus.png";
+        //    }
+        //}
+        //function addLoadEvent(func) {
+        //    var oldonload = window.onload;
+        //    if (typeof window.onload != 'function') {
+        //        window.onload = func;
+        //    } else {
+        //        window.onload = function () {
+        //            if (oldonload) {
+        //                oldonload();
+        //            }
+        //            func();
+        //        }
+        //    }
+        //}
+        //addLoadEvent(preloader);
+        //---------
+        function selectShift(a) {
+            $("#selectedShiftId").val($(a).data("shiftid"));
+            $("#selectedShiftName").val($(a).data("shiftname"));
+            setSelectedValue();
+        }
+        function setSelectedValue() {
+            var shiftId = $("#selectedShiftId").val();
+            var shiftName = $("#selectedShiftName").val();
+
+            var checkShiftStatu = $("#checkShiftStatu").val();
+            $.post('@Url.Action("SetShift")', { shiftId: shiftId, shiftName: shiftName, checkShiftStatu: checkShiftStatu }, function (data) {
+                if (data.Success) {
+                    if (data.Data.ResultType == 2) {
+                        top.location.href = data.Data.Message;
+                    } else {
+                        jConfirm(data.Data.Message, "确定", "取消", function (confirmed) {
+                            if (confirmed) {
+                                $("#checkShiftStatu").val("0");
+                                setSelectedValue();
+                            }
+                        });
+                    }
+
+                } else {
+                    //jAlert(data.Data);
+                    ajaxErrorHandle(data);
+                }
+            }, 'json');
+        }
+    </script>
+}

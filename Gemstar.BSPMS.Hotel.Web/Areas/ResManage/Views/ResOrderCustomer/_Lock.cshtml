@@ -1,0 +1,134 @@
+﻿@*门卡*@
+@model Gemstar.BSPMS.Hotel.Services.ResManage.ResMainInfo
+
+<div id="lockWindow" style="width:920px;height:450px;">
+    <style type="text/css">#lockTableDiv .k-grid tr:hover,#lockTableDiv .k-grid tr:hover td{background: none;} #lockTableDiv .k-grid tr.k-master-row:hover td{background-color: #cce4ff;}</style>
+    <div id="lockTableDiv" style="text-align:center">
+        <div class="k-grid k-widget" style="max-height: 434px;overflow:hidden;">
+            <div class="k-header k-grid-toolbar">
+                <div class="toolbar" style="text-align:left;">
+                    <label class="category-label" for="lockWindow_roomNo">房号：</label><input type="text" id="lockWindow_roomNo"/>
+                </div>
+            </div>
+            <div class="k-grid-header" style="padding-right: 17px;">
+                <div class="k-grid-header-wrap k-auto-scrollable">
+                    <table>
+                        <colgroup>
+                            <col class="k-hierarchy-col">
+                            <col style="width:60px">
+                            <col style="width:60px">
+                            <col style="width:135px">
+                            <col style="width:135px">
+                            <col style="width:60px">
+                            <col />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="k-hierarchy-cell k-header">&nbsp;</th>
+                                <th class="k-header">账号</th>
+                                <th class="k-header">房号</th>
+                                <th class="k-header">入住时间</th>
+                                <th class="k-header">离店时间</th>
+                                <th class="k-header">卡数量</th>
+                                <th class="k-header">操作</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="k-grid-content k-auto-scrollable" style="max-height: 310px;">
+                <table style="height: auto;">
+                    <colgroup>
+                        <col class="k-hierarchy-col">
+                        <col style="width:60px">
+                        <col style="width:60px">
+                        <col style="width:135px">
+                        <col style="width:135px">
+                        <col style="width:60px">
+                        <col style="width:100%"/>
+                    </colgroup>
+                    <tbody id="lockTbody"></tbody>
+                </table>
+            </div>
+            <div class="k-header k-grid-toolbar">
+                <div class="toolbar" style="text-align:left;">
+                    <input type="hidden" id="lockResId" />
+                    <input type="hidden" id="writeRegId" />
+                    <input type="hidden" id="writeSeqId" />
+                    <button id="readLockCardButton" name="readLockCardButton" class="k-button" type="button">读卡</button>
+                    <button id="logoutLockCardButton" name="logoutLockCardButton" class="k-button" type="button">注销卡</button>
+                    <input id="hardwareCallback_Error" value="LockWindow.CallBackError" type="hidden" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/x-kendo-template" id="lockTemplet">
+    <tr data-RegId="#= Data.RegId #" class="k-master-row">
+        <td class="k-hierarchy-cell"><a class="k-icon k-plus" href="javascript:void(0);" tabindex="-1"></a></td>
+        <td role="gridcell"><a class="k-lock-regid" href="javascript:void(0);">#= Data.RegId.replace(Data.Hid,"") #</a></td>
+        <td role="gridcell">#= Data.RoomNo != null && Data.RoomNo.length > 0 ? Data.RoomNo:'' #</td>
+        <td role="gridcell">#= Data.ArrDate #</td>
+        <td role="gridcell">#= Data.DepDate #</td>
+        <td role="gridcell">#var childlength=0;for (var i=0; i < Data.LockCardList.length; i++) {if (Data.LockCardList[i].Status==0) {childlength++;}}##= childlength #</td>
+        <td role="gridcell" style="text-align:left;">
+            #if (Data.IsWrite) {#
+                <button class="k-button k-button-icontext" style="min-width:24px;" name="writeLockCard" onclick="LockWindow.WriteLockCard('#= Data.RegId #', '', '')">发卡</button>
+            #}#
+            #if (Data.IsOnlineLock && Data.IsWrite) {#
+            <button class="k-button k-button-icontext" style="min-width:24px;" name="writeLockCard" onclick="LockWindow.WriteOnlineLockCard('#= Data.RegId #')">发密码锁</button>
+            #}#
+        </td>
+    </tr>
+    #if (Data.LockCardList != null && Data.LockCardList.length > 0) {#
+        <tr data-RegId="#= Data.RegId #" class="k-detail-row" style="display: none;">
+            <td class="k-hierarchy-cell"></td>
+            <td class="k-detail-cell" colspan="6">
+                <div data-role="grid" class="k-grid k-widget">
+                    <table role="grid">
+                        <colgroup>
+                            <col>
+                            <col style="width:60px">
+                            <col style="width:125px">
+                            <col style="width:125px">
+                            <col style="width:125px">
+                            <col style="width:70px">
+                            <col style="width:175px">
+                        </colgroup>
+                        <thead class="k-grid-header" role="rowgroup">
+                            <tr role="row">
+                                <th scope="col" class="k-header">卡号</th>
+                                <th scope="col" class="k-header">房号</th>
+                                <th scope="col" class="k-header">开始时间</th>
+                                <th scope="col" class="k-header">结束时间</th>
+                                <th scope="col" class="k-header">发卡时间</th>
+                                <th scope="col" class="k-header">状态</th>
+                                <th scope="col" class="k-header">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody role="rowgroup">
+                            #for (var i=0; i < Data.LockCardList.length; i++) {#
+                                <tr data-Id="#= Data.LockCardList[i].Id #" data-CardNo="#= Data.LockCardList[i].CardNo #" class="#= i%2==0?'':'k-alt' #">
+                                    <td role="gridcell">#= Data.LockCardList[i].CardNo #</td>
+                                    <td role="gridcell">#= Data.LockCardList[i].RoomNo #</td>
+                                    <td role="gridcell">#= Data.LockCardList[i].BeginDate #</td>
+                                    <td role="gridcell">#= Data.LockCardList[i].EndDate #</td>
+                                    <td role="gridcell">#= Data.LockCardList[i].CreateDate #</td>
+                                    <td role="gridcell">#= Data.LockCardList[i].StatusName #</td>
+                                    <td role="gridcell">
+                                    #if (Data.LockCardList[i].Status==0) {#
+                                        #if (Data.IsWrite) {#
+                                            <button class="k-button k-button-icontext" style="min-width:24px;" name="rewriteLockCard" onclick="LockWindow.ReWriteLockCard('#= Data.RegId #', '#= Data.LockCardList[i].CardNo #', '#= Data.LockCardList[i].Id #')">重写卡</button>
+                                        #}#
+                                        <button class="k-button k-button-icontext" style="min-width:24px;" name="nocardLogoutLockCard" onclick="LockWindow.NoCardLogoutLockCard('#= Data.RegId #', '#= Data.LockCardList[i].CardNo #', '#= Data.LockCardList[i].Id #')">无卡注销</button>
+                                    #}#
+                                    </td>
+                                </tr>
+                            #}#
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    #}#
+</script>

@@ -1,0 +1,130 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPos;
+@{
+    Layout = "~/Areas/ScanOrder/Views/Shared/_Layout.cshtml";
+    
+    var banners = ViewBag.BannerList as List<PosMBanner>;
+  
+
+}
+
+@section Css{
+    <link href="~/Content/ScanOrder/orderIndex.css" rel="stylesheet" />
+}
+
+
+
+
+@*<div class="mui-bar mui-bar-nav" style="height:44px;position:fixed">
+        <h1 class="mui-title">@ViewBag.RefeName/@ViewBag.TabName</h1>
+
+    </div>*@
+<!-- 轮播图 -->
+<div class="banner mui-slider">
+    <div class="mui-slider-group mui-slider-loop">
+        @Html.Partial("_MBannerList", banners)
+    </div>
+</div>
+<!-- 跑马灯 -->
+<div class="bursting swiper-container">
+    <div class="swiper-wrapper">
+       
+    </div>
+</div>
+<div style="margin:26px;">
+    <span style="font-size:30px;line-height: 49px;"> 店铺离线，暂停服务，请联系服务员~~~！</span>
+</div>
+
+
+
+<script src="~/Scripts/ScanOrder/ScanOrder.js"></script>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+        
+            if ('@banners.Count' <= 0) {
+                $(".banner").attr("style","display:none")
+            }
+            //参数中有A的话 代表是重新进入餐台。删除缓存数据
+            if (getQueryString("flag")=="A") {
+                localStorage.removeItem("billDetailList");
+                localStorage.removeItem("ActionList");
+                localStorage.removeItem("GroupList");
+            }
+            @*var s = '@ViewBag.BillDetailList';
+            var s1 = '@ViewBag.BillDetailActionList';
+            if (localStorage.getItem("billDetailList") == null) {
+                var s2 = JSON.stringify(s);
+                console.log(s2);
+                //localStorage.setItem("billDetailList", JSON.stringify(s));
+                //localStorage.setItem("ActionList", JSON.stringify(s1));
+            }*@
+
+
+
+            banner();
+            bursting();
+         
+
+
+
+
+         });
+
+    function banner() {
+        var mySwiper = new Swiper('.swiper-container', {
+            loop: true,    //设置循环滚动
+            // 如果需要前进后退按钮
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            speed: 3000,  //设置图片滚动速度
+
+            // 自动滚动，注意与上面的loop不一样，loop是指能否从最后位置滚动回第一的位置
+            autoplay: {
+                delay: 1,   //每滚动一个图片后等待的时间，这里设置为1ms就是代表没有等待
+                //触摸后不会停止自动滚动
+                disableOnInteraction: false,
+            },
+
+            //同时显示多少个图片
+            slidesPerView: 4,
+            spaceBetween: 30,   //两图片之间的空隙
+            breakpoints: {   //设置浏览器不同尺寸时的显示方式
+                320: {
+                    slidesPerView: 2,
+                    spaceBetween: 10
+                },
+                //当宽度小于等于640
+                640: {
+                    slidesPerView: 3,
+                    spaceBetween: 20
+                }
+            },
+
+        });
+
+        //因为这里需要用到mouseover事件，所以前面要引入jQuery库
+        $('.swiper-container').mouseover(function () {
+            mySwiper.autoplay.stop();   //鼠标悬停在跑马灯上时停止滚动
+        });
+        $('.swiper-container').mouseout(function () {
+            mySwiper.autoplay.start();
+        });
+
+        //swiper中设置了图片的滚动动画是ease-out，需要改成linear才有平稳滚动的效果
+        mySwiper.$wrapperEl.css({ '-webkit-transition-timing-function': "linear", "-moz-transition-timing-function": "linear", "-ms-transition-timing-function": "linear", "-o-transition-timing-function": "linear", "transition-timing-function": "linear" });
+    }
+
+    function bursting() {
+        //获得slider插件对象
+        var gallery = mui('.banner');
+        gallery.slider({
+            interval: 1000 //自动轮播周期，若为0则不自动播放，默认为0；
+        });
+    }
+
+    WeixinJSBridge.call('hideToolbar');
+    </script>
+}
+

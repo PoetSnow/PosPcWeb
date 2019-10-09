@@ -1,0 +1,1066 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StiSerializer version="1.02" type="Net" application="StiReport">
+  <Dictionary Ref="1" type="Dictionary" isKey="true">
+    <BusinessObjects isList="true" count="0" />
+    <Databases isList="true" count="1">
+      <posdev Ref="2" type="Stimulsoft.Report.Dictionary.StiSqlDatabase" isKey="true">
+        <Alias>posdev</Alias>
+        <ConnectionStringEncrypted>1HD168ZoMZzjaaXcaoQkTtFS2StOXMOJYUWl3GIN40vkbGWD50DzyOJB/eBhhGhO1cJzwsUFMZnCE13g5ARlbsJsT8vEXbvtQxD18WENoC/RYFPPxExpmWFJGYDqJbduxXjJKU8FsqTCFb306kwpP8PuyyvNTTFN6UQh7OsYsWvcavWIxU8=</ConnectionStringEncrypted>
+        <Name>posdev</Name>
+      </posdev>
+    </Databases>
+    <DataSources isList="true" count="1">
+      <up_pos_print_billDetail Ref="3" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
+        <Alias>up_pos_print_billDetail</Alias>
+        <Columns isList="true" count="81">
+          <value>客人姓名,System.String</value>
+          <value>人数,System.Int32</value>
+          <value>餐台号,System.String</value>
+          <value>开台卡号,System.String</value>
+          <value>会员卡号,System.String</value>
+          <value>合约单位名称,System.String</value>
+          <value>消费人,System.String</value>
+          <value>金额折,System.Decimal</value>
+          <value>状态,System.Byte</value>
+          <value>服务费率,System.Decimal</value>
+          <value>最低消费时长,System.Int32</value>
+          <value>账单打单次数,System.Int32</value>
+          <value>埋脚单打单次数,System.Int32</value>
+          <value>开台备注,System.String</value>
+          <value>收银备注,System.String</value>
+          <value>可视单号,可视账号,System.String</value>
+          <value>手机号码,System.String</value>
+          <value>登记营业日,System.DateTime</value>
+          <value>登记时间,System.DateTime</value>
+          <value>模块,System.String</value>
+          <value>业务员,System.String</value>
+          <value>关联号,System.String</value>
+          <value>最低消费,System.Decimal</value>
+          <value>项目代码,System.String</value>
+          <value>消费项目,System.String</value>
+          <value>单位代码,System.String</value>
+          <value>单位,System.String</value>
+          <value>数量,System.Decimal</value>
+          <value>称重条只,System.Decimal</value>
+          <value>扣钝倍数,System.Decimal</value>
+          <value>单价,System.Decimal</value>
+          <value>作法加价,System.Decimal</value>
+          <value>折前金额,System.Decimal</value>
+          <value>税额,System.Decimal</value>
+          <value>客位,System.String</value>
+          <value>作法,System.String</value>
+          <value>要求,System.String</value>
+          <value>消费还是付款,System.String</value>
+          <value>计费状态,System.Byte</value>
+          <value>求和套餐,System.Boolean</value>
+          <value>求和套餐明细,System.Boolean</value>
+          <value>套餐分摊金额,System.Decimal</value>
+          <value>单道折扣,System.Decimal</value>
+          <value>单道金额折,System.Decimal</value>
+          <value>批次,System.String</value>
+          <value>原价,System.Decimal</value>
+          <value>会员价,System.Decimal</value>
+          <value>会员折扣,System.Decimal</value>
+          <value>备注,System.String</value>
+          <value>班次,System.String</value>
+          <value>市别,System.String</value>
+          <value>折后金额,System.Decimal</value>
+          <value>折扣金额,System.String</value>
+          <value>折扣率,System.Int32</value>
+          <value>毛利率,System.String</value>
+          <value>服务费,System.Decimal</value>
+          <value>消费余额,System.String</value>
+          <value>自动标志,System.String</value>
+          <value>序号,System.String</value>
+          <value>已付金额,System.Decimal</value>
+          <value>未付金额,System.Decimal</value>
+          <value>折前总金额,System.Decimal</value>
+          <value>折后总金额,System.Decimal</value>
+          <value>结账状态,System.Byte</value>
+          <value>应付金额,System.Decimal</value>
+          <value>计费状态备注,System.String</value>
+          <value>开台人,System.String</value>
+          <value>id,System.String</value>
+          <value>是否折扣,System.String</value>
+          <value>外部支付信息,System.String</value>
+          <value>餐台名,System.String</value>
+          <value>会员名称,System.String</value>
+          <value>房号,System.String</value>
+          <value>本次扣款,System.Decimal</value>
+          <value>会员余额,System.String</value>
+          <value>房客名称,System.String</value>
+          <value>签单人名称,System.String</value>
+          <value>支付方式代码,System.String</value>
+          <value>交易号,System.String</value>
+          <value>消费项目打单次数,System.String</value>
+          <value>点菜单打单次数,System.String</value>
+        </Columns>
+        <CommandTimeout>30</CommandTimeout>
+        <Dictionary isRef="1" />
+        <IsCloud>False</IsCloud>
+        <Name>up_pos_print_billDetail</Name>
+        <NameInSource>posdev</NameInSource>
+        <Parameters isList="true" count="0" />
+        <SqlCommand>return</SqlCommand>
+      </up_pos_print_billDetail>
+    </DataSources>
+    <Relations isList="true" count="0" />
+    <Report isRef="0" />
+    <Variables isList="true" count="10">
+      <value>,HotelFax,传真,System.String,,False,False</value>
+      <value>,HotelId,HotelId,System.String,_x0030_00629,False,False</value>
+      <value>,HotelName,HotelName,System.String,云POS酒店,False,False</value>
+      <value>,UserCode,UserCode,System.String,admin2,False,False</value>
+      <value>,UserName,UserName,System.String,admin2,False,False</value>
+      <value>,LogoUrl,LogoUrl,System.Object,,False,False</value>
+      <value>,WeiXinQRCodeUrl,WeiXinQRCodeUrl,System.String,,False,False</value>
+      <value>,ReportCode,ReportCode,System.String,PosBillPrint,False,False</value>
+      <value>,HotelPhone,HotelPhone,System.String,_x0031_5774226572,False,False</value>
+      <value>,HotelAddress,HotelAddress,System.String,,False,False</value>
+    </Variables>
+  </Dictionary>
+  <EngineVersion>EngineV2</EngineVersion>
+  <GlobalizationStrings isList="true" count="0" />
+  <MetaTags isList="true" count="0" />
+  <Pages isList="true" count="1">
+    <Page1 Ref="4" type="Page" isKey="true">
+      <Border>None;Black;2;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <Components isList="true" count="6">
+        <ReportTitleBand1 Ref="5" type="ReportTitleBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,0.4,8,4.6</ClientRectangle>
+          <Components isList="true" count="21">
+            <Text10 Ref="6" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0,8,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,14</Font>
+              <Guid>f6355b91ac894d809ca80aa62d25c934</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text10</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>欢迎光临{HotelName}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text10>
+            <Text38 Ref="7" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2,1.2,5.8,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>829ec89b8da546cdb610b36bb73e6bca</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text38</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{up_pos_print_billDetail.可视单号}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text38>
+            <Text1 Ref="8" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,1.2,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text1</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>客账号：</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text1>
+            <Text6 Ref="9" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,1.8,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>63cd30257f0a4a7a8fb5d0f46ef08216</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text6</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>台号/名：</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text6>
+            <Text43 Ref="10" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2,1.8,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>9f6cde06afd0431697905d7b5acb136e</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text43</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{up_pos_print_billDetail.餐台名}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text43>
+            <Text8 Ref="11" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4.2,1.8,1.6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>694a4120b79c4d92a3e206e7dd6f2b5b</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text8</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>市  别：</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text8>
+            <Text34 Ref="12" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>5.8,1.8,2.2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,11</Font>
+              <Guid>da2231d06b684986880f4859d8c5d65b</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text34</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{up_pos_print_billDetail.市别}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text34>
+            <Text5 Ref="13" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,2.4,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>2ad481e597124e96b3519ac005c64860</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text5</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>人  数：</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text5>
+            <Text42 Ref="14" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2,2.4,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>0adacca598d94b129ca0bb8dbf1a36d0</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text42</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{up_pos_print_billDetail.人数}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text42>
+            <Text4 Ref="15" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4.2,2.4,1.6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>ee6dcb182e0d49cc8518806898be3725</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text4</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>开  台：</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text4>
+            <Text11 Ref="16" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,3,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>299c8c52c6074a36a2ee0646885c9001</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text11</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>营业日：</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text11>
+            <Text12 Ref="17" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2,3,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>9215c5d8b3c7453380fad73189c85dc6</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text12</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{Format("{0:yyyy-MM-dd}",up_pos_print_billDetail.登记营业日)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text12>
+            <Text17 Ref="18" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4.2,3,1.6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>65be3cd23f1a41c991ec23cf4a13bc3b</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text17</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>班  次：</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text17>
+            <Text35 Ref="19" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>5.8,3,2.2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>68c8e2a697e1434d8076293ed2d5adba</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text35</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{up_pos_print_billDetail.班次}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text35>
+            <Text3 Ref="20" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,3.6,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>37394f76da7f402faa36539ba0eae2bd</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text3</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>打单时间：</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text3>
+            <Text15 Ref="21" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4.2,3.6,1.6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>160a1bf98e934ceabaed2fe6b0ba3499</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text15</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>打单人：</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text15>
+            <Text41 Ref="22" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2,3.6,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>5a13f2694a5848b48403415b2be267d9</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text41</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{Format("{0:HH:mm:ss}", Time)}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text41>
+            <Text28 Ref="23" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>5.8,2.4,2.2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>cae9119d1f32010a43d9b9a58c68f44d</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text28</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{up_pos_print_billDetail.开台人}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text28>
+            <Text25 Ref="24" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>5.8,3.6,2.2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>2455c22c3c5a3c7de498da849556f597</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text25</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{UserName}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text25>
+            <HorizontalLinePrimitive4 Ref="25" type="HorizontalLinePrimitive" isKey="true">
+              <ClientRectangle>0.1,1,7.8,0.0254</ClientRectangle>
+              <Color>Black</Color>
+              <EndCap Ref="26" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </EndCap>
+              <Guid>94b221e12de54648a6042194a550e309</Guid>
+              <Name>HorizontalLinePrimitive4</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <StartCap Ref="27" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </StartCap>
+              <Style>DashDot</Style>
+            </HorizontalLinePrimitive4>
+            <HorizontalLinePrimitive7 Ref="28" type="HorizontalLinePrimitive" isKey="true">
+              <ClientRectangle>0,4.4,8,0.0254</ClientRectangle>
+              <Color>Black</Color>
+              <EndCap Ref="29" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </EndCap>
+              <Guid>90f48bd77e913611e77549d93ac1d028</Guid>
+              <Name>HorizontalLinePrimitive7</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <StartCap Ref="30" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </StartCap>
+              <Style>Dash</Style>
+            </HorizontalLinePrimitive7>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Name>ReportTitleBand1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </ReportTitleBand1>
+        <HeaderBand2 Ref="31" type="HeaderBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,5.8,8,0.6</ClientRectangle>
+          <Components isList="true" count="5">
+            <Text30 Ref="32" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.4,0,1.8,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>f61eecf4bffd4dc493a6b550876da510</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text30</Name>
+              <Page isRef="4" />
+              <Parent isRef="31" />
+              <Text>消费项目</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text30>
+            <Text31 Ref="33" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2.8,0,1,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>bbf3c943cc7c484dad5f7a2a47772c68</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text31</Name>
+              <Page isRef="4" />
+              <Parent isRef="31" />
+              <Text>单价</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text31>
+            <Text46 Ref="34" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>5.2,0,1,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>21b080bb88f749f7abc9f03d502b7b4f</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text46</Name>
+              <Page isRef="4" />
+              <Parent isRef="31" />
+              <Text>数量</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text46>
+            <Text53 Ref="35" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4,0,1,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>ab64e54f0baf40269f3c8c67829708ec</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text53</Name>
+              <Page isRef="4" />
+              <Parent isRef="31" />
+              <Text>单位</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text53>
+            <Text54 Ref="36" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6.4,0,1,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>915f88c67b884b408548c1149d780b30</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text54</Name>
+              <Page isRef="4" />
+              <Parent isRef="31" />
+              <Text>金额</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text54>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Name>HeaderBand2</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </HeaderBand2>
+        <DataBand1 Ref="37" type="DataBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <BusinessObjectGuid isNull="true" />
+          <ClientRectangle>0,7.2,8,0.4</ClientRectangle>
+          <ColumnGaps>1</ColumnGaps>
+          <Components isList="true" count="5">
+            <Text2 Ref="38" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.2,0,2.4,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>黑体,10</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text2</Name>
+              <Page isRef="4" />
+              <Parent isRef="37" />
+              <Text>{up_pos_print_billDetail.消费项目}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <VertAlignment>Center</VertAlignment>
+            </Text2>
+            <Text7 Ref="39" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>5.2,0,1,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text7</Name>
+              <Page isRef="4" />
+              <Parent isRef="37" />
+              <Text>{up_pos_print_billDetail.数量}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="40" type="NumberFormat" isKey="true">
+                <DecimalSeparator>,</DecimalSeparator>
+                <GroupSeparator />
+                <NegativePattern>1</NegativePattern>
+              </TextFormat>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text7>
+            <Text13 Ref="41" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4,0,1,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>86349e485f87479590ee5be314470b8d</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text13</Name>
+              <Page isRef="4" />
+              <Parent isRef="37" />
+              <Text>{up_pos_print_billDetail.单位}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text13>
+            <Text14 Ref="42" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2.8,0,1,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>1442ac6e082346748572cb4755f7563c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text14</Name>
+              <Page isRef="4" />
+              <Parent isRef="37" />
+              <Text>{Format("{0:F1}",up_pos_print_billDetail.单价)}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="43" type="NumberFormat" isKey="true">
+                <DecimalSeparator>,</DecimalSeparator>
+                <GroupSeparator />
+                <NegativePattern>1</NegativePattern>
+              </TextFormat>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text14>
+            <Text16 Ref="44" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6.4,0,1.6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>18b52581a04944228dbb94195d648647</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text16</Name>
+              <Page isRef="4" />
+              <Parent isRef="37" />
+              <Text>{up_pos_print_billDetail.数量 * up_pos_print_billDetail.单价}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="45" type="NumberFormat" isKey="true">
+                <DecimalSeparator>,</DecimalSeparator>
+                <GroupSeparator />
+                <NegativePattern>1</NegativePattern>
+              </TextFormat>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text16>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <DataSourceName>up_pos_print_billDetail</DataSourceName>
+          <Filters isList="true" count="1">
+            <value>消费还是付款,EqualTo,D,,String</value>
+          </Filters>
+          <Name>DataBand1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+          <PrintOnAllPages>True</PrintOnAllPages>
+          <Sort isList="true" count="0" />
+        </DataBand1>
+        <FooterBand1 Ref="46" type="FooterBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,8.4,8,3.8</ClientRectangle>
+          <Components isList="true" count="14">
+            <Text21 Ref="47" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.8,1,1.6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>2f17a7379e744021ac98a540d3def324</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text21</Name>
+              <Page isRef="4" />
+              <Parent isRef="46" />
+              <Text>服务费：</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text21>
+            <Text24 Ref="48" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2.4,1,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>e4c76710d0e241838e9da3aaaab26c63</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text24</Name>
+              <Page isRef="4" />
+              <Parent isRef="46" />
+              <Text>{up_pos_print_billDetail.服务费}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text24>
+            <Text26 Ref="49" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4.4,1,2.4,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>31e6a7c8d43d4ee780ee9eb8bec8a0e9</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text26</Name>
+              <Page isRef="4" />
+              <Parent isRef="46" />
+              <Text>{up_pos_print_billDetail.服务费率}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="50" type="PercentageFormat" isKey="true">
+                <DecimalSeparator>,</DecimalSeparator>
+                <GroupSeparator />
+                <NegativePattern>1</NegativePattern>
+                <PositivePattern>1</PositivePattern>
+                <Symbol>%</Symbol>
+              </TextFormat>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text26>
+            <Text9 Ref="51" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.4,2.2,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>92156dcf7ce0493eaec2c0627e1160a7</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text9</Name>
+              <Page isRef="4" />
+              <Parent isRef="46" />
+              <Text>折扣金额：</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text9>
+            <Text18 Ref="52" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2.4,2.2,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>5497649f8bb9437aac0a02d60e0d013e</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text18</Name>
+              <Page isRef="4" />
+              <Parent isRef="46" />
+              <Text>-{up_pos_print_billDetail.折扣金额}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text18>
+            <Text29 Ref="53" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2.4,2.8,4.4,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,12</Font>
+              <Guid>9749583450b9d50ce784fe814f74cfea</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text29</Name>
+              <Page isRef="4" />
+              <Parent isRef="46" />
+              <Text>{up_pos_print_billDetail.应付金额}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text29>
+            <Text32 Ref="54" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.4,2.8,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>b69bc0e98624d70d1a31fe870ae59d1b</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text32</Name>
+              <Page isRef="4" />
+              <Parent isRef="46" />
+              <Text>应付金额：</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text32>
+            <Text39 Ref="55" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2.4,1.6,4.4,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>0515a41e825a755440840132b93f2a04</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text39</Name>
+              <Page isRef="4" />
+              <Parent isRef="46" />
+              <Text>{SumIf(DataBand1,up_pos_print_billDetail.折前金额,up_pos_print_billDetail.计费状态==2)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text39>
+            <Text40 Ref="56" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.6,1.6,1.8,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>c628d72eebd9897c78c701485d0ce0af</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text40</Name>
+              <Page isRef="4" />
+              <Parent isRef="46" />
+              <Text>赠送金额：</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text40>
+            <Text47 Ref="57" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2.4,0.4,4.4,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text47</Name>
+              <Page isRef="4" />
+              <Parent isRef="46" />
+              <Text>{up_pos_print_billDetail.折前总金额}</Text>
+              <TextBrush>Black</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Text47>
+            <Text48 Ref="58" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.2,0.4,2.2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text48</Name>
+              <Page isRef="4" />
+              <Parent isRef="46" />
+              <Text>消费金额：</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text48>
+            <Text33 Ref="59" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4.4,2.2,2.4,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>acb7c5e7fd0759f2b2d8dab28122cad6</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text33</Name>
+              <Page isRef="4" />
+              <Parent isRef="46" />
+              <Text>{up_pos_print_billDetail.折扣率}%</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text33>
+            <HorizontalLinePrimitive1 Ref="60" type="HorizontalLinePrimitive" isKey="true">
+              <ClientRectangle>0.1,0.2,7.8,0.0254</ClientRectangle>
+              <Color>Black</Color>
+              <EndCap Ref="61" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </EndCap>
+              <Guid>8629ecce72c547719f92dd695116bf3e</Guid>
+              <Name>HorizontalLinePrimitive1</Name>
+              <Page isRef="4" />
+              <Parent isRef="46" />
+              <StartCap Ref="62" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </StartCap>
+              <Style>Dash</Style>
+            </HorizontalLinePrimitive1>
+            <HorizontalLinePrimitive5 Ref="63" type="HorizontalLinePrimitive" isKey="true">
+              <ClientRectangle>0,3.6,7.8,0.0254</ClientRectangle>
+              <Color>Black</Color>
+              <EndCap Ref="64" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </EndCap>
+              <Guid>c64847b969f15240fa33fe8d760ff36b</Guid>
+              <Name>HorizontalLinePrimitive5</Name>
+              <Page isRef="4" />
+              <Parent isRef="46" />
+              <StartCap Ref="65" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </StartCap>
+              <Style>Dash</Style>
+            </HorizontalLinePrimitive5>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Name>FooterBand1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+          <PrintOnAllPages>True</PrintOnAllPages>
+        </FooterBand1>
+        <DataBand2 Ref="66" type="DataBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <BusinessObjectGuid isNull="true" />
+          <ClientRectangle>0,13,8,1.4</ClientRectangle>
+          <Components isList="true" count="2">
+            <Text22 Ref="67" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.2,0,1.8,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text22</Name>
+              <Page isRef="4" />
+              <Parent isRef="66" />
+              <Text>付款金额：</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text22>
+            <Text23 Ref="68" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2,0,5.8,1.2</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text23</Name>
+              <Page isRef="4" />
+              <Parent isRef="66" />
+              <Text>{up_pos_print_billDetail.折前金额}[{up_pos_print_billDetail.消费项目}] [{up_pos_print_billDetail.外部支付信息}]</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+            </Text23>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <DataRelationName isNull="true" />
+          <DataSourceName>up_pos_print_billDetail</DataSourceName>
+          <Filters isList="true" count="1">
+            <value>消费还是付款,EqualTo,C,,String</value>
+          </Filters>
+          <Name>DataBand2</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+          <PrintOnAllPages>True</PrintOnAllPages>
+          <Sort isList="true" count="0" />
+        </DataBand2>
+        <FooterBand2 Ref="69" type="FooterBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,15.2,8,2.8</ClientRectangle>
+          <Components isList="true" count="2">
+            <Text19 Ref="70" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.4,0.8,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>2b5b989b783644c1a582186a1c945039</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text19</Name>
+              <Page isRef="4" />
+              <Parent isRef="69" />
+              <Text>客人签名：</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text19>
+            <HorizontalLinePrimitive6 Ref="71" type="HorizontalLinePrimitive" isKey="true">
+              <ClientRectangle>3.3,1.2,3.4,0.0254</ClientRectangle>
+              <Color>Black</Color>
+              <EndCap Ref="72" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </EndCap>
+              <Guid>64b812740408478d8c10c6b5fc998930</Guid>
+              <Name>HorizontalLinePrimitive6</Name>
+              <Page isRef="4" />
+              <Parent isRef="69" />
+              <StartCap Ref="73" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </StartCap>
+              <Style>DashDot</Style>
+            </HorizontalLinePrimitive6>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Guid>8b5eefca0ece4cd5acfc7f82676c1a9a</Guid>
+          <Name>FooterBand2</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+          <PrintOnAllPages>True</PrintOnAllPages>
+        </FooterBand2>
+      </Components>
+      <Conditions isList="true" count="0" />
+      <Guid>1987d1d4df1e4568a5ce246f61bae47e</Guid>
+      <Margins>0,0,0.5,0.5</Margins>
+      <Name>Page1</Name>
+      <PageHeight>59.7</PageHeight>
+      <PageWidth>8</PageWidth>
+      <PaperSize>A4</PaperSize>
+      <Report isRef="0" />
+      <Watermark Ref="74" type="Stimulsoft.Report.Components.StiWatermark" isKey="true">
+        <Font>Arial,100</Font>
+        <TextBrush>[50:0:0:0]</TextBrush>
+      </Watermark>
+    </Page1>
+  </Pages>
+  <PrinterSettings Ref="75" type="Stimulsoft.Report.Print.StiPrinterSettings" isKey="true" />
+  <ReferencedAssemblies isList="true" count="8">
+    <value>System.Dll</value>
+    <value>System.Drawing.Dll</value>
+    <value>System.Windows.Forms.Dll</value>
+    <value>System.Data.Dll</value>
+    <value>System.Xml.Dll</value>
+    <value>Stimulsoft.Controls.Dll</value>
+    <value>Stimulsoft.Base.Dll</value>
+    <value>Stimulsoft.Report.Dll</value>
+  </ReferencedAssemblies>
+  <ReportAlias>单据</ReportAlias>
+  <ReportChanged>2/19/2019 5:43:58 PM</ReportChanged>
+  <ReportCreated>12/25/2017 11:11:27 AM</ReportCreated>
+  <ReportDescription>up_pos_print_billDetail</ReportDescription>
+  <ReportFile>D:\zhang\dotnetProjects\BSPMS\Gemstar.BSPMS.Hotel.Web\SRReports\PosBillPrint.mrt</ReportFile>
+  <ReportGuid>0a6d9f9381fc441a84cb0154c9aed622</ReportGuid>
+  <ReportName>单据</ReportName>
+  <ReportUnit>Centimeters</ReportUnit>
+  <ReportVersion>2014.2.2000</ReportVersion>
+  <Script>using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Data;
+using Stimulsoft.Controls;
+using Stimulsoft.Base.Drawing;
+using Stimulsoft.Report;
+using Stimulsoft.Report.Dialogs;
+using Stimulsoft.Report.Components;
+
+namespace Reports
+{
+    public class Report : Stimulsoft.Report.StiReport
+    {
+        public Report()        {
+            this.InitializeComponent();
+        }
+
+        #region StiReport Designer generated code - do not modify
+		#endregion StiReport Designer generated code - do not modify
+    }
+}</Script>
+  <ScriptLanguage>CSharp</ScriptLanguage>
+  <Styles isList="true" count="0" />
+</StiSerializer>

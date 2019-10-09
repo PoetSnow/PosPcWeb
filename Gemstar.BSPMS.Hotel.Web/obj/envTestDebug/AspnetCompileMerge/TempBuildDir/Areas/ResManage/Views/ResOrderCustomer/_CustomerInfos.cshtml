@@ -1,0 +1,283 @@
+﻿@*主单内所有客人信息列表*@
+@model List<Gemstar.BSPMS.Hotel.Services.ResManage.ResDetailCustomerInfos>
+@{ 
+    double rnd = new Random().NextDouble();
+}
+<style type="text/css">#customerInfosTbody .k-radio-label {padding-right: 0px;}#submitCustomerInfosButton {border-color: #e62722;color: #e62722;}#submitCustomerInfosButton:hover {background-color: #e62722;border-color: #e62722;color: #ffffff;}</style>
+<script type="text/javascript">
+    //设置客人资料
+    function setCustomerInfos(thisObj, dataItem) {
+        if (dataItem != null && dataItem != undefined) {
+            var trObj = $(thisObj).parents("#customerInfosTbody tr");
+            trObj.find("[name='GuestName']").val(dataItem.GuestName);
+            trObj.find("[name='Cerid']").val(dataItem.Cerid);
+            trObj.find("[name='City']").val(dataItem.City);
+            trObj.find("[name='Address']").val(dataItem.Address);
+            if (dataItem.PhotoUrl != null && dataItem.PhotoUrl != undefined && dataItem.PhotoUrl.length > 0) 
+            {
+                trObj.find("[for='PhotoUrl']").data("src",dataItem.PhotoUrl);
+            }
+            var guestidObj = trObj.find("[name='GuestId']");
+            guestidObj.val(dataItem.Id);
+            guestidObj.attr("selected", "selected");
+            if (dataItem.CerType != null && dataItem.CerType != undefined && dataItem.CerType.length > 0) {
+                trObj.find("[name='CerType']").data("kendoDropDownList").value(dataItem.CerType);
+            }
+            if (dataItem.Gender != null && dataItem.Gender != undefined && dataItem.Gender.length > 0) {
+                if (dataItem.Gender == "F") {
+                    trObj.find("[type='radio'][value='F']")[0].checked = true;
+                }
+                else {
+                    trObj.find("[type='radio'][value='M']")[0].checked = true;
+                }
+            }
+            if (dataItem.Birthday != null && dataItem.Birthday != undefined) {
+                trObj.find("[name='Birthday']").data("kendoDatePicker").value(dataItem.Birthday);
+            }
+            if (dataItem.Nation != null && dataItem.Nation != undefined && dataItem.Nation.length > 0) {
+                trObj.find("[name='Nation']").data("kendoDropDownList").value(dataItem.Nation);
+            }
+            if (dataItem.BlacklistReason != null && dataItem.BlacklistReason != undefined && $.trim(dataItem.BlacklistReason).length > 0) {
+                jAlert("此客人在黑名单上，原因：\n" + dataItem.BlacklistReason);
+            }
+        }
+    }
+    //客人姓名改变事件
+    function batchGuestName_changed(e) {
+        var guestidObj = $(this.element).parents("#customerInfosTbody tr").find("[name='GuestId']");
+        if (guestidObj.attr("selected") != "selected") {
+            //guestidObj.val("");
+        } else {
+            guestidObj.removeAttr("selected");
+        }
+    }
+    //客人姓名选择事件
+    function batchGuestName_selected(e) {
+        if (e != null && e != undefined && e.item != null && e.item != undefined) {
+            var dataItem = this.dataItem(e.item.index());
+            setCustomerInfos(this.element, dataItem);
+        }
+    }
+    //设置国籍下拉列表宽度
+    function nation_DataBound(e) {
+        $(this.element).data("kendoDropDownList").list.width(120);
+    }
+</script>
+<div id="customerInfosWindow">
+    <div class="k-grid k-widget" style="max-height: 450px;overflow:hidden;">
+        <div class="k-grid-header" style="padding-right: 17px;">
+            <div class="k-grid-header-wrap k-auto-scrollable">
+                <table role="grid">
+                    <colgroup>
+                        <col style="width:50px;">
+                        <col style="width:100px;">
+                        <col style="width:85px;">
+                        <col style="width:127px;">
+                        <col style="width:115px;">
+                        <col style="width:181px;">
+                        <col style="width:100px;">
+                        <col style="width:115px;">
+                        <col style="width:220px;">
+                        <col style="width:75px;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="k-header">房号</th>
+                            <th class="k-header">客人姓名</th>
+                            <th class="k-header">性别</th>
+                            <th class="k-header">生日</th>
+                            <th class="k-header">证件类型</th>
+                            <th class="k-header">证件号</th>
+                            <th class="k-header">国籍</th>
+                            <th class="k-header">籍贯</th>
+                            <th class="k-header">地址</th>
+                            <th class="k-header">操作</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="k-grid-content k-auto-scrollable" style="max-height: 357px;">
+            <table style="height: auto;">
+                <colgroup>
+                    <col style="width:50px;">
+                    <col style="width:100px;">
+                    <col style="width:85px;">
+                    <col style="width:127px;">
+                    <col style="width:115px;">
+                    <col style="width:181px;">
+                    <col style="width:100px;">
+                    <col style="width:115px;">
+                    <col style="width:220px;">
+                    <col style="width:75px;">
+                </colgroup>
+                <tbody id="customerInfosTbody">
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        var index = 0;
+                        foreach (var item in Model)
+                        {
+                            <tr data-id="@item.Id" data-regid="@item.Regid" data-scan="false">
+                                <td>@item.RoomNo</td>
+                                <td>
+                                    <input type="hidden" name="GuestId" />
+                                    <label for="PhotoUrl" data-src=""></label>
+                                    @(Html.Kendo().AutoComplete()
+                                        .Name("GuestName_" + index)
+                                        .DataTextField("GuestName")
+                                        .Template("#: GuestName # #: Mobile == null ? '' : Mobile #")
+                                        .Filter("contains")
+                                        .MinLength(2)
+                                        .DataSource(e => { e.Read(r => r.Url(Url.Action("ListItemsForGuests", "ResOrderCustomer", new { rnd = new Random().NextDouble() }))).ServerFiltering(true); })
+                                        .Events(e => e.Select("batchGuestName_selected").Change("batchGuestName_changed"))
+                                        .HtmlAttributes(new { style = "width: 100%", Name = "GuestName" })
+                                        .Value(item.GuestName))
+                                </td>
+                                <td>@(Html.Kendo().RadioButton().Name("Gender_" + index).Label("男").Value("M").Checked(item.Gender != "F" ? true : false))&nbsp;&nbsp;@(Html.Kendo().RadioButton().Name("Gender_" + index).Label("女").Value("F").Checked(item.Gender == "F" ? true : false))</td>
+                                <td>@Html.Kendo().DatePicker().Name("Birthday_" + index).Value(item.Birthday).Format(Gemstar.BSPMS.Common.Extensions.DateTimeExtension.DateFormatStr).HtmlAttributes(new { style = "width: 100%", Name = "Birthday" })</td>
+                                <td>@Html.Kendo().DropDownList().Name("CerType_" + index).Value(item.CerType).DataTextField("Text").DataValueField("Value").BindTo(ViewBag.CerTypeList).HtmlAttributes(new { style = "width: 100%", Name = "CerType" })</td>
+                                <td><input type="text" class="k-textbox" name="Cerid" value="@item.Cerid" style="width:100%;" /></td>
+                                <td>@(Html.Kendo().DropDownList().Name("Nation_" + index).Value(item.Nation).Filter(FilterType.Contains).DataTextField("Name").DataValueField("Name").DataSource(s => s.Read(r => r.Url(Url.Action("ListItemsForNation", new { rnd = rnd }))).ServerFiltering(true)).AutoBind(true).Events(e=>e.DataBound("nation_DataBound")).HtmlAttributes(new { style = "width: 100%;", Name = "Nation" }))</td>
+                                <td><input type="text" class="k-textbox" name="City" value="@item.City" style="width:100%;" /></td>
+                                <td><input type="text" class="k-textbox" name="Address" value="@item.Address" style="width:100%;" /></td>
+                                <td><button type="button" class="k-button" name="btnScan" style="min-width:inherit;">扫描</button></td>
+                            </tr>
+                            index++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="k-header k-grid-toolbar">
+            <div class="toolbar" style="text-align:right;">
+                <button id="submitCustomerInfosButton" name="submitCustomerInfosButton" class="k-button" type="button">保存</button>
+                <button id="cancelCustomerInfosButton" name="cancelCustomerInfosButton" class="k-button" type="button" style="margin-right: 25px;">返回</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //调用成功后的回调函数
+    function customerBatchScanCallBack(data) {
+        var scanTr = $("#customerInfosTbody [data-scan='true']");
+        if (scanTr != null && scanTr != undefined) {
+            scanTr.find("[name='GuestName']").data("kendoAutoComplete").value(data.Name);
+            if (data.Sex == "F") {
+                scanTr.find("[type='radio'][value='F']")[0].checked = true;
+            } else {
+                scanTr.find("[type='radio'][value='M']")[0].checked = true;
+            }
+            scanTr.find("[name='Birthday']").data("kendoDatePicker").value(data.Birthday);
+            scanTr.find("[name='Cerid']").val(data.Number);
+            scanTr.find("[name='Address']").val(data.Address);
+            if (data.ImageBase64 != "" && data.ImageBase64 != null) {
+                var photodata = "data:image/bmp;base64," + data.ImageBase64;
+                scanTr.find("[for='PhotoUrl']").data("src", photodata);
+            }
+            cerIdBatch_changed(scanTr.find("[name='btnScan']"));
+        }
+    }
+    //证件号改变事件
+    function cerIdBatch_changed(obj, isBirthDay) {
+        try{
+            var scanTr = $(obj).parents("#customerInfosTbody tr");
+            var cerType = scanTr.find("[name='CerType']").data("kendoDropDownList").value();
+            var cerId = scanTr.find("[name='Cerid']").val();
+            if ($.trim(cerType).length > 0 && $.trim(cerId).length > 0) {
+                $.post(CustomerCommonValues.GetGuestByCerId, { cerType: cerType, cerId: cerId }, function (result) {
+                    if (result != null && result != undefined && result.Success && result.Data != null && result.Data != undefined) {
+                        setCustomerInfos(obj, result.Data);
+                    }
+                    if (cerType == "01") {
+                        getCity(cerId, scanTr.find("[name='City']"));
+                        if (isBirthDay == "true") {
+                            scanTr.find("[name='Birthday']").data("kendoDatePicker").value(getBirthDay(cerId));
+                            scanTr.find("[type='radio'][value='" + getGender(cerId) + "']")[0].checked = true;
+                            var sex = getGender(cerId);
+                            if (sex == "F") {
+                                scanTr.find("[type='radio'][value='F']")[0].checked = true;
+                            } else {
+                                scanTr.find("[type='radio'][value='M']")[0].checked = true;
+                            }
+                        }
+                    }
+                }, 'json');
+            }
+        }catch(e){}
+    }
+    //单击扫描按钮
+    $("#customerInfosTbody [name='btnScan']").click(function () {
+        $("#certificatesScan").val("customerBatch");
+        $("#customerInfosTbody [data-scan!='false']").attr("data-scan", "false");
+        $(this).parents("tr").attr("data-scan", "true");
+        var isTrue = false;
+        try {
+            var func = eval("scanIdButton_clicked");
+            if (typeof (func) == "function") {
+                func(); isTrue = true;
+            }
+        } catch (e) { }
+        if (isTrue == false) {
+            console.log("找不到扫描证件的JS方法");
+        }
+    });
+    //证件号改变事件
+    $("#customerInfosTbody [name='Cerid']").change(function () {
+        cerIdBatch_changed(this, "true");
+    });
+    //设置客人姓名下拉列表宽度
+    $("#customerInfosTbody [name='GuestName']").each(function (index, item) {
+        $(item).data("kendoAutoComplete").list.width(150);
+    });
+    //返回
+    $("#customerInfosWindow [name='cancelCustomerInfosButton']").click(function () {
+        $("#customerInfosWindowDiv").data("kendoWindow").close();
+    });
+    //保存
+    $("#customerInfosWindow [name='submitCustomerInfosButton']").click(function () {
+        var data = [];
+        var isError = false;
+        $("#customerInfosTbody tr").each(function (index, item) {
+            var trObj = $(item);
+            var entity = {
+                Id: trObj.attr("data-id"),
+                Regid: trObj.attr("data-regid"),
+                GuestName: trObj.find("[name='GuestName']").data("kendoAutoComplete").value(),
+                Gender: trObj.find("[type='radio']:checked").val(),
+                Birthday: trObj.find("[name='Birthday']").data("kendoDatePicker").value(),
+                CerType: trObj.find("[name='CerType']").data("kendoDropDownList").value(),
+                Cerid: trObj.find("[name='Cerid']").val(),
+                Nation: trObj.find("[name='Nation']").data("kendoDropDownList").value(),
+                City: trObj.find("[name='City']").val(),
+                Address: trObj.find("[name='Address']").val(),
+                GuestId: trObj.find("[name='GuestId']").val(),
+                PhotoUrl: trObj.find("[for='PhotoUrl']").data("src")
+            };
+            if (entity.Birthday != null) {
+                entity.Birthday = entity.Birthday.ToDateString();
+            }
+            if (entity.GuestName == null || entity.GuestName == undefined || entity.GuestName.length <= 0) {
+                isError = true;
+                jAlert("请输入客人姓名", "知道了"); return false;
+            }
+            data.push(entity);
+        });
+        if (isError) { return; }
+        if (data != null && data != undefined && data.length > 0) {
+            $.post("@Url.Action("SaveCustomerInfos")", { data: data }, function (result) {
+                if (result.Success) {
+                    OrderCustomer.RefreshData(result, "");
+                    var msg = "";
+                    if (result.Data != null && result.Data != undefined && result.Data.OtherMessage != null && result.Data.OtherMessage != undefined && result.Data.OtherMessage.length > 0) {
+                        msg = "\n" + result.Data.OtherMessage;
+                    }
+                    jAlert("保存成功！" + msg, "知道了", function () { $("#customerInfosWindowDiv").data("kendoWindow").close(); });
+                } else {
+                    ajaxErrorHandle(result);
+                }
+            }, 'json');
+        } else {
+            jAlert("请输入客人姓名", "知道了");
+        }
+    });
+</script>

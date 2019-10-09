@@ -1,0 +1,48 @@
+﻿@{
+    Layout = null;
+}
+@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPos.PosBill>
+
+<style>
+    .smear li {
+        float: left;
+        padding: 0.3rem;
+        margin-right: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 0.5rem;
+        border: 2px solid #333;
+    }
+
+        .smear li a {
+            display: block;
+            height: 100%;
+            width: 100%;
+        }
+
+        .smear li span {
+            width: 100%;
+            display: block;
+            font-weight: bold;
+        }
+</style>
+
+<input id="business" type="hidden" value="@(string.Format("{0:yyyy-MM-dd}", ViewBag.Business ?? ""))" />
+<ul class="smear">
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            foreach (var tabStaus in Model)
+            {
+                <li class="staus-sit" data-staus="@tabStaus.Status">
+                    <a href="javascript:void(0);" onclick="ChangeItemBySmear(this)" data-tabid="@tabStaus.Tabid" data-tabno="@tabStaus.TabNo" data-billid="@tabStaus.Billid" data-tabstatus="@tabStaus.Status" data-tabflag="@tabStaus.TabFlag" data-billNo="@tabStaus.BillNo">
+                        <span class="smearbillno">@tabStaus.BillNo</span>
+                        <span class="smeariguest">@tabStaus.IGuest 位</span>
+                        <span class="smearname">@tabStaus.Name</span>
+                        <span class="smearbilldate">@tabStaus.BillDate.Value.ToString("yy/MM/dd HH:mm")</span>
+                    </a>
+                </li>
+            }
+        }
+    }
+</ul>
+

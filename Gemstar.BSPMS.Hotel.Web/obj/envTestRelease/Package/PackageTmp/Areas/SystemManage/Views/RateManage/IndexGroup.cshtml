@@ -1,0 +1,421 @@
+﻿@using Gemstar.BSPMS.Common.Services;
+<div id="divtop">
+    <div style="text-align:left;margin-top:10px;margin-left:10px;" id="@(ViewBag.viewType ? "dataDiv" : "")">
+        <div style="margin-bottom:5px;margin-left: 230px;">
+            @*选择分店：
+                @{ var hotelItems = new List<SelectListItem>();
+                    if (ViewBag.Hotels != null)
+                    {
+                        foreach (var hotel in ViewBag.Hotels)
+                        {
+                            hotelItems.Add(new SelectListItem { Value = hotel.Hid, Text = (string.IsNullOrEmpty(hotel.Hotelshortname) ? hotel.Name : hotel.Hotelshortname) });
+                        }
+                    }
+                   @(Html.Kendo().DropDownList().Name("Hotelname").DataTextField("Text").DataValueField("Value").BindTo(hotelItems))
+                        }*@
+            <span style="color:red;font-size:14px;margin-left:20px;">双击可修改</span>
+        </div>
+
+        <div style="float:left;width:280px;">
+            <table>
+                <tr>
+                    <td class="trtitle" style="background-color: rgb(241,241,241);width:280px;">
+                        <span id="cc" style="float:left;width:100px;text-align:left;padding-left:4px;">价格代码</span>
+
+                        <span class="k-button" style="float:left;margin-left:4px;" onclick="addRate()">增加</span>
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div style="float:left;">
+            <div id="divtitle" style="float:left;overflow:hidden;overflow-y:scroll;">
+                <table id="tbtop">
+                    <tr>
+                        @foreach (var item in ViewBag.roomType)
+                        {
+                            if (item.Status == EntityStatus.禁用)
+                            {
+                                <td class="trtitle" style="text-decoration:line-through;color:red;">@item.Name </td>
+                            }
+                            else
+                            {
+                                <td class="trtitle">@item.Name </td>
+                            }
+                        }
+                    </tr>
+                </table>
+            </div>
+            <div id="bb" style="float:left;width:15px;height:50px;line-height:50px;border:1px solid rgb(207,207,207);color:red;position:relative;right:17px;top:0px;background-color:rgb(241,241,241)"></div>
+        </div>
+        <div style="clear:both">
+            <div id="aa" style="float:left;width:280px;">
+                <div id="divleft" style="width:280px;overflow-y:hidden;overflow-x:scroll;">
+                    <table id="tbleft" style="width:280px;">
+                        @foreach (var item in ViewBag.rateList)//循环价格代码
+                        {
+                            <tr onmouseover="changeTrColor(this)">
+                                <td name="jgdm" class="tdleft" title="双击修改价格代码" ondblclick="updateRate('@item.Id')">
+                                    @if (item.Status == EntityStatus.启用)
+                                    {
+                                        <span class="sp-rate"> @item.Name</span>
+                                        <span class="k-button" title="" onclick="disableRate('禁用','@item.Id')">禁用</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="sp-rate" style="text-decoration:line-through;color:red;"> @item.Name</span>
+                                        <span class="k-button" title="" onclick="disableRate('启用','@item.Id')">启用</span>
+                                    }
+                                    <span class="k-button" title="" onclick="delRate('@item.Id','@item.Name')">删除</span>
+                                    <span class="k-button" title="批量变价" onclick="changeRate('@item.Id','@item.Name')">变价</span>
+                                </td>
+                            </tr>
+                        }
+
+                       
+
+                    </table>
+                </div>
+                <div style="width:100%;height:15px;line-height:15px;border:1px solid rgb(207,207,207);color:red;text-align:center; position:relative;bottom:16px;left:0px;background-color:rgb(241,241,241);border-top:none;"></div>
+            </div>
+
+            <div id="divright" style="float:left;overflow:scroll;" onscroll="document.getElementById('divtitle').scrollLeft = this.scrollLeft;document.getElementById('divleft').scrollTop = this.scrollTop;">
+                <table id="tbright">
+
+                    @foreach (var item in ViewBag.rateList)//循环价格代码
+                    {
+                        <tr>
+                            @foreach (var item1 in ViewBag.roomType)    //循环房类
+                            {
+                                var a = 0;
+                                foreach (var item2 in ViewBag.rateDetailList)//循环价格体系明细
+                                {
+                                    if (item2.Rateid == @item.Id && item2.RoomTypeid == @item1.Id)
+                                    {
+                                        var tdText = (item2.Rate == null ? "0" : item2.Rate.ToString());
+                                        var detailInfo = "";
+                                        var hasDetailInfo = false;
+                                        if (!string.IsNullOrWhiteSpace(item2.Cancelid))
+                                        {
+                                            detailInfo += hasDetailInfo ? "" : "";
+                                            detailInfo += item2.Cancelid;
+                                            hasDetailInfo = true;
+                                        }
+                                        if (!string.IsNullOrWhiteSpace(item2.Guaranteeid))
+                                        {
+                                            detailInfo += hasDetailInfo ? "," : "";
+                                            detailInfo += item2.Guaranteeid;
+                                            hasDetailInfo = true;
+                                        }
+                                        if (item2.IsClose ?? false)
+                                        {
+                                            detailInfo += hasDetailInfo ? "," : "";
+                                            detailInfo += item2.IsClose ? "关闭" : "";
+                                            hasDetailInfo = true;
+                                        }
+                                        a = 1;
+                                        if (item.Status == EntityStatus.启用)
+                                        {
+                                            <td class="trbd" style="cursor:pointer;" title="双击逐个设置价格信息" ondblclick="AddRateDetail('@item.Id','@item1.Id','@item.Name','@item1.Name')">
+                                                @tdText <br />
+                                                @if (hasDetailInfo)
+                                                {
+                                                    @detailInfo
+                                                }
+                                            </td>//渠道价格代码对应房类的价格、是否取消、可担保；点击可修改价格、是否取消、可担保
+                                        }
+                                        else
+                                        {
+                                            <td class="trbd" style="text-decoration:line-through;color:red;cursor:pointer;" title="双击逐个设置价格信息" ondblclick="AddRateDetail('@item.Id','@item1.Id','@item.Name','@item1.Name')">
+                                                @tdText <br />
+                                                @if (hasDetailInfo)
+                                                {
+                                                    @detailInfo
+                                                }
+                                            </td>
+                                        }
+                                    }
+                                }
+                                if (a == 0)
+                                {
+                                    if (item.Status == EntityStatus.启用)
+                                    {
+                                        <td class="trbd" style="cursor:pointer;" title="双击逐个设置价格信息" ondblclick="AddRateDetail('@item.Id','@item1.Id','@item.Name','@item1.Name')">0 </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="trbd" style="text-decoration:line-through;color:red;cursor:pointer;" title="双击逐个设置价格信息" ondblclick="AddRateDetail('@item.Id','@item1.Id','@item.Name','@item1.Name')">0 </td>
+                                    }
+                                }
+                            }
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="newCommonKendoWindow"></div>
+<input type="text" id="rateid" style="display:none;" />
+@section headerContent{
+    <style type="text/css">
+        .sp-rate {
+            display: inline-block;
+            width: 100px;
+            text-align: left;
+            padding-left: 4px;
+            cursor: pointer;
+        }
+
+        .td-checks {
+            background-color: rgb(205,229,255);
+        }
+
+        .td-check {
+            background-color: rgb(133,191,255);
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        /*表头样式*/
+        .trtitle {
+            font-weight: bold;
+            width: 175px;
+            text-align: center;
+            height: 50px;
+        }
+        /*表内容*/
+        .trbd {
+            color: black;
+            width: 175px;
+            text-align: center;
+            height: 50px;
+            max-width: 130px;
+        }
+        /*价格代码的样式*/
+        .tdleft {
+            /*background-color: rgb(239,247,255);*/
+            color: black;
+            width: 210px;
+            height: 50px;
+            cursor: pointer;
+        }
+
+        /*tr td的边框样式*/
+        tr, td {
+            border: 1px solid rgb(207,207,207);
+        }
+        /*按钮样式*/
+        .btn {
+            height: 36px;
+            border: 1px solid #ccc;
+            background-color: #dadada;
+            border-radius: 4px;
+            text-align: center;
+            color: #333;
+            cursor: pointer;
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+        /*最外部div样式*/
+        .bodydiv {
+            height: 800px;
+            width: 1000px;
+            overflow: scroll;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        /*启用禁用样式*/
+        .enablespan {
+            border: 1px solid rgb(0,71,147);
+            background-color: white;
+            color: rgb(0,71,147);
+            display: inline-block;
+            width: 60px;
+            text-align: center;
+            cursor: pointer;
+        }
+        /*table样式*/
+        .tbcs {
+            width: auto;
+        }
+
+        div {
+            margin: 0px;
+            padding: 0px;
+            margin: auto;
+        }
+
+        .enableclick {
+            background-color: rgb(0,71,147);
+            color: white;
+        }
+    </style>
+}
+@section scripts{
+    <script type="text/javascript">
+        function changeTrColor(obj){
+            var _table=obj.parentNode;
+            for (var i=0;i<_table.rows.length;i++){
+                _table.rows[i].style.backgroundColor="";
+            }
+            obj.style.backgroundColor="rgb(205,229,255)";
+        }
+        $(function (){
+            initfun();
+            $("#divtop").bind('DOMNodeInserted', function(e) {
+                initfun();
+            }); 
+        });
+        function setScroll()
+        {  
+            if("@ViewBag.roomType.Count"=="0"){
+                $("#divleft").css("overflow-y","auto"); 
+                $("#bb").css("display","none");
+                $(".sp-rate").css("width","83");
+                $("#cc").css("width","83");
+            } 
+        }
+        function initfun(){
+            setScroll();
+            $("#divtop").width(document.documentElement.clientWidth-20);
+            $("#divtitle").css("max-width",document.documentElement.clientWidth-370);
+            $("#divright").css("max-width",document.documentElement.clientWidth-370);
+            $("#tbtop tr").css("background-color","rgb(241,241,241)");
+            $("#tbleft tr:odd").addClass("k-alt");
+            $("#tbright tr:odd").addClass("k-alt");
+            var ht=@ViewBag.roomtypecount * 175;
+            $("#tbtop").width(ht);
+            $("#tbright").width(ht);
+            $("#divleft").css("max-height",document.documentElement.clientHeight-130);
+            $("#divright").css("max-height",document.documentElement.clientHeight-130);
+            $("#tbright td").click(function(){
+                $(".enableclick").removeClass("enableclick");
+                $(".td-checks").removeClass("td-checks");
+                $(".td-check").removeClass("td-check");
+                var row = $(this).parent().index() + 1; // 行位置
+                var col = $(this).index() + 1; // 列位置
+                for(var i=0;i<row;i++)
+                {
+                    $("#tbright tr:eq("+i+") td:eq("+(col-1)+")").addClass("td-checks");
+                }
+                for(var j=0;j<col;j++)
+                {
+                    $("#tbright tr:eq("+(row-1)+") td:eq("+(j)+")").addClass("td-checks");
+                }
+                $("#tbright tr:eq("+(row-1)+") td:eq("+(col-1)+")").addClass("td-check");
+                $("#tbtop tr:eq(0) td:eq("+(col-1)+")").addClass("td-checks");
+                $("#tbleft tr:eq("+(row-1)+") td:eq(0)").addClass("td-checks");
+                $("#tbleft tr:eq("+(row-1)+") td:eq(0) span:eq(1)").addClass("enableclick");
+                $("#tbleft tr:eq("+(row-1)+") td:eq(0) span:eq(2)").addClass("enableclick");
+                $("#tbleft tr:eq("+(row-1)+") td:eq(0) span:eq(3)").addClass("enableclick");
+            });
+
+        }
+
+        function changecolor(obj, rateid) {
+            $("[name='jgdm']").css("background-color", "WHITE");
+            $(obj).css("background-color", "#A6FFFF");
+            $("#rateid").val(rateid);
+        }
+        //增加价格代码
+        function addRate() {
+            top.openKendoWindow("价格代码增加", "@Url.Action("Add")");
+        }
+        //修改价格代码
+        function updateRate(rateidval) {
+
+            if (rateidval != "") {
+                top.openKendoWindow("价格代码修改", "@Url.Action("Edit")", { id: rateidval});
+            } else {
+                jAlert("请选择价格代码")
+            }
+
+        }
+        //禁用价格代码
+        function disableRate(ratestatus,rateidval) {
+            jConfirm("确认要"+ratestatus+"所选中的价格码?", "确认", "取消", function (confirmed) {
+                if (confirmed) {
+                    var status = "1";
+                    if (ratestatus== "禁用") {
+                        status = "51";
+                    }
+                    if (rateidval != "") {
+                        var events = jsonajax("/RateManage/"+(status=="1"?"EnableRate":"DisableRate")+"?rateid=" + rateidval+ "&status=" + status);
+                        if(events=="成功" || events=="失败")
+                        {
+                            if(events=="成功"){
+                                location.reload();
+                            } else{
+                                if (status == "1") {
+                                    jAlert("启用" + events);
+                                } else {
+                                    jAlert("禁用" + events);
+                                }
+                            }
+                        }else{
+                            if (status == "1") {
+                                jAlert("你没有启用权限！");
+                            } else {
+                                jAlert("你没有禁用权限！");
+                            }
+                        }
+                    } else {
+                        jAlert("请选择价格代码")
+                    }}});
+        }
+        //添加价格明细信息
+        function AddRateDetail(ratecode, roomtype, ratecodename, roomtypename) {
+            top.openKendoWindow("价格明细信息", "@Url.Action("Detail")", { ratecode: ratecode, roomtype: roomtype, ratecodename: ratecodename, roomtypename: roomtypename });
+        }
+        //修改文本信息
+        function checkText(obj) {
+            if (isNaN($(obj).val())) {
+                $(obj).val("0");
+            }
+        }
+        //ajax方法
+        function jsonajax(urls) {
+            var events = {};
+            var Rand = Math.random();
+            $.ajax({
+                url: urls+"&rand="+Rand,
+                success: function (data) {
+                    events = data;
+                },
+                async: false
+            });
+            return events;
+        }
+        function delRate(ids,name)
+        {
+            jConfirm("确认要删除“"+name+"”的价格代码?", "确认", "取消", function (confirmed) {
+                if (confirmed) {
+                    var str = jsonajax("/RateManage/checkRateExist?rateid=" +ids+"&isdel=true");
+                    if (str != "" ) {
+                        jAlert("价格代码在" + str + "已使用不可删除！", "知道了");
+                    }
+                    else {
+                        $.post("@Url.Action("BatchDelete")", { id: ids }, function (data) {
+                            if (data.Success) {
+                                location.reload();
+                            } else {
+                                ajaxErrorHandle(data);
+                            }
+                        }, 'json');
+                    }
+
+                }
+            });
+        }
+        function changeRate(ids,name)
+        {
+            top.openKendoWindow("批量变动价格明细", "@Url.Action("ChangePrice")", { ratecode: ids,  ratecodename: name });
+
+        }
+    </script>
+}

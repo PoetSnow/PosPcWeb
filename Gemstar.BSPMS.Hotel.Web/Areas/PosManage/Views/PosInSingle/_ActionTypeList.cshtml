@@ -1,0 +1,40 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPos.PosActionType>
+<ul>
+    @{
+        <li id="AddHandWrite" class="content-list-detail">
+            <a href="javascript:void(0)" onclick="AddPractice('@Url.Action("_HandAction","PosInSingle")')">
+                <span style="font-size: 5rem;line-height: 5rem;">+</span>
+            </a>
+        </li>
+        if (ViewBag.isCuisine)
+        {
+            <li class="content-list-detail" style="background: #ffc800;">
+                <a href="javascript:void(0)" onclick="initItemAction('@ViewBag.Itemid')" data-id="@ViewBag.Itemid" data-name="菜式作法">
+                    <span>&nbsp;</span>
+                    <span>菜式作法</span>
+                    <span></span>
+                    <span></span>
+                </a>
+            </li>
+        }
+        if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <li class="content-list-detail" style="background: #ffc800;">
+                    <a href="javascript:void(0)" onclick="getActionList(this,'@(Url.Action("_ActionList", "PosInSingle"))','@(Url.Action("GetActionTotal", "PosInSingle"))')" data-id="@item.Id" data-name="@item.Cname">
+                        <span>@item.Code</span>
+                        <span>@item.Cname</span>
+                        <span></span>
+                        <span></span>
+                    </a>
+                </li>
+            }
+            <li class="content-list-paging">
+                <a href="javascript:void(0)" onclick="getListPage(this,'1','@(Url.Action("_ActionTypeList", "PosInSingle"))','@(Url.Action("GetActionTypeTotal", "PosInSingle"))')">上一页</a>
+                <a href="javascript:void(0)" onclick="getListPage(this,'2','@(Url.Action("_ActionTypeList","PosInSingle"))','@(Url.Action("GetActionTypeTotal","PosInSingle"))')">下一页</a>
+            </li>
+        }
+        <li class="content-list-return" style=""><a href="javascript:void(0)" onclick="getActionTypeList(this,'@(Url.Action("_ActionTypeList", "PosInSingle"))','@(Url.Action("GetActionTypeTotal", "PosInSingle"))')"><img src="~/Images/posInSingle/fanh.png" /><br />返回</a></li>
+    }
+</ul>

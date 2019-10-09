@@ -1,0 +1,61 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MbrCardCenter.Models.MbrCardManage.MbrCardChangeScoreViewModel
+
+<div style="text-align:center;width:100%;">
+    <table class="editFormTable" style="width:100%;">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.AccountType)</td>
+            <td>@Html.Kendo().DropDownListFor(m => m.AccountType).HtmlAttributes(new { style = "width:100%;text-align: left" }).BindTo(new List<DropDownListItem>() { new DropDownListItem { Text = "--请选择--" }, new DropDownListItem { Text = "积分", Value = "11" }, new DropDownListItem { Text = "业主分", Value = "12" } })</td>
+            <td>@Html.ValidationMessageFor(m => m.AccountType, "*")</td>
+      
+            <td class="textright">@Html.LabelFor(m => m.Score)</td>
+            <td>@Html.TextBoxFor(m => m.Score, new { @class = "k-textbox", style = "width:100%;", Value = "正数调增，负数调减" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Score, "*")</td>
+        </tr>
+        @*<tr><td class="textright"></td><td>正数调增，负数调减</td><td></td></tr>*@
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.InvNo)</td>
+            <td>@Html.TextBoxFor(m => m.InvNo, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td></td>
+       
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td>@Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+        <tr> 
+            <td colspan="6" stype="margin-top:20px;text-align:center;">
+                <button class="k-primary k-button" id="save" role="button" onclick="aa()" data-role="button">保存</button>&nbsp;&nbsp;
+                <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<input type="text" value="@ViewBag.ids" style="display:none" id="idstr" />
+<script type="text/javascript">
+    $(function () {
+        $("#Score").focus(function () { 
+            if (this.value == '正数调增，负数调减') this.value = '';
+        });
+        $("#Score").blur(function () {
+            if (this.value == '') this.value = '正数调增，负数调减';
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+    function aa() {
+        var accounttype = $("#AccountType").val();
+        var score = $("#Score").val(); var invno = $("#InvNo").val(); var remark = $("#Remark").val();
+        var ids = $("#idstr").val();
+        $.post("/MbrCardManage/UpdateScores", { id: ids,score:score, accounttype: accounttype, invno: invno, remark: remark }, function (data) {
+            if (data.Success) {
+                jAlert("修改成功！");
+                closeEditFormWindow();
+                $(document).find("iframe")[0].contentWindow.refreshGrid();
+            } else {
+                //jAlert("修改失败！");
+                ajaxErrorHandle(data);
+            }
+        }, 'json');
+    }
+</script>

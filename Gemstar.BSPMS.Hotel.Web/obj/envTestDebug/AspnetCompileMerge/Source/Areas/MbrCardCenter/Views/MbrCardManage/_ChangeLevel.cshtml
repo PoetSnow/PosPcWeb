@@ -1,0 +1,101 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MbrCardCenter.Models.MbrCardManage.MbrCardChangeLevelViewModel
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.Id)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.MbrCardNo)</td>
+            <td>@Html.DisplayFor(m => m.MbrCardNo)</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.GuestName)</td>
+            <td>@Html.DisplayFor(m => m.GuestName)</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.CurrentScore)</td>
+            <td>@Html.DisplayFor(m => m.CurrentScore)</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright"><span>原</span>@Html.LabelFor(m => m.MbrCardTypeid)</td>
+            <td>
+                @{var MbrCardTypeList = (ViewBag.MbrCardTypeSelectList as SelectList);}
+                @if (MbrCardTypeList != null)
+                {
+                    int i = 0;
+                    foreach (KeyValuePair<string, string> item in MbrCardTypeList.Items)
+                    {
+                        if (item.Key == Model.MbrCardTypeid)
+                        {
+                @item.Value
+                            break;
+                        }
+                        i++;
+                    }
+                    (MbrCardTypeList.Items as List<KeyValuePair<string, string>>).RemoveAt(i);
+                }
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright"><span>新</span>@Html.LabelFor(m => m.MbrCardTypeid)</td>
+            <td>@Html.Kendo().DropDownListFor(m => m.MbrCardTypeid).BindTo(ViewBag.MbrCardTypeSelectList as SelectList).OptionLabel("--请选择--").HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.MbrCardTypeid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Score)</td>
+            <td>@Html.TextBoxFor(m => m.Score, new { @class = "k-textbox", style = "width:100%;" ,})</td>
+            <td>@Html.ValidationMessageFor(m => m.Score, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td>@Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        var IsAuth = "@ViewBag.IsAuth" == "True";
+        if (!IsAuth) {
+            $("#Score").attr("readonly", "readonly");
+            $("#Score").css("background-color", "#f5f5f5");
+        }
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"), function () { $("#dataDiv", $("#mainContent iframe")[0].contentWindow.document).load($("#mainContent iframe")[0].src + "?viewType=false"); });
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeKendoWindow();
+        });
+        if (document.getElementById("MbrCardTypeid") != null) {
+            $("#MbrCardTypeid").data("kendoDropDownList").select(0);
+        }
+        $("#MbrCardTypeid").change(function () {
+            var id = $("#MbrCardTypeid").data("kendoDropDownList").value();
+            if (id != null && id != undefined && id.length > 0) {
+                $.post(
+                    "/MbrCardCenter/MbrCardManage/GetChangeLevelScore",
+                    { mbrCardTypeid: id },
+                    function (data) {
+                        $("#Score").val(data);
+                    },
+                "json");
+            }
+        });
+    });
+</script>
+
+
+

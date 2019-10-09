@@ -1,0 +1,177 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.UserManage.UserEditGroupViewModel
+@using (Html.BeginForm("EditGroup", "UserManage"))
+{
+    @Html.HiddenFor(m=>m.OriginJsonData)
+    @Html.HiddenFor(m=>m.Id)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Code)</td>
+            <td>
+                <input id="dd" type="text"  class="k-textbox" disabled="disabled"  style="width:100%;margin-bottom:1px;background-color:rgb(245,245,245)" value="@Model.Code" />
+                @Html.TextBoxFor(m => m.Code, new { @class = "k-textbox", style = "width:100%;display:none;" })
+                
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Name)</td>
+            <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+        </tr> 
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Mobile)</td>
+            <td>@Html.TextBoxFor(m => m.Mobile, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Mobile, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Email)</td>
+            <td>@Html.TextBoxFor(m => m.Email, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Email, "*")</td>
+        </tr> 
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Qq)</td>
+            <td>@Html.TextBoxFor(m => m.Qq, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Qq, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.CardId)</td>
+            <td> @Html.TextBoxFor(m => m.CardId, new { @class = "k-textbox", style = "width:100%;margin-left:0" })</td>
+            <td>@Html.ValidationMessageFor(m => m.CardId, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Belonghotel)</td>
+            <td>
+                @Html.HiddenFor(m => m.Belonghotel)
+                @Html.Kendo().MultiSelect().Name("BelonghotelMultiSelect").HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetHotelSelectList", "UserManage")); }).Value(ViewBag.listBelonghotels).AutoClose(false)
+            </td>
+            <td></td>
+            @if (ViewBag.isOpenAnalysis)
+            {
+                <td class="textright">@Html.LabelFor(m => m.AnalysisUserCode)</td>
+                <td> @Html.TextBoxFor(m => m.AnalysisUserCode, new { @class = "k-textbox", style = "width:100%;margin-left:0" })</td>
+                <td>@Html.ValidationMessageFor(m => m.AnalysisUserCode, "*")</td>
+            }
+        </tr>  
+        <tr>
+            <td colspan="6" align="center">
+                @Html.HiddenFor(m => m.HotelRoleIds)
+                <table>
+                    <tr>
+                        <td align="center">分店列表</td>
+                        <td align="center">角色列表</td>
+                        <td></td>
+                        <td align="center">所属分店及角色列表</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;width:210px">
+                            <select multiple="multiple" id="userHotelList" style="outline:none;width:200px;height:300px;border:solid 1px #e5e5e5">
+                                @foreach (var h in Model.Hotels)
+                                {
+                                    <option value="@h.Hid" style="padding-top:7px;">@(string.IsNullOrWhiteSpace(h.Hotelshortname) ? h.Name : h.Hotelshortname)</option>
+                                }
+                            </select>
+                        </td>
+                        <td style="text-align:center;width:170px">
+                            <select multiple="multiple" id="userRoleList" style="outline:none;width:160px;height:300px;border:solid 1px #e5e5e5">
+                                @foreach (var r in Model.Roles)
+                                {
+                                    <option value="@r.Roleid" style="padding-top:7px;">@r.Authname</option>
+                                }
+                            </select>
+                        </td>
+                        <td style="text-align:center;width:100px">
+                            <button class="k-primary k-button addSelected">添　　 加  <font style="font-size:18px;">></font></button>
+                            <button class="k-primary k-button removeSelected">移　 　除  <font style="font-size:18px;"><</font></button>
+                            <button class="k-primary k-button addAll">添加全部<font style="font-size:14px;">>></font></button>
+                            <button class="k-primary k-button removeAll">移除全部<font style="font-size:14px;"><<</font></button>
+                        </td>
+                        <td style="text-align:center;width:260px">
+                            <select multiple="multiple" id="userBelongHotelRoleList" style="outline:none;width:250px;height:300px;border:solid 1px #e5e5e5">
+                                @foreach (var r in Model.UserRoles)
+                                {
+                                    var h = Model.Hotels.SingleOrDefault(w => w.Hid == r.Hid);
+                                    var role = Model.Roles.SingleOrDefault(w => w.Roleid == r.Roleid);
+                                    <option value="@string.Format("{0}|{1}",r.Hid,r.Roleid)" style="padding-top:7px;">@string.Format("{0}--{1}",h==null?"": (string.IsNullOrWhiteSpace(h.Hotelshortname) ? h.Name : h.Hotelshortname), role==null?"":role.Authname)</option>
+                                }</select>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () { 
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            $("#Belonghotel").val($("#BelonghotelMultiSelect").data("kendoMultiSelect").value());
+            e.preventDefault();
+            saveGroupOperator();
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+
+        $(".addSelected").click(function (e) {
+            e.preventDefault();
+            addSelected();
+        });
+        $(".removeSelected").click(function (e) {
+            e.preventDefault();
+            removeSelected();
+        });
+        $(".addAll").click(function (e) {
+            e.preventDefault();
+            addAll();
+        });
+        $(".removeAll").click(function (e) {
+            e.preventDefault();
+            removeAll();
+        });
+    });
+
+    function saveGroupOperator() {
+        var $selected = $("#userBelongHotelRoleList option");
+        var hotelRoleList = [];
+        $selected.each(function (i, o) {
+            hotelRoleList.push(o.value);
+        });
+        $("#HotelRoleIds").val(hotelRoleList.join(','));
+        saveFormData($("#saveEditFormButton"));
+    }
+    function addSelected() {
+        var $hotelSelected = $("#userHotelList option:checked");
+        var $roleSelected = $("#userRoleList option:checked");
+        $hotelSelected.each(function (i, h) {
+            $roleSelected.each(function (j, r) {
+                var value = h.value + '|' + r.value;
+                var $exists = $("#userBelongHotelRoleList option[value='" + value + "']");
+                if ($exists.length == 0) {
+                    $("#userBelongHotelRoleList").append("<option value='" + value + "'>" + h.text + '--' + r.text + "</option>");
+                }
+            });
+        });
+    }
+    function addAll() {
+        var $hotelSelected = $("#userHotelList option");
+        var $roleSelected = $("#userRoleList option");
+        $hotelSelected.each(function (i, h) {
+            $roleSelected.each(function (j, r) {
+                var value = h.value + '|' + r.value;
+                var $exists = $("#userBelongHotelRoleList option[value='" + value + "']");
+                if ($exists.length == 0) {
+                    $("#userBelongHotelRoleList").append("<option value='" + value + "'>" + h.text + '--' + r.text + "</option>");
+                }
+            });
+        });
+    }
+    function removeSelected() {
+        var $selected = $("#userBelongHotelRoleList option:checked");
+        $selected.remove();
+    }
+    function removeAll() {
+        var $selected = $("#userBelongHotelRoleList option");
+        $selected.remove();
+    }
+</script>
+

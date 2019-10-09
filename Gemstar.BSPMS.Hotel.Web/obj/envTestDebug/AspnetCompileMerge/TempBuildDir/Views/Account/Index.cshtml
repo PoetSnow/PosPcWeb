@@ -1,0 +1,209 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Models.Account.LoginViewModel
+@{
+    Layout = null;
+    var product = ViewBag.product as Gemstar.BSPMS.Common.Services.Entities.M_v_products;
+    ViewBag.Title = product.SysShortName;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @if (!MvcApplication.IsTestEnv)
+    {
+        <script type="text/javascript">var loginUrl = "@string.Format("http://{0}/Account{1}", ViewBag.domain, MvcApplication.IsTestEnv ? "?env=test" : "")"; if (window.top != window) { window.top.location = loginUrl; } else { if (!window.location.href.startsWith(loginUrl)) window.location = loginUrl; }</script>
+    }
+    @Html.Partial("_HeaderCss")
+    @Html.Partial("_HeaderJs")
+    <script type="text/javascript">
+        function _reloadMvcCaptchaImage() {
+            var r = + new Date();
+            $("#captchaImage").find("img").attr("src","@Url.Action("LoadCheckCode")" + "?r=" + r);
+        }
+    </script>
+    <link href="~/Content/jquery.nivo.slider/themes/default/default.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/jquery.nivo.slider/nivo-slider.css" rel="stylesheet" type="text/css" />
+    <!--[if IE]>
+    <script src="/Scripts/jquery.placeholder.min.js" type="text/javascript"></script>
+    <script type="text/javascript">$(function(){$('input, textarea').placeholder();});</script>
+    <![endif]-->
+</head>
+<body>
+    <div class="header clearfix">
+        <div class="header-inner">
+            <div class="logo">
+                <img src="~/images/logo.png" /><span class="fleft"><i class="system-name">@product.SysName</i></span>
+            </div>
+            <div class="try">
+                <span class="phone-icon"></span><span class="number">服务热线<br /><b class="font-lag">400-7755-123</b></span>@*<a class="sq-button" href="apply_trial.html">申请试用</a>*@
+            </div>
+        </div>
+    </div>
+    <div class="banner">
+        <div id="slider-wrapper" class="slider-wrapper theme-default" style="width:auto;height:484px;overflow:hidden;position:absolute;z-index:0;">
+            <div id="slider" class="nivoSlider" style="width:2000px;height:484px;"></div>
+        </div>
+        <div class="banner-inner">
+            <div class="login"></div>
+            <div class="login-box" id="IDAccountLogin">
+                <a href="#" class="qrcode-target qrcode-target-show" id="qrcode-target-wechat" title="扫码登录"></a>
+                <span class="pms-login">
+                    @product.SysShortName @ViewBag.Code
+                    @if (MvcApplication.IsTestEnv)
+                    {
+                        <b class="font-lag" style="color:red">测试版本</b>
+                    }
+                </span>
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                <ul>
+                    <li class="login-i-t">
+                        @Html.TextBoxFor(m => m.HotelId, new { @class = "lo-input-text", placeholder = "酒店代码" })
+                    </li>
+                    <li class="login-i-t">
+                        @Html.TextBoxFor(m => m.Username, new { @class = "lo-input-text", placeholder = "登录名" })
+                    </li>
+                    <li class="login-i-t">
+                        <span class="k-textbox k-space-right k-eye" style="width:100%;">
+                            @Html.PasswordFor(m => m.Password, new { @class = "lo-input-password", placeholder = "登录密码" })
+                            <input type="text" id="PasswordMw" class="lo-input-password" style="display:none" />
+                            <a href="#" id="showPassword" class="k-icon k-eye-open" data-statu="1" data-password="Password" data-text="PasswordMw">&nbsp;</a>
+                        </span>
+                    </li>
+                    <li id="checkcd" class="login-i-t" style="display:none;">
+                        @Html.TextBoxFor(m => m.CheckCode, new { @class = "lo-input-yzm", placeholder = "验证码" })
+                        <span id="captchaImage"><a href="javascript:_reloadMvcCaptchaImage()"><img src="@Url.Action("LoadCheckCode",new { r=DateTime.Now.Ticks})" alt="正在加载..." title="刷新图片" width="90" height="32" border="0"></a></span>
+                    </li>
+                    <li id="PromptLi" style="margin-top:10px;"><span class="red-color">请用谷歌浏览器登录</span></li>
+                    <li>
+                        <input class="lo-input-button" type="submit" value="登录" id="doLogin">
+                    </li>
+                    <li style="margin-top:10px">
+                        <input id="exitBrowse" class="lo-input-button" type="button" value="退出" onclick="ExitProcedure()" hidden>
+                    </li>
+                    <li class="login-i-t re-password">@*<a href="~/Account/Register">注册用户</a>*@<a href="~/Account/ResetPassword" target="_blank">找回密码</a><a href="#" id="tryButton">我要体验</a></li>
+
+                </ul>
+                }
+            </div>
+            <div class="login-box hide" id="IDWechatLogin">
+                <a href="#" class="qrcode-target qrcode-target-hide" id="qrcode-target-account" title="返回"></a>
+                <span class="pms-login">
+                    @product.SysShortName @ViewBag.Code
+                    @if (MvcApplication.IsTestEnv)
+                    {
+                        <b class="font-lag" style="color:red">测试版本</b>
+                    }
+                </span>
+                <div class="login-weixin">
+                    <div class="qrcode" id="IDQrcode">
+                        <div class="tit" style="visibility:hidden;">请打开微信扫一扫，扫描二维码登录</div>
+                        <div class="pic">
+                            <div alt="" onclick="wechatLogin.refreshQrcode();" id="IDQrcodeImg"></div>
+                            <div class="alt" id="IDQrcodeInvalid">
+                                <div class="void">
+                                    <i class="ico ico-void"></i>
+                                    <p class="txt">二维码失效<br>点击刷新</p>
+                                </div>
+                                <div class="mask"></div>
+                            </div>
+                        </div>
+                        <div class="msg">请打开微信扫一扫，扫描二维码登录</div>
+                    </div>
+                    <div class="status status-succ hide" id="IDQrcodeScaned">
+                        <i class="ico ico-succ"></i>
+                        <p class="tit">扫码成功，请在手机端完成操作</p>
+                        <p class="txt">请勿刷新页面</p>
+                    </div>
+                    <div class="status status-warn hide" id="IDRefuseLogin">
+                        <i class="ico ico-warn"></i>
+                        <p class="tit">登录被拒绝</p>
+                        <a class="opr" href="javascript:;" id="IDRefuseLoginReturn">返回</a>
+                    </div>
+                    <div class="status status-info hide" id="IDHasNotBind">
+                        <i class="ico ico-info"></i>
+                        <p class="tit">该微信号尚未绑定任何操作员<br>请先登录系统绑定操作员</p>
+                    </div>
+                    <div class="tips-error hide" id="IDQrcodeError"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer" style="background:#fff;">
+        <div class="footer-inner">
+            <span class="wx-a" style="padding-top: inherit"><img src="~/images/wx1.jpg" style="width:100px;" /><br /><span style="margin-left: 25px;display: inherit;margin-top: -12px">官方公众号</span></span><span class="wx-b" style="padding-top: inherit"><img src="~/images/wx2.jpg" style="width:85px;margin-top: 8px" /><br /><span style="margin-left: 15px;margin-top: -5px;display: inherit;">微信预订系统</span></span>
+            <div class="company-info">
+                <p>深圳市捷信达电子有限公司</p>
+                <p>福田区深南大道6025号英龙大厦25楼</p>
+                <p>TEL:0755-83664567(总机) FAX:0755-83663702</p>
+                <p>7*24小时服务与支持：400-7755-123</p>
+                <p>深圳市捷信达电子有限公司版权所有( 粤ICP备09046004号 ) </p>
+            </div>
+        </div>
+        <input type="button" accesskey="s" onclick="go2authLogin()" value="授权登录" style="display:none" />
+    </div>
+    <!--account login-->
+    <script src="~/Scripts/jquery.nivo.slider.pack.js"></script>
+    <script type="text/javascript">
+        var CommonValues = {
+            TryHotelId: "@Model.TryHotelId",
+            TryUserName: "@Model.TryUserName",
+            TryUserPass: "@Model.TryUserPass",
+            AuthLogin: "@Url.Action("AuthLogin")",
+            GetBanner: "@Url.Action("GetBanner", "Account")",
+        };
+    </script>
+    <script type="text/javascript" src="~/Scripts/login/accountLogin.js"></script>
+    <!--webchar login-->
+    <script type="text/javascript" src="~/Scripts/qrcode.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.qrcode.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/login/wechatLogin.js"></script>
+    <!-- 封装 -->
+    <script type="text/javascript">
+        var mode = getQueryString("mode");
+        localStorage.setItem("posMode", mode);
+
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return r[2]; return '';
+        }
+
+        if ("undefined" != typeof jsObject) //如果是封装程序
+        {
+            $("#exitBrowse").show();
+
+            $("input[type=text]").focus(function () {
+                if (jsObject.EnableKeyboard) {
+                    jsObject.ScreenKeyboard();  //调用屏幕键盘
+                }
+            });
+            $("input[type=text]").blur(function () {
+                if (jsObject.EnableKeyboard) {
+                    jsObject.ScreenKeyboardClose(); //关闭屏幕键盘
+                }
+            });
+
+            $("input[type=password]").focus(function () {
+                if (jsObject.EnableKeyboard) {
+                    jsObject.ScreenKeyboard();  //调用屏幕键盘
+                }
+            });
+            $("input[type=password]").blur(function () {
+                if (jsObject.EnableKeyboard) {
+                    jsObject.ScreenKeyboardClose(); //关闭屏幕键盘
+                }
+            });
+        }
+
+        //退出程序
+        function ExitProcedure() {
+            if ("undefined" != typeof jsObject) //如果是封装程序
+            {
+                jsObject.Exit();
+            }
+        }
+    </script>
+</body>
+</html>

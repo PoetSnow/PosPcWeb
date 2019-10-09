@@ -1,0 +1,61 @@
+﻿@*发票*@
+@model Gemstar.BSPMS.Hotel.Services.ResManage.ResMainInfo
+@{
+    object ResInvoiceInfo_InvoiceType_True = new { @id = "ResInvoiceInfo_InvoiceType_True", @class = "k-radio" };
+    object ResInvoiceInfo_InvoiceType_False = new { @id = "ResInvoiceInfo_InvoiceType_False", @class = "k-radio" };
+    if (Model != null && Model.ResInvoiceInfo != null && Model.ResInvoiceInfo.InvoiceType != null)
+    {
+        if ((bool)Model.ResInvoiceInfo.InvoiceType)
+        {
+            ResInvoiceInfo_InvoiceType_True = new { @id = "ResInvoiceInfo_InvoiceType_True", @checked = true, @class = "k-radio" };
+        }
+        else
+        {
+            ResInvoiceInfo_InvoiceType_False = new { @id = "ResInvoiceInfo_InvoiceType_False", @checked = true, @class = "k-radio" };
+        }
+    }
+    else
+    {
+        Model.ResInvoiceInfo = new Gemstar.BSPMS.Hotel.Services.ResManage.ResInvoiceInfo();
+    }
+}
+
+<div id="orderMainInvoiceInfoWindow">
+    <input id="InvoiceInfoTemporary" name="InvoiceInfoTemporary" type="hidden" value="" />
+    <input id="ResInvoiceInfo_OriginResInvoiceInfoJsonData" name="ResInvoiceInfo.OriginResInvoiceInfoJsonData" type="hidden" value="@Model.ResInvoiceInfo.OriginResInvoiceInfoJsonData" />
+    <input id="ResInvoiceInfo_Id" name="ResInvoiceInfo.Id" type="hidden" value="@Model.ResInvoiceInfo.Id" />
+    <table class="editFormTable">
+        <tr>
+            <td class="textright"><label for="ResInvoiceInfo_InvoiceType">发票类型</label></td>
+            <td style="height:20px;">
+                @Html.RadioButtonFor(m => m.ResInvoiceInfo.InvoiceType, false, ResInvoiceInfo_InvoiceType_False)<label class="k-radio-label" for="ResInvoiceInfo_InvoiceType_False">普通发票</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                @Html.RadioButtonFor(m => m.ResInvoiceInfo.InvoiceType, true, ResInvoiceInfo_InvoiceType_True)<label class="k-radio-label" for="ResInvoiceInfo_InvoiceType_True">增值税专用发票</label>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright"><label for="ResInvoiceInfo_TaxName">发票抬头</label></td>
+            <td><input class="k-textbox" id="ResInvoiceInfo_TaxName" name="ResInvoiceInfo.TaxName" style="width:100%;" type="text" value="@Model.ResInvoiceInfo.TaxName"></td>
+            <td><span class="field-validation-error" data-valmsg-for="ResInvoiceInfo.TaxName">*</span></td>
+        </tr>
+        <tr>
+            <td class="textright"><label for="ResInvoiceInfo_TaxNo">税务登记号</label></td>
+            <td><input class="k-textbox" id="ResInvoiceInfo_TaxNo" name="ResInvoiceInfo.TaxNo" style="width:100%;" type="text" value="@Model.ResInvoiceInfo.TaxNo"></td>
+            <td><span class="field-validation-error" data-valmsg-for="ResInvoiceInfo.TaxNo">*</span></td>
+        </tr>
+        <tr>
+            <td class="textright"><label for="ResInvoiceInfo_TaxAddTel">地址和电话</label></td>
+            <td><input class="k-textbox" id="ResInvoiceInfo_TaxAddTel" name="ResInvoiceInfo.TaxAddTel" style="width:100%;" type="text" value="@Model.ResInvoiceInfo.TaxAddTel"></td>
+            <td><span class="field-validation-error" data-valmsg-for="ResInvoiceInfo.TaxAddTel">*</span></td>
+        </tr>
+        <tr>
+            <td class="textright"><label for="ResInvoiceInfo_TaxBankAccount">开户银行和账号</label></td>
+            <td><input class="k-textbox" id="ResInvoiceInfo_TaxBankAccount" name="ResInvoiceInfo.TaxBankAccount" style="width:100%;" type="text" value="@Model.ResInvoiceInfo.TaxBankAccount"></td>
+            <td><span class="field-validation-error" data-valmsg-for="ResInvoiceInfo.TaxBankAccount">*</span></td>
+        </tr>
+    </table>
+    <div class="formButtons" style="text-align:center;margin-top: 8.12px;">
+        <button class="k-button" id="orderMainInvoiceInfoWindow_submit" type="button">确定</button>
+    </div>
+</div>

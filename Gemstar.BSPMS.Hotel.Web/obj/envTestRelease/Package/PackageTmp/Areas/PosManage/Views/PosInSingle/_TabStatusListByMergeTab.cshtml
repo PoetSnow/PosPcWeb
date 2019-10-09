@@ -1,0 +1,49 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_TabStatusResult>
+
+<ul id="tabListMerge">
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            foreach (var tabStaus in Model)
+            {
+                <li class="content-list-tabStatus" data-staus="@tabStaus.TabStatus">
+                    <a href="javascript:void(0);" onclick="MergeTab(this)" data-id="@tabStaus.Tabid"  data-name="@tabStaus.TabName" data-code="@tabStaus.TabNo"  data-staus="@tabStaus.TabStatus">
+                        <span>@tabStaus.TabName</span>
+                        <span>@tabStaus.TabNo</span>
+                        @if (!string.IsNullOrEmpty(tabStaus.FloorShowData))
+                        {
+                            foreach (var item in tabStaus.FloorShowData.Split(','))
+                            {
+                                if (item == "A")
+                                {
+                                    <span class="staus-empty-span">@tabStaus.OpenGuest</span>
+                                }
+                                else if (item == "B" && (tabStaus.TabStatus == 1 || tabStaus.TabStatus == 4 || tabStaus.TabStatus == 5))
+                                {
+                                    <span class="staus-empty-span">@tabStaus.GuestName</span>
+                                }
+                                else if (item == "C")
+                                {
+                                    <span class="staus-empty-span">@tabStaus.TabTypeName</span>
+                                }
+                                else if (item == "D")
+                                {
+                                    <span class="staus-empty-span">@tabStaus.OpenRecord</span>
+                                }
+                            }
+
+                        }
+
+                    </a>
+                </li>
+            }
+        }
+
+        <li class="content-list-paging">
+            <a href="javascript:void(0)" onclick="pageUpMergeTab()">上一页</a>
+            <a href="javascript:void(0)" onclick="pageDownMergeTab()">下一页</a>
+        </li>
+        <li class="content-list-return" style=""><a href="javascript:void(0)" onclick="CloseMergeTab()"><img src="~/Images/posInSingle/fanh.png" /><br />关闭</a></li>
+    }
+</ul>
+

@@ -1,0 +1,477 @@
+﻿@model List<Gemstar.BSPMS.Common.Tools.KeyValuePairModel<string, string>>
+@{
+    ViewBag.Title = "长包房费用导入";
+}
+<style type="text/css">
+    html,body{overflow:hidden;}
+    .wrap {margin: 10px 10px 10px 10px; overflow:hidden;}
+    #importButton{display:inline-block;width:250px;}
+    #importButton .k-header{background-color:white;}
+    #readmeP{display:inline-block;vertical-align:middle;}
+</style>
+<script type="text/javascript">
+    function onSuccess(e) {
+        if (e.operation == "upload") {
+            popupNotification.show("导入完毕！", "info");
+            var result = e.response;
+            //1.清空内容
+            $("#txtImportData").val("");
+            $("#txtLastTimeMeterReading").val("");
+            var folioAddItemDropdownlist = $("#folioAddItem").data("kendoDropDownList");
+            if (folioAddItemDropdownlist != null && folioAddItemDropdownlist != undefined) {
+                folioAddItemDropdownlist.value("");
+                folioAddItemDropdownlist.trigger("select");
+                folioAddItemDropdownlist.trigger("change");
+            }
+            //2.显示错误信息
+            if (result.Success == false) {
+                jAlert("导入失败：\n" + result.Data, "知道了");
+                return;
+            }
+            //3.保存结果
+            $("#txtImportData").val(JSON.stringify(result.Data));
+            //4.页面显示
+            Import.ShowExcelDataToPage();
+        }
+    }
+</script>
+<span id="popupNotification"></span>
+<input type="hidden" id="txtImportData" />
+<input type="hidden" id="txtLastTimeMeterReading"/>
+<div id="permanentRoomImportDiv">
+    <div class="k-grid k-widget">
+        <div class="k-header k-grid-toolbar">
+            <div class="toolbar">
+                <a id="downloadButton" name="downloadButton" class="k-button" href="@Url.Action("DownLoadFile")" target="_blank">下载模板</a>
+                <div id="importButton">@(Html.Kendo().Upload().Name("files").Async(a => a.Save("Import", "PermanentRoomImport").AutoUpload(true)).Events(e => e.Success("onSuccess")).ShowFileList(false).Multiple(false).Messages(c => c.Select("导入")))</div>
+                <p id="readmeP">
+                    1.只能填写在住长包房的房号。<br />
+                    2.根据需导入的消费项目来填写模板表格：如“水电费”等消费项目填写抄表数则不需要填写数量和单价（如果需减免部分水电费则要填写本月实际收取数量），如“洗衣费”等消费项目填写数量和金额则不需要填写抄表数。<br />
+                    3.如果有填写金额则优先按此金额导入；如果没有填写金额有填写数量（单价：优先按填入的，无填入时根据消费项目设置中的）则按表达式计算：金额=数量x单价；<br />&nbsp;&nbsp;&nbsp;如果没有填写数量单价金额有填写抄表数（未填写上次抄表数或单价时则根据消费项目设置生成）则按表达式计算：金额=（本次抄表数-上次抄表数）x单价。<br />
+                </p>
+            </div>
+        </div>
+        <div class="k-grid-header" style="padding-right: 17px;">
+            <div class="k-grid-header-wrap k-auto-scrollable">
+                <table role="grid">
+                    <colgroup>
+                        <col style="width:80px;" />
+                        <col style="width:80px;" />
+                        <col style="width:90px;" class="folioAddMeterReadingCol" />
+                        <col style="width:90px;" class="folioAddMeterReadingCol" />
+                        <col style="width:90px;" class="folioAddQtyInputCol" />
+                        <col style="width:120px;" class="folioAddQtyInputCol" />
+                        <col style="width:150px;" />
+                        <col style="width:120px;" />
+                        <col style="width:120px;" />
+                        <col style="width:120px;" />
+                        <col />
+                        <col />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="k-header">账号</th>
+                            <th class="k-header">房号</th>
+                            <th class="k-header folioAddMeterReading">上次读表数</th>
+                            <th class="k-header folioAddMeterReading">本次读表数</th>
+                            <th class="k-header folioAddQtyInput">数量</th>
+                            <th class="k-header folioAddQtyInput">单价</th>
+                            <th class="k-header">金额</th>
+                            <th class="k-header">税率</th>
+                            <th class="k-header">不含税金额</th>
+                            <th class="k-header">税额</th>
+                            <th class="k-header">单号</th>
+                            <th class="k-header">备注</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="k-grid-content k-auto-scrollable">
+            <table style="height: auto;">
+                <colgroup>
+                    <col style="width:80px;" />
+                    <col style="width:80px;" />
+                    <col style="width:90px;" class="folioAddMeterReadingCol" />
+                    <col style="width:90px;" class="folioAddMeterReadingCol" />
+                    <col style="width:90px;" class="folioAddQtyInputCol" />
+                    <col style="width:120px;" class="folioAddQtyInputCol" />
+                    <col style="width:150px;" />
+                    <col style="width:120px;" />
+                    <col style="width:120px;" />
+                    <col style="width:120px;" />
+                    <col />
+                    <col />
+                </colgroup>
+                <tbody id="permanentRoomImportTbody">
+                </tbody>
+            </table>
+        </div>
+        <div class="k-header k-grid-toolbar">
+            <div class="toolbar">
+                <label class="category-label" for="lockWindow_roomNo">请选择消费项目</label>
+                @(Html.Kendo().DropDownList().Name("folioAddItem").OptionLabel("请选择").Filter(FilterType.Contains).DataTextField("CodeName").DataValueField("Id").Events(e => e.Change("folioAddItem_autoCompleteChanged")).DataSource(s => s.Read(r => r.Url(Url.Action("AutoCompleteItem")).Data("folioAddItem_autoCompleteSetPara")).ServerFiltering(true)).AutoBind(false))
+                <button id="saveButton" name="saveButton" class="k-button" type="button">保存</button>
+                <button id="delDayButton" name="delDayButton" class="k-button" type="button">删除当天导入</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var Import = {
+        ShowExcelDataToPage: function () {//把excel内容显示在页面
+            var PermanentRoomImportTbody = $("#permanentRoomImportTbody");
+            PermanentRoomImportTbody.empty();
+
+            var dataJson = $("#txtImportData").val();
+            if ($.trim(dataJson) == "") { return; }
+            var dataObj = JSON.parse(dataJson);
+            if (dataObj == null || dataObj == undefined) { return; }
+
+            popupNotification.show("正在显示数据...", "info");
+            var tableHtml = Import.GenerateTableHtml(dataObj);
+            PermanentRoomImportTbody.html(tableHtml);
+            popupNotification.show("显示数据完毕！", "info");
+        },
+        GenerateTableHtml: function (items) {//循环获取tr列表
+            var consumerItem = Import.ConsumerItemSelected();
+            Import.GenerateColumn(consumerItem);
+
+            var trList = [];
+            $.each(items, function (index, item) {
+                trList.push(Import.GenerateTrHtml(item, consumerItem));
+            });
+            return trList.join("");
+        },
+        GenerateTrHtml: function (item, consumerItem) {//生成tr
+
+            var isSelected = (consumerItem != null && consumerItem != undefined);
+
+            var trHtml = [];
+            trHtml.push(("<tr data-Regid=\"{0}\" data-RoomNo=\"{1}\">").replace("{0}", item.Regid).replace("{1}", item.RoomNo));
+
+            var templete = "<td class=\"{class}\">{0}</td>";
+
+            trHtml.push(templete.replace("{class}", "td-regid").replace("{0}", Import.Tools.ShowValue(item.ShortRegid)));//账号
+            trHtml.push(templete.replace("{class}", "td-roomno").replace("{0}", Import.Tools.ShowValue(item.RoomNo)));//房号
+
+            if (isSelected == false) {//返回源信息
+                trHtml.push(templete.replace("{class}", "td-lasttimemeterreading").replace("{0}", Import.Tools.ShowValue(item.LastTimeMeterReading)));//上次读表数
+                trHtml.push(templete.replace("{class}", "td-thistimemeterreading").replace("{0}", Import.Tools.ShowValue(item.ThisTimeMeterReading)));//本次读表数
+
+                trHtml.push(templete.replace("{class}", "td-quantity").replace("{0}", Import.Tools.ShowValue(item.Quantity)));//数量
+                trHtml.push(templete.replace("{class}", "td-price").replace("{0}", Import.Tools.ShowValue(item.Price)));//单价
+
+                trHtml.push(templete.replace("{class}", "td-amountd").replace("{0}", Import.Tools.ShowValue(item.AmountD)));//金额
+                trHtml.push(templete.replace("{class}", "td-tax").replace("{0}", Import.Tools.ShowValue(item.Tax)));//税率
+
+                trHtml.push(templete.replace("{class}", "td-amountdnotax").replace("{0}", Import.Tools.ShowValue(item.AmountDNoTax)));//不含税金额
+                trHtml.push(templete.replace("{class}", "td-amountdtax").replace("{0}", Import.Tools.ShowValue(item.AmountDTax)));//税额
+
+                trHtml.push(templete.replace("{class}", "td-invno").replace("{0}", Import.Tools.ShowValue(item.InvNo)));//单号
+                trHtml.push(templete.replace("{class}", "td-remark").replace("{0}", Import.Tools.ShowValue(item.Remark)));//备注
+
+                return trHtml.join("");
+            }
+
+            if (consumerItem.Action == "51" || consumerItem.Action == "52" || consumerItem.Action == "53") {
+
+                if (item.LastTimeMeterReading == null || item.LastTimeMeterReading == undefined || isNaN(item.LastTimeMeterReading) || item.LastTimeMeterReading <= 0) {
+                    var dataJson = $("#txtLastTimeMeterReading").val();
+                    if ($.trim(dataJson) != "") {
+                        var dataObj = JSON.parse(dataJson);
+                        if (dataObj != null && dataObj != undefined && dataObj.length > 0) {
+                            $.each(dataObj, function (index1, item1) {
+                                if (item1.Key == item.Regid && item1.Value == item.RoomNo) {
+                                    if (item1.Data != null && item1.Data != undefined) {
+                                        item.LastTimeMeterReading = item1.Data;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+
+                trHtml.push(templete.replace("{class}", "td-lasttimemeterreading").replace("{0}", Import.Tools.ShowValue(item.LastTimeMeterReading)));//上次读表数
+                trHtml.push(templete.replace("{class}", "td-thistimemeterreading").replace("{0}", Import.Tools.ShowValue(item.ThisTimeMeterReading)));//本次读表数
+                if (item.LastTimeMeterReading != null && item.ThisTimeMeterReading != null && (item.Quantity == null || item.Quantity <= 0)) {
+                    item.Quantity = item.ThisTimeMeterReading - item.LastTimeMeterReading;
+                }
+            }
+
+            if (consumerItem.IsQuantity == true) {
+                var quantity = parseFloat(item.Quantity);
+                if (isNaN(quantity)) { quantity = 0; }
+                var price = parseFloat(item.Price == null || item.Price == undefined ? (consumerItem.Price == null || consumerItem.Price == undefined ? "" : consumerItem.Price) : item.Price);
+                if (isNaN(price)) { price = 0; }
+
+                trHtml.push(templete.replace("{class}", "td-quantity").replace("{0}", Import.Tools.ShowValue(quantity)));//数量
+                trHtml.push(templete.replace("{class}", "td-price").replace("{0}", Import.Tools.ShowValue(price)));//单价
+
+                if (quantity != 0 && price != 0 && (item.AmountD == null || item.AmountD <= 0)) {
+                    item.AmountD = (quantity * price).toFixed(2);
+                }
+            }
+
+            var amountValue = parseFloat(item.AmountD);
+            if (isNaN(amountValue)) { amountValue = 0; }
+
+            var taxRateValue = parseFloat(consumerItem.Taxrate);
+            if (isNaN(taxRateValue)) {taxRateValue = 0;}
+            taxRateValue = taxRateValue / 100.0;
+            var amountDNoTax = (amountValue / (1 + taxRateValue)).toFixed(2);
+            var amountDTax = (amountValue - amountDNoTax).toFixed(2);
+
+            trHtml.push(templete.replace("{class}", "td-amountd").replace("{0}", Import.Tools.ShowValue(item.AmountD)));//金额
+            trHtml.push(templete.replace("{class}", "td-tax").replace("{0}", Import.Tools.ShowValue(consumerItem.Taxrate)));//税率
+
+            trHtml.push(templete.replace("{class}", "td-amountdnotax").replace("{0}", Import.Tools.ShowValue(amountDNoTax)));//不含税金额
+            trHtml.push(templete.replace("{class}", "td-amountdtax").replace("{0}", Import.Tools.ShowValue(amountDTax)));//税额
+
+            trHtml.push(templete.replace("{class}", "td-invno").replace("{0}", Import.Tools.ShowValue(item.InvNo)));//单号
+            trHtml.push(templete.replace("{class}", "td-remark").replace("{0}", Import.Tools.ShowValue(item.Remark)));//备注
+
+            return trHtml.join("");
+        },
+        GenerateColumn: function (consumerItem) {//生成列
+            if (consumerItem != null && consumerItem != undefined) {
+                if (consumerItem.IsQuantity == true) {
+                    $(".folioAddQtyInput").css("display", "table-cell");
+                    $(".folioAddQtyInputCol").css("display", "table-column");
+                } else {
+                    $(".folioAddQtyInput").css("display", "none");
+                    $(".folioAddQtyInputCol").css("display", "none");
+                }
+                if (consumerItem.Action == "51" || consumerItem.Action == "52" || consumerItem.Action == "53") {
+                    $(".folioAddMeterReading").css("display", "table-cell");
+                    $(".folioAddMeterReadingCol").css("display", "table-column");
+                } else {
+                    $(".folioAddMeterReading").css("display", "none");
+                    $(".folioAddMeterReadingCol").css("display", "none");
+                }
+            }
+            else {
+                $(".folioAddQtyInput").css("display", "table-cell");
+                $(".folioAddQtyInputCol").css("display", "table-column");
+                $(".folioAddMeterReading").css("display", "table-cell");
+                $(".folioAddMeterReadingCol").css("display", "table-column");
+            }
+        },
+        ConsumerItemSelected: function () {//获取消费项目选中项
+            var itemid = $("#folioAddItem").data("kendoDropDownList").value();
+            if ($.trim(itemid) == "") {
+                return null;
+            }
+            var dataItem = $("#folioAddItem").data("kendoDropDownList").dataItem();
+            if (dataItem == null || dataItem == undefined) {
+                return null;
+            }
+            if (dataItem.Id != itemid || dataItem.DcFlag != "D") {
+                return null;
+            }
+            return dataItem;
+        },
+        Tools: {//工具
+            ShowValue: function (value) {//显示值
+                if (value == null || value == undefined || value <= 0) {
+                    return "";
+                }
+                return value;
+            },
+            OnResize: function () {//设置高度
+                var allHeight = $("#mainContent", window.top.document).height();
+                if (allHeight == null || allHeight == undefined || allHeight <= 0) {
+                    allHeight = $(window).height();
+                }
+                var showHeight = 27 + 20 + $(".k-grid-toolbar").find(":eq(0)").height() + $(".k-grid-toolbar").find(":eq(1)").height() + 53;
+                $("#permanentRoomImportDiv .k-grid-content").height(allHeight - showHeight);
+            },
+        },
+        GetData: function (consumerItem) {//获取值
+            var isTrue = true;
+            var result = [];
+            $("#permanentRoomImportTbody tr").each(function (index, item) {
+                var itemOjb = $(item);
+                var regid = itemOjb.attr("data-regid");
+                var roomNo = itemOjb.attr("data-roomno");
+                var lastTimeMeterReading = parseInt(itemOjb.find(".td-lasttimemeterreading").text());
+                var thisTimeMeterReading = parseInt(itemOjb.find(".td-thistimemeterreading").text());
+                var qty = parseInt(itemOjb.find(".td-quantity").text());
+                var amountD = parseFloat(itemOjb.find(".td-amountd").text());
+                var invNo = itemOjb.find(".td-invno").text();
+                var remark = itemOjb.find(".td-remark").text();
+
+                if ($.trim(regid) == "") {
+                    jAlert("账号不能为空！", "知道了");
+                    isTrue = false;
+                    return false;
+                }
+                if ($.trim(roomNo) == "") {
+                    jAlert("房号不能为空！", "知道了");
+                    isTrue = false;
+                    return false;
+                }
+                if (amountD == null || amountD == undefined || isNaN(amountD) || amountD <= 0) {
+                    jAlert("金额不能为空！", "知道了");
+                    isTrue = false;
+                    return false;
+                }
+                if (consumerItem.Action != "51" && consumerItem.Action != "52" && consumerItem.Action != "53") {
+                    lastTimeMeterReading = null;
+                    thisTimeMeterReading = null;
+                }
+
+                var entity = {
+                    Regid: regid,
+                    RoomNo: roomNo,
+                    LastTimeMeterReading: lastTimeMeterReading,
+                    ThisTimeMeterReading: thisTimeMeterReading,
+                    Quantity: qty,
+                    AmountD: amountD,
+                    InvNo: invNo,
+                    Remark: remark,
+                };
+                result.push(entity);
+            });
+            if (isTrue == false) { return null;}
+            return result;
+        },
+    };
+
+    //保存
+    function saveButton(e) {
+
+        var consumerItem = Import.ConsumerItemSelected();
+        if (consumerItem == null) { jAlert("请选择消费项目！", "知道了"); return; }
+
+        var datas = Import.GetData(consumerItem);
+        if (datas == null) { return; }
+
+        var url = "@Url.Action("SaveImport")";
+
+        jConfirm("请仔细检查页面数据，确定要保存账务？", "确定", "取消", function (result) {
+            if (result) {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { itemid: consumerItem.Id, list: datas },
+                    dataType: "json",
+                    error: function (xhr, msg, ex) {
+                        jAlert(msg, "知道了");
+                    },
+                    success: function (result) {
+                        jAlert((result.Success ? "成功：\n" : "失败：\n") + result.Data, "知道了");
+                    },
+                });
+            }
+        });
+
+    }
+    //删除
+    function delDayButton(e) {
+        var msg = "此操作将删除今天导入的[{0}]的长包房账务，确定要删除账务？";
+        var itemId = $("#folioAddItem").data("kendoDropDownList").value();
+        if ($.trim(itemId) == "") {
+            msg = msg.replace("{0}", "所有消费项目");
+        } else {
+            msg = msg.replace("{0}", $("#folioAddItem").data("kendoDropDownList").text());
+        }
+        jConfirm(msg, "确定", "取消", function (result) {
+            if (result) {
+                var url = "@Url.Action("DeleteImport")";
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { itemId: itemId },
+                    dataType: "json",
+                    error: function (xhr, msg, ex) {
+                        jAlert(msg, "知道了");
+                    },
+                    success: function (result) {
+                        if (result.Success) {
+                            jAlert("删除成功！\n" + result.Data, "知道了");
+                        }
+                        else {
+                            jAlert("删除失败！\n" + result.Data, "知道了");
+                        }
+                    },
+                });
+            }
+        });
+    }
+
+
+
+    //入账消费项目设置查询参数
+    function folioAddItem_autoCompleteSetPara() {
+        return {
+            type: "D",
+            keyword: $("#folioAddItem").data("kendoDropDownList").filterInput.val()
+        };
+    }
+    //入账消费项目Change事件
+    function folioAddItem_autoCompleteChanged(e) {
+
+        $("#txtLastTimeMeterReading").val("");
+        var consumerItem = Import.ConsumerItemSelected();
+        if (consumerItem == null) {
+            Import.ShowExcelDataToPage();
+            return;
+        }
+        if (consumerItem.Action != "51" && consumerItem.Action != "52" && consumerItem.Action != "53") {
+            Import.ShowExcelDataToPage();
+            return;
+        }
+
+        var dataJson = $("#txtImportData").val();
+        if ($.trim(dataJson) == "") {
+            Import.ShowExcelDataToPage();
+            return;
+        }
+        var dataObj = JSON.parse(dataJson);
+        if (dataObj == null || dataObj == undefined) {
+            Import.ShowExcelDataToPage();
+            return;
+        }
+
+        var list = [];
+        $.each(dataObj, function (index, item) {
+            list.push({ Key: item.Regid, Value: item.RoomNo });
+        });
+
+        var url = "@Url.Action("GetLastTimeMeterReading")";
+        popupNotification.show("正在获取上次抄表数...", "info");
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: { list: list, action: consumerItem.Action },
+            dataType: "json",
+            error: function (xhr, msg, ex) {
+                jAlert(msg, "知道了");
+            },
+            success: function (result) {
+                if (!result.Success) {
+                    jAlert(result.Data, "知道了");
+                } else {
+                    $("#txtLastTimeMeterReading").val(JSON.stringify(result.Data));
+                    popupNotification.show("获取上次抄表数成功！", "info");
+                }
+            },
+            complete: function () {
+                Import.ShowExcelDataToPage();
+            }
+        });
+    }
+
+    //页面加载完成后执行
+    var popupNotification = null;
+    $(document).ready(function () {
+        window.onresize = Import.Tools.OnResize; Import.Tools.OnResize();
+        $("#folioAddItem").data("kendoDropDownList").list.width(226);
+        $("#delDayButton").click(function (e) { delDayButton(e); });
+        $("#saveButton").click(function (e) { saveButton(e); });
+
+        popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
+    });
+</script>

@@ -1,0 +1,18 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosReserve.TimeList>
+
+<tr>
+    @{
+        foreach (var item in Model)
+        {
+            if (item.Time.ToString().Length == 0)
+            {
+                <th>@("0" + item.Time + " : 00")</th>
+            }
+            else
+            {
+                <th>@(item.Time + " : 00")</th>
+            }
+            @*<th>@item.Time</th>*@
+        }
+    }
+</tr>

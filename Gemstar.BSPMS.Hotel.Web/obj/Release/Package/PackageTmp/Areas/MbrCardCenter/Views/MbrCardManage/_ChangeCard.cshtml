@@ -1,0 +1,44 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MbrCardCenter.Models.MbrCardManage.MbrCardChangeViewModel
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.ID);
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.OldCardNo)</td>
+            <td>@Html.DisplayTextFor(m => m.OldCardNo)</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.NewCardNo)</td>
+            <td>@Html.TextBoxFor(m => m.NewCardNo, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.NewCardNo, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td>@Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveSecondEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeSecondEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveSecondEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveSecondFormData($("#saveSecondEditFormButton"));
+        });
+        $("#closeSecondEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeSecondKendoWindow();
+        });
+    });
+</script>
+
+

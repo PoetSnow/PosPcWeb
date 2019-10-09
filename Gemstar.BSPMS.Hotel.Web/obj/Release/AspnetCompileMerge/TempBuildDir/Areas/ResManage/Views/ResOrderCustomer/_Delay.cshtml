@@ -1,0 +1,65 @@
+﻿@*延期*@
+@using Gemstar.BSPMS.Common.Extensions;
+@model Gemstar.BSPMS.Hotel.Services.ResManage.ResMainInfo
+<style type="text/css">#submitDelayButton {border-color: #e62722;color: #e62722;}#submitDelayButton:hover {background-color: #e62722;border-color: #e62722;color: #ffffff;}</style>
+<div id="delayWindow">
+    <div class="k-grid k-widget" style="max-height: 450px;overflow:hidden;">
+        <div class="k-grid-header" style="padding-right: 17px;">
+            <div class="k-grid-header-wrap k-auto-scrollable">
+                <table role="grid">
+                    <colgroup>
+                        <col style="width:37px;">
+                        <col style="width:59px;">
+                        <col style="width:59px;">
+                        <col>
+                        <col>
+                        <col style="width:135px;">
+                        <col style="width:135px;">
+                        <col style="width:225px;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="k-header">
+                                <input type="checkbox" class="k-checkbox" id="checkAllDelay" style="padding-left:0px;" /><label class="k-checkbox-label" for="checkAllDelay" title="全选"></label>
+                            </th>
+                            <th class="k-header">账号</th>
+                            <th class="k-header">房号</th>
+                            <th class="k-header">房价</th>
+                            <th class="k-header">客人名</th>
+                            <th class="k-header">抵店时间</th>
+                            <th class="k-header">离店时间</th>
+                            <th class="k-header">延期后的离店时间</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="k-grid-content k-auto-scrollable" style="max-height: 357px;">
+            <table style="height: auto;">
+                <colgroup>
+                    <col style="width:37px;">
+                    <col style="width:59px;">
+                    <col style="width:59px;">
+                    <col>
+                    <col>
+                    <col style="width:135px;">
+                    <col style="width:135px;">
+                    <col style="width:225px;">
+                </colgroup>
+                <tbody id="delayTbody"></tbody>
+            </table>
+        </div>
+        <div class="k-header k-grid-toolbar">
+            <div class="toolbar">
+                <label for="editedPrice">选中的日期调整为</label>
+                @(Html.Kendo().DateTimePicker().Name("editedDetDate").Format(DateTimeExtension.DateTimeWithoutSecondFormatStr).Min(DateTime.Now))
+                <input type="hidden" id="editedDetDateHidden" value="" />
+                @(Html.Kendo().NumericTextBox().Name("editedDetDays").Format("# 天").Min(0).Decimals(0).Value(0).HtmlAttributes(new { style = "width:70px;" }))
+                <button id="editDetDateButton" name="editDetDateButton" class="k-button" type="button">调整</button>
+                <button id="cancelDelayButton" name="cancelDelayButton" class="k-button" type="button" style="float:right;margin-right:13px;">返回</button>
+                <button id="submitDelayButton" name="submitDelayButton" class="k-button" type="button" style="float:right;">保存</button>
+                <input type="hidden" id="delayContinue" value="0" />
+            </div>
+        </div>
+    </div>
+</div>

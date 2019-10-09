@@ -1,0 +1,88 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MarketingManage.Models.RoomOwnerFee.RoomOwnerFeeAddViewModel
+@using Kendo.Mvc.UI
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(w => w.roomNo)    
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.roomNo)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.roomId).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("getOwnerRoomNO", "RoomOwnerFee", new { rnd = new Random().NextDouble() })); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.roomNo, "*")</td>
+
+            <td class="textright">业主姓名</td>
+            <td><input type="text" id="ownername" class="k-textbox" style="width:100%;background-color:rgb(245,245,245)" value="@ViewBag.ownername" disabled="disabled" /> </td>
+            <td> </td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.itemId)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.itemId).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("getOwnerItem", "RoomOwnerFee", new { rnd = new Random().NextDouble() })); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.itemId, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.FeeDate)</td>
+            <td>@Html.Kendo().DatePickerFor(m => m.FeeDate).HtmlAttributes(new { style = " width:100%" }) </td>
+            <td>@Html.ValidationMessageFor(m => m.FeeDate, "*")</td>
+        </tr>
+
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.currentReadQty)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.currentReadQty).HtmlAttributes(new { style = " width:100%" }) </td>
+            <td>@Html.ValidationMessageFor(m => m.currentReadQty, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.qty)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.qty).HtmlAttributes(new { style = " width:100%" }) </td>
+            <td>@Html.ValidationMessageFor(m => m.qty, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.price)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.price).HtmlAttributes(new { style = " width:100%" }) </td>
+            <td>@Html.ValidationMessageFor(m => m.price, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.amount)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.amount).HtmlAttributes(new { style = " width:100%" }) </td>
+            <td>@Html.ValidationMessageFor(m => m.amount, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td colspan="4">@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = " width:100%" }) </td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td> 
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+
+
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        $("#roomId").change(function () {
+
+            $.post("@Url.Action("getOwnername")", { roomId: $("#roomId").val() }, function (data) {
+                if (data.Success) {
+                    $("#ownername").val(data.Data);
+                } else {
+                    ajaxErrorHandle(data);
+                }
+            })
+        });
+
+    });
+
+</script>
+

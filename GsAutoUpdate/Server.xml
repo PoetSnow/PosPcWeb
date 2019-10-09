@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ServerUpdate>
+  <item>
+    <!-- 更新后启动的程序 -->
+    <ApplicationStart>xxx.exe</ApplicationStart>
+    <!-- 程序名称（暂时没用） -->
+    <AppName>xxx</AppName>
+    <!-- 最小版本号（暂时没用） -->
+    <MinVersion>1.0.0.0</MinVersion>
+    <!-- 发布时间 -->
+    <ReleaseDate>2018/08/01 08:30:00</ReleaseDate>
+    <!-- 下载地址 -->
+    <ReleaseUrl>http://localhost/update/1.0.0.1.zip</ReleaseUrl>
+    <!-- 发布版本号 -->
+    <ReleaseVersion>1.0.0.1</ReleaseVersion>
+    <!-- 更新界面提示信息（$会替换成换行符） -->
+    <VersionDesc>1、增加xxx功能 $ 2、修复xxx问题 $ 3、优化xxx内容</VersionDesc>
+    <!-- Cover 表示覆盖更新，Increment 表示增量更新 -->
+    <UpdateMode>Increment</UpdateMode>
+  </item>
+</ServerUpdate>

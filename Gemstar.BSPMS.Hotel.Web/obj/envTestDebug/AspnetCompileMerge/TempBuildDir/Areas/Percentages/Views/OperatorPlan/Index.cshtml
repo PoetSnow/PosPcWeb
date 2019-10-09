@@ -1,0 +1,106 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@using Kendo.Mvc.UI;
+
+@{
+    ViewBag.Title = "计划任务";
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "Id";
+
+    var gridModel = new KendoGridCommonViewModel()
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForEnable = false,
+        EnableFunctionForDisable = false,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false
+    };
+    var gridHelper = new KendoGridEditInCellHtmlHelper<percentagesPlan>(
+        Html,
+        Url,
+        gridModel,
+        c =>
+        {
+            c.Bound(w => w.SalesmanName).Title("操作员").Width(100);
+            c.Bound(w => w.one).Title("一月").Width(100);
+            c.Bound(w => w.two).Title("二月").Width(100);
+            c.Bound(w => w.three).Title("三月").Width(100);
+            c.Bound(w => w.four).Title("四月").Width(100);
+            c.Bound(w => w.five).Title("五月").Width(100);
+            c.Bound(w => w.six).Title("六月").Width(100);
+            c.Bound(w => w.seven).Title("七月").Width(100);
+            c.Bound(w => w.eight).Title("八月").Width(100);
+            c.Bound(w => w.nine).Title("九月").Width(100);
+            c.Bound(w => w.ten).Title("十月").Width(100);
+            c.Bound(w => w.eleven).Title("十一月").Width(100);
+            c.Bound(w => w.twelve).Title("十二月").Width(100);
+        }
+        ,
+        c =>
+        {
+            c.Id(w => w.Id);
+            c.Field(w => w.SalesmanName).Editable(false);
+        },
+    c =>
+    {
+        c.Template(@<text> 提成内容：
+        @(Html.Kendo().DropDownList()
+                .Name("planSource")
+                .DataTextField("Text").DataValueField("Value")
+                .HtmlAttributes(new { @style = "width:146.797px;" })
+                .DataSource(e => { e.Read(r => r.Action("ListItemsForSource", "OperatorPlan")); })
+        )　年份：
+        <select id="year" style="display:initial" onchange="queryData(); ">
+            @for (var i = DateTime.Now.AddYears(-5).Year; i < DateTime.Now.AddYears(5).Year; i++)
+    {
+                <option value=@i>@i</option>
+            }
+        </select>
+        <span style='margin-left:10px;'> <a class="k-button k-button- icontext k-grid-save-changes" href="javascript: void(0)"><span class="k-icon k-update"> </span> 保存修改</a> <a class="k-button k-button-icontext k-grid-cancel-changes" href="javascript: void(0)"><span class="k-icon k-cancel"></span>取消修改</a></span>
+        </text>);
+    }
+        );
+}
+@(gridHelper.KendoGridEditInCell())
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridModel)
+}
+<script type="text/javascript">
+    $(function () {
+        var date = new Date();
+        $("#year").val(date.getFullYear());
+        $("#planSource").change(function () {
+            queryData();
+        });
+        setTimeout(function () { queryData(); }, 0);
+    });
+    function queryData() {
+        var year = $("#year").val();
+        var planSource = $("#planSource").val(); 
+        var result = "@@t00年份=" + year + "&@@m39计划内容=" + planSource;
+        GetControl("#commonQueryParameterValues").val(result);
+        var grid = $("#" + "@gridId").data("kendoGrid");
+        grid.dataSource.read();
+    }
+</script>
+
+<style>
+    select {
+        cursor: pointer;
+        background: white;
+        width: auto;
+        font-size: 13px;
+        border: 1px solid #ccc;
+        height: 24px;
+        color: black;
+        border-radius: 4px;
+    }
+
+    .single-line {
+        height: 97%;
+        color: black;
+    }
+</style>

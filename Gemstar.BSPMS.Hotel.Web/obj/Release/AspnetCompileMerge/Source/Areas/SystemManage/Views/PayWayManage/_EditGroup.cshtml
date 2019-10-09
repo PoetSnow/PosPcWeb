@@ -1,0 +1,168 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.ItemManage.ItemGroupEditViewModel
+@using (Html.BeginForm(new { action = "EditGroup" }))
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.DcFlag) 
+    @Html.HiddenFor(m => m.DataControlCode)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">付款类型</td>
+            @if (ViewBag.isexistItemReserv)
+            {
+                <td>
+                    @Html.HiddenFor(m => m.ItemTypeName)  
+                    @Html.Kendo().DropDownListFor(e => e.ItemTypeid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForPayway", "PayWayManage")); })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.ItemTypeid, "*")</td>
+
+                <td class="textright">@Html.LabelFor(m => m.Code)</td>
+                <td>@Html.TextBoxFor(m => m.Code, new { @class = "k-textbox", style = "width:100%;" })</td>
+            }
+            else
+            {
+                <td>
+                    @Html.HiddenFor(m => m.ItemTypeid)
+                    @Html.TextBoxFor(m => m.ItemTypeName, new { @class = "k-textbox", style = "width:100%;background-color:rgb(245,245,245);", @readonly = "readonly" })
+
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.ItemTypeid, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.Code)</td>
+                <td>
+                    @Html.TextBoxFor(m => m.Code, new { @class = "k-textbox", style = "width:100%;background-color:rgb(245,245,245);", @readonly = "readonly" })
+                </td>
+            }
+            <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Name)</td>
+            @if (ViewBag.isexistItemReserv)
+            {
+                <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;" })</td>
+            }
+            else
+            {
+                <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;background-color:rgb(245,245,245);", @readonly = "readonly" })</td>
+            }
+            <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.IsInput)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.IsInput).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetIsSelectList", "PayWayManage")); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.IsInput, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Action)</td>
+            <td>
+                @if (ViewBag.isexistItemReserv)
+                {
+                    @Html.Kendo().DropDownListFor(e => e.Action).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetActionList", "PayWayManage")); })
+                }
+                else
+                {
+                    @Html.HiddenFor(m => m.Action)
+                    <input type="text" class="k-textbox" style="width:100%;background-color:rgb(245,245,245);" readonly="readonly" value="@ViewBag.actions" />
+                }
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.Action, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.IsCharge)</td>
+            @if (ViewBag.isexistItemReserv)
+            {
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.IsCharge).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetIsSelectList", "PayWayManage")); })
+                </td>
+            }
+            else
+            { 
+                <td>@Html.HiddenFor(m => m.IsCharge)
+                    <input type="text" class="k-textbox" style="width:100%;background-color:rgb(245,245,245);" readonly="readonly" value="@ViewBag.IsCharges" />
+                </td>
+            }
+            <td>@Html.ValidationMessageFor(m => m.IsCharge, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.IsRetun)</td>
+            @if (ViewBag.isexistItemReserv)
+            {
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.IsRetun).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetIsSelectList", "PayWayManage")); })
+                </td>
+            }
+            else
+            {
+                @Html.HiddenFor(m => m.IsRetun)
+                <td>
+                    <input type="text" class="k-textbox" style="width:100%;background-color:rgb(245,245,245);" readonly="readonly" value="@ViewBag.IsRetuns" />
+                </td>
+            }
+            <td>@Html.ValidationMessageFor(m => m.IsRetun, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.Notscore)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.Notscore).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetIsSelectList", "PayWayManage")); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.Notscore, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Rate)</td>
+            <td>@Html.TextBoxFor(m => m.Rate, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Rate, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+            <td>@Html.TextBoxFor(m => m.Seqid, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.DataControlName)</td>
+            <td>@Html.TextBoxFor(m => m.DataControlName, new { @class = "k-textbox", style = "width:100%;", @readonly = "readonly" })</td>
+            <td>@Html.ValidationMessageFor(m => m.DataControlName, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.ResortCanUpdate)</td>
+            <td>@Html.CheckBoxFor(m => m.ResortCanUpdate, new { onclick = "return false;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ResortCanUpdate, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.SelectedResortHids)</td>
+            <td>@Html.DropDownListFor(m => m.SelectedResortHids, Model.ResortItems, new { @class = "box", multiple = "multiple", style = "width:100%;height:200px;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.SelectedResortHids, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.UpdateProperties)</td>
+            <td>@Html.DropDownListFor(m => m.UpdateProperties, Model.PropertyItems, new { @class = "box", multiple = "multiple", style = "width:180px;height:200px;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.UpdateProperties, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $(".k-input").css("text-indent", "1em");
+        $.validator.unobtrusive.parse(document);
+        var canEditCode = "@ViewBag.canEditCode";
+        if (canEditCode == "False") {
+            $("#Code").attr("readonly", "readonly");
+            $("#Code").css("background-color", "rgb(245,245,245)");
+        }
+        var controlType = "@Model.DataControlCode";
+        if (controlType != "@Gemstar.BSPMS.Common.Services.BasicDataControls.DataControlType.SelectedResorts.Code") {
+            $("#SelectedResortHids").attr("disabled", "disabled");
+        }
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        $("#ItemTypeid").change(function () {
+            $("#qudao").val("re");
+        });
+
+    });
+</script>
+
+

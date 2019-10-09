@@ -1,0 +1,171 @@
+/** 
+ * CONTENTS
+ *
+ * BASE
+ *
+ * BUTTON TYPES
+ *
+ * MODIFIERS
+ * Size
+ * Mode
+ */
+/*------------------------------------*\
+    BASE
+\*------------------------------------*/
+.softkeys {
+    display: table;
+    list-style: none;
+    padding: 0;
+    margin-top: 0.5rem;
+    width: 100%;
+    text-align: center;
+    font-size: 4rem;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.softkeys__btn {
+    display: inline-block;
+    text-align: center;
+    font-size: 4rem;
+    line-height: 5rem;
+    min-width: 5rem;
+    min-height: 5rem;
+    padding: 0 1rem;
+    margin: 0.2rem;
+    border: 2px solid #aaa;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.softkeys__btn:hover, .softkeys__btn:focus {
+    outline: none;
+    background-color: #4b94ce;
+    border-color: #4b94ce;
+    color: #fff;
+}
+
+.softkeys__btn span {
+    display: none;
+}
+
+.softkeys__btn span:first-child {
+    display: block;
+}
+
+.softkeys__new-row:before {
+    display: block;
+    content: ' ';
+    width: 100%;
+}
+/*------------------------------------*\
+    BUTTON TYPEs
+\*------------------------------------*/
+.softkeys__btn--space {
+    width: 30rem;
+}
+/*------------------------------------*\
+    SIZE MODIFIERS
+\*------------------------------------*/
+.softkeys--sm {
+    font-size: 0.8rem;
+}
+
+.softkeys--md {
+    font-size: 1rem;
+}
+
+.softkeys--lg {
+    font-size: 1.2rem;
+}
+
+.softkeys--xl {
+    font-size: 1.4rem;
+}
+/*------------------------------------*\
+    MODE MODIFIERS
+\*------------------------------------*/
+/*.softkeys--caps*/
+.softkeys--caps .softkeys__btn[data-type=capslock] {
+    background-color: #4b94ce;
+    border-color: #4b94ce;
+    color: #fff;
+}
+
+.softkeys--caps .softkeys__btn[data-type=letter] {
+    text-transform: uppercase;
+}
+/*.softkeys--alt*/
+.softkeys--alt .softkeys__btn[data-type=shift] {
+    background-color: #4b94ce;
+    border-color: #4b94ce;
+    color: #fff;
+}
+
+.softkeys--alt .softkeys__btn[data-type=symbol] span {
+    display: none;
+}
+
+.softkeys--alt .softkeys__btn[data-type=symbol] span:last-child {
+    display: block;
+}
+/* Êý×Ö */
+.softkeys__btn:nth-child(1),
+.softkeys__btn:nth-child(2),
+.softkeys__btn:nth-child(3),
+.softkeys__btn:nth-child(4),
+.softkeys__btn:nth-child(5),
+.softkeys__btn:nth-child(6),
+.softkeys__btn:nth-child(7),
+.softkeys__btn:nth-child(8),
+.softkeys__btn:nth-child(9),
+.softkeys__btn:nth-child(10) {
+    color: #fff;
+    background-image: linear-gradient(to bottom,#14d492,#00a47f);
+}
+
+.softkeys__btn:nth-child(12),
+.softkeys__btn:nth-child(13),
+.softkeys__btn:nth-child(14),
+.softkeys__btn:nth-child(15),
+.softkeys__btn:nth-child(16),
+.softkeys__btn:nth-child(17),
+.softkeys__btn:nth-child(18),
+.softkeys__btn:nth-child(19),
+.softkeys__btn:nth-child(20),
+.softkeys__btn:nth-child(21),
+.softkeys__btn:nth-child(21),
+.softkeys__btn:nth-child(22),
+.softkeys__btn:nth-child(23),
+.softkeys__btn:nth-child(24),
+.softkeys__btn:nth-child(25),
+.softkeys__btn:nth-child(26),
+.softkeys__btn:nth-child(27),
+.softkeys__btn:nth-child(28),
+.softkeys__btn:nth-child(29),
+.softkeys__btn:nth-child(30),
+.softkeys__btn:nth-child(31),
+.softkeys__btn:nth-child(32),
+.softkeys__btn:nth-child(33),
+.softkeys__btn:nth-child(34),
+.softkeys__btn:nth-child(35),
+.softkeys__btn:nth-child(36),
+.softkeys__btn:nth-child(37),
+.softkeys__btn:nth-child(38),
+.softkeys__btn:nth-child(39),
+.softkeys__btn:nth-child(40) {
+    color: #fff;
+    background-image: linear-gradient(to bottom,#7c7c7c,#454545);
+}
+
+.softkeys__btn:nth-child(41),
+.softkeys__btn:nth-child(42),
+.softkeys__btn:nth-child(43),
+.softkeys__btn:nth-child(44) {
+    color: #fff;
+    font-size: 3.5rem;
+    background-image: linear-gradient(to bottom,#228bbc,#0a6798);
+}

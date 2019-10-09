@@ -1,0 +1,179 @@
+﻿/*---------- Pos收银样式 ----------*/
+body {
+    overflow: auto;
+}
+
+a {
+    display: block;
+}
+
+.wrap {
+    margin: 0;
+    padding-left: 1rem;
+    background: #294461;
+}
+
+/* 左侧 */
+.mainLeft {
+    width: 400px;
+    float: left;
+}
+
+.mainLeft-bg {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background: #8D5E37;
+    position: relative;
+}
+
+.mainLeft-bg1 {
+    padding: 0.5rem;
+    background: #fff;
+    border-radius: 0.5rem;
+}
+
+.mainLeft-button {
+    width: 100%;
+}
+
+.mainLeft-button li {
+    height: 2rem;
+    padding: 0 1rem;
+    line-height: 2rem;
+    text-align: center;
+    display: inline-block;
+    border-radius: 0.2rem;
+    background: #0ac288;
+    border-right: 1px solid #119000;
+    border-bottom: 1px solid #119000;
+    /*background-image: linear-gradient(to bottom,#0ac288,#088368);*/
+}
+
+.mainLeft-button li a {
+    color: #fff;
+    font-size: 0.9rem;
+    display: inline-block;
+}
+
+.mainLeft-query {
+    padding-bottom: 0.5rem;
+}
+
+.mainLeft-table {
+    border: 1px solid #aaa;
+    border-top: 0;
+    border-spacing: 0;
+    width: 100%;
+    margin-top: 1%;
+}
+
+.mainLeft-table td {
+    height: 2rem;
+    line-height: 2rem;
+    text-align: center;
+    border-top: 1px solid #aaa;
+    border-left: 1px solid #aaa;
+}
+
+.mainLeft-table td:nth-child(6n+1) {
+    border-left: 0;
+}
+
+/* 右侧 */
+.mainRight {
+    float: right;
+    height: 100%;
+    margin-left: 412px;
+    position: absolute;
+}
+
+#PosBill {
+    height: 7.8rem;
+}
+
+#PosBill li {
+    line-height: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mainRight-details {
+    padding: 0.5rem;
+    overflow: hidden;
+    margin-right: 12px;
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+}
+
+.mainRight-details li {
+    width: 25%;
+    float: left;
+}
+
+.mainRight-details li:last-child {
+    width: 75%;
+}
+
+.mainRight-details li span {
+    color: #a732cf;
+}
+
+.mainRight-table {
+    border-top: 0;
+    border-spacing: 0;
+    width: 99%;
+    margin-top: 0.2rem;
+}
+
+.mainRight-paymentMethod {
+    border-top: 0;
+    border-spacing: 0;
+    width: 99%;
+    margin-top: 0.5rem;
+    position: relative;
+}
+
+.mainRight-paymentMethod > .wrap {
+    padding: 0;
+    margin: 0;
+}
+
+.tips {
+    color: #00abff;
+    font-size: 1rem;
+    padding: 0.2rem;
+    position: absolute;
+}
+
+.mainLeft .tips:last-child {
+    top: 1rem;
+    right: 2.5rem;
+}
+
+.mainRight .tips:nth-last-child(2) {
+    top: -0.2rem;
+    right: 0.9rem;
+}
+
+.mainRight .tips:nth-last-child(1) {
+    top: 9.3rem;
+    right: 0.5rem;
+}
+
+.layui-layer-tips .layui-layer-content {
+    font-size: 13px;
+    border-radius: 0.5rem;
+}
+
+.layui-layer-hui {
+    border-radius: 0.5rem;
+}
+
+.layui-layer-hui .layui-layer-content {
+    text-align: left;
+    font-size: 13px;
+    border-radius: 0.5rem;
+    background: rgba(0,0,0,0.75);
+}

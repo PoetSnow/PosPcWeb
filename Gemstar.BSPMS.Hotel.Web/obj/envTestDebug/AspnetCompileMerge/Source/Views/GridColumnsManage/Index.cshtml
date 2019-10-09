@@ -1,0 +1,127 @@
+﻿@{
+    Layout = null;
+}
+@model Gemstar.BSPMS.Hotel.Web.Models.GridColumnsManageViewModel
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>表格列管理</title>
+    @Html.Partial("_HeaderCss")
+    @System.Web.Optimization.Scripts.Render(BundleConfig.BundleHeaderJs)
+    <style>
+        .table{
+            width:100%;
+            max-width:100%;
+        }
+        .table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+}
+.table > thead > tr > th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #ddd;
+}
+.table > caption + thead > tr:first-child > th,
+.table > colgroup + thead > tr:first-child > th,
+.table > thead:first-child > tr:first-child > th,
+.table > caption + thead > tr:first-child > td,
+.table > colgroup + thead > tr:first-child > td,
+.table > thead:first-child > tr:first-child > td {
+  border-top: 0;
+}
+.table > tbody + tbody {
+  border-top: 2px solid #ddd;
+}
+.table .table {
+  background-color: #fff;
+}
+.table-condensed > thead > tr > th,
+.table-condensed > tbody > tr > th,
+.table-condensed > tfoot > tr > th,
+.table-condensed > thead > tr > td,
+.table-condensed > tbody > tr > td,
+.table-condensed > tfoot > tr > td {
+  padding: 5px;
+}
+.table-bordered {
+  border: 1px solid #ddd;
+}
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+  border: 1px solid #ddd;
+}
+.table-bordered > thead > tr > th,
+.table-bordered > thead > tr > td {
+  border-bottom-width: 2px;
+}
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+        .text-center{
+            text-align:center;
+            margin-top:30px;
+            margin-bottom:30px;
+        }
+    </style>
+</head>
+    <body>
+        <h3 style="margin-top:3px;margin-bottom:3px;">　　 表格列管理</h3>
+        @using(Html.BeginForm("Save","GridColumnsManage")){
+            @Html.HiddenFor(m=>m.setArea)
+            @Html.HiddenFor(m=>m.setController)
+            @Html.HiddenFor(m=>m.setAction)
+            @Html.HiddenFor(m=>m.columns)
+            <table class="table table-striped">
+                <tr>
+                    <td class="text-center"> 列名称 </td>
+                    <td class="text-center"> 是否显示 </td>
+                    <td class="text-center">列顺序</td>
+                    <td class="text-center"> 列宽度 </td>
+                </tr>
+                @{
+                    var columns = Model.ColumnSettings;
+                    foreach (var column in columns)
+                    {
+                        <tr>
+                            <td style="padding-left:40px;">@column.Title
+                                <input type="hidden" name="@string.Format("name{0}", column.Name)" value="@column.Name"/>
+                                <input type="hidden" name="@string.Format("title{0}", column.Name)" value="@column.Title"/>
+                            </td>
+                            <td><input type="radio" id="@string.Format("a{0}", column.Name)" name="@string.Format("hidden{0}", column.Name)" value="1" @if (!column.Hidden){Output.Write("checked='checked'");}/><label for="@string.Format("a{0}", column.Name)"> 显示</label> 
+                                <input type="radio" id="@string.Format("b{0}", column.Name)" name="@string.Format("hidden{0}", column.Name)" value="0" @if (column.Hidden){Output.Write("checked='checked'");}/><label for="@string.Format("b{0}", column.Name)"> 隐藏</label>
+                            </td>
+                            <td><input type="text" name="@string.Format("order{0}",column.Name)" value="@column.Order" class="k-textbox"/></td>
+                            <td><input type="text" name="@string.Format("width{0}", column.Name)" value="@column.Width" class="k-textbox"/></td>
+                        </tr>
+                    }
+                }
+            </table>
+            <div class="text-center">
+                <button type="button" class="k-button" onclick="deleteCustomColunm();">删除自定义</button>&nbsp;
+                <button type="submit" class="k-button">保存</button>&nbsp;
+                <input type="hidden" name="actionKey" value="0" id="actionKey" />
+                <a href="@Url.Action(Model.setAction,Model.setController,new{area=Model.setArea})" class="k-button">返回</a>
+            </div>
+        }
+    </body>
+</html>
+
+<script type="text/javascript">
+    function deleteCustomColunm() {
+        $("#actionKey").val("1");//0：保存，1：删除
+        $("form").submit();
+    }
+</script>
+

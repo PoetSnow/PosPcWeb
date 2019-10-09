@@ -1,0 +1,47 @@
+﻿<style>
+    .cutline{
+        margin-top:3rem;
+    }
+    .cutline li{
+        margin:1rem;
+    }
+    .cutline li span{
+        font-size:1.2rem;
+        display:inline-block;
+    }
+    .cutline li span:first-child{
+        width:10rem;
+        text-align:right;
+    }
+    .cutline li span:nth-child(2){
+        width:5rem;
+    }
+</style>
+<div style="float:left;width:50%;">
+    <ul class="cutline">
+        <li><span>套餐明细：</span><span class="package-state">&nbsp;</span></li>
+        <li><span>海鲜称重标记：</span><span class="seafood-state">&nbsp;</span></li>
+    </ul>
+    <ul class="cutline">
+        <li><span>楼面新点菜：</span><span class="neworder-state">&nbsp;</span></li>
+        <li><span>正常菜式：</span><span class="normal-state">&nbsp;</span></li>
+        <li><span>传菜：</span><span class="dish-state">&nbsp;</span></li>
+        <li><span>返传菜：</span><span class="returndish-state">&nbsp;</span></li>
+        <li><span>超时未上菜：</span><span class="overtime-state">&nbsp;</span></li>
+    </ul>
+</div>
+<div style="float:right;width:50%;">
+    <ul class="cutline">
+        <li><span>例送：</span><span class="case-state">&nbsp;</span></li>
+        <li><span>赠送：</span><span class="give-state">&nbsp;</span></li>
+        <li><span>取消：</span><span class="cancel-state">&nbsp;</span></li>
+    </ul>
+    <ul class="cutline">
+        <li><span>入单/开台项目：</span><span class="original-state">&nbsp;</span></li>
+        <li><span>已打单：</span><span class="intimidate-state">&nbsp;</span></li>
+        <li><span>已买单：</span><span class="check-state">&nbsp;</span></li>
+    </ul>
+    <div class="formButtons">
+        <button id="closeEditFormButton" role="button" data-role="button" style="width:100%;" onclick="layer.closeAll()">关闭</button>
+    </div>
+</div>

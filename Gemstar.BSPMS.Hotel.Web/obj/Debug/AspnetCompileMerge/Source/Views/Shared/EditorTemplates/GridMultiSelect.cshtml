@@ -1,0 +1,14 @@
+﻿@model object
+@{
+    int? height = (ViewData[ViewData.TemplateInfo.GetFullHtmlFieldName("") + "_Height"] as int?);
+    if (height == null || !height.HasValue)
+    {
+        height = 200;
+    }
+}
+@(
+  Html.Kendo().MultiSelectFor(m=>m).BindTo((SelectList)ViewData[ViewData.TemplateInfo.GetFullHtmlFieldName("") + "_Data"]).Events(e=>e.Close("featureClose").Open("featureOpen")).AutoClose(false).Height((int)height).Filter(FilterType.Contains)
+)
+
+
+

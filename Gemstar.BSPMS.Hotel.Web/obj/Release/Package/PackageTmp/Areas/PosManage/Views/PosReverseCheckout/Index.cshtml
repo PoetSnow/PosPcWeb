@@ -1,0 +1,310 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPos;
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosReverseCheckout.ReverseCheckoutViewModel
+@{
+    ViewBag.Title = "Pos反结";
+}
+<link href="~/Scripts/layer-v3.1.1/theme/default/layer.css" rel="stylesheet" />
+<link href="~/Content/Pos/posCashier.css?version=@ViewBag.Version" rel="stylesheet" />
+<link href="~/Content/Pos/posPublic.css?version=@ViewBag.Version" rel="stylesheet" />
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.CanReason)
+    <ul class="mainLeft-button" style="margin:0.5rem 0;">
+        <li><a href="javascript:void(0);" onclick="preview()">打单</a></li>
+        <li><a href="javascript:void(0);" onclick="PrintPaymentMethod()">打印埋脚</a></li>
+        <li><a href="javascript:void(0);" onclick="isReverseCheckout()">反结</a></li>
+        <li><a href="javascript:void(0);">发票领取单</a></li>
+        <li><a href="javascript:void(0);" onclick="showHideDetail(this)">隐藏明细</a></li>
+    </ul>
+    <div class="mainLeft">
+        <div class="mainLeft-bg">
+            <div class="mainLeft-bg1">
+                <div class="mainLeft-query">
+                    台号/客账号：<input id="txtTabNo" type="text" class="k-textbox" />
+                    <a href="javascript:void(0);" class="k-button" onclick="queryBillList()">查询</a>
+                </div>
+                <div class="mainLeft-billList">
+                </div>
+                <img src="~/images/hxz.png" style="position: absolute; right: 0px; top: 0px;" />
+            </div>
+        </div>
+    </div>
+    <div class="mainRight">
+        <div class="mainRight-details">
+            <ul>
+                <li style="width:100%;"></li>
+                <li style="width:100%;"></li>
+                <li style="width:100%;"></li>
+                <li style="width:100%;"></li>
+                <li style="width:100%;"></li>
+                <li style="width:100%;"></li>
+                <li style="width:100%;"></li>
+            </ul>
+        </div>
+        <div class="mainRight-table">
+        </div>
+        <div class="mainRight-paymentMethod">
+        </div>
+    </div>
+    <iframe id="printFrame" style="visibility:hidden"></iframe>
+}
+@Html.Partial("PosReverse.JavaScript")
+<script type="text/javascript">
+    $(function () {
+        window.onresize = onResize; onResize();
+
+        queryBillList();
+
+        $("#printFrame").attr("src", "");
+    });
+
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#gridBill .k-grid-toolbar").height() + 20 + 30 + 145;
+        $("#gridBill .k-grid-content").height(allHeight - showHeight);
+
+        $(".mainLeft").height($(window).height() - $("#remValue").height());
+        $(".mainLeft-billList").height($(".mainLeft").height() - $(".mainLeft-button").outerHeight(true) - $(".mainLeft-query").outerHeight(true) - $("#remValue").height() * 2);
+        $(".mainRight").height($(".mainLeft").height());
+        $(".mainRight").width($(".wrap").width() - $(".mainLeft").outerWidth(true) - $("#remValue").height());
+    }
+
+    //反结提示
+    function isReverseCheckout() {
+
+        $.ajax({
+            url: '@Url.Action("ReverseCheck", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    var grid = $("#gridBill").data("kendoGrid");
+                    var selectedRows = grid.select();
+                    if (selectedRows.length > 0) {
+                        layer.confirm("确认要反结当前选中的账单？", {
+                            btn: ['确定', '取消'] //按钮
+                            , title: '快点云Pos提示'
+                            , shade: 'rgba(0,0,0,0)'
+                        }
+                        , function (index) {
+                            layer.close(index);
+                            var row = selectedRows[0];
+                            var data = grid.dataItem(row);
+
+                            var model = {
+                                Billid: data["billid"],
+                                CanReason: $("#CanReason").val(),
+                            };
+
+                            $.post('@Url.Action("PayWayIsRepay", "PosReverseCheckout", new { rnd = new Random().NextDouble() })', { billid: model.Billid }, function (result) {
+                                if (result.Success) {
+                                    layer.prompt({ title: '请输入反结原因', formType: 2 }, function (text, index) {
+                                        layer.close(index);
+                                        $("#CanReason").val(text);
+
+                                        
+
+                                        ReverseCheckout(model);
+                                    });
+
+
+                                }
+                                else {
+                                    layer.alert(result.Data, { title: "快点云Pos提示" });
+                                }
+
+                            }, 'json');
+
+                           
+                        }
+                        , function () {
+                            layer.closeAll();
+                        });
+                    }
+                    else {
+                        alert("请选择要操作的账单", "提示");
+                    }
+                } else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+
+    }
+
+    //反结
+    function ReverseCheckout(model) {
+        $.ajax({
+        url: '@Url.Action("ReverseCheckout", new { rnd = new Random().NextDouble() })',
+        type: "post",
+        data: model,
+        dataType: "json",
+        success: function (data) {
+            if (data.Success) {
+                queryBillList();
+            } else {
+                layer.alert(data.Data, { title: "快点云Pos提示" });
+            }
+        },
+        error: function (data) {
+            layer.alert(data.responseText, { title: "快点云Pos提示" });
+        }
+    });
+
+
+
+    }
+
+    //查询付款方式列表
+    function queryPaymentMethod(model) {
+        $.ajax({
+            url: '@Url.Action("_PaymentMethodList", "Shared", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $(".mainRight-paymentMethod").html(data);
+                setTimeout(function () {
+                    $(".mainRight-paymentMethod .k-header:last-child").show();
+                    $(".mainRight-paymentMethod tr td:last-child").show();
+                }, 500);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //删除付款方式
+    function deletePayment(obj) {
+        var grid = $("#gridBill").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0) {
+            layer.confirm("确认要反结当前选中的付款方式？", {
+                btn: ['确定', '取消'] //按钮
+                , title: '快点云Pos提示'
+                , shade: 'rgba(0,0,0,0)'
+            }
+            , function (index) {
+                layer.close(index);
+
+                var gridPayment = $("#gridPaymentMethod").data("kendoGrid");
+                var dataPayment = gridPayment.dataItem($(obj).parents("tr"));
+
+                  $.post('@Url.Action("PayWayIsRepay", "PosReverseCheckout", new { rnd = new Random().NextDouble() })', { id: dataPayment["Id"] }, function (data) {
+                      if (data.Success) {
+                          layer.prompt({ title: '请输入反结原因', formType: 2 }, function (text, index) {
+                                    layer.close(index);
+                                    $("#CanReason").val(text);
+                                    $.post('@Url.Action("ReversePayment", "PosReverseCheckout", new { rnd = new Random().NextDouble() })', { id: dataPayment["Id"] }, function (data) {
+                                        if (data.Success) {
+                                            queryBillList();
+                                        } else {
+                                            layer.alert(data.Data, { title: "快点云Pos提示" });
+                                        }
+                                    }, 'json');
+                                    });
+
+                        } else {
+                            layer.alert(data.Data, { title: "快点云Pos提示" });
+                        }
+                    }, 'json');
+
+
+
+            }
+            , function () {
+                layer.closeAll();
+            });
+        }
+        else {
+            alert("请选择要操作的付款方式", "提示");
+        }
+    }
+
+    //打印预览
+    function preview() {
+        var grid = $("#gridBill").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0) {
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+
+            var model = {
+                ReportCode: "PosBillPrint",
+                ProcedureName: "up_pos_print_billDetail",
+                ParameterValues: "@@h99billid=" + data["billid"] + "&@@h99mBillid=" + data["mBillid"],
+                IsOpenSearchWindow: false,
+                ChineseName: "账单打印预览",
+                StyleName: ""
+            };
+
+            $.post('@Url.Action("AddQueryParaTemp", "PosReverseCheckout", new { print = 1})', model, function (result) {
+                if (result.Success) {
+                    $("#printFrame").attr("src", result.Data);
+                } else {
+                    layer.alert(result.Data, { title: "快点云Pos提示" });
+                }
+            }, 'json');
+        }
+        else {
+        }
+    }
+
+    var detailHeight = $(".mainRight-details").outerHeight(true);
+    function showHideDetail(obj) {
+        var remValue = $("#remValue").height();
+
+        if ($(obj).text() == "隐藏明细") {
+            //$(".mainRight-details *").hide();
+            $(".mainRight-details").animate({ height: "0.9rem" });
+            $(".mainRight-table .k-grid-content").animate({ height: $(".mainRight-table .k-grid-content").height() + remValue * 6.9 });
+            $(obj).text("展开明细");
+        }
+        else {
+            //$(".mainRight-details *").show();
+            $(".mainRight-details").animate({ height: "7.8rem" });
+            $(".mainRight-table .k-grid-content").animate({ height: $(".mainRight-table .k-grid-content").height() - remValue * 6.9 });
+            $(obj).text("隐藏明细");
+        }
+    }
+
+    //打印埋脚
+    function PrintPaymentMethod() {
+
+        var grid = $("#gridBill").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0) {
+
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+
+            var model = {
+                ReportCode: "PosBillPaymentMethodPrint",
+                ProcedureName: "up_pos_print_billPaymentMethod",
+                ParameterValues: "@@h99billid=" + data["billid"] + "&@@h99mBillid=" + data["mBillid"] + "",
+                IsOpenSearchWindow: false,
+                ChineseName: "埋脚打印",
+                StyleName: ""
+            };
+
+            $.post('@Html.Raw(Url.Action("PrintBillPayMethod", "PosReverseCheckout", new { print = 1 }))', model, function (result) {
+                console.log(result.Data)
+                if (result.Success) {
+                    $("#printFrame").attr("src", result.Data);
+                } else {
+                    layer.alert(result.Data);
+                }
+            }, 'json');
+        }
+        else {
+            layer.alert("请选择账单");
+        }
+    }
+</script>
+<script src="~/Scripts/layer-v3.1.1/layer.js"></script>

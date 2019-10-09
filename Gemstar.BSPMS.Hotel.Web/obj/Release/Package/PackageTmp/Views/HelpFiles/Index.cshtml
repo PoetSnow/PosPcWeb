@@ -1,0 +1,167 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Models.HelpFileModels.HelpFileIndexModel
+@{
+    Layout = "~/Views/Shared/_LayoutHelpFiles.cshtml";
+}
+@section headerCss{
+<style type="text/css">
+    .contentbox {
+    margin-top: 15px;
+    padding-top: 20px;
+}
+    .w1000 {
+    width: 1000px;
+    margin: 0 auto;
+}
+    #content {
+    font-size: 15px;
+    border: 2px solid #ececec;
+    word-break: break-all;
+    word-wrap: break-word;
+    line-height: 26px;
+   padding: 20px 25px;
+    float: left;
+   margin-bottom:20px;
+    width: 660px;
+    float: left;
+    min-height: 600px;
+    _height: 600px;
+    background-color: #fff;
+    z-index: 100;
+}
+    #content h1.title {
+    color: #000;
+    font-size: 16px;
+    border-bottom: 2px solid #ebebeb;
+    padding: 10px 0;
+    margin-bottom: 10px;
+}
+    .slider {
+    margin-left: 754px;
+    width: 246px;
+    min-height: 600px;
+}
+    .slide_box {
+    margin-bottom: 10px;
+    background-color: #fff;
+    border: 1px solid #e6e6e6;
+}
+    .slide_box span {
+    color: #999;
+    padding: .6em .6em .6em .6em;
+    text-transform: lowercase;
+    font-size: 1.2em;
+}
+    ul, ol {
+    list-style: none;
+}
+    .most-view {
+    line-height: 1.8;
+    height: 25px;
+    overflow: hidden;
+    list-style: none;
+}
+    img {
+    max-width:680px;
+    }
+    body,button,textarea{font: 12px/180% 'Microsoft Yahei', Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;}
+    .most-view a {
+    color: #555;
+    text-decoration: none;
+}
+    .k-button {
+        border-radius: 4px;
+    }
+
+    .editFormTable td:nth-child(odd) {
+        width:84px;
+    }
+</style>
+    }
+
+    <div class="w1000 contentbox">
+        <div id="content">
+            @if (Model.helpFile == null)
+            {
+                <p>暂时没有任何相关的帮助信息</p>
+            }
+            else
+            {
+                <h1 class="title">@string.Format("{0}（共查看{1}次）", Model.helpFile.Title, Model.helpFile.ReadNumber)</h1>
+                <div class="detail">
+                </div>
+            }
+        </div>
+        <div class="slider">
+            <div class="slide_box">
+                <span>帮助中心</span>
+                <div style="padding: 8px">
+                    <ul>
+                        @foreach (var help in Model.allHelpsInMenu)
+                        {
+                            <li class="most-view"><a href="@Url.Action("Index","HelpFiles",new { area="",menuId=Model.menuId, menuName =Model.menuName , helpId =help.Id})">@help.Title</a>
+                             @if (Model.HasAuthToAdd) {
+                                 <span>@(help.CheckStatus?"(已审)":"(未审)")</span>
+                             }
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            @if (Model.HasAuthToAdd)
+            {
+                <div>
+                    <a href="@Url.Action("Add","HelpFiles",new { area="",menuId=Model.menuId, menuName =Model.menuName})" class="k-button">添加</a>
+                    @if (Model.helpFile != null)
+                    {
+                    <a href="@Url.Action("Edit", "HelpFiles", new { area = "", helpId = Model.helpFile.Id, menuId = Model.menuId, menuName = Model.menuName })" class="k-button">修改</a>
+                    <input type="button" id="bntDelete" class="k-button" data-helpid="@Model.helpFile.Id" value="删除" />
+                    }
+                </div>
+            }
+        </div>
+        
+    </div>
+@section scripts{
+    <script type="text/javascript">
+        function htmlDecode(str) {
+            var s = "";
+            if (str.length == 0) return "";
+            s = str.replace(/&amp;/g, "&");
+            s = s.replace(/&lt;/g, "<");
+            s = s.replace(/&gt;/g, ">");
+            s = s.replace(/&nbsp;/g, " ");
+            s = s.replace(/&#39;/g, "\'");
+            s = s.replace(/&quot;/g, "\"");
+            return s;
+        }
+        $(function () {
+            @if(Model.helpFile != null && !string.IsNullOrWhiteSpace(Model.helpFile.Content))
+            {
+                <text>
+            var content = "@Html.Raw(Model.helpFile.Content)";
+            content = htmlDecode(content);
+            $("div.detail").html(content);
+            </text>
+            }
+            $("#bntDelete").click(function (e) {
+                e.preventDefault();
+                jConfirm("确定删除当前帮助吗？", "确定删除", "不删除了", function (result) {
+                    if (result) {
+                        var helpId = $("#bntDelete").data("helpid");
+                        if (helpId) {
+                            $.post("@Url.Action("Delete")",
+                                { helpId:helpId},
+                                function (e) {
+                                    if (e.Success) {
+                                        jAlert("删除成功");
+                                        window.location.href = window.location.href;
+                                    }
+                                },
+                                'json')
+                        }
+                    }
+                })
+            });
+        });
+    </script>
+    }

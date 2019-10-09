@@ -1,0 +1,112 @@
+﻿
+@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.RoleManage.AuthManageViewModelGroup
+@{
+    var hotelItems = new List<SelectListItem>();
+    foreach (var hotel in Model.Hotels)
+    {
+        hotelItems.Add(new SelectListItem { Value = hotel.Hid, Text = (string.IsNullOrWhiteSpace(hotel.Hotelshortname) ? hotel.Name : hotel.Hotelshortname) });
+    }
+}
+<script type="text/javascript">
+    function hotelChange() {
+        var hid = $("#Hid").data("kendoDropDownList").value();
+        var roleId = $("#RoleId").val();
+
+        $.post("@Url.Action("AuthItemConsumeInGroupHotel")", { hid: hid, roleId: roleId }, function (data) {
+            if (data.Success) {
+                var treeview = $("#authTree").data("kendoTreeView");
+                console.log(data.Data);
+                treeview.setDataSource(new kendo.data.HierarchicalDataSource({
+                    data: [
+                      data.Data
+                    ]
+                }));
+                //同时清空应用到的酒店列表中的选中项
+                $("#userHotelList option:checked").each(function (i, o) { o.selected = false; });
+            } else {
+                //jAlert(data.Data);
+                ajaxErrorHandle(data);
+            }
+        },'json');
+    };
+</script>
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.RoleId)
+    <div>
+        <span>请选择酒店：</span>
+        @Html.Kendo().DropDownListFor(m => m.Hid).DataTextField("Text").DataValueField("Value").BindTo(hotelItems).HtmlAttributes(new { style = "width:auto;min-width:220px;" }).Events(e => e.Change("hotelChange")).Value(Model.Hid)
+    </div>
+    <div id="authTreeDiv">
+        @Html.Kendo().TreeView().Name("authTree").BindTo(new List<TreeViewItemModel> { Model.RootAuth }).Checkboxes(c => c.CheckChildren(true))
+    </div>
+    <div style="padding-left:30px;">
+        <p style="padding-bottom:6px;">权限同时应用到：</p>
+        <select multiple="multiple" id="userHotelList" style="outline:none;width:230px;height:300px;border:solid 1px #e5e5e5;padding-left:4px;padding-bottom:3px;overflow:auto">
+            @foreach (var h in Model.Hotels)
+            {
+                <option value="@h.Hid" style="padding-top:7px;">@(string.IsNullOrWhiteSpace(h.Hotelshortname) ? h.Name : h.Hotelshortname)</option>
+            }
+        </select>
+        @Html.HiddenFor(m => m.ApplyHotelIds)
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button><br />
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveRoleAuths($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+    function saveRoleAuths(btn) {
+        var roleId = $("#RoleId").val();
+        var hid = $("#Hid").data("kendoDropDownList").value();
+        var checkedNodes = [],
+                treeView = $("#authTree").data("kendoTreeView");
+
+        checkedNodeIds(treeView.dataSource.view(), checkedNodes);
+        var selectedHotels = $("#userHotelList option:checked");
+        var selectedHotelIds = [];
+        selectedHotels.each(function (i, o) {
+            selectedHotelIds.push(o.value);
+        });
+
+        var events = jsonajax("/RoleManage/saveChangeItemConsumeroleauth?ItemConsumeCodes=" + checkedNodes + "&roleid=" + roleId + "&applyHotelIds=" + selectedHotelIds.join(',') + "&hid=" + hid);
+        if (events == "成功") {
+            jAlert("保存成功！");
+        } else {
+            jAlert("保存失败！");
+        }
+    }
+    function checkedNodeIds(nodes, checkedNodes) {
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i].checked) {
+                checkedNodes.push(nodes[i].id);
+            }
+
+            if (nodes[i].hasChildren) {
+                checkedNodeIds(nodes[i].children.view(), checkedNodes);
+            }
+        }
+    }  //ajax方法
+    function jsonajax(urls) {
+        var events = {};
+        var Rand = Math.random();
+        $.ajax({
+            url: urls + "&rand=" + Rand,
+            success: function (data) {
+                events = data;
+            },
+            async: false
+        });
+        return events;
+    }
+</script>

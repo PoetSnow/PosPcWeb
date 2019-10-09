@@ -1,0 +1,72 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+@{
+    ViewBag.Title = "操作员对应营业点";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var colsDefault = new List<GridColumnSetting>
+    {
+    new GridColumnSetting {Name = "Code", Title = "登录名", Hidden = false, Order = 1, Width = 0},
+    new GridColumnSetting {Name = "Name", Title = "操作员", Hidden = false, Order = 2, Width = 0},
+    new GridColumnSetting {Name = "mobile", Title = "手机号", Hidden = false, Order = 3, Width = 0},
+    new GridColumnSetting {Name = "PosId", Title = "对应收银点", Hidden = false,Order = 5, Width = 0},
+    new GridColumnSetting {Name = "RefeId", Title = "对应营业点", Hidden = false,Order = 4, Width = 0},
+        new GridColumnSetting {Name = "remark", Title = "备注", Hidden = false,Order = 6, Width = 0},
+    };
+    var gridViewModel = new KendoGridCustomDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        StatusColumnName = "status",
+        EnableFunctionForEnable = true,
+        EnableFunctionForDisable = true,
+        EnableScrollable = true,
+        Area = "PosManage",
+        Controller = " BasicDataPosUserToRefe",
+        Action = "Index",
+        DefaultColumnSettings = colsDefault,
+        CustomToolbar = c =>
+        {
+            c.Custom().Name("comfirmtextone").Text("双击可修改").HtmlAttributes(new { id = "comfirmtextone", href = "javascript:void(0);", style = "color:red;margin-top:9px;margin-left:10px;cursor:default;" });
+        }
+    };
+}
+
+@Html.Partial("_KendoGridCustomDataRowView", gridViewModel)
+
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+    function isOpenAnalysis() {
+        return "@ViewBag.isOpenAnalysis" != "True" ? "display:none" : "";
+    }
+    $(function () {
+        window.onresize = onResize;
+        onResize();
+        $("#comfirmtext").removeClass("k-button");
+        $("#comfirmtextone").removeClass("k-button");
+        $(".k-grid-addGridItem").hide();
+        $(".k-grid-batchDelete").hide();
+        $(".k-grid-enable").hide();
+        $(".k-grid-disable").hide();
+    });
+    function gridread() {
+        $("#grid").data("kendoGrid").dataSource.read();
+    }
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 145;
+        $("#grid .k-grid-content").height(allHeight - showHeight);
+    }
+</script>

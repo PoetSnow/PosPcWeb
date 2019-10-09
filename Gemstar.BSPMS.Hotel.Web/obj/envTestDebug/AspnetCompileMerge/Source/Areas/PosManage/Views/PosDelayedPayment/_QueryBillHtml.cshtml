@@ -1,0 +1,65 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosGuestQuery.QueryBillModel
+
+<script>
+    function posId() {
+        var module = $("#PosId").data("kendoDropDownList");
+        var posid = module.value();
+        return {
+            posId: posid
+        };
+    }
+    function posChange() {
+
+        $("#RefeId").data("kendoMultiSelect").dataSource.read();
+    }
+</script>
+@using (Html.BeginForm("GetPosBillList", "PosDelayedPayment", FormMethod.Post))
+{
+    <div style="width:450px;height:auto;max-height:530px;margin-bottom:20px;overflow:auto;">
+
+        <table id="commonQueryTable">
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.BillBsnsDate)</td>
+                <td>@Html.Kendo().DatePickerFor(e => e.BillBsnsDate).Value(Model.BillBsnsDate).HtmlAttributes(new { style = " width:89%;height:auto;", onclick = "openKendoDatePicker(this);" })</td>
+                <td>@Html.ValidationMessageFor(m => m.BillBsnsDate, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.PosId)</td>
+                <td>@Html.Kendo().DropDownListFor(e => e.PosId).HtmlAttributes(new { style = " width:89%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListPosByHid", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); }).Events(e => e.Change("posChange")).Value(Model.PosId)</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.tabNo)</td>
+                <td>@Html.Kendo().TextBoxFor(e => e.tabNo).HtmlAttributes(new { style = " width:89%" })</td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+
+    @Html.ValidationSummary()
+    <div style="text-align:center;margin-bottom:20px;">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <input type="button" class="k-primary k-button" id="closeEditFormButton" value="返回" />&nbsp; &nbsp;
+    </div>
+}
+<script>
+    $("#saveEditFormButton").click(function (e) {
+        var date = $("#BillBsnsDate").val();
+        if (date == null || date == "") {
+            layer.alert("营业日不能为空", { title: "快点云Pos提示" });
+            return false;
+        }
+        //$("#ParentBillBsnsDate").val($("#BillBsnsDate").val());
+        //$("#ParentPosId").val($("#PosId").val());
+        //$("#ParentRefeId").val($("#RefeId").val());
+        //$("#ParentItemName").val($("#ItemName").val());
+        //$("#ParentMinAmount").val($("#MinAmount").val());
+        //$("#ParentMaxAmount").val($("#MaxAmount").val());
+        //$("#ParentPayMethod").val($("#PayMethod").val());
+        e.preventDefault();
+        saveFormData($("#saveEditFormButton"));
+    });
+    $("#closeEditFormButton").click(function () {
+        closeGeneralWindow();
+    })
+</script>

@@ -1,0 +1,141 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItemPayWay.PosItemPayWayEditViewModel
+
+<script type="text/javascript">
+    function moduleChanged() {
+        var Refeid = $("#Refeid").data("kendoMultiSelect");
+        Refeid.dataSource.read();
+    }
+
+    function payTypeChanged() {
+        var payType = $("#PayType").data("kendoDropDownList");
+        var val = payType.value();
+
+        if (val == "no") {
+            $("#IsChange").prop("checked", true);
+            $("#IsChange").prop("disabled", false);
+        }
+        else {
+            $("#IsChange").prop("checked", false);
+            $("#IsChange").prop("disabled", true);
+        }
+    }
+
+    function posCode_paras() {
+        var module = $("#Module").data("kendoDropDownList");
+        var moduleCode = module.value();
+        return {
+            moduleCode: moduleCode
+        };
+    }
+</script>
+@{
+    var Rate = ViewBag.Rate;
+}
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.OperName)
+    @Html.HiddenFor(m => m.ModifiedDate)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Code)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Code).HtmlAttributes(new { style = "width:100%;", @readonly = "readonly" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Cname)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Cname).HtmlAttributes(new { style = "width:100%;", placeholder = "请输入中文名称" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Cname, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Ename)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Ename).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Ename, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Status)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Status).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosStatus", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); })</td>
+            <td>@Html.ValidationMessageFor(m => m.Status, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.PayType)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.PayType).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosPayType", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); }).Events(e => e.Change("payTypeChanged"))</td>
+            <td>@Html.ValidationMessageFor(m => m.PayType, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Montypeno)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Montypeno).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosMontypeno", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); })</td>
+            <td>@Html.ValidationMessageFor(m => m.Montypeno, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Rate)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.Rate).HtmlAttributes(new { style = "width:100%;" }).Value(Rate)</td>
+            <td>@Html.ValidationMessageFor(m => m.Rate, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Module)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Module).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosModules", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); }).Events(e => e.Change("moduleChanged"))</td>
+            <td>@Html.ValidationMessageFor(m => m.Module, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Refeid)</td>
+            <td>@Html.Kendo().MultiSelectFor(e => e.Refeid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosRefeByModules", "BasicDataPosRefe", new { rnd = new Random().NextDouble() }).Data("posCode_paras")); }).AutoClose(false).Placeholder("请选择所属营业点").Value(Model.Refeids)</td>
+            <td>@Html.ValidationMessageFor(m => m.Refeid, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Seqid).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.CodeIn)</td>
+            <td title="在挂房账、合约单位以及会员账务使用，必须与捷云对应的营业点代码相同">@Html.Kendo().TextBoxFor(m => m.CodeIn).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.CodeIn, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright"></td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsWxShow).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsWxShow, "*")</td>
+            <td class="textright"></td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsInCome).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsInCome, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright"></td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsChange).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsChange, "*")</td>
+            <td class="textright"></td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsSubscription).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsSubscription, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright"></td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsPayout).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsPayout, "*")</td>
+            <td class="textright"></td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsCharge).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsCharge, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright"></td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsInvoice).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsInvoice, "*")</td>
+            <td class="textright"></td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsRepay).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsRepay, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        moduleChanged();
+    });
+</script>

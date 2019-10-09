@@ -1,0 +1,1513 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EnumsPos;
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPos;
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+@using Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosInSingle;
+
+@model InSingleViewModel
+@{
+    ViewBag.Title = "Pos入单";
+    var refe = Session["PosRefe"] as PosRefe;
+    var bill = ViewBag.PosBill as up_pos_list_billByRefeidAndTabidResult;
+    var pos = ViewBag.Pos as PosPos;
+}
+
+<link href="~/Content/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="~/Scripts/layer-v3.1.1/theme/default/layer.css" rel="stylesheet" />
+<link href="~/Content/Pos/posInSingle.css" rel="stylesheet" />
+<link href="~/Content/Pos/posPublic.css" rel="stylesheet" />
+
+@using (Html.BeginForm())
+{
+    if (bill != null)
+    {
+        <input id="billid" type="hidden" value="@(bill.Billid)" />
+        <input id="mBillid" type="hidden" value="@(bill.MBillid)" />
+        <input id="iGuest" type="hidden" value="@(bill.IGuest)" />
+        <input id="tabFlag" type="hidden" value="@(bill.TabFlag ?? 0)" />
+
+        <!--添加市别和班次隐藏框 By:tanj 2018年3月30日09:35:22-->
+        <input id="ShuffleName" type="hidden" value="@(bill.ShuffleName)" />
+        <input id="ShiftName" type="hidden" value="@(bill.ShiftName)" />
+    }
+    else
+    {
+        <input id="billid" type="hidden" value="" />
+        <input id="mBillid" type="hidden" value="" />
+        <input id="iGuest" type="hidden" value="" />
+        <input id="tabFlag" type="hidden" value="0" />
+
+         <!--添加市别和班次隐藏框 By:tanj 2018年3月30日09:35:22-->
+        <input id="ShuffleName" type="hidden" value="" />
+        <input id="ShiftName" type="hidden" value="" />
+    }
+
+    if (Model != null)
+    {
+        <input id="refeid" type="hidden" value="@(Model.Refeid)" />
+        <input id="tabid" type="hidden" value="@(Model.Tabid)" />
+        <!-- 大类分页 -->
+        <input id="pageIndexClass" type="hidden" value="@(Model.PageIndex)" />
+        <input id="pageTotalClass" type="hidden" value="@(ViewBag.PageTotal)" />
+    }
+    else
+    {
+        <input id="refeid" type="hidden" value="@(refe.Id)" />
+        <input id="tabid" type="hidden" value="" />
+        <!-- 大类分页 -->
+        <input id="pageIndexClass" type="hidden" value="" />
+        <input id="pageTotalClass" type="hidden" value="" />
+    }
+
+    <input id="selIds" type="hidden" value="" />
+    <input id="igroupid" type="hidden" value="" />
+    <input id="itemids" type="hidden" value="@(ViewBag.BillItemIds)" />
+    <input id="isoutsell" type="hidden" value="@(refe.Isoutsell.ToString() ?? false.ToString())" />
+    <input id="openInfo" type="hidden" value="@(refe.OpenInfo ?? false.ToString())" />
+    <input id="billDetailId" type="hidden" value="" />
+    <input id="isOpenBrush" type="hidden" value="@(Model.IsOpenBrush == 1 ? true : false)" />
+    <input id="isAutoLogin" type="hidden" value="@(ViewBag.IsAutoLogin == true ? true : false)" />
+    <input id="tipsTime" type="hidden" value="@(Convert.ToInt32(ViewBag.TipsTime ?? 5) * 1000)" />
+
+    <!-- 大类 -->
+    <input id="itemClassid" type="hidden" value="" />
+    <input id="itemLevel" type="hidden" value="{}" />
+    <input id="itemid" type="hidden" value="" />
+
+    <!-- 单位 -->
+    <input id="unitid" type="hidden" value="" />
+    <input id="quantity" type="hidden" value="1" />
+    <input id="price" type="hidden" value="0" />
+    <input id="rowIndex" type="hidden" value="-1" />
+
+    <!-- 通用列表分页参数 -->
+    <input id="pageIndexItem" type="hidden" value="1" />
+    <input id="pageTotalItem" type="hidden" value="1" />
+
+    <!-- 单位分页 -->
+    <input id="pageIndexPrice" type="hidden" value="1" />
+    <input id="pageTotalPrice" type="hidden" value="1" />
+
+    <div class="mainLeft">
+        <!-- 提示信息 -->
+        <div class="tips" data-id=".mainLeft-top" data-position="2" data-msg="开台信息内容显示，包括当前营业点、台号、营业日、市别、班次；以及开台人数、客人姓名和操作员。" onmouseover="tipShow(this)" onmouseout="tipHide(this)" onclick="tipMsg(this)"><i class="fa fa-question-circle-o" aria-hidden="true"></i></div>
+        @if (bill != null)
+        {
+            <ul class="mainLeft-top">
+                <li>　营业点：@bill.RefeName</li>
+                <li>　　台号：@(bill.TabFlag != null && bill.TabFlag == (byte)PosBillTabFlag.物理台 ? bill.TabNo : "＋" + bill.TabNo)</li>
+                <li>　营业日：@bill.BillBsnsDate.Value.ToString("yyyy-MM-dd")</li>
+                <li>　　市别：@bill.ShuffleName</li>
+                <li>　　班次：@bill.ShiftName</li>
+                <li>营业经理：@bill.InputUser</li>
+                <li>客人姓名：@bill.Name</li>
+                <li>　　人数：@bill.IGuest</li>
+                <li>　操作员：@bill.InputUser</li>
+            </ul>
+        }
+        else
+        {
+            <ul class="mainLeft-top">
+                <li>　营业点：</li>
+                <li>　　台号：</li>
+                <li>　营业日：@pos.Business.Value.ToString("yyyy-MM-dd")</li>
+                <li>　　市别：</li>
+                <li>　　班次：</li>
+                <li>营业经理：</li>
+                <li>客人姓名：</li>
+                <li>　　人数：</li>
+                <li>　操作员：</li>
+            </ul>
+        }
+        <div class="mainLeft-bottom">
+            <div class="left-bottom-list">
+                <div class="mainLeft-bottom-top"></div>
+                <div class="bottom-list-detail">
+                    @(Html.Kendo().Grid<up_pos_list_BillDetailByBillidResult>()
+        .Name("grid")
+        .Columns(columns =>
+        {
+            columns.Bound(m => m.Id).Hidden();
+            columns.Bound(m => m.Itemid).Hidden();
+            columns.Bound(m => m.Unitid).Hidden();
+            columns.Bound(m => m.Status).Hidden();
+            columns.Bound(m => m.DeptClassid).Hidden();
+            columns.Bound(m => m.statusString).Hidden();
+            columns.Bound(m => m.Row).Title("行").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(25);
+            columns.Bound(m => m.ItemName).Title("名称").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(100);
+            columns.Bound(m => m.Quantity).Title("数量").HtmlAttributes(new { @style = "white-space: nowrap;" });
+            columns.Bound(m => m.Dueamount).Title("金额").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+            columns.Bound(m => m.Action).Title("作法").ClientTemplate("<a href='javascript:void(0);' style = 'white-space: nowrap;overflow: hidden;text-overflow: ellipsis;' data-id='#: Id #' onclick = \"getActionGroup(this,'" + Url.Action("GetActionPageIndex", "PosInSingle") + "', '" + Url.Action("_ActionList", "PosInSingle") + "', '" + Url.Action("GetActionTotal", "PosInSingle") + "')\">#: Action #</a>");
+            columns.Bound(m => m.Request).Title("要求").HtmlAttributes(new { @style = "white-space: nowrap;" });
+            columns.Bound(m => m.Memo).Title("备注").HtmlAttributes(new { @style = "white-space: nowrap;" });
+        })
+        .HtmlAttributes(new { style = "height:100%;", onclick = "layer.closeAll()" })
+        .Scrollable()
+        .Resizable(r => r.Columns(true))
+        .Selectable(s => s.Mode(GridSelectionMode.Single))
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("ListUpBillDetailByBillid", "PosInSingle").Data("posBill_paras"))
+        ).Events(e => e.DataBound("selRow")))
+                </div>
+                <div style="height: 3px; width:99%;border: 0; background-image: url('../../Images/posInSingle/baibian.png');"></div>
+                <ul class="bottom-list-total">
+                    <li>合计金额：<span id="dueamount"></span></li>
+                    <li>最低消费：<span id="limit"></span></li>
+                    <li>消费余额：<span id="remaining"></span></li>
+                    <li>实时毛利：<span id="grossrate"></span>%</li>
+                    <li>折扣金额：<span id="discount"></span></li>
+                    <li>　折扣率：<span id="discountRate"></span>%</li>
+                    <li>　服务费：<span id="service"></span></li>
+                    <li>服务费率：<span id="serviceRate"></span>%</li>
+                    <li>实收金额：<span id="amount"></span></li>
+                </ul>
+                <!-- 提示信息 -->
+                <div class="tips" data-id=".mainLeft-bottom" data-position="2" data-msg="已点菜信息显示，有计费、例送、赠送和取消的菜式；显示的内容有作法，点击作法时会在单位区域弹出当前作法的详细显示，并且可以分组操作加减作法；要求只能显示操作显示一个要求；备注上如果此菜式是例送、赠送和取消时则会在备注上显示出来。" onmouseover="tipShow(this)" onmouseout="tipHide(this)" onclick="tipMsg(this)"><i class="fa fa-question-circle-o" aria-hidden="true"></i></div>
+                <div class="tips" data-id=".bottom-list-total" data-position="1" data-msg="已点菜数据统计，但是必须是落单的。包括当前账单的服务费、消费余额、折扣金额；实时毛率是算已点菜式的理论毛利率的平均值。" onmouseover="tipShow(this)" onmouseout="tipHide(this)" onclick="tipMsg(this)"><i class="fa fa-question-circle-o" aria-hidden="true"></i></div>
+            </div>
+            <div class="left-bottom-button">
+                <ul>
+                    <li style="padding-top:0.5rem;" class="left-bottom-buttonBai">
+                        <a href="javascript:void(0);" onclick="UpdateQuantity(1, 1)">+</a>
+                    </li>
+                    <li class="left-bottom-buttonBai">
+                        <a href="javascript:void(0);" onclick="UpdateQuantity(2, 1)">-</a>
+                    </li>
+                    <li class="left-bottom-buttonBai">
+                        <a href="javascript:void(0);" onclick="quantityChange(this)">数量</a>
+                    </li>
+                    <li class="left-bottom-buttonBai">
+                        <a href="javascript:void(0);" onclick="getReasonList(this,'@(Url.Action("_ReasonList", "PosInSingle", new { rnd = new Random().NextDouble() }))','@(Url.Action("GetReasonTotal", "PosInSingle", new { rnd = new Random().NextDouble() }))')" data="0">取消</a>
+                    </li>
+                    <li class="left-bottom-buttonBai">
+                        <a href="javascript:void(0);">客位</a>
+                    </li>
+                    <li class="left-bottom-buttonLan">
+                        <a href="javascript:void(0);" onclick="getRequestList(this,'@(Url.Action("_RequestList", "PosInSingle", new { rnd = new Random().NextDouble() }))','@(Url.Action("GetRequestTotal", "PosInSingle"))')">要求</a>
+                    </li>
+                    <li class="left-bottom-buttonLan">
+                        <a id="detailAction" href="javascript:void(0);" onclick="getActionTypeList(this,'@(Url.Action("_ActionTypeList", "PosInSingle", new { rnd = new Random().NextDouble() }))','@(Url.Action("GetActionTypeTotal", "PosInSingle", new { rnd = new Random().NextDouble() }))')">作法</a>
+                    </li>
+                    <li class="left-bottom-buttonLan">
+                        <a href="javascript:void(0);" onclick="getReasonList(this,'@(Url.Action("_ReasonList", "PosInSingle", new { rnd = new Random().NextDouble() }))','@(Url.Action("GetReasonTotal", "PosInSingle", new { rnd = new Random().NextDouble() }))')" data="1">赠送</a>
+                    </li>
+                    <li class="left-bottom-buttonLan">
+                        <a href="javascript:void(0);" style="line-height:1.3rem" onclick="editOpenTab('@Url.Action("_EditOpenTab","PosTabStatus", new { rnd = new Random().NextDouble() })',function(){})">开台<br />信息</a>
+                    </li>
+                    <li class="left-bottom-buttonLan">
+                        <a href="javascript:void(0);" onclick="getCutline()">图例</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <div class="mainRight">
+        <div class="mainRight-list">
+            <div class="right-top-depart">
+                <ul>
+                    <li style="background-color:#ffad3d">
+                        <a>
+                            <img src="~/Images/posInSingle/fanye.png" />
+                            <span>翻页</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="mainRight-time">
+                    <label id="lblTime">@(DateTime.Today.ToString("dddd", new System.Globalization.CultureInfo("zh-CN")))<br />@(string.Format("{0:HH:mm:ss}", DateTime.Now))</label>
+                    <img src="~/images/selectPos/kd.png" />
+                </div>
+                <!-- 提示信息 -->
+                <div class="tips" data-id=".right-top-depart ul" data-position="3" data-msg="当前营业点上对应的大类，当前选择的大类显示淡绿色，未选择的大类显示黄色。可以使用翻页循环翻页。" onmouseover="tipShow(this)" onmouseout="tipHide(this)" onclick="tipMsg(this)"><i class="fa fa-question-circle-o" aria-hidden="true"></i></div>
+            </div>
+            <div class="right-top-content">
+                <div class="top-content-list">
+                    <ul>
+                        <li class="content-list-return">
+                            返回
+                        </li>
+                    </ul>
+                    <ul>
+                        <li class="content-list-unit">
+                            <a>
+                                <img src="~/Images/posInSingle/fany.png" />
+                                <span>翻页</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- 提示信息 -->
+                    <div class="tips" data-id=".top-content-list ul:first-child" data-position="2" data-msg="当前大类对应的分类和消费项目，大类下的分类显示黄色的背景，消费项目显示白色的背景颜色。每个消费项目显示内容第一行为消费项目编码，第二、三行显示消费项目名称，最后一行显示消费项目的默认单价。" onmouseover="tipShow(this)" onmouseout="tipHide(this)" onclick="tipMsg(this)"><i class="fa fa-question-circle-o" aria-hidden="true"></i></div>
+                    <div class="tips" data-id=".top-content-list ul:nth-child(2)" data-position="1" data-msg="当前选择消费项目对应的单位，选中的单位右下角会使用红色的勾显示。可以使用翻页键循环翻页。" onmouseover="tipShow(this)" onmouseout="tipHide(this)" onclick="tipMsg(this)"><i class="fa fa-question-circle-o" aria-hidden="true"></i></div>
+                </div>
+
+                <div class="mainRight-input">
+                    <input id="txtKeyword" class="k-textbox" type="text" placeholder="输入编码或拼音首字母" style="background-color:#ececec" value="@(Model == null ? "":Model.Keyword)" oninput="keywordQuery()" />
+                    <div>
+                        <table>
+                            <tr>
+                                <td><input id="btnKey1" type="button" value="1" onclick="input('1')" class="number" /></td>
+                                <td><input id="btnKey2" type="button" value="2" onclick="input('2')" class="number" /></td>
+                                <td><input id="btnKey3" type="button" value="3" onclick="input('3')" class="number" /></td>
+                                <td colspan="2" rowspan="2" style="width:100%;height:100%;"><input id="btnOpenTabtypeWindow" type="button" value="确定" onclick='ensure()' /></td>
+                            </tr>
+                            <tr>
+                                <td><input id="btnKey4" type="button" value="4" onclick="input('4')" class="number" /></td>
+                                <td><input id="btnKey5" type="button" value="5" onclick="input('5')" class="number" /></td>
+                                <td><input id="btnKey6" type="button" value="6" onclick="input('6')" class="number" /></td>
+                            </tr>
+                            <tr>
+                                <td><input id="btnKey7" type="button" value="7" onclick="input('7')" class="number" /></td>
+                                <td><input id="btnKey8" type="button" value="8" onclick="input('8')" class="number" /></td>
+                                <td><input id="btnKey9" type="button" value="9" onclick="input('9')" class="number" /></td>
+                                <td colspan="2"><input id="btnKeyTg" type="button" value="退格" onclick="input('退格')" /></td>
+                            </tr>
+                            <tr>
+                                <td><input id="btnKey." type="button" value="." onclick="input('.')" class="number" /></td>
+                                <td><input id="btnKey0" type="button" value="0" onclick="input('0')" class="number" /></td>
+                                <td><input id="btnKey/" type="button" value="/" onclick="input('/')" class="number" /></td>
+                                <td><input id="btnKeyA" type="button" value="A" onclick="input('A')" class="letter" /></td>
+                                <td><input id="btnKeyB" type="button" value="B" onclick="input('B')" class="letter" /></td>
+                            </tr>
+                            <tr>
+                                <td><input id="btnKeyC" type="button" value="C" onclick="input('C')" class="letter" /></td>
+                                <td><input id="btnKeyD" type="button" value="D" onclick="input('D')" class="letter" /></td>
+                                <td><input id="btnKeyE" type="button" value="E" onclick="input('E')" class="letter" /></td>
+                                <td><input id="btnKeyF" type="button" value="F" onclick="input('F')" class="letter" /></td>
+                                <td><input id="btnKeyG" type="button" value="G" onclick="input('G')" class="letter" /></td>
+                            </tr>
+                            <tr>
+                                <td><input id="btnKeyH" type="button" value="H" onclick="input('H')" class="letter" /></td>
+                                <td><input id="btnKeyI" type="button" value="I" onclick="input('I')" class="letter" /></td>
+                                <td><input id="btnKeyJ" type="button" value="J" onclick="input('J')" class="letter" /></td>
+                                <td><input id="btnKeyK" type="button" value="K" onclick="input('K')" class="letter" /></td>
+                                <td><input id="btnKeyL" type="button" value="L" onclick="input('L')" class="letter" /></td>
+                            </tr>
+                            <tr>
+                                <td><input id="btnKeyM" type="button" value="M" onclick="input('M')" class="letter" /></td>
+                                <td><input id="btnKeyN" type="button" value="N" onclick="input('N')" class="letter" /></td>
+                                <td><input id="btnKeyO" type="button" value="O" onclick="input('O')" class="letter" /></td>
+                                <td><input id="btnKeyP" type="button" value="P" onclick="input('P')" class="letter" /></td>
+                                <td><input id="btnKeyQ" type="button" value="Q" onclick="input('Q')" class="letter" /></td>
+                            </tr>
+                            <tr>
+                                <td><input id="btnKeyR" type="button" value="R" onclick="input('R')" class="letter" /></td>
+                                <td><input id="btnKeyS" type="button" value="S" onclick="input('S')" class="letter" /></td>
+                                <td><input id="btnKeyT" type="button" value="T" onclick="input('T')" class="letter" /></td>
+                                <td><input id="btnKeyU" type="button" value="U" onclick="input('U')" class="letter" /></td>
+                                <td><input id="btnKeyV" type="button" value="V" onclick="input('V')" class="letter" /></td>
+                            </tr>
+                            <tr>
+                                <td><input id="btnKeyW" type="button" value="W" onclick="input('W')" class="letter" /></td>
+                                <td><input id="btnKeyX" type="button" value="X" onclick="input('X')" class="letter" /></td>
+                                <td><input id="btnKeyW" type="button" value="Y" onclick="input('W')" class="letter" /></td>
+                                <td><input id="btnKeyX" type="button" value="Z" onclick="input('X')" class="letter" /></td>
+                                <td><input id="btnKeyQk" type="button" value="清空" onclick="input('清空')" class="letter" /></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ul class="mainRight-bottom">
+            <li class="right-bottom-blue">
+                <a href="javascript:void(0);" onclick="getDiscTypeList('@Url.Action("_DiscTypeList", "PosInSingle")','@Url.Action("GetDiscTypeTotal", "PosInSingle", new { rnd = new Random().NextDouble() })')">
+                    <img src="~/Images/posInSingle/zhek.png" /><br /><span>折扣</span>
+                </a>
+            </li>
+            <li class="right-bottom-blue">
+                <a href="javascript:void(0);">
+                    <img src="~/images/posInSingle/dianx.png" /><br /><span>点心</span>
+                </a>
+            </li>
+            <li class="right-bottom-blue">
+                <a href="javascript:void(0);">
+                    <img src="~/Images/posInSingle/xiangx.png" /><br /><span>详细</span>
+                </a>
+            </li>
+            <li class="right-bottom-blue">
+                <a id="tabNo" href="javascript:void(0);" onclick="getTabStatusList('@(Url.Action("_TabStatusList", "PosInSingle"))','@(Url.Action("GetTabStatusTotal", "PosInSingle", new { rnd = new Random().NextDouble() }))')">
+                    <img src="~/Images/posInSingle/liuw.png" /><br /><span>台号</span>
+                </a>
+            </li>
+            <li class="right-bottom-green">
+                <a href="javascript:void(0);" onclick="intimidate()">
+                    <img src="~/Images/posInSingle/dad.png" /><br /><span>打单</span>
+                </a>
+            </li>
+            <li class="right-bottom-green">
+                <a href="javascript:void(0);" onclick="preview()">
+                    <img src="~/Images/posInSingle/yul.png" /><br /><span>预览</span>
+                </a>
+            </li>
+            <li class="right-bottom-green">
+                <a href="javascript:void(0);">
+                    <img src="~/Images/posInSingle/shez.png" /><br /><span>高级</span>
+                </a>
+            </li>
+            <li class="right-bottom-green">
+                <a href="javascript:void(0);" onclick="showHideKeyboard()">
+                    <img src="~/Images/posInSingle/jp.png" /><br /><span>键盘</span>
+                </a>
+            </li>
+            <li class="right-bottom-purple">
+                <a href="javascript:void(0);" onclick="openItemSelect()">
+                    <img src="~/Images/posInSingle/xd.png" /><br /><span>先落</span>
+                </a>
+            </li>
+            <li id="payBill" class="right-bottom-purple">
+                <a href="javascript:void(0);" onclick="payBill('@Url.Action("_Payment", "Shared", new { rnd = new Random().NextDouble() })','@Url.Action("Index", "PosTabStatus")','@Url.Action("_EditOpenTab","PosTabStatus")')">
+                    <img src="~/Images/posInSingle/maid.png" /><br /><span>买单</span>
+                </a>
+            </li>
+            <li class="right-bottom-purple">
+                <a href="javascript:void(0);" onclick="beAlone()">
+                    <img src="~/Images/posInSingle/luod.png" /><br /><span>落单</span>
+                </a>
+            </li>
+            <li class="right-bottom-purple">
+                <a href='javascript:void(0);' onclick="exitInSingle()">
+                    <img src="~/Images/posInSingle/tuic.png" /><br /><span>退出</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <iframe id="printFrame" hidden></iframe>
+}
+
+<script type="text/javascript">
+    window.setInterval(function () {
+        var weekday = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+        var date = weekday[new Date().getDay()] + "<br/>" + new Date().Format("HH:mm:ss");
+        $("#lblTime").html(date);
+    }, 1000);
+
+    $(window).resize(function () {          //当浏览器大小变化时
+        avgItemSpacing();
+        setTimeout(function () {
+            initItemClass();
+            initItemPrice(0);
+        }, 250);
+    });
+
+    $(function () {
+        var ShuffleName = $("#ShuffleName").val();//市别
+        var ShiftName = $("#ShiftName").val();//班次
+        if (ShiftName == "") {
+            layer.alert("当前收银点没有设置班次", { title: "快点云Pos提示" });
+            return false;
+        }
+        else {
+            if (ShuffleName=="") {
+                layer.alert("当前营业点没有设置市别", { title: "快点云Pos提示" });
+                return false;
+            }
+        }
+        if (Boolean($("#isAutoLogin").val()) == true) {
+            var model = {
+                Message: "请刷卡...",
+                ReturnType: 2,
+                Callback: "$('#isAutoLogin').val('false');layer.closeAll();",
+            };
+
+            $.ajax({
+                url: '@Url.Action("_PayByCard", "Shared")',
+                type: "post",
+                data: model,
+                dataType: "html",
+                success: function (data) {
+                    layer.open({
+                        type: 1,
+                        title: "刷卡",
+                        skin: 'layui-layer-demo', //样式类名
+                        closeBtn: 0, //不显示关闭按钮
+                        area: ['auto', 'auto'], //宽高
+                        content: data
+                    });
+
+                    $(".layui-layer-shade").css({ "opacity": "1" });
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+    else {
+        initItemClass();
+        initItemPrice(0);
+        $("#grid").on("click", "tr.k-state-selected", function (e) {
+            e.preventDefault();
+
+            var grid = $("#grid").data("kendoGrid");
+            var selectedRows = grid.select();
+
+            if (selectedRows.length > 0) {
+                var row = selectedRows[0];
+                var data = grid.dataItem(row);
+                $("#rowIndex").val(data["Id"]);
+                $("#itemid").val(data["Itemid"]);
+                $("#unitid").val(data["Unitid"]);
+                $("#billDetailId").val(data["Id"]);
+                $("#quantity").val(data["Quantity"]);
+
+                queryItemPrice(data["Itemid"]);
+            }
+        });
+
+        getStatistics(2);
+    }
+    });
+
+    function getBillInfo() {
+        var model = {
+            Tabid: $("#tabid").val(),
+            Refeid: $("#refeid").val()
+        }
+
+        $.ajax({
+            url: '@Url.Action("_BillInfo", "PosInSingle")',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $(".mainLeft-top").remove();
+                $(".mainLeft-bottom").before(data);
+                $("#grid").data("kendoGrid").dataSource.read();
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+
+        initItemClass();
+    }
+
+    function posBill_paras() {
+        return {
+            billid: $("#billid").val(),
+        };
+    }
+
+    //初始化大类列表
+    function initItemClass() {
+        var listWidth = $(".right-top-depart ul").width() - 1;
+        var timeWidth = $(".mainRight-time").outerWidth(true);
+        var liWidth = $(".right-top-depart li").first().outerWidth(true);
+        var size = parseInt(listWidth / liWidth) - 1;
+
+        var model = {
+            Tabid: $("#tabid").val(),
+            Refeid: $("#refeid").val(),
+            PageIndex: 1,
+            PageSize: size
+        };
+
+        queryItemClass(model);
+        $("#pageIndexClass").val(1);
+    }
+
+    //查询项目大类
+    function queryItemClass(model) {
+        $.ajax({
+            url: '@Url.Action("_ItemClassList", "PosInSingle")',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#pageIndexClass").val(model.PageIndex);
+                $(".right-top-depart ul").remove();
+                $(".mainRight-time").before(data);
+                
+                if ($("#openInfo").val().indexOf("I") == -1 && $("#openInfo").val().indexOf("J") == -1) {
+                    $("#tabNo").trigger("click");
+                }
+                else {
+                    $(".right-top-depart ul li:nth-child(1) a").first().click();
+                }
+
+                //填充空白部分
+                setItemClassNull(model);
+
+                avgClassSpacing();
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    function avgClassSpacing() {
+        //平均分配间距
+        var remValue = $("#remValue").height();
+        var listWidth = $(".right-top-depart ul").width() - 1;
+        var liWidth = $(".right-top-depart li").first().outerWidth(true);
+        var right = parseFloat((listWidth % liWidth) / parseFloat(listWidth / liWidth));
+        if (right > 0) {
+            $(".right-top-depart li").css({ "margin-right": right + 0.5 * remValue + "px" });
+        }
+    }
+
+    //填充空白部分
+    function setItemClassNull(model) {
+        var html = "";
+        var liCount = $(".right-top-depart").find("li").length - 1;
+        if (parseInt(liCount) > 0 && parseInt(liCount) < parseInt(model.PageSize)) {
+            var count = parseInt(model.PageSize) - liCount;
+            for (var i = 0; i < count; i++) {
+                html += '<li style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+            }
+            if (liCount == 0) {
+                $(".right-top-depart li:nth-child(1)").before(html);
+            }
+            else {
+                $(".right-top-depart li:nth-child(" + liCount + ")").after(html);
+            }
+        }
+        else if (parseInt(liCount) <= 0) {
+            var count = parseInt(model.PageSize) - liCount;
+            for (var i = 0; i < count; i++) {
+                html += '<li style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+            }
+            if (liCount <= 0) {
+                $(".right-top-depart li:nth-child(1)").before(html);
+            }
+            else {
+                $(".right-top-depart li:nth-child(" + liCount + ")").after(html);
+            }
+        }
+    }
+
+    //初始化消费项目
+    function initItem(itemClassid) {
+        $("#itemLevel").val("{}");
+        $(".right-top-depart li").removeClass("itemClassSelect");
+        var aTag = $(".right-top-depart a");
+        aTag.each(function () {
+            if ($(this).attr("data-id") == itemClassid) {
+                $(this).parents("li").addClass("itemClassSelect");
+            }
+        });
+
+        $("#itemClassid").val(itemClassid);
+        var size = getPagingSize() - 2;
+
+        var model = {
+            Itemid: itemClassid,
+            Refeid: $("#refeid").val(),
+            PageIndex: 1,
+            PageSize: size
+        };
+        $("#itemLevel").val($("#itemLevel").val() + "|" + JSON.stringify(model));
+        queryList(model, '@Url.Action("_ItemList", "PosInSingle")', '@Url.Action("GetItemTotal", "PosInSingle")');
+    }
+
+    //查询消费项目
+    function queryItem(model) {
+        $.ajax({
+            url: '@Url.Action("_ItemList", "PosInSingle")',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#pageIndexItem").val(model.PageIndex);
+                $(".top-content-list ul").first().remove();
+                $(".top-content-list ul").first().before(data);
+                getItemTotal(model);
+
+                var html = "";
+                var liCount = $(".top-content-list ul").first().find("li").length - 2;
+
+                if (parseInt(liCount) > 0 && parseInt(liCount) < parseInt(model.PageSize)) {
+
+                    var count = parseInt(model.PageSize) - liCount;
+
+                    for (var i = 0; i < count; i++) {
+                        html += '<li class="content-list-detail" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+                    }
+
+                    if (liCount == 0) {
+                        $(".top-content-list ul:first-child li:nth-child(1)").before(html);
+                    }
+                    else {
+                        $(".top-content-list ul:first-child li:nth-child(" + liCount + ")").after(html);
+                    }
+                }
+                else if (parseInt(liCount) <= 0) {
+                    var count = parseInt(model.PageSize) - liCount;
+
+                    for (var i = 0; i < count; i++) {
+                        html += '<li class="content-list-detail" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+                    }
+
+                    if (liCount <= 0) {
+                        $(".top-content-list ul:first-child li:nth-child(1)").before(html);
+                    }
+                    else {
+                        $(".top-content-list ul:first-child li:nth-child(" + liCount + ")").after(html);
+                    }
+                }
+
+                if (liCount == 1) {
+                    $(".top-content-list ul:first-child li:first-child a:first-child").trigger("click");
+                    $("#txtKeyword").val("");
+                    $("#txtKeyword").focus();
+                }
+
+                setItemStyle();
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //获取消费项目总数
+    function getItemTotal(model) {
+        $.ajax({
+            url: '@Url.Action("GetItemTotal", "PosInSingle")',
+            type: "post",
+            data: model,
+            dataType: "text",
+            success: function (data) {
+                $("#pageTotalItem").val(data);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //添加消费项目选中样式
+    function setItemStyle() {
+        avgItemSpacing();
+
+        $(".top-content-list a span:nth-child(4)").hide();
+        var aTag = $(".top-content-list a");
+        var ids = $("#itemids").val();
+        $("#itemids").val(ids + "," + $("#itemid").val());
+        ids = $("#itemids").val().split(",");
+        for (var i = 0; i < aTag.length - 2; i++) {
+            for (var j = 0; j < ids.length; j++) {
+                if (typeof ($(aTag[i]).attr("data-id")) != "undefined") {
+                    if ($(aTag[i]).attr("data-id") == ids[j]) {
+                        $(aTag[i]).find("span:nth-child(4)").show();
+                    }
+                }
+            }
+        }
+    }
+
+    //平均分配消费项目间距
+    function avgItemSpacing() {
+        var remValue = $("#remValue").height();
+        var listHeight = $(".top-content-list ul:first-child").height() - 1;
+        var listWidth = $(".top-content-list ul:first-child").width() - 1;
+        var liHeight = $(".top-content-list ul:first-child li").first().outerHeight(true);
+        var liWidth = $(".top-content-list ul:first-child li").first().outerWidth(true);
+
+        var right = parseInt(listWidth % liWidth - 1) / parseInt(listWidth / liWidth);
+        var bottom = parseInt(listHeight % liHeight - 1) / parseInt(listHeight / liHeight);
+        if (right > 0 && bottom > 0) {
+            $(".top-content-list ul:first-child li").css({ "margin-right": right + 0.3 * remValue + "px", "margin-bottom": bottom + 0.3 * remValue + "px" });
+        }
+        else if (right > 0 && bottom <= 0) {
+            $(".top-content-list ul:first-child li").css({ "margin-right": right + 0.3 * remValue + "px" });
+        }
+        else if (right <= 0 && bottom > 0) {
+            $(".top-content-list ul:first-child li").css({ "margin-bottom": bottom + 0.3 * remValue + "px" });
+        }
+    }
+
+    //初始化单位价格
+    function initItemPrice(itemid) {
+        var grid = $("#grid").data("kendoGrid");
+        var itemRows = grid.items();
+        if (itemRows.length > 1) {
+            for (var i = 0; i < itemRows.length ; i++) {
+                var row = itemRows[i];
+                var data = grid.dataItem(row);
+                if (data["Itemid"] == itemid) {
+                    $("#unitid").val(data["Unitid"]);
+                }
+            }
+        }
+
+        var listWidth = $(".top-content-list ul:nth-child(2)").width() - 1;
+        var liWidth = $(".top-content-list ul:nth-child(2) li").first().outerWidth(true);
+        var size = parseInt(listWidth / liWidth) - 1;
+
+        $("#pageIndexPrice").val(1);
+
+        var model = {
+            Itemid: itemid,
+            PageIndex: $("#pageIndexPrice").val(),
+            PageSize: size
+        };
+
+        $.ajax({
+            url: '@Url.Action("_ItemPriceList", "PosInSingle")',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#pageIndexPrice").val(model.PageIndex);
+                $(".top-content-list ul:nth-child(2)").remove();
+                $(".top-content-list ul").first().after(data);
+
+                getItemPriceTotal(model);
+                setItemPriceNull(model);
+                avgPriceSpacing();
+
+                //设置单位选中样式
+                if ($("#unitid").val() == "") {
+                    var aTag = $(".content-list-unit a");
+                    aTag.each(function () {
+                        if ($(this).attr("data-default") == "True") {
+                            $("#unitid").val($(this).attr("data-id"));
+                            addBillDetail($(this));
+                            setItemPriceStyle($("#unitid").val());
+                        }
+                    });
+                }
+                else {
+                    var liTag = $(".content-list-unit a").find("span:nth-child(3)");
+                    liTag.each(function () {
+                        if ($(this).parents("a").first().attr("data-id") == $("#unitid").val()) {
+                            addBillDetail($(this).parents("a").first());
+                            setItemPriceStyle($("#unitid").val());
+                        }
+                    });
+                }
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //查询单位价格
+    function queryItemPrice(itemid) {
+        var listWidth = $(".top-content-list ul:nth-child(2)").width() - 1;
+        var liWidth = $(".top-content-list ul:nth-child(2) li").first().outerWidth(true);
+        var size = parseInt(listWidth / liWidth) - 1;
+
+        var model = {
+            Itemid: itemid,
+            PageIndex: $("#pageIndexPrice").val(),
+            PageSize: size
+        };
+
+        $.ajax({
+            url: '@Url.Action("_ItemPriceList", "PosInSingle")',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#pageIndexPrice").val(model.PageIndex);
+                $(".top-content-list ul:nth-child(2)").remove();
+                $(".top-content-list ul").first().after(data);
+
+                getItemPriceTotal(model);
+                setItemPriceNull(model);
+                avgPriceSpacing();
+
+                setItemPriceStyle($("#unitid").val());
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //填充空白部分
+    function setItemPriceNull(model) {
+        var html = "";
+        var liCount = $(".top-content-list ul:nth-child(2)").find("li").length - 1;
+
+        if (parseInt(liCount) > 0 && parseInt(liCount) < parseInt(model.PageSize)) {
+            var count = parseInt(model.PageSize) - liCount;
+            for (var i = 0; i < count; i++) {
+                html += '<li class="content-list-unit" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+            }
+            if (liCount == 0) {
+                $(".top-content-list ul:nth-child(2) li:nth-child(1)").before(html);
+            }
+            else {
+                $(".top-content-list ul:nth-child(2) li:nth-child(" + liCount + ")").after(html);
+            }
+        }
+        else if (parseInt(liCount) <= 0) {
+            var count = parseInt(model.PageSize) - liCount;
+            for (var i = 0; i < count; i++) {
+                html += '<li class="content-list-unit" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+            }
+            if (liCount <= 0) {
+                $(".top-content-list ul:nth-child(2) li:nth-child(1)").before(html);
+            }
+            else {
+                $(".top-content-list ul:nth-child(2) li:nth-child(" + liCount + ")").after(html);
+            }
+        }
+    }
+
+    //获取单位价格总数
+    function getItemPriceTotal(model) {
+        $.ajax({
+            url: '@Url.Action("GetItemPriceTotal", "PosInSingle")',
+            type: "post",
+            data: model,
+            dataType: "text",
+            success: function (data) {
+                $("#pageTotalPrice").val(data);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //添加单位价格选中样式
+    function setItemPriceStyle(unitid) {
+        $(".content-list-unit a span:nth-child(3)").hide();
+        var aTag = $(".content-list-unit a");
+
+        if ($("#unitid").val() == "") {
+            aTag.each(function () {
+                if ($(this).attr("data-id") == unitid) {
+                    $(this).find("span:nth-child(3)").show();
+                }
+            });
+        }
+        else {
+            aTag.each(function () {
+                if ($(this).attr("data-id") == $("#unitid").val()) {
+                    $(this).find("span:nth-child(3)").show();
+                }
+            });
+        }
+    }
+
+    //平均分配单位间距
+    function avgPriceSpacing() {
+        var remValue = $("#remValue").height();
+        var listHeight = $(".top-content-list ul:nth-child(2)").height() - 1;
+        var listWidth = $(".top-content-list ul:nth-child(2)").width() - 1;
+        var liHeight = $(".top-content-list ul:nth-child(2) li").first().outerHeight(true);
+        var liWidth = $(".top-content-list ul:nth-child(2) li").first().outerWidth(true);
+        var left = parseFloat(listWidth % liWidth) / parseFloat(listWidth / liWidth);
+        var bottom = parseFloat(listHeight % liHeight) / parseFloat(listHeight / liHeight);
+
+        if (left > 0) {
+            $(".top-content-list ul:nth-child(2) li").css({ "margin-left": left + 0.5 * remValue + "px" });
+        }
+    }
+
+    //锁台
+    function isLockTab(tabid, tabno, billid, status) {
+        if (tabFlag == 0 && tabid == "") {
+            layer.msg("请选择要操作的台号");
+        }
+
+        $("#tabid").val(tabid);
+        if (billid.length > 0) {
+            $("#billid").val(billid);
+        }
+
+        var model = {
+            Tabid: tabid,
+            TabNo: tabno,
+            Billid: $("#billid").val(),
+        };
+
+        $.ajax({
+            url: '@Url.Action("AddLockTab", "PosTabStatus")',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (data) {
+                if (data.Data != null) {
+                    $("#billid").val(data.Data.Billid);
+                }
+
+                if (Boolean(data.Success)) {
+                    openTab(tabid, tabno, status);
+                }
+                else if (Boolean(data.Success) === false) {
+                    if (Number(data.ErrorCode) === 1) {
+                         getBillInfo();
+                        $(".right-top-depart ul li:nth-child(1) a").first().click();
+                    }
+                    else if (Number(data.ErrorCode) === 2) {
+                        layer.confirm(data.Data, {
+                            btn: ['继续', '取消'] //按钮
+                            , title: '快点云Pos提示'
+                            , shade: 'rgba(0,0,0,0)'
+                        }, function () {
+                             getBillInfo();
+                            $(".right-top-depart ul li:nth-child(1) a").first().click();
+                        }, function () {
+                            layer.closeAll();
+                        });
+                    }
+                }
+                else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //结账
+    function payment(model) {
+        $.ajax({
+            url: '@Url.Action("_Payment", "Shared", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            dataType: "html",
+            success: function (data) {
+                layer.open({
+                    type: 1,
+                    title: "买单",
+                    skin: 'layui-layer-demo', //样式类名
+                    closeBtn: 0, //不显示关闭按钮
+                    shadeClose: true, //开启遮罩关闭
+                    area: ['70rem', '40rem'], //宽高
+                    content: data
+                });
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //弹出作法分组
+    function openActionGroup() {
+        var grid = $("#grid").data("kendoGrid");
+        var selectedRows = grid.select();
+
+        if (selectedRows.length === 0) {
+            layer.msg("请选择要操作的消费项目");
+            return false;
+        }
+
+        var row = selectedRows[0];
+        var dataRow = grid.dataItem(row);
+
+        $.ajax({
+            url: '@Url.Action("_ActionGroupList", "PosInSingle")',
+            type: "post",
+            data: { mBillid: $("#mBillid").val(), mid: dataRow["Id"] },
+            dataType: "html",
+            success: function (data) {
+                layer.closeAll();
+                var top = $(".top-content-list ul").first().find("li").last().offset().top + $(".top-content-list ul").first().find("li").last().outerHeight(true) + 'px';
+                var left = $(".top-content-list").offset().left + 'px';
+                layer.open({
+                    type: 1,
+                    anim: -1,
+                    title: '选择【' + dataRow["ItemName"] + '】的作法组',
+                    area: ['530px', 'auto'],
+                    offset: [top, left],
+                    skin: 'layui-layer-demo', //样式类名
+                    closeBtn: 1, //不显示关闭按钮
+                    shade: false,
+                    isOutAnim: false,
+                    content: data
+                });
+                var lis = $(".layui-layer-content .content-list-detail").find("a");
+                var igroupid = $("#igroupid").val();
+                var flag = true;
+                $(lis).each(function () {
+                    if ($(this).attr("data-igroupid") == igroupid) {
+                        selActionGroup(this);
+                        flag = false;
+                        return;
+                    }
+                });
+
+                if (flag) {
+                    selActionGroup($(lis).first());
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    function getCutline() {
+        $.ajax({
+            url: '@Url.Action("_Cutline", "PosInSingle")',
+            type: "post",
+            data: {},
+            dataType: "html",
+            success: function (data) {
+                layer.closeAll();
+                layer.open({
+                    type: 1,
+                    title: "图例",
+                    skin: 'layui-layer-demo', //样式类名
+                    closeBtn: 0, //不显示关闭按钮
+                    shadeClose: true, //开启遮罩关闭
+                    area: ['40rem', '35rem'], //宽高
+                    content: data
+                });
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //开台
+    function openTab(tabid, tabno, status) {
+        if (Number(status) === 7 || Number(status) === 1) {
+            var model = {
+                Tabid: tabid,
+                TabNo: tabno,
+                ReturnType: 2,
+                Refeid: $("#refeid").val(),
+                BillBsnsDate: $("#lblData").text()
+            };
+
+            $.ajax({
+                url: '@Url.Action("_AddOpenTab", "PosTabStatus")',
+                type: "post",
+                data: model,
+                dataType: "html",
+                success: function (data) {
+                    layer.close(layer.index);
+                    layer.open({
+                        type: 1,
+                        title: "开台登记",
+                        skin: 'layui-layer-demo', //样式类名
+                        closeBtn: 0, //不显示关闭按钮
+                        shadeClose: true, //开启遮罩关闭
+                        area: ['auto', 'auto'], //宽高
+                        content: data
+                    });
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+        else {
+            getBillInfo();
+        }
+    }
+
+    //开快餐台
+    function openTakeoutTab() {
+        var model = {
+            Refeid: $("#refeid").val(),
+            BillBsnsDate: $("#lblData").text()
+        };
+
+        $.ajax({
+            url: '@Url.Action("GetTakeoutBill", "PosInSingle")',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    $("#tabid").val(data.Data.Tabid);
+                    $("#refeid").val(data.Data.Refeid);
+                    $("#billid").val(data.Data.Billid);
+
+                    model = {
+                        Tabid: data.Data.Tabid,
+                        TabNo: data.Data.TabNo,
+                        Billid: data.Data.Billid,
+                        Refeid: data.Data.Refeid
+                    };
+
+                    $.ajax({
+                        url: '@Url.Action("_AddTakeoutTab", "PosInSingle")',
+                        type: "post",
+                        data: model,
+                        dataType: "html",
+                        success: function (data) {
+                            layer.open({
+                                type: 1,
+                                title: "开台登记",
+                                skin: 'layui-layer-demo', //样式类名
+                                closeBtn: 0, //不显示关闭按钮
+                                shadeClose: true, //开启遮罩关闭
+                                area: ['70rem', '40rem'], //宽高
+                                content: data
+                            });
+                        },
+                        error: function (data) {
+                            layer.alert(data.responseText, { title: "快点云Pos提示" });
+                        }
+                    });
+                } else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //开虚拟台
+    function openVirtualTab() {
+        var model = {
+            Refeid: $("#refeid").val(),
+            BillBsnsDate: $("#lblData").text()
+        };
+
+        $.ajax({
+            url: '@Url.Action("GetTakeoutBill", "PosInSingle")',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    $("#tabid").val(data.Data.Tabid);
+                    $("#refeid").val(data.Data.Refeid);
+                    $("#billid").val(data.Data.Billid);
+                    getBillInfo();
+                } else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //开手动台
+    function openManualTab() {
+        var model = {
+            Refeid: $("#refeid").val(),
+            BillBsnsDate: $("#lblData").text()
+        };
+
+        $.ajax({
+            url: '@Url.Action("GetTakeoutBill", "PosInSingle")',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    $("#tabid").val(data.Data.Tabid);
+                    $("#refeid").val(data.Data.Refeid);
+                    $("#billid").val(data.Data.Billid);
+                    getBillInfo();
+                } else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //打单
+    function intimidate() {
+        if ($("billid").val() != "" && $("mBillid").val() != "") {
+            var model = {
+                ReportCode: "PosBillPrint",
+                ProcedureName: "up_pos_print_billDetail",
+                ParameterValues: "@@h99billid=" + $("#billid").val() + "&@@h99mBillid=" + $("#mBillid").val() + "",
+                IsOpenSearchWindow: false,
+                ChineseName: "账单打印预览",
+                StyleName: ""
+            };
+
+            $.post('@Url.Action("AddQueryParaTemp", "PosCashier",new { print = 1})', model, function (result) {
+                if (result.Success) {
+                    //window.open(result.Data);
+                    $("#printFrame").attr("src", result.Data);
+                } else {
+                    ajaxErrorHandle(result);
+                }
+            }, 'json');
+        } else {
+            layer.msg("请先选择要操作台号");
+        }
+    }
+
+    //打印预览
+    function preview() {
+        if ($("billid").val() != "" && $("mBillid").val() != "") {
+            var model = {
+                ReportCode: "PosBillPrint",
+                ProcedureName: "up_pos_print_billDetail",
+                ParameterValues: "@@h99billid=" + $("#billid").val() + "&@@h99mBillid=" + $("#mBillid").val() + "",
+                IsOpenSearchWindow: false,
+                ChineseName: "账单打印预览",
+                StyleName: ""
+            };
+
+            $.post('@Url.Action("AddQueryParaTemp", "PosCashier")', model, function (result) {
+                if (result.Success) {
+                    layer.open({
+                        type: 2,
+                        title: '账单打印预览',
+                        shadeClose: true,
+                        area: ['950px', '600px'],
+                        content: result.Data
+                    });
+                } else {
+                    ajaxErrorHandle(result);
+                }
+            }, 'json');
+        }
+        else {
+            layer.msg("请先选择要操作台号");
+        }
+    }
+
+    //通用列表查询
+    function queryList(model, listUrl, totalUrl) {
+        $.ajax({
+            url: listUrl,
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#pageIndexItem").val(model.PageIndex);
+                $(".top-content-list ul").first().remove();
+                $(".top-content-list ul").first().before(data);
+                getListTotal(model, totalUrl);
+
+                var liCount = $(".top-content-list ul").first().find("li").length - 2;
+                if ($(".tabStatusList").length > 0) {
+                    var liCount = $(".top-content-list ul").first().find("li").length - 3;
+                }
+                if (listUrl.indexOf("_TabStatusList") > -1) {
+                    setTabBackClass();
+                }
+
+                var html = "";  //填充空白部分
+                if (parseInt(liCount) >= 0 && parseInt(liCount) < parseInt(model.PageSize)) {
+                    count = Number(model.PageSize) - Number(liCount);
+                    for (var i = 0; i < count; i++) {
+                        html += '<li class="content-list-detail" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+                    }
+                    if (Number(model.Istagtype) === 0 || $(".tabStatusList").length > 0) {
+                        $(".top-content-list ul:first-child li:nth-last-child(2)").before(html);
+                    }
+                    else {
+                        $(".top-content-list ul:first-child li:nth-child(" + liCount + ")").after(html);
+                    }
+                }
+                else if (parseInt(liCount) <= 0) {
+                    var count = parseInt(model.PageSize) - liCount;
+
+                    for (var i = 0; i < count; i++) {
+                        html += '<li class="content-list-detail" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+                    }
+
+                    if (liCount <= 0) {
+                        $(".top-content-list ul:first-child li:nth-child(1)").before(html);
+                    }
+                    else {
+                        $(".top-content-list ul:first-child li:nth-child(" + liCount + ")").after(html);
+                    }
+                }
+
+                setItemStyle();
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //数字键盘
+    function numberInput(obj, tag) {
+        if ($(obj).attr("data-keyboardShow") == 1) {
+            var model = {
+                Tag: "#" + $(tag).parents(".otbIGuest").find("input").last().attr("id")
+                , Display: "none;"
+                , Callback: "closeTips();"
+                , InputCallback: "inputIGuest();"
+            };
+            $.ajax({
+                url: '@Url.Action("_NumberInput", "PosInSingle")',
+                type: "post",
+                data: model,
+                dataType: "html",
+                success: function (data) {
+                    layer.open({
+                        type: 4
+                        , title: false
+                        , closeBtn: 0
+                        , shade: false
+                        , scrollbar: false
+                        , shadeClose: true
+                        , tips: [2]
+                        , content: [data, tag]
+                    });
+
+                    $(".wrap").css({ "margin": 0 });
+                    $(".layui-layer-tips .layui-layer-content").css({ "overflow": "hidden", "margin": "0", "padding": "0", "background": "rgba(150, 150, 150, 0.9)" });
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+            $(obj).attr("data-keyboardShow", 0);
+        }
+        else {
+            layer.closeAll("tips");
+            $(obj).attr("data-keyboardShow", 1);
+        }
+    }
+
+    //输入人数时
+    function inputIGuest() {
+        $(".otbIGuest input").val($(".otbIGuest input").last().val());
+    }
+
+    //关闭数字键盘
+    function closeTips() {
+        layer.closeAll("tips");
+    }
+
+    //通用获取列表总数
+    function getListTotal(model, totalUrl) {
+        $.ajax({
+            url: totalUrl,
+            type: "post",
+            data: model,
+            dataType: "text",
+            success: function (data) {
+                $("#pageTotalItem").val(data);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //通用获取列表分页大小
+    function getPagingSize() {
+        var listHeight = $(".top-content-list ul:first-child").height() - 1;
+        var listWidth = $(".top-content-list ul:first-child").width() - 1;
+        var liHeight = $(".top-content-list ul:first-child li").first().outerHeight(true);
+        var liWidth = $(".top-content-list ul:first-child li").first().outerWidth(true);
+
+        if (listHeight <= 0) {
+            listHeight = $(".top-content-list").height() - $(".top-content-list ul:nth-child(2)").outerHeight(true);
+        }
+
+        var size = parseInt(listHeight / liHeight) * parseInt(listWidth / liWidth);
+        return size;
+    }
+
+    //通用获取列表分页数据
+    function getListPage(obj, operation, listUrl, totalUrl) {
+        var index = parseInt($("#pageIndexItem").val());
+        var total = parseInt($("#pageTotalItem").val());
+        if (listUrl.indexOf("_TabStatusList") > -1 && Boolean($("#isoutsell").val()) === true) {
+            var size = getPagingSize() - 3;
+        }
+        else {
+            size = getPagingSize() - 2;
+        }
+        var number = (total % size) > 0 ? parseInt(total / size) + 1 : parseInt(total / size);
+
+        if (Number(operation) === 1) {
+            index -= 1;
+        }
+        else {
+            index += 1;
+        }
+        if (index < 1 || index > number) {
+            return false;
+        }
+
+        var model = {
+            Itemid: $("#itemClassid").val(),
+            PageIndex: index,
+            Refeid: $("#refeid").val(),
+            PageSize: size,
+            ActionTypeId: $(obj).attr("data-id"),
+            Istagtype: $(obj).attr("data"),
+        };
+        $("#itemLevel").val($("#itemLevel").val() + "|" + JSON.stringify(model));
+        queryList(model, listUrl, totalUrl);
+    }
+
+    //隐藏/显示键盘
+    function showHideKeyboard() {
+        var remValue = $("#remValue").height();
+        if ($(".mainRight-input").is(":visible")) {
+            $(".mainRight-input").hide();
+            $(".top-content-list").animate({ width: ($(".top-content-list").width() + $(".mainRight-input").outerWidth(true)) + "px" }, 500, function () {
+                $(".top-content-list ul").width($(".top-content-list").width());
+                $(".top-content-list ul:nth-child(2)").width($(".top-content-list").width() - 1.6 * remValue);
+                $(window).trigger("resize");
+                initItem($("#itemClassid").val());
+            });
+        }
+        else {
+            $(".top-content-list").animate({ width: ($(".top-content-list").width() - $(".mainRight-input").outerWidth(true)) + "px" }, 500, function () {
+                $(".top-content-list ul").width($(".top-content-list").width());
+                $(".top-content-list ul:nth-child(2)").width($(".top-content-list").width() - 1.6 * remValue);
+                $(".mainRight-input").show();
+                $(window).trigger("resize");
+                initItem($("#itemClassid").val());
+            });
+        }
+
+    }
+
+    //提交表单
+    function saveFormData(btn, window) {
+        var f = $(btn)[0].form;
+        var validator = $(f).validate();
+        if (validator.form()) {
+            $.post(
+                $(f).attr("action"),
+                $(f).serialize(),
+                function (data) {
+                    if (data.Success) {
+                        layer.closeAll();
+                        getBillInfo();
+                    } else {
+                        layer.alert(data.Data, { title: "快点云Pos提示" });
+                    }
+                },
+            "json");
+        }
+    }
+
+    //提交表单
+    function saveTakeoutTab(btn, window) {
+        var f = $(btn)[0].form;
+        var validator = $(f).validate();
+        if (validator.form()) {
+            $.post(
+                $(f).attr("action"),
+                $(f).serialize(),
+                function (data) {
+                    if (data.Success) {
+                        if (window === undefined) {
+                            closeGeneralWindow();
+                        }
+                        else {
+                            closeWindow(window);
+                        }
+                        getBillInfo();
+                    } else {
+                        layer.alert(data.Data, { title: "快点云Pos提示" });
+                    }
+                },
+            "json");
+        }
+    }
+</script>
+<script src="~/Scripts/posInSingle.js"></script>
+<script src="~/Scripts/layer-v3.1.1/layer.js"></script>

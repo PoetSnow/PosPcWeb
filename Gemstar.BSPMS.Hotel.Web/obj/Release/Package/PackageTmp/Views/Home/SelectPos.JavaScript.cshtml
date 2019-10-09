@@ -1,0 +1,177 @@
+﻿<script type="text/javascript">
+        function HotelModule()
+    {
+        var CurrentPosId = $("#CurrentPosId").data("kendoDropDownList");
+        var id = CurrentPosId.value();
+        if (id == "" && CurrentPosId.items().length > 0) {
+            CurrentPosId.select(0);
+        }
+
+        $.ajax({
+            url: '@Url.Action("HotelModule", "Home")',
+            type: "post",
+            data: { id : id },
+            dataType: "html",
+            success: function (data) {
+                $(".content").html(data);
+            },
+            error: function (data) {
+                alert(data.responseText);
+            }
+        });
+
+        posChange();
+    }
+
+    function posChange()
+    {
+        var CurrentPosId = $("#CurrentPosId").data("kendoDropDownList");
+        var id = CurrentPosId.value();
+        if (id == "" && CurrentPosId.items().length > 0) {
+            CurrentPosId.select(0);
+            id = CurrentPosId.value();
+        }
+
+        $.ajax({
+            url: '@Url.Action("GetBusinessByPos", "Home")',
+            type: "post",
+            data: { id : id },
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    $("#business").text(data.Data);
+                }
+            },
+            error: function (data) {
+                alert(data.responseText);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+            $(".k-state-default").css({ "background": "#0f2135" });
+            $(".k-state-wrap").css({ "background": "#0f2135" });
+            $(".k-dropdown-wrap").css({ "border": "0" });
+            $(".k-input").css({ "color": "#fff" });
+
+            var winHeight = $(window).outerHeight(true);
+            var topHeight = $(".top").outerHeight(true);
+            var ulHeight = $(".content ul").outerHeight(true);
+            var footerHeight = $(".footer").outerHeight(true);
+
+            var contentHeight = winHeight - topHeight - footerHeight;
+            $(".content").height(contentHeight);
+            $(".content ul").css({ "padding-top": (contentHeight - ulHeight) / 2 + "px" });
+        })
+
+    function setSelectedValue(flag) {
+            var currentPos = $("#CurrentPosId").data("kendoDropDownList");
+            var model = {
+                CurrentPosId: currentPos.value(),
+                CurrentPosName: currentPos.text()
+            }
+
+            $.ajax({
+                url: '@Url.Action("SaveLoginPos", "Home")',
+                type: "post",
+                data: model,
+                dataType: "json",
+                success: function (data) {
+                    if (data.Success == true) {
+                        @*if (flag === 1)
+                            top.location.href = '@Url.Action("PosTabStatus","PosManage", new { rnd = new Random().NextDouble() })';*@
+                         if (flag == 2) {
+                            top.location.href = '@Html.Raw(Url.Action("PosInSingle","PosManage", new { rnd=new Random().NextDouble(), flag = "2" }))';
+
+                        }
+                        else if (flag == 3 || flag==1)
+                        {
+
+                            $.ajax({
+                                url: '@Url.Action("CheckBussisByHotelAndPos", "Home")',
+                                type: "post",
+                                data: { hid: '@ViewBag.HotelId', posId: currentPos.value() },
+                                dataType: "json",
+                                success: function (data) {
+                                    if (data.Success == true) {
+                                        if (flag==1) {
+                                            top.location.href = '@Url.Action("PosTabStatus","PosManage", new { rnd = new Random().NextDouble() })';
+                                        }
+                                        else {
+                                            top.location.href = '@Html.Raw(Url.Action("Main", new { rnd = new Random().NextDouble(), authCode = "p20" }))';
+                                        }
+
+                                    }
+                                    else {
+                                        layer.alert(data.Data, {
+                                            closeBtn: 0,
+                                            title: "快点云Pos提示",
+                                            btn: ['确认', '取消']
+                                        }, function () {
+                                            if (flag == 1) {
+                                                top.location.href = '@Url.Action("PosTabStatus","PosManage", new { rnd = new Random().NextDouble() })';
+                                            }
+                                            else {
+                                                top.location.href = '@Html.Raw(Url.Action("Main", new { rnd = new Random().NextDouble(), authCode = "p20" }))';
+                                            }
+                                           // top.location.href = '@Html.Raw(Url.Action("Main", new { rnd = new Random().NextDouble(), authCode = "p20" }))';
+                                        });
+                                    }
+                                },
+                                error: function (data) {
+                                    layer.alert(data.responseText);
+                                }
+                            });
+                        }
+                        else if (flag == 7)
+                        {
+
+                            $.ajax({
+                                url: '@Url.Action("CheckBussisByHotelAndPos", "Home")',
+                                type: "post",
+                                data: { hid: '@ViewBag.HotelId', posId: currentPos.value() },
+                                dataType: "json",
+                                success: function (data) {
+                                    if (data.Success == true) {
+                                        top.location.href = '@Html.Raw(Url.Action("Main", new { rnd = new Random().NextDouble(), authCode = "p99" }))';
+                                    }
+                                    else {
+                                        layer.alert(data.Data, {
+                                            closeBtn: 0,
+                                            title: "快点云Pos提示",
+                                            btn: ['确认', '取消']
+                                        }, function () {
+                                            top.location.href = '@Html.Raw(Url.Action("Main", new { rnd = new Random().NextDouble(), authCode = "p99" }))';
+                                        });
+                                    }
+                                },
+                                error: function (data) {
+                                    layer.alert(data.responseText);
+                                }
+                            });
+                         }
+                         else if (flag == 4) {
+                            top.location.href = '@Url.Action("PosSeafoodPool", "PosManage", new { rnd = new Random().NextDouble() })';
+                        }
+                         else if (flag == 8) {
+                             top.location.href = "/PosManage/PosReserve?posId=" + model.CurrentPosId;
+                         }
+                    }
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                }
+            });
+        }
+
+        function logout() {
+            $.post("@Url.Action("Logout","Account",new { area=""})", null, function (data) {
+                if (data.Success) {
+                    top.location.href = data.Data;
+                } else {
+                    //jAlert(data.Data);
+                    ajaxErrorHandle(data);
+                }
+            }, 'json');
+        }
+</script>

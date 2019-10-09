@@ -1,0 +1,153 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosTab.TabAddViewModel
+
+<script type="text/javascript">
+    function moduleChanged() {
+        var TabTypeid = $("#TabTypeid").data("kendoDropDownList");
+        TabTypeid.dataSource.read();
+
+        var RefeName = $("#Refeid").data("kendoDropDownList");
+        RefeName.dataSource.read();
+    }
+
+    function posCode_paras() {
+        var module = $("#Module").data("kendoDropDownList");
+        var moduleCode = module.value();
+        return {
+            moduleCode: moduleCode
+        };
+    }
+</script>
+<style>
+    .selectBtn {
+        position: absolute;
+        width: 35px;
+        height: 28px;
+        border: 1px solid #aaa;
+        background: #eee;
+        color: #333;
+    }
+</style>
+
+@using (Html.BeginForm("Add", "BasicDataPosTab", FormMethod.Post))
+{
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.TabNo)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.TabNo).HtmlAttributes(new { style = "width:100%;", placeholder = "请输入代码", onkeyup = "checkCode(this)" })</td>
+            <td>@Html.ValidationMessageFor(m => m.TabNo, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Cname)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Cname).HtmlAttributes(new { style = "width:100%;", placeholder = "请输入中文名称" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Cname, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Ename)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Ename).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Ename, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Module)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Module).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosModules", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); }).Events(e => e.Change("moduleChanged"))</td>
+            <td>@Html.ValidationMessageFor(m => m.Module, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Refeid)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Refeid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosRefeByModules", "BasicDataPosRefe", new { rnd = new Random().NextDouble() }).Data("posCode_paras")).ServerFiltering(true); })</td>
+            <td>@Html.ValidationMessageFor(m => m.Refeid, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.TabTypeid)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.TabTypeid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosTabtypeByModules", "BasicDataPosTabtype", new { rnd = new Random().NextDouble() }).Data("posCode_paras")).ServerFiltering(true); }).OptionLabel("请选择餐台类型")</td>
+            <td>@Html.ValidationMessageFor(m => m.TabTypeid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Istagtemp)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Istagtemp).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosIstagtemp", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); })</td>
+            <td>@Html.ValidationMessageFor(m => m.Istagtemp, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.LargessLimit)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.LargessLimit).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.LargessLimit, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+            <td>@Html.Kendo().IntegerTextBoxFor(m => m.Seqid).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.IsWxUsed)</td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsWxUsed).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsWxUsed, "*")</td>
+        </tr>
+
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Ipaddress)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Ipaddress).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Ipaddress, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.RelayNo)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.RelayNo).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.RelayNo, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.NetPrinter)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.NetPrinter).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.NetPrinter, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.ProdPrinter)</td>
+            <td>@Html.Kendo().MultiSelectFor(m => m.ProdPrinter).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForProdPrinterByModules", "BasicDataPosProdPrinter", new { moduleCode = "CY", rnd = new Random().NextDouble() })); }).AutoClose(false).Placeholder("请选择出品打印机").Value(Model.ProdPrinters)</td>
+
+            <td>@Html.ValidationMessageFor(m => m.ProdPrinter, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.IOpenType)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.IOpenType).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetOpenType", "BasicDataPosTab", new { rnd = new Random().NextDouble() })); })</td>
+            <td>@Html.ValidationMessageFor(m => m.IOpenType, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.DepartName)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.DepartName).HtmlAttributes(new { style = "width:100%;", @readonly = "readonly" })<input type="button" value="选择" class="selectBtn" onclick="selectTabDeot()" /></td>
+            <td></td>
+            <td>
+                @Html.HiddenFor(m => m.DeptDepart)
+            </td>
+
+
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        moduleChanged();
+    });
+
+    function selectTabDeot() {
+        $.ajax({
+            url: '@Url.Action("_DeptDepartList", "BasicDataPosTab")',
+            type: "get",
+            dataType: "html",
+            success: function (result) {
+             
+                $("#posMaskWindow").html(result);
+                $("#posMaskWindow_wnd_title").text("选择二级仓");
+                $(".k-i-close").click(function () {
+                    closeGeneralWindow();
+                });
+                openGeneralWindow();
+            },
+            error: function (result) {
+                alert(result.responseText);
+            }
+        });
+
+    }
+
+</script>

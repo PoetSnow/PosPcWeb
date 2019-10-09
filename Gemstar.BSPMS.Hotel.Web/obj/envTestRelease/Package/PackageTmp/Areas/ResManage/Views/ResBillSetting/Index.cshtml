@@ -1,0 +1,549 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "客单设置";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var resId = queryModel == null ? "" : queryModel.QueryParameterValues;
+    var keyColumnName = "id";
+    var gridModel = new KendoGridCommonViewModel()
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForQuery = false,
+        EnableFunctionForPage = false,
+        HtmlAttributes = new { style = "height:434px;max-height:434px;" },
+        EnableScrollable = true,
+    };
+    var gridHelper = new KendoGridEditInCellHtmlHelper<ResBillSetting>(
+        Html,
+        Url,
+        gridModel,
+        c =>
+        {
+            c.Bound(w => w.BillCode).Title("账单代码").EditorTemplateName("GridForeignKey").Width(90);
+            c.Bound(w => w.BillName).Title("账单名称").Width(150);
+            c.Bound(w => w.DebitTypeId).Title("消费类型").EditorTemplateName("GridMultiSelect").ClientTemplate("#= ShowDebitTypeName(DebitTypeId) #");
+            c.Bound(w => w.Remarks).Title("备注");
+        },
+        c => c.Id(w => w.Id),
+        c =>
+        {
+            c.Template(@<text>
+                <a class="k-button k-button-icontext k-grid-add" href="javascript:void(0)"><span class="k-icon k-add"></span>增加</a>
+                <a class="k-button k-button-icontext k-grid-cancel-changes" href="javascript:void(0)"><span class="k-icon k-cancel"></span>取消修改</a>
+                <a class="k-button k-button-icontext k-grid-save-changes" href="javascript:void(0)"><span class="k-icon k-update"></span>保存修改</a>
+                <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="batchDelete('@gridModel.GridControlId', '@gridModel.KeyColumnName','@Url.Action("BatchDelete")')"><span class="k-icon k-i-unpin"></span>删除</a>
+                <div class="resBillRightDiv">
+                            <label for="resBillTempleteSelect">模板</label>
+                            @(Html.Kendo().DropDownList()
+                            .Name("resBillTempleteSelect")
+                            .DataTextField("TempleteName")
+                            .DataValueField("TempleteId")
+                            .AutoBind(true)
+                            .Events(e => e.Change("ResBillTemplete.OnChange").Select("ResBillTemplete.OnSelect").DataBound("ResBillTemplete.OnDataBound"))
+                            .HtmlAttributes(new { style = "width: 150px;" })
+                            .Template("<div><span title=\"#:TempleteId=='add'?'将当前账单表格数据保存为新模板':''#\">#:TempleteName#</span><span title=\"删除此模板\" class=\"delTempleteBtn\" onclick=\"ResBillTemplete.OnDel('#:TempleteId#')\">#:TempleteId=='add'?'':'删除'#</span></div>")
+                            .OptionLabel(" ")
+                            .DataSource(d => d.Read("GetTempleteList", "ResBillSetting")))
+                </div>
+            </text>);
+        },
+        page => page.Enabled(false).Numeric(false).PreviousNext(false).Refresh(true)
+    );
+}
+<style type="text/css">.wrap {margin: 7px 7px 0px 7px;} body{overflow-y:hidden;} .delTempleteBtn{float:right;color:rgb(166,166,166);font-size:9px;cursor:pointer;}.resBillRightDiv{float:right;padding-right:17px;} </style>
+<div style="display:none;">@Html.Kendo().MultiSelect().Name("DebitTypeIdData").BindTo((SelectList)ViewData["DebitTypeId_Data"])<input type="hidden" id="isUseTemplete" /></div>
+@(gridHelper.KendoGridEditInCell())
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridModel)
+    <script type="text/javascript">
+        //显示消费类型名称
+        function ShowDebitTypeName(value) {
+            var result = [];
+            if (value != null && value != undefined && value.length > 0) {
+                var list = value.split(",");
+                var debitTypeIdList = $("#DebitTypeIdData").data("kendoMultiSelect").dataSource.data();
+                $.each(list, function (index, item) {
+                    $.each(debitTypeIdList, function (indexType, itemType) {
+                        if (item == itemType.Value) {
+                            result.push(itemType.Text);
+                        }
+                    });
+                });
+            }
+            return result.join(",");
+        }
+        //下拉多选 消费类型关闭事件
+        function featureClose() {
+            selectEvent("close");
+        }
+        //下拉多选 消费类型打开事件
+        function featureOpen() {
+            selectEvent("open");
+        }
+        function eebitTypeId_change(e) {
+            //1.在列表中找到要修改的实体
+            var tr = $("#DebitTypeId").parents("tr");
+            if (!(tr != null && tr != undefined && tr.length == 1)) {
+                return;
+            }
+            var uid = tr.attr("data-uid");
+            if (!(uid != null && uid != undefined && uid.length > 0)) {
+                return;
+            }
+            var itemModel = $("#grid").data("kendoGrid").dataSource.getByUid(uid);
+            if (!(itemModel != null && itemModel != undefined)) {
+                return;
+            }
+            //2.获取修改后的值
+            var debitTypeId_MultiSelect = $("#DebitTypeId").data("kendoMultiSelect");
+            if (!(debitTypeId_MultiSelect != null && debitTypeId_MultiSelect != undefined)) {
+                return;
+            }
+            itemModel.DebitTypeId = this.value().join(",");
+        }
+        //下拉多选 消费类型事件处理
+        function selectEvent(type) {
+            //1.在列表中找到要修改的实体
+            var tr = $("#DebitTypeId").parents("tr");
+            if (!(tr != null && tr != undefined && tr.length == 1)) {
+                return;
+            }
+            var uid = tr.attr("data-uid");
+            if (!(uid != null && uid != undefined && uid.length > 0)) {
+                return;
+            }
+            var itemModel = $("#grid").data("kendoGrid").dataSource.getByUid(uid);
+            if (!(itemModel != null && itemModel != undefined)) {
+                return;
+            }
+            //2.获取修改后的值
+            var debitTypeId_MultiSelect = $("#DebitTypeId").data("kendoMultiSelect");
+            if (!(debitTypeId_MultiSelect != null && debitTypeId_MultiSelect != undefined)) {
+                return;
+            }
+            debitTypeId_MultiSelect.unbind("change", eebitTypeId_change);
+            debitTypeId_MultiSelect.bind("change", eebitTypeId_change);
+            if (type == "open") {
+                //3.实体的值 选中显示到列表中
+                debitTypeId_MultiSelect.value(itemModel.DebitTypeId.split(","));
+            }
+            else if (type == "close") {
+                var debitTypeIds = debitTypeId_MultiSelect.value();
+                //3.修改后的值 保存到实体
+                itemModel.DebitTypeId = debitTypeIds.join(",");
+            }
+        }
+        //初始化完成后执行
+        $(document).ready(function () {
+            //排序
+            function sortNumber(a, b)
+            {
+                return a - b;
+            }
+            //表格修改事件
+            function grid_edit(e) {
+                if (e.model.isNew()) {//新添加的行
+                    var billCodeObj = e.container.find("input[name=BillCode]").data("kendoDropDownList");
+                    if (billCodeObj != null && billCodeObj != undefined && $.trim(billCodeObj.value()) == "") {//账单代码还没有值
+                        //定义变量
+                        var billCodeNumber = 66;
+                        var billCodeNumbers = [];
+                        //获取表格内的所有账单代码
+                        var list = e.sender.dataItems();
+                        if (list != null && list != undefined && list.length > 0) {
+                            $.each(list, function (index, item) {
+                                billCodeNumbers.push((item.BillCode).charCodeAt(0));
+                            });
+                        }
+                        //账单代码从小到大排序，寻找新的没有使用的过的账单代码
+                        if (billCodeNumbers != null && billCodeNumbers != undefined && billCodeNumbers.length > 0) {
+                            billCodeNumbers = billCodeNumbers.sort(sortNumber);
+                            $.each(billCodeNumbers, function (index, item) {
+                                if (item == billCodeNumber) {
+                                    billCodeNumber = billCodeNumber + 1;
+                                }
+                            });
+                        }
+                        //账单代码数量是否已最大
+                        if (billCodeNumber > 90) {
+                            e.preventDefault();
+                            jAlert("账单代码A-Z数量已是最多，不能再添加，只能修改或删除！", "知道了"); return false;
+                        }
+                        //给新行账单代码赋值
+                        var billCodeString = String.fromCharCode(billCodeNumber);
+                        billCodeObj.value(billCodeString);
+                        e.model.BillCode = billCodeString;
+                        //切换到账单名称框
+                        var grid = $("#grid").data("kendoGrid");
+                        grid.editCell($("#grid tr[data-uid='" + e.model.uid + "'] td:eq(1)"));
+                    }
+                    //给账单名称赋值
+                    var billNameObj = e.container.find("input[name=BillName]");
+                    if (billNameObj != null && billNameObj != undefined && billNameObj.length > 0) {
+                        billNameObj.attr("readonly", "readonly");//账单名称不允许修改
+                    }
+                    if (billNameObj != null && billNameObj != undefined && billNameObj.length > 0 && $.trim(billNameObj.val()) == "") {//账单名称框编辑状态并且为空
+                        if (e.model.BillCode != null && e.model.BillCode != undefined && e.model.BillCode.length > 0) {//账单代码不为空
+                            var billName = e.model.BillCode + "账单";
+                            //给账单名称赋值
+                            billNameObj.val(billName);
+                            e.model.BillName = billName;
+                            //切换到消费类型
+                            var grid = $("#grid").data("kendoGrid");
+                            grid.editCell($("#grid tr[data-uid='" + e.model.uid + "'] td:eq(2)"));
+                        }
+                    }
+                    //加载消费类型多选框样式
+                    var DebitTypeIdObj = e.container.find("select[name=DebitTypeId]");
+                    if (DebitTypeIdObj != null && DebitTypeIdObj != undefined && DebitTypeIdObj.length > 0) {
+                        featureOpen();
+                    }
+                } else {//修改行
+                    var billNameObj = e.container.find("input[name=BillName]");
+                    if (billNameObj != null && billNameObj != undefined && billNameObj.length > 0) {
+                        billNameObj.attr("readonly", "readonly");//账单名称不允许修改
+                    }
+                    //加载消费类型多选框样式
+                    var DebitTypeIdObj = e.container.find("select[name=DebitTypeId]");
+                    if (DebitTypeIdObj != null && DebitTypeIdObj != undefined && DebitTypeIdObj.length > 0) {
+                        featureOpen();
+                    }
+                }
+            }
+            //表格保存事件
+            var isEditBillCodeAndDebitTypeId = false;//是否已修改标识
+            function grid_save(e) {
+                //判断是否已修改
+                if (!e.model.isNew()) {
+                    if (e.values.BillCode != undefined) {//修改代码
+                        if (e.values.BillCode != e.model.BillCode) {
+                            isEditBillCodeAndDebitTypeId = true;
+                        }
+                    } else if (e.values.DebitTypeId != undefined) {//修改消费类型
+                        var DebitTypeIdObj = e.container.find("select[name=DebitTypeId]");
+                        if (DebitTypeIdObj != null && DebitTypeIdObj != undefined && DebitTypeIdObj.length > 0) {
+                            var newids = DebitTypeIdObj.val();
+                            var oldids = e.model.DebitTypeId == null || e.model.DebitTypeId == undefined ? null : e.model.DebitTypeId.split(",");
+                            if ((newids == null && oldids != null) || (newids != null && oldids == null)) {
+                                isEditBillCodeAndDebitTypeId = true;
+                            }
+                            if (newids != null && newids != undefined && oldids != null && oldids != undefined) {
+                                if (newids.length != oldids.length) {
+                                    isEditBillCodeAndDebitTypeId = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                //修改了账单代码，则自动给账单名称赋值
+                if (e.values.BillCode != undefined && e.values.BillCode != null && e.values.BillCode != "") {//账单代码不为空
+                    var isEdit = false;
+                    if (e.model.BillName == undefined || e.model.BillName == null || e.model.BillName == "") {//账单名称为空
+                        e.model.BillName = (e.values.BillCode + "账单");//给账单名称赋值
+                        isEdit = true;
+                    }
+                    else if (e.model.BillName.indexOf(e.model.BillCode) != -1) {//账单名称中包含账单代码
+                        e.model.BillName = e.model.BillName.replace(e.model.BillCode, e.values.BillCode);//更新账单代码到账单名称中
+                        isEdit = true;
+                    }
+                    if (isEdit) {
+                        //切换到账单名称编辑框
+                        var grid = $("#grid").data("kendoGrid");
+                        grid.editCell($("#grid tr[data-uid='" + e.model.uid + "'] td:eq(1)"));
+                    }
+                }
+            }
+            //点击保存按钮事件 验证内容是否合法
+            function grid_saveChanges(e) {
+                var list = e.sender.dataItems();
+                if (list != null && list != undefined && list.length > 0) {
+                    var billCodes = [];
+                    var billNames = [];
+                    $.each(list, function (index, item) {
+                        if (item.Resid == null || item.Resid == undefined || $.trim(item.Resid) == "") {
+                            item.Resid = "@ViewBag.Resid";
+                        } else {
+                            if (item.Resid != "@ViewBag.Resid") {
+                                e.preventDefault();
+                                jAlert("账单所属主单ID错误，请刷新页面后重试！", "知道了"); return false;
+                            }
+                        }
+                        if ($.trim(item.BillCode) == "") {
+                            e.preventDefault();
+                            jAlert("账单代码不能为空！", "知道了"); return false;
+                        }
+                        if ($.trim(item.BillName) == "") {
+                            e.preventDefault();
+                            jAlert("账单名称不能为空！", "知道了"); return false;
+                        }
+                        if ($.trim(item.DebitTypeId) == "") {
+                            e.preventDefault();
+                            jAlert("消费类型不能为空！", "知道了"); return false;
+                        }
+                        if (("," + billCodes.join(",") + ",").indexOf(item.BillCode) != -1) {
+                            e.preventDefault();
+                            jAlert("账单代码" + item.BillCode + "已重复，请修改！", "知道了"); return false;
+                        }
+                        billCodes.push(item.BillCode);
+
+                        if (("," + billNames.join(",") + ",").indexOf(item.BillName) != -1) {
+                            e.preventDefault();
+                            jAlert("账单名称" + item.BillName + "已重复，请修改！", "知道了"); return false;
+                        }
+                        billNames.push(item.BillName);
+                    });
+                }
+            }
+            var grid = $("#grid").data("kendoGrid");
+            grid.bind("edit", grid_edit);
+            grid.bind("save", grid_save);
+            grid.bind("saveChanges", grid_saveChanges);
+
+            var isAdd = false;//是否添加
+            var isError = false;//是否有错误
+            //请求开始前
+            function dataSource_requestStart(e) {
+                if (e.type == "read") {
+                    $("#isUseTemplete").val("false");
+                } else if (e.type == "create") {
+                    var url = e.sender.transport.options.create.url;
+                    var index = url.indexOf("?");
+                    if (index != -1) {
+                        url = url.substring(0, index) + "?isTemplete=" + $("#isUseTemplete").val();
+                    } else {
+                        url = url + "?isTemplete=" + $("#isUseTemplete").val();
+                    }
+                    e.sender.transport.options.create.url = url;
+                }
+            }
+            //是否请求服务器
+            function dataSource_requestEnd(e) {
+                if (e != null && e != undefined && e.response.Errors != null && e.response.Errors != undefined) {
+                    isError = true;
+                }
+                if (e != null && e != undefined && e.type == "create") {
+                    isAdd = true;//添加了新行
+                }
+            }
+            //所有操作结束事件
+            function dataSource_sync(e) {
+                if (isError) { return; }
+                if (isAdd || isEditBillCodeAndDebitTypeId) {
+                    $("#grid").data("kendoGrid").dataSource.read();
+                    //是否更新账务
+                    updateFolioBillSet("保存成功！");
+                    isAdd = false;
+                    isEditBillCodeAndDebitTypeId = false;
+                }
+            }
+            grid.dataSource.bind("requestStart", dataSource_requestStart);
+            grid.dataSource.bind("requestEnd", dataSource_requestEnd);
+            grid.dataSource.bind("sync", dataSource_sync);
+
+            //删除完毕后执行的方法
+            function deleteEnd(result) {
+                if (result != null && result != undefined && result.Success) {
+                    //是否更新账务
+                    updateFolioBillSet("删除成功！");
+                }
+            }
+            //修改删除按钮事件，增加删除完毕后执行的方法
+            var batchDeleteButton = $(".k-grid-batchDelete");
+            if (batchDeleteButton != null && batchDeleteButton != undefined) {
+                var clickStr = batchDeleteButton.attr("onclick");
+                if ($.trim(clickStr) != "") {
+                    //"batchDelete('grid','id','/ResManage/ResBillSetting/BatchDelete')"
+                    if (clickStr.indexOf("batchDelete") == 0) {
+                        clickStr = clickStr.replace("batchDelete", "").replace("(", "").replace(")", "");
+                        var list = clickStr.split(",");
+                        if (list.length == 3) {
+                            batchDeleteButton.removeAttr("onclick");
+                            batchDeleteButton.click(function () {
+                                batchDelete($.trim(list[0].replace("'", "").replace("'", "")), $.trim(list[1].replace("'", "").replace("'", "")), $.trim(list[2].replace("'", "").replace("'", "")), deleteEnd);
+                            });
+                        }
+                    }
+                }
+            }
+            //是否把当前设置的规则重新应用到账务中
+            function updateFolioBillSet(type) {
+                jConfirm(type + "\n是否把新的设置应用到历史账务中？", "  是  ", "  否  ", function (isTrue) {
+                    if (isTrue) {
+                        resBillSettingToFolio();
+                    }
+                });
+                $("#popup_cancel").focus();
+            }
+            function resBillSettingToFolio() {
+                $.post("@Url.Action("ResBillSettingToFolio", "ResBillSetting")", { "resid": "@ViewBag.Resid" },
+                function (result) {
+                    if (result.Success) {
+                        jAlert("应用成功！", "知道了");
+                        try { window.top.folioQueryResBillIdRefresh(); } catch (e) { }
+                    } else {
+                        jAlert("应用失败！" + result.Data, "知道了");
+                    }
+                }, "json");
+            }
+        });
+
+        //检查账单表格数据
+        function checkGridData(list) {
+            var isTrue = true;
+            if (list != null && list != undefined && list.length > 0) {
+                var billCodes = [];
+                var billNames = [];
+                $.each(list, function (index, item) {
+                    if (item.Resid == null || item.Resid == undefined || $.trim(item.Resid) == "") {
+                        item.Resid = "@ViewBag.Resid";
+                    } else {
+                        if (item.Resid != "@ViewBag.Resid") {
+                            isTrue = false;
+                            jAlert("账单所属主单ID错误，请刷新页面后重试！", "知道了"); return false;
+                        }
+                    }
+                    if ($.trim(item.BillCode) == "") {
+                        isTrue = false;
+                        jAlert("账单代码不能为空！", "知道了"); return false;
+                    }
+                    if ($.trim(item.BillName) == "") {
+                        isTrue = false;
+                        jAlert("账单名称不能为空！", "知道了"); return false;
+                    }
+                    if ($.trim(item.DebitTypeId) == "") {
+                        isTrue = false;
+                        jAlert("消费类型不能为空！", "知道了"); return false;
+                    }
+                    if (("," + billCodes.join(",") + ",").indexOf(item.BillCode) != -1) {
+                        isTrue = false;
+                        jAlert("账单代码" + item.BillCode + "已重复，请修改！", "知道了"); return false;
+                    }
+                    billCodes.push(item.BillCode);
+
+                    if (("," + billNames.join(",") + ",").indexOf(item.BillName) != -1) {
+                        isTrue = false;
+                        jAlert("账单名称" + item.BillName + "已重复，请修改！", "知道了"); return false;
+                    }
+                    billNames.push(item.BillName);
+                });
+            }
+            return isTrue;
+        }
+
+
+        //模板
+        var ResBillTemplete = {
+            //事件-绑定数据
+            OnDataBound: function (e) {
+                //增加一个选项
+                var isExists = false;
+                var list = e.sender.dataSource.data();
+                $.each(list, function (index, item) {
+                    if (item.TempleteId == "add") {
+                        isExists = true;
+                    }
+                });
+                if (!isExists) {
+                    e.sender.dataSource.insert(0, { Hid: "", TempleteId: "add", TempleteName: "添加模板" });
+                }
+            },
+            //是否删除
+            IsDel: false,
+            //事件-删除模板
+            OnDel: function (value) {
+                ResBillTemplete.IsDel = true;
+            },
+            //事件-选中事件
+            OnSelect: function (e) {
+                var dataItem = e.sender.dataItem(e.item);
+                var id = dataItem[e.sender.options.dataValueField];
+                var name = dataItem[e.sender.options.dataTextField];
+                //选择第一项
+                if (name == e.sender.options.optionLabel) {
+                    try { $("#grid").data("kendoGrid").dataSource.read(); } catch (e) { }
+                    return;
+                }
+                //点击删除，则不选中项目
+                if (ResBillTemplete.IsDel == true) {
+                    e.preventDefault();
+                    ResBillTemplete.IsDel = false;
+                    ResBillTemplete.DelTemplete(id, name);
+                    return;
+                }
+                //点击添加，则不选中项目
+                if (id == "add") {
+                    e.preventDefault();
+                    ResBillTemplete.AddTemplete();
+                    return;
+                }
+            },
+            //事件-改变事件
+            OnChange: function (e) {
+                var id = this.value();
+                var name = this.text();
+                if ($.trim(id) == "") { return; }
+                ResBillTemplete.GetTemplete(id, name);
+            },
+            //添加模板
+            AddTemplete: function () {
+                //验证
+                var list = $("#grid").data("kendoGrid").dataSource.data();
+                var isTrue = checkGridData(list);
+                if (list == null || list == undefined || list.length <= 0) {
+                    jAlert("账单内容不能为空！", "知道了"); isTrue = false;
+                }
+                if (!isTrue) { return; }
+                //提交
+                jPrompt("将当前账单表格数据保存为新模板！\n请输入模板名称：", "", "保存", "取消", function (result) {
+                    if (result == null) { return; }
+                    if ($.trim(result) == "") {
+                        jAlert("请输入模板名称！", "知道了"); return;
+                    }
+                    var addVersions = [];
+                    $.each(list, function (index, item) {
+                        addVersions.push({ BillCode: item.BillCode, BillName: item.BillName, DebitTypeId: item.DebitTypeId, Remarks: item.Remarks });
+                    });
+                    $.post("@Url.Action("AddTemplete", "ResBillSetting")", { name: $.trim(result), addVersions: addVersions }, function (result) {
+                        if (result.Success) {
+                            jAlert("保存新模板成功！", "知道了");
+                            try { $("#resBillTempleteSelect").data("kendoDropDownList").dataSource.read(); } catch (e) { }
+                        } else {
+                            jAlert("保存新模板失败！" + result.Data, "知道了");
+                        }
+                    }, "json");
+                });
+            },
+            //删除模板
+            DelTemplete: function (id, name) {
+                jConfirm("是否删除模板[" + name + "]？", "  是  ", "  否  ", function (isTrue) {
+                    if (isTrue) {
+                        $.post("@Url.Action("DelTemplete", "ResBillSetting")", { id: id }, function (result) {
+                            if (result.Success) {
+                                jAlert("删除模板成功！", "知道了");
+                                try { $("#resBillTempleteSelect").data("kendoDropDownList").dataSource.read(); } catch (e) { }
+                            } else {
+                                jAlert("删除模板失败！" + result.Data, "知道了");
+                            }
+                        }, "json");
+                    }
+                });
+            },
+            //获取模板
+            GetTemplete: function (id, name) {
+                $.post("@Url.Action("ToTempleteDetailList", "ResBillSetting")", { id: id }, function (result) {
+                    if (result.Success) {
+                        $("#grid").data("kendoGrid").dataSource.data(result.Data);
+                        $("#isUseTemplete").val("true");
+                    } else {
+                        jAlert("获取模板信息失败！" + result.Data, "知道了");
+                    }
+                }, "json");
+            },
+        };
+    </script>
+}

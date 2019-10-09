@@ -1,0 +1,147 @@
+﻿@{
+    Layout = null;
+}
+
+<style>
+    .content {
+        margin: 0;
+        padding-left: 1rem;
+        font-size: 1.0rem;
+        background-color: #efefef;
+        padding-bottom:3rem;
+    }
+
+    .red {
+        color: red;
+    }
+
+    .green {
+        color: green;
+    }
+
+    .layui-layer-btn .layui-layer-btn0 {
+        width: calc(100% - 20px);
+        border-bottom-right-radius: 1rem;
+    }
+</style>
+<div class="content">
+    <table id="payMethodTable">
+        <tbody>
+            <tr class="folioAddPayment">
+                <td class="textright">房间号：</td>
+                <td class="textright"><input type="text" style="width:100%" class="k-textbox" id="roomNo" name="roomNo"></td>
+                <td class="textright"><a href="javascript:void(0);" class="k-button" onclick="getRommInfo();">查询</a><small>(可按回车键查询)</small></td>
+            </tr>
+            <tr>
+                <td class="textright red">是否允许挂房账：</td>
+                <td><span id="lblIsTransfer"></span></td>
+                <td class="textright green">客人名：</td>
+                <td><input type="text" readonly style="min-width:100%;background-color:rgb(245, 245, 245);" class="k-textbox" id="labelRoom" /></td>
+            </tr>
+            <tr class="folioAddPayment">
+                <td class="textright">抵店日期：</td>
+                <td><span id="lblArrDate"></span></td>
+                <td class="textright">余　额：</td>
+                <td><span id="lblBalance"></span></td>
+            </tr>
+            <tr class="folioAddPayment">
+                <td class="textright">授权金额：</td>
+                <td><span id="lblApprovalAmt"></span></td>
+                <td class="textright">信用调节额：</td>
+                <td><span id="lblApprovalAdj"></span></td>
+            </tr>
+            <tr class="folioAddPayment">
+                <td class="textright">可用余额：</td>
+                <td><span id="lblAvailableBalance"></span></td>
+                <td class="textright">挂账限额：</td>
+                <td><span id="lblLimitAmount"></span></td>
+            </tr>
+            <tr class="folioAddPayment">
+                <td class="textright">付款方式：</td>
+                <td><span id="lblPayment"></span></td>
+                <td class="textright">已挂账金额：</td>
+                <td><span id="lblChargeamt"></span></td>
+            </tr>
+            <tr class="folioAddPayment">
+                <td class="textright">房　价：</td>
+                <td><span id="lblExcutiveRate"></span></td>
+                <td class="textright">可用限额：</td>
+                <td><span id="lblEnableAmount"></span></td>
+            </tr>
+            <tr class="folioAddPayment">
+                <td class="textright">收银说明：</td>
+                <td><span id="lblCashRemark"></span></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="textright">备　注：</td>
+                <td colspan="3"><textarea class="k-textbox" id="lblRemark" style="width:100%;resize:none;" rows="5"></textarea></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    var url = "@Url.Action("GetRoomAccount", "Shared")";
+
+    $(function () {
+        //回车查询事件
+        $("#roomNo").keypress(function (e) {
+            if ($("#roomNo").val() != "" && e.keyCode == 13) {
+                getRommInfo();
+            }
+        })
+    })
+
+    //获取房账信息
+    function getRommInfo() {
+        var obj = $(roomNo);
+        if ($(obj).val() == "") {
+            layer.alert("请输入房号", { title: "快点云Pos提示"});
+            return;
+        }
+
+        $.ajax({
+                url: url,
+                type: "post",
+                data: { roomNo: $(obj).val() },
+                dataType: "json",
+                success: function (data) {
+                    if (data.Success) {
+                        if (data.Data === "{}") {
+                            $("#labelRoom,#lblRemark").val("");
+                            $("#payMethodTable tr td span").text("");
+                            layer.alert("未查询到房账信息", { title: "快点云Pos提示" });
+                            return;
+                        }
+                        var json = JSON.parse(data.Data);
+                        $("#lblArrDate").text(json.ArrDate);
+                        $("#lblBalance").text(json.Balance);
+                        $("#lblApprovalAmt").text(json.ApprovalAmt);
+                        $("#lblApprovalAdj").text(json.ApprovalAdj);
+                        $("#lblLimitAmount").text(json.LimitAmount);
+                        $("#lblPayment").text(json.Payment);
+                        $("#lblChargeamt").text(json.Chargeamt);
+                        $("#lblExcutiveRate").text(json.ExcutiveRate);
+                        $("#lblEnableAmount").text(json.EnableAmount);
+                        $("#lblRemark").val(json.Remark);
+                        $("#lblCashRemark").text(json.CashRemark);
+                        $("#labelRoom").val(json.GuestCname);
+                        $("#lblIsTransfer").text((json.isTransfer === "1"?"是":"否"));
+                        if (json.ApprovalAmt != undefined && json.ApprovalAdj != undefined) {
+                            $("#lblAvailableBalance").text((json.ApprovalAmt) + (json.ApprovalAdj));
+                        }
+
+                        $(obj).blur();
+                    }
+                    else {
+                        layer.alert(data.Data, { title: "快点云Pos提示"});
+                    }
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示"});
+                }
+            });
+    }
+</script>

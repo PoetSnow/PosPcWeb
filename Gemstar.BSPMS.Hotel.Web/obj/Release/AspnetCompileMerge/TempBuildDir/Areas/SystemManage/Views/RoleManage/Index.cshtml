@@ -1,0 +1,111 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+@{
+    ViewBag.Title = "角色";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "Roleid";
+    var ColumnName = "Authname";
+    var gridModel = new KendoGridCommonViewModel() { GridControlId = gridId, KeyColumnName = keyColumnName, EnableScrollable = true };
+    var gridHelper = new KendoGridEditInCellHtmlHelper<Role>(
+        Html,
+        Url,
+        gridModel,
+        c =>
+        {
+            c.Bound("Authname").Title("角色名称");
+            c.Bound("Seqid").Title("排序号");
+            c.Bound("").Title("操作").ClientTemplate("<button class='k-button k-grid-roleMember' onclick='roleMember(this)'><span></span>&nbsp;成员</button>&nbsp;&nbsp;<button class='k-button k-grid-roleAuth' onclick='roleAuth(this)'><span></span>&nbsp;操作权限</button>&nbsp;&nbsp;<button class='k-button k-grid-reportAuth' onclick='reportAuth(this)'><span></span>&nbsp;报表权限</button>&nbsp;&nbsp;<button class='k-button' onclick='itemConsumeAuth(this)'><span></span>&nbsp;消费录入权限</button>").Width(500);
+        },
+c => c.Id(w => w.Roleid)
+);
+}
+@(gridHelper.KendoGridEditInCell())
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridModel)
+    <style type="text/css">
+        .mt-10 {
+            margin-top: 20px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            window.onresize = onResize; onResize();
+            $("#@gridId .k-grid-header th:eq(1) .k-link").click();
+            $("#@gridId .k-grid-header th:eq(2) .k-link").attr("href", "javascript:void()");
+
+        });
+        //角色成员
+        function roleMember(obj) {
+            var gridId = "@gridId";
+            var keyName = "@keyColumnName";
+            var Name = "@ColumnName";
+            var grid = $("#" + gridId).data("kendoGrid");
+            var data = grid.dataItem($(obj).parent().parent());
+            var id = data[keyName];
+            var name = data[Name];
+            if (id == "" || id == undefined) {
+                jAlert("请先保存角色资料", "知道了");
+            } else {
+                top.openKendoWindow("【" + name + "】角色成员", "@Url.Action("Member")", { roleId: id })
+            }
+        }
+        //角色权限
+        function roleAuth(obj) {
+            var gridId = "@gridId";
+            var keyName = "@keyColumnName";
+            var Name = "@ColumnName";
+            var grid = $("#" + gridId).data("kendoGrid");
+            var data = grid.dataItem($(obj).parent().parent());
+            var id = data[keyName];
+            var name = data[Name];
+            if (id == "" || id == undefined) {
+                jAlert("请先保存角色资料", "知道了");
+            } else {
+                top.openKendoWindow("【" + name + "】操作权限", "@Url.Action("AuthManage")", { roleId: id })
+            }
+        }
+        //报表权限
+        function reportAuth(obj) {
+            var gridId = "@gridId";
+            var keyName = "@keyColumnName";
+            var Name = "@ColumnName";
+            var grid = $("#" + gridId).data("kendoGrid");
+            var data = grid.dataItem($(obj).parent().parent());
+            var id = data[keyName];
+            var name = data[Name];
+            if (id == "" || id == undefined) {
+                jAlert("请先保存角色资料", "知道了");
+            } else {
+                top.openKendoWindow("【" + name + "】报表权限", "@Url.Action("ReportRoleAuth")", { roleId: id })
+            }
+        }
+        //消费项目权限
+        function itemConsumeAuth(obj) {
+            var gridId = "@gridId";
+            var keyName = "@keyColumnName";
+            var Name = "@ColumnName";
+            var grid = $("#" + gridId).data("kendoGrid");
+            var data = grid.dataItem($(obj).parent().parent());
+            var id = data[keyName];
+            var name = data[Name];
+            if (id == "" || id == undefined) {
+                jAlert("请先保存角色资料", "知道了");
+            } else {
+                top.openKendoWindow("【" + name + "】消费录入权限", "@Url.Action("ItemConsumeRoleAuth")", { roleId: id })
+            }
+        }
+        function onResize() {
+            var allHeight = $("#mainContent", window.top.document).height();
+            var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 145;
+            $("#grid .k-grid-content").height(allHeight - showHeight);
+        }
+    </script>
+}

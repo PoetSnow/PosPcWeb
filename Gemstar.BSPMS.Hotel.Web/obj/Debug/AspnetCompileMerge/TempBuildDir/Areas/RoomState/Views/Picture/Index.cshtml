@@ -1,0 +1,1409 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntityProcedures
+@using Gemstar.BSPMS.Common.Extensions;
+@model Gemstar.BSPMS.Hotel.Web.Areas.RoomState.Models.Picture.IndexViewModel
+@{
+    ViewBag.Title = "房态图";
+
+    var roomStatuFilterInfos = new[] {
+        new { id="roomStatusIsEmpty",name = "空　房",spanClass = "new-avai-bg"},
+        new { id="roomStatusInUsing",name = "在住房",spanClass = "new-live-room-bg"},
+        new { id="roomStatusInContinue",name = "续住房",spanClass = "new-continue-room-bg-small"},
+        new { id="roomStatusIsArr",name = "预抵房",spanClass = "new-eta-room-bg-small"},
+        new { id="roomStatusIsDep",name = "预离房",spanClass = "new-pre-room-bg-small"},
+        new { id="roomStatusIsService",name = "维修房",spanClass = "new-maint-room-bg"},
+        new { id="roomStatusIsStop",name = "停用房",spanClass = "new-service-room-bg"},
+        new { id="roomStatusIsDirty",name = "脏　房",spanClass = "new-dirty-room-bg-small"},
+        new { id="roomStatusIsEan",name = "净　房",spanClass = "new-ean-room-bg-small"},
+        new { id="roomStatusIsClean",name = "清洁房",spanClass = "new-wait-room-bg-small"},
+        new { id="roomStatusIsHour",name = "钟点房",spanClass = "new-hour-room-bg-small"}
+        };
+}
+@section headerContent{
+    <link href="~/Content/jquery.contextMenu.css?r=201705021514" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery.ui.position.js"></script>
+    <script src="~/Scripts/jquery.contextMenu.js"></script>
+}
+<style type="text/css">
+    .editFormTable td:nth-child(odd) {
+        text-align: right;
+    }
+
+    .bg-left {
+        clear: both;
+    }
+</style>
+<div class="side-bar-l">
+    <form action="" method="post">
+        <ul class="list-f">
+
+            <li class="search-bar-f">
+                <input class="s-input-text" style="width:92%" id="roomStatusSearchKey" name="" type="text" placeholder="房号/客名/合约/主单名" />
+                <a class="search-icon" href="javascript:refreshRoomStatus();"></a>
+            </li>
+            <li>
+                @(Html.Kendo().DropDownList()
+            .Name("marketType")
+            .HtmlAttributes(new { @class = "s-input-text-new" })
+            .DataTextField("Text")
+            .DataValueField("Value")
+            .OptionLabel("全部市场分类")
+            .DataSource(s => { s.Read(r => r.Url(Url.Action("ListItemsForMarketCategory", new { rnd = new Random().NextDouble() }))); })
+            .Events(e => e.Change("customerSource_changed")).AutoBind(false))
+
+            </li>
+            <li>
+                @(Html.Kendo().DropDownList().Name("roomStatusSource")
+    .HtmlAttributes(new { @class = "s-input-text-new" })
+    .DataTextField("Name")
+    .DataValueField("Id")
+    .DataSource(e => { e.Read(r => r.Action("GetCustomerSourceSelectList", "CommonCodeManage", new { area = "SystemManage" })); })
+    .OptionLabel("全部客人来源")
+    .Events(e => e.Change("customerSource_changed"))
+                )
+            </li>
+            <li>
+                @(Html.Kendo().MultiSelect()
+              .Name("roomStatusRoomType")
+              .DataTextField("Value").DataValueField("Key")
+              .HtmlAttributes(new { @class = "s-input-text", @style = "height:initial" })
+              .DataSource(e => { e.Read(r => r.Action("GetRoomTypeSelectList", "RoomTypeManage", new { area = "SystemManage" })); })
+              .AutoClose(false)
+              .Placeholder("全部房型")
+              .Events(e => e.Close("roomtype_changed").Change("roomtype_changed"))
+                )
+                @*<div class="select-ico">
+                        <span unselectable="on" class="k-select"><span unselectable="on" class="k-icon k-i-arrow-s">select</span></span>
+                    </div>*@
+
+            </li>
+            <li>
+                @(Html.Kendo().MultiSelect().Name("roomStatusFeatures")
+    .AutoClose(false)
+    .Placeholder("全部房间特色")
+    .DataTextField("Name")
+    .DataValueField("Name")
+    .DataSource(e => { e.Read(r => r.Action("GetRoomFeaturesSelectList", "CommonCodeManage", new { area = "SystemManage" })); })
+    .Events(e => e.Change("roomFeature_changed"))
+    .HtmlAttributes(new { @class = "s-input-text", @style = "height:initial" })
+                )
+            </li>
+            <li>
+                @if (UrlHelperExtension.GetIsNotRoomForCookies(Request))
+                {
+                    <text>
+                        <input class="input-cbx" id="isNotRoom" name="roomStatus" type="checkbox" value="1" checked="checked" />
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        <input class="input-cbx" id="isNotRoom" name="roomStatus" type="checkbox" value="1" />
+                    </text>
+                }
+                <label for="">含假房</label>
+                <span class="color font-size" id="isNotRoom-1">0</span>
+            </li>
+            <li style="line-height:0px;margin-left:0px;"><hr style="background-color:#9bb8d6;height:1px;border:none;" /></li>
+            @foreach (var statuInfo in roomStatuFilterInfos)
+            {
+                if (statuInfo.id != "roomStatusIsClean" || Model.IsRoomCheck)
+                {
+                    <li id="@{@statuInfo.id}1">
+                        <input class="input-cbx" id="@statuInfo.id" name="roomStatus" type="checkbox" value="1" />
+                        <label for="@statuInfo.id">@statuInfo.name</label>
+                        <span class="color font-size" id="@statuInfo.id-1">0</span>
+                        <span class="roomStatus-imgs @statuInfo.spanClass new-right"></span>
+                    </li>
+                }
+            }
+
+        </ul>
+    </form>
+</div>
+<div class="side-bar-r">
+    <div class="room-statistics">
+        <div style="padding-top:5px;">
+            <a class="bnt-refresh room-re" href="javascript:void(0)" onclick="bntRefreshRoomStatus()"><i class="i-refresh  "></i><span>刷新</span></a>
+            <span class="span-right">总房数：<i id="infoTotalRoomQty">0</i></span>
+            <span>在住房：<i id="infoUsingQty">0</i></span>
+            <span>续住房：<i id="infoContinueQty">0</i></span>
+            <span>预抵房：<i id="infoArrQty">0</i></span>
+            <span>预离房：<i id="infoDepQty">0</i></span>
+            <span>维修房：<i id="infoServiceQty">0</i></span>
+            <span>停用房：<i id="infoStopQty">0</i></span>
+            <span>出租率：<i id="rentalRate">0%</i></span>
+            <i class="span-red">左击可看信息，双击在住可转客账，右击可按字母快速操作</i>
+        </div>
+    </div>
+    @(Html.Kendo().ListView<UpQueryRoomStatusResult>()
+                .Name("roomStatusListView")
+                .DataSource(d => d.Read(c => c.Action("GetRoomStatus", "Picture", new { area = "RoomState" }).Data("getRoomStatusQueryPara")))
+                .ClientTemplateId("roomStatusContentTemplate")
+                .TagName("div")
+                .Events(e => e.DataBound("roomStatusListView_dataBound"))
+                .HtmlAttributes(new { @class = "house-state-list", @style = "border:0 none" })
+    )
+
+</div>
+<div style="display:none;">
+    <!--房间维修或停用弹框-->
+    <div id="RoomServiceOrStopWindow">
+        <table class="editFormTable">
+            <tr style="display:none;">
+                <td colspan="4"><input type="hidden" id="txtRoomId" /><input type="hidden" id="txtType" /></td>
+            </tr>
+            <tr>
+                <td>房号</td>
+                <td colspan="3"><input type="text" id="txtRoomNo" class="k-textbox k-state-disabled bg-disabled" disabled="disabled" /></td>
+            </tr>
+            <tr>
+                <td>开始时间</td>
+                <td><input type="text" id="txtStartDate" class="k-textbox k-state-disabled bg-disabled" disabled="disabled" /></td>
+                <td>结束时间</td>
+                <td>@Html.Kendo().DateTimePicker().Name("txtEndDate").Format(Gemstar.BSPMS.Common.Extensions.DateTimeExtension.DateTimeWithoutSecondFormatStr).HtmlAttributes(new { onclick = "openKendoDatetimePicker(this)" })</td>
+            </tr>
+            <tr>
+                <td>原因</td>
+                <td colspan="3"><input type="text" id="txtReason" class="k-textbox" style="width:100%" /></td>
+            </tr>
+            <tr>
+                <td>备注</td>
+                <td colspan="3"><textarea id="txtRemark" class="k-textbox" rows="2" style="width:100%"></textarea></td>
+            </tr>
+            <tr>
+                <td>设置人</td>
+                <td><input type="text" id="txtCreateUser" class="k-textbox k-state-disabled bg-disabled" disabled="disabled" /></td>
+                <td>
+                    <span id="serviceSpan">维修人</span>
+                </td>
+                <td><input type="text" id="txtServiceUser" class="k-textbox" style="width:100%;" /></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align:left;padding-left:40px;height:29px;">
+                    @Html.Kendo().CheckBox().Name("IsRoomClean").HtmlAttributes(new { id = "IsRoomClean" }) <label for="IsRoomClean">房间清洁</label>
+
+                </td>
+                <td colspan="2" id="cleanTr" style="display:none;padding-left:10px;">
+                    服务员
+                    @(Html.Kendo().DropDownList().Name("CleanWaiter")
+                           .DataSource(s => { s.Read(r => r.Url(Url.Action("ListItemsWaiter"))); })
+                           .DataTextField("Name")
+                           .DataValueField("Id")
+                           .HtmlAttributes(new { style = "text-align: left;width:81%" })
+                           .OptionLabel("请选择")
+                    )
+                </td>
+            </tr>
+        </table>
+        <div class="formButtons" style="text-align:center;padding-top:8.12px;">
+            <button class="k-primary k-button" id="saveRoomServiceOrStopButton" role="button" data-role="button" onclick="RoomServiceOrStop.SetStatus()">保存</button>
+            <button class="k-primary k-button" id="endRoomServiceOrStopButton" role="button" data-role="button" onclick="RoomServiceOrStop.EndStatus()">结束维修或停用房</button>
+            <button class="k-primary k-button" id="closeRoomServiceOrStopButton" role="button" data-role="button" onclick="RoomServiceOrStop.Close()">取消</button>
+        </div>
+    </div>
+</div>
+
+<div style="display:none">
+    <!--脏房转净房设置服务员-->
+    <div id="dirtyWinodw">
+        <div>
+
+            <table class="editFormTable">
+                <tr>
+                    <td>服务员 </td>
+                    <td>
+                        @(Html.Kendo().DropDownList().Name("waiterList")
+                           .DataSource(s => { s.Read(r => r.Url(Url.Action("ListItemsWaiter"))); })
+                           .DataTextField("Name")
+                           .DataValueField("Id")
+                           .HtmlAttributes(new { style = "text-align: left;width:100%" })
+                           .OptionLabel("请选择")
+                        )
+                    </td>
+                </tr>
+                <tr>
+                    <td>备注</td>
+                    <td><textarea id="txtWaiterRemark" class="k-textbox" rows="2" style="width:100%"></textarea></td>
+                </tr>
+            </table>
+            <input type="hidden" id="hidRoomId" />
+            <input type="hidden" id="hidIsDirty" />
+            <input type="hidden" id="hidIsContinue" />
+            <input type="hidden" id="hidIsEmpty" />
+        </div>
+        <div class="formButtons" style="text-align:center;padding-top:8.12px;">
+            <button class="k-primary k-button" id="saveRoomServiceOrStopButton" role="button" data-role="button" onclick="DirtyWaiter.Save()">确定</button>
+
+            <button class="k-primary k-button" id="closeRoomServiceOrStopButton" role="button" data-role="button" onclick="DirtyWaiter.Close()">取消</button>
+        </div>
+    </div>
+</div>
+
+<div style="display:none">
+    @*-------修改房间描述-------*@
+    <div id="updateWinodw">
+        <div>
+            <table class="editFormTable">
+                <tr>
+                    <td>房间描述</td>
+                    <td><textarea id="txtUpdateRemark" class="k-textbox" rows="2" style="width:100%"></textarea></td>
+                </tr>
+            </table>
+        </div>
+        <div class="formButtons" style="text-align:center;padding-top:8.12px;">
+            <button class="k-primary k-button" id="saveUpdateButton" role="button" data-role="button" onclick="UpdateRoomRemark.Save()">确定</button>
+
+            <button class="k-primary k-button" id="closeUpdateButton" role="button" data-role="button" onclick="UpdateRoomRemark.Close()">取消</button>
+        </div>
+    </div>
+</div>
+
+<div style="display:none">
+    @*-------叫醒提醒-------*@
+    <div id="notifyWinodw">
+        <div>
+            <table class="editFormTable">
+                <tr>
+                    <td>提醒时间</td>
+                    <td colspan="2">
+                        @Html.Kendo().DateTimePicker().Name("notifyTime").Format(Gemstar.BSPMS.Common.Extensions.DateTimeExtension.DateTimeWithoutSecondFormatStr).HtmlAttributes(new { onclick = "openKendoDatetimePicker(this)", style = "width:90%;" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>提醒内容</td>
+                    <td colspan="2">
+                        @Html.TextArea("notifyContent", new { @class = "k-textbox", style = "width:90%;height:100px;" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>备注</td>
+                    <td colspan="2">
+                        @Html.TextArea("notifyRemarks", new { @class = "k-textbox", style = "width:90%;height:100px;" })
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" id="hidNotifyId" />
+        </div>
+        <div class="formButtons" style="text-align:center;padding-top:8.12px;">
+            <button class="k-primary k-button" id="saveNotifyButton" role="button" data-role="button" onclick="UpdateNotify.Save()">确定</button>
+
+            <button class="k-primary k-button" id="closeNotifyButton" role="button" data-role="button" onclick="UpdateNotify.Close()">取消</button>
+        </div>
+    </div>
+</div>
+<div style="display:none">
+    @Html.Partial("~/Areas/ResManage/Views/ResOrderCustomer/_ChangeRoom.cshtml")
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        //自动刷新功能
+        @if(Model.RefreshIntervalSeconds >= 30)
+        {
+            <text>
+        var refreshIntervalSeconds = @Model.RefreshIntervalSeconds;
+        setInterval(function(){refreshRoomStatus();},refreshIntervalSeconds*1000);
+        </text>
+        }
+        function customerSource_changed() {
+            refreshRoomStatus();
+        }
+        function roomtype_changed() {
+            refreshRoomStatus();
+        }
+        function roomFeature_changed() {
+            refreshRoomStatus();
+        }
+        //因分辨率造成的宽度影响
+        function calculationWidth() {
+            //计算列表长度
+            var roomStatusListView = $("#roomStatusListView").width();
+            var bg = $(".house-state-bg:first");
+            var dl =bg.outerWidth(true);//当前房态图为110px ，间距2px border 1
+            var margin = bg.outerWidth();
+            var sum = Math.floor(roomStatusListView / dl);
+            var width = sum * dl-(dl-margin);
+            $(".room-statistics").width(width);
+            //分辨率
+            var swidth = window.screen.width;
+            $('dd.icon-all').find('span:eq(4)').parent().css('padding-top', '0px');
+            if (swidth < 1680) {
+                $(".house-state-list").css("overflow-y", "auto");
+                $("body").css("overflow-y", "hidden");
+                $(".house-state-list").css("max-height", "550px");
+                $(".house-state-list").css("height", "550px");
+                if (swidth <= 1366) {
+                    $(".house-state-list").css("max-height", "450px");
+                    $(".house-state-list").css("height", "450px");
+                }
+                else if (swidth == 1400) {
+                    $(".house-state-list").css("max-height", "700px");
+                    $(".house-state-list").css("height", "700px");
+                }
+            }
+        }
+        var pictureLoad = {};
+
+        $(function () {
+            $("#IsRoomClean").click(function(){
+                if($("#IsRoomClean").is(':checked') && $("#endRoomServiceOrStopButton").css("display")!="none")
+                {
+                    $("#cleanTr").css("display","");
+                }else{  $("#cleanTr").css("display","none");}
+            })
+            //calculationWidth();
+            pictureLoad.onloadsum = 0;//数据源加载次数
+            pictureLoad.ListView = "";//房间楼层
+            pictureLoad.isDirty = "@Model.IsRoomCheck" == "True";
+            pictureLoad.TimeFn = null;//定义setTimeout执行方法
+            $("#roomStatusSearchKey").keydown(function (e) {
+                if (e.keyCode == 13) {
+                    refreshRoomStatus();
+                }
+            })
+            //房间状态条件中的互斥事件实现
+            $("#roomStatusIsEmpty").change(function (e) {
+                e.preventDefault();
+                roomStatusIsEmptyChanged();
+                refreshRoomStatus();
+            });
+            $("#roomStatusInUsing").change(function (e) {
+                e.preventDefault();
+                roomStatusInUsingChanged();
+                refreshRoomStatus();
+            });
+            //状态更改时自动刷新数据
+            $("#roomStatusIsDirty").change(function (e) {
+                e.preventDefault();
+                roomStatusIsDirChanged("roomStatusIsDirty")
+                refreshRoomStatus();
+            });
+            $("#roomStatusIsEan").change(function (e) {
+                e.preventDefault();
+                roomStatusIsDirChanged("roomStatusIsEan")
+                refreshRoomStatus();
+            })
+            $("#roomStatusInContinue").change(function(e){
+                e.preventDefault();
+                roomStatusInContinueChanged();
+                refreshRoomStatus();
+            })
+            $("#roomStatusIsClean").change(function (e) {
+                e.preventDefault();
+                refreshRoomStatus();
+            })
+            //$("#isRoom").change(function (e) {
+            //    e.preventDefault();
+            //    refreshRoomStatus();
+            //})
+            $("#isNotRoom").change(function (e) {
+                e.preventDefault();
+                refreshRoomStatus();
+                roomStatusisNotRoomChanged();
+            })
+            $("#roomStatusIsHour").change(function (e) {
+                e.preventDefault();
+                refreshRoomStatus();
+            })
+            $("#roomStatusIsArr").change(function (e) {
+                e.preventDefault();
+                refreshRoomStatus();
+            });
+            $("#roomStatusIsDep").change(function (e) {
+                e.preventDefault();
+                roomStatusIsDepChanged();
+                refreshRoomStatus();
+            });
+            $("#roomStatusIsService").change(function (e) {
+                e.preventDefault();
+                refreshRoomStatus();
+            });
+            $("#roomStatusIsStop").change(function (e) {
+                e.preventDefault();
+                refreshRoomStatus();
+            });
+            //房间的右键菜单,注意每个菜单项的icon属性必须有值，且不同，因为不同状态的房间出现不同菜单项时，就是根据此icon属性来确定菜单项显示与否的
+            var menuItems = {};
+            menuItems["checkIn"] = { name: "新入住(N)", icon: "check", accesskey: "N" };
+            menuItems["order"] = { name: "新预订(V)", icon: "order", accesskey: "V" };
+            menuItems["batchCheckIn"] = { name: "快速入住(W)", icon: "batchCheckIn", accesskey: "W" };
+            menuItems["batchOrder"] = { name: "快速预订(B)", icon: "batchOrder", accesskey: "B" };
+            @if (Model.IsPermanentRoom)
+            {
+                Output.WriteLine("menuItems['permanentRoomOrder'] = { name: '长包订租(L)', icon: 'permanentRoomOrder', accesskey: 'L' };");
+            }
+            menuItems["accounting"] = { name: "客单操作(G)", icon: "operation", accesskey: "G" };
+            menuItems["checkout"] = { name: "结账退房(A)", icon: "checkout", accesskey: "A" };
+            menuItems["changeToDirty"] = { name: "转为脏房(D)", icon: "dirty", accesskey: "D" };
+            menuItems["changeToEmpty"] = { name: "转为净房(C)", icon: "cleanj", accesskey: "C" };
+            menuItems["changeToService"] = { name: "维修/完成(R)", icon: "service", accesskey: "R" };
+            menuItems["changeToStop"] = { name: "停用/完成(S)", icon: "stop", accesskey: "S" };
+            menuItems["changeToUpdate"] = { name: "修改房间描述(X)", icon: "update", accesskey: "X" };
+            menuItems["notify"] = { name: "提醒设置(T)", icon: "notify", accesskey: "T" };
+            @if (Model.IsRoomCheck)
+             {
+                 Output.WriteLine("menuItems['changeToWaitClean'] = { name: '转为清洁房(F)', icon: 'clean', accesskey:'F' };");
+             }
+            $.contextMenu({
+                selector: '.house-state-bg',
+                events:{
+                    show: function (e) {
+                        showBorder(this);
+                        var isDirty = $(this).attr("data-IsDirty");
+                        var isEmpty = $(this).attr("data-isEmpty");
+                        var isService = $(this).attr("data-isService");
+                        var isStop = $(this).attr("data-isStop");
+                        var isRoomCheck = '@Model.IsRoomCheck'=="True";
+                        var isDirtyRoomCheckIn = '@Model.IsDirtyRoomCheckIn'=="True";
+                        var IsContainNewOrder = '@Model.IsContainNewOrder'=="True";
+                        e.$menu.find("li").each(function () {
+                            $(this).css("display", "block");
+                        });
+                        if(!IsContainNewOrder)
+                        {
+                            e.$menu.find("li.icon-check").css("display", "none");
+                            e.$menu.find("li.icon-order").css("display", "none");
+                        }
+                        //隐藏菜单项时，不能根据菜单项的位置，因为可能会更换位置，需要根据对应的class属性
+                        //空房
+                        if (isEmpty == 1) {
+                            e.$menu.find("li.icon-operation").css("display", "none");
+                            e.$menu.find("li.icon-checkout").css("display", "none");
+                            e.$menu.find("li.icon-notify").css("display", "none");
+                            if (isDirty == 1) {//空脏房
+                                if (!isDirtyRoomCheckIn) {
+                                    e.$menu.find("li.icon-check").css("display", "none");
+                                }
+                                e.$menu.find("li.icon-dirty").css("display", "none");
+                                if (isRoomCheck) {
+                                    e.$menu.find("li.icon-cleanj").css("display", "none");
+                                }
+                            }
+                            else if (isDirty == 2) {//空清洁房
+                                e.$menu.find("li.icon-check").css("display", "none");
+                                if (isRoomCheck) {
+                                    e.$menu.find("li.icon-clean").css("display", "none");
+                                }
+                            }
+                            else if (isDirty == 0) {//空净房
+                                e.$menu.find("li.icon-cleanj").css("display", "none");
+                            }
+                        }
+                            //在住
+                        else if (isEmpty == 0) {
+                            e.$menu.find("li.icon-check").css("display", "none");
+                            e.$menu.find("li.icon-service").css("display", "none");
+                            e.$menu.find("li.icon-stop").css("display", "none");
+                            if (isDirty == 0) {//在住净房
+                                e.$menu.find("li.icon-cleanj").css("display", "none");
+                            }
+                            else if (isDirty == 1) {//在住脏房
+                                e.$menu.find("li.icon-dirty").css("display", "none");
+                                if (isRoomCheck) {
+                                    e.$menu.find("li.icon-cleanj").css("display", "none");
+                                }
+                            }
+                            else if(isDirty==2){//在住清洁房
+                                if (isRoomCheck) {
+                                    e.$menu.find("li.icon-clean").css("display", "none");
+                                }
+                            }
+                        }
+                        //维修或者停用
+                        if (isService == 1 || isStop == 1) {
+                            e.$menu.find("li").each(function () {
+                                $(this).css("display", "none");
+                            })
+                            e.$menu.find("li.icon-update").css("display", "block");
+                            if (isService == 1) {
+                                e.$menu.find("li.icon-service").css("display", "block");
+                            }
+                            else {
+                                e.$menu.find("li.icon-stop").css("display", "block");
+                            }
+                            if (isDirty == 2) {//清洁
+                                e.$menu.find("li.icon-dirty").css("display", "block");
+                                e.$menu.find("li.icon-cleanj").css("display", "block");
+                            }
+                            else if (isDirty == 1) {//脏房
+                                if (isRoomCheck) {
+                                    e.$menu.find("li.icon-clean").css("display", "block");
+                                }
+                                else {
+                                    e.$menu.find("li.icon-cleanj").css("display", "block");
+                                }
+                            }
+                            else if (isDirty == 0) {//净 房
+                                e.$menu.find("li.icon-dirty").css("display", "block");
+                                if (isRoomCheck) {
+                                    e.$menu.find("li.icon-clean").css("display", "block");
+                                }
+                            }
+                        }
+                        closeRoomInfo();
+                    }
+                },
+                callback: function (key, options) {
+                    var roomid = options.$trigger.data("roomid");
+                    var funcName = eval("roomStatuContextMenu_" + key);
+                    if (typeof (funcName) == "function") {
+                        funcName(roomid, options.$trigger);
+                    } else {
+                        jAlert("不支持的操作类型", "知道了");
+                    }
+                },
+                items: menuItems
+            });
+            //空白处点击后关闭房间信息
+            $(document).click(function (e) {
+                var $target = $(e.target);
+                if ($target.hasClass("house-state-bg")) {
+                    return;
+                }
+                var parent = $target.parents(".house-state-bg");
+                if (parent.length > 0) {
+                    return;
+                }
+                closeRoomInfo();
+            });
+            //房间维修或停用弹框初始化
+            RoomServiceOrStop.Onload();
+            DirtyWaiter.Onload();
+            UpdateRoomRemark.Onload();
+            UpdateNotify.Onload();
+        });
+        //房态右键按钮响应事件，参数roomid为房间id，source为界面上的房态dom对象,方法名称统一用roomStatuContextMenu_menuKey(roomId,source)
+        //新入住
+        function roomStatuContextMenu_checkIn(roomId, source) {
+            //var isDirty = $(source).attr("data-isDirty");
+            //if (isDirty == 1 || isDirty == 2) {
+            //    jAlert("未转净房不允许入住", "知道了");
+            //    return;
+            //}
+            var url = ("@Url.Action("Index", "ResOrderAdd", new { area= "ResManage" })" + "?type=I&parameters=" + encodeURIComponent("roomid=" + roomId) + "&IsRoomStatus=3");
+            top.openResKendoWindow("客单", url, null, "20020", "新预订/入住");
+        }
+        //新预订
+        function roomStatuContextMenu_order(roomId,source){
+            var roomType = $(source).attr("data-roomtypeid");
+            var url = encodeURI("@Url.Action("Index", "ResOrderAdd", new { area= "ResManage" })" + "?type=R&parameters=" + encodeURIComponent("roomtypeid=" + roomType));
+            top.openResKendoWindow("客单", url, null, "20020", "新预订/入住");
+        }
+        //长包房预订
+        function roomStatuContextMenu_permanentRoomOrder(roomId,source){
+            var roomType = $(source).attr("data-roomtypeid");
+            var url = encodeURI("@Url.Action("Index", "ResOrderAdd", new { area= "PermanentRoom" })" + "?type=R&parameters=" + encodeURIComponent("roomtypeid=" + roomType + "&roomid=" + roomId));
+            top.openResKendoWindow("客单", url, null, "20020", "新预订/入住");
+        }
+        //提醒设置
+        function roomStatuContextMenu_notify(roomId,source){
+            UpdateNotify.Open(roomId);
+        }
+        //客房操作
+        function roomStatuContextMenu_accounting(roomId, source) {
+            var regid = $(source).attr("data-regid");
+            if ($.trim(regid) != "") {
+                var url = "@Url.Action("Index","ResOrderAdd", new { area = "ResManage" })" + "?type=I"  + "&id=" + regid+"&IsRoomStatus=3";
+                top.openResKendoWindow("客单", url, null, "20020", "新预订/入住");
+            }
+            else {
+                var url = ("@Url.Action("Index", "ResOrderAdd", new { area= "ResManage" })" + "?type=I&parameters=" + encodeURIComponent("roomid=" + roomId) + "&IsRoomStatus=3");
+                top.openResKendoWindow("客单", url, null, "20020", "新预订/入住");
+            }
+        }
+        function roomStatuContextMenu_changeToDirty(roomId, source) {
+            var isDirty = $(source).attr("data-isDirty");
+            $.post('@Url.Action("SetDirty")', { id: roomId,isdirty:isDirty }, function (data) {
+                if (data.Success) {
+                    refreshRoomStatus();
+                } else {
+                    //jAlert(data.Data, "知道了");
+                    ajaxErrorHandle(data);
+                }
+            },'json');
+        }
+        function roomStatuContextMenu_changeToWaitClean(roomId, source) {
+            var isDirty = $(source).attr("data-isDirty");
+            $.post('@Url.Action("SetWaitClean")', { id: roomId, isdirty:isDirty }, function (data) {
+                if (data.Success) {
+                    refreshRoomStatus();
+                } else {
+                    //jAlert(data.Data, "知道了");
+                    ajaxErrorHandle(data);
+                }
+            }, 'json');
+        }
+        function roomStatuContextMenu_changeToEmpty(roomId, source) {
+            var isDirty = $(source).attr("data-isDirty");
+            var isContinue = $(source).attr("data-isContinue");
+            var isEmpty = $(source).attr("data-isEmpty");
+            $("#hidRoomId").val(roomId);
+            $("#hidIsDirty").val(isDirty);
+            var isDirtyLog = "@Model.IsDirtyLog";
+            if (isDirtyLog == "True") {
+                $("#hidIsContinue").val(isContinue);
+                $("#hidIsEmpty").val(isEmpty);
+                DirtyWaiter.Open();
+            }
+            else {
+                // $("#hidIsContinue").val("");
+                DirtyWaiter.Save();
+            }
+        }
+        function roomStatuContextMenu_changeToService(roomId, source) {
+            RoomServiceOrStop.Open(roomId, 1);
+        }
+        function roomStatuContextMenu_changeToStop(roomId, source) {
+            RoomServiceOrStop.Open(roomId, 2);
+        }
+        //结账
+        function roomStatuContextMenu_checkout(roomId, source) {
+            var regid = $(source).attr("data-regid");
+            var url = "@Url.Action("Index","ResOrderAdd", new { area = "ResManage" })" + "?type=I"  + "&id=" + regid+"&IsRoomStatus=0";
+            top.openResKendoWindow("客单", url, null, "20020", "新预订/入住");
+        }
+        //批量入住
+        function roomStatuContextMenu_batchCheckIn(roomId, source) {
+            var roomtypeid = $(source).attr("data-roomtypeid");
+            var url = ("@Url.Action("Index", "ResOrderBatch", new { area= "ResManage", isCheckIn = 1 })") + "&roomTypeId=" + roomtypeid + "&roomId=" + roomId;
+            top.openIframeKendoWindow("快速入住", url, null, "20020", "快速入住");
+        }
+        //批量预订
+        function roomStatuContextMenu_batchOrder(roomId, source) {
+            var roomtypeid = $(source).attr("data-roomtypeid");
+            var url = ("@Url.Action("Index", "ResOrderBatch", new { area= "ResManage", isCheckIn = 0 })") + "&roomTypeId=" + roomtypeid + "&roomId=" + roomId;
+            top.openIframeKendoWindow("快速预订", url, null, "20020", "快速预订");
+        }
+        function roomStatuContextMenu_changeToUpdate(roomId, source) {
+            UpdateRoomRemark.Open(roomId);
+        }
+        //listview数据绑定完成后，注册点击后显示房间信息事件
+        function roomStatusListView_dataBound(da) {
+            $(".house-state-bg").click(function (e) {
+                e.preventDefault();
+                clearTimeout(pictureLoad.TimeFn);
+                var data = this;
+                pictureLoad.TimeFn = setTimeout(function () {
+                    showRoomInfo(data);
+                }, 200);
+            });
+            $(".house-state-bg").dblclick(function (e) {
+                e.preventDefault();
+                clearTimeout(pictureLoad.TimeFn);
+                var data = this;
+                pictureLoad.TimeFn = setTimeout(function () {
+                    showOrderFolio(data);
+                }, 200);
+            })
+            $(".house-state-bg").mousedown(function(e) {  
+                e.preventDefault();
+                clearTimeout(pictureLoad.TimeFn);
+                var data = this;
+                if (1 == e.which) {
+                    closeRoomInfo();
+                    pictureLoad.TimeFn = setTimeout(function() {
+                        e.stopImmediatePropagation();
+                        $(data).trigger($.Event("contextmenu", { data: e.data, pageX: e.pageX, pageY: e.pageY }));
+                    }, 1200);  
+                }
+                
+            });  
+            //没有开启时,去掉清洁房样式
+            var td = $(".new-wait-room-bg-small");
+            var isColean = "@Model.IsRoomCheck";
+            if (isColean=="False") {
+                for (var i = 0; i < td.length; i++) {
+                    $(td[i]).removeClass("new-wait-room-bg-small");
+                }
+            }
+            calcRoomStatusTotalInfos();
+            calculationWidth();
+            //注册可拖动
+            $(".house-state-bg").kendoDraggable({
+                hint: function(element) {
+                    return element.clone().addClass("house-state-drag");
+                }
+            });
+            $(".house-state-bg").kendoDropTarget({
+                drop: function(e) {
+                    var $source = $(e.draggable.currentTarget);
+                    var sourceRoomid = $source.data("roomid");
+                    var sourceRegid = $source.data("regid");
+                    if(!sourceRegid){
+                        jAlert("请拖动在住房来执行换房操作");
+                        return;
+                    }
+                    var $target = $(e.dropTarget);
+                    var targetRoomid = $target.data("roomid");
+                    var targetRegid = $target.data("regid");
+                    if(targetRegid){
+                        jAlert("拖动的目标房间必须是空房才可以");
+                        return;
+                    }
+                    var sourceRoomNo = $source.find("dt.default").text();
+                    var targetRoomNo = $target.find("dt.default").text();
+                    jConfirm("确定要将"+sourceRoomNo+"房换到"+targetRoomNo+"房吗？","确定换房","不换了",function(result){
+                        if(result){
+                            var url = "@Url.Action("Index","ResOrderAdd", new { area = "ResManage" })" + "?type=I"  + "&id=" + sourceRegid+"&IsRoomStatus=3&parameters="+encodeURIComponent("changeRoomid=" + targetRoomid);
+                            top.openResKendoWindow("客单", url, null, "20020", "新预订/入住");
+                        }
+                    });
+                }
+            });
+        }
+        //计算本次数据的所有统计数据
+        function calcRoomStatusTotalInfos() {
+            var aa = $("#roomStatusListView").data("kendoListView");
+            var listView = aa;//$("#roomStatusListView").data("kendoListView");
+            var allData = listView.dataSource.data();
+            var totalQty = allData.length; //总数
+            var NotQty = 0;//除去假房的总数
+            var NoUsingQty = 0;//除去假房的在住房
+            var NoEmptyQty = 0;//净房
+            var NoServiceQty = 0;
+            var NoStopQty = 0;
+            var NoContinueQty = 0;
+            var NoArrQty = 0;
+            var NoDepQty = 0;
+            var continueQty = 0;//续住房
+            var usingQty = 0;//在住房数
+            var arrQty = 0;//预抵房数
+            var deptQty = 0;//预离房数
+            var emptyQty = 0;//空房数
+            var serviceQty = 0;//维修房数
+            var stopQty = 0;//停用
+            var dirtyQty = 0;//脏房数
+            var cleanQty = 0;//清洁房数
+            var hourQty = 0;//钟点房
+            for (var i = 0; i < totalQty; i++) {
+                var item = allData[i];
+                if (item.IsArr == 1) {
+                    arrQty++;
+                    //if (!item.IsNotRoom)
+                    //    NoArrQty++;
+                }
+                if (item.IsDep == 1) {
+                    deptQty++;
+                    //if (!item.IsNotRoom)
+                    //    NoDepQty++;
+                }
+                if (item.IsEmpty == 0) {
+                    usingQty++;
+                    //if (!item.IsNotRoom) {
+                    //    NoUsingQty++;
+                    //}
+
+                }
+                if (item.IsEmpty == 1) {
+                    emptyQty++;
+
+                }
+                if (item.IsService == 1) {
+                    serviceQty++;
+                    //if (!item.IsNotRoom)
+                    //    NoServiceQty++;
+                }
+                if (item.IsStop == 1) {
+                    stopQty++;
+                    //if (!item.IsNotRoom)
+                    //    NoStopQty++;
+                }
+                if (item.IsDirty == 1) {
+                    dirtyQty++;
+                }
+                if (item.IsDirty == 2) {
+                    cleanQty++;
+                }
+                if (item.HouStatus != 0) {
+                    hourQty++;
+                }
+                if(item.IsContinue == 1)
+                {
+                    continueQty++;
+                }
+                //if (!item.IsNotRoom) {
+                //    NotQty++;
+                //    if (item.IsContinue == 1)
+                //        NoContinueQty++;
+                //}
+                if (item.IsDirty == 0 && item.IsService != 1 && item.IsStop != 1)
+                    NoEmptyQty++;
+            }
+            $("#roomStatusIsEmpty-1").text(emptyQty);
+            $("#roomStatusInUsing-1").text(usingQty);
+            $("#roomStatusIsArr-1").text(arrQty);
+            $("#roomStatusIsDep-1").text(deptQty);
+            $("#roomStatusIsService-1").text(serviceQty);
+            $("#roomStatusIsStop-1").text(stopQty);
+            $("#roomStatusIsDirty-1").text(dirtyQty);
+            $("#roomStatusIsEan-1").text(NoEmptyQty);
+            $("#roomStatusInContinue-1").text(continueQty);
+            if("@Model.IsRoomCheck"=="True"){
+                $("#roomStatusIsClean-1").text(cleanQty);
+            }
+            $("#roomStatusIsHour-1").text(hourQty);
+            //if (pictureLoad.onloadsum == 0) {//第一次加载数据源
+            $.post("@Url.Action("RoomQty")", null, function (data) {
+                if (data.Success) {
+                    NotQty = data.Data.NotQty;
+                    NoUsingQty = data.Data.NoUsingQty;
+                    NoServiceQty = data.Data.NoServiceQty;
+                    NoStopQty = data.Data.NoStopQty;
+                    NoContinueQty = data.Data.NoContinueQty;
+                    NoArrQty = data.Data.NoArrQty;
+                    NoDepQty = data.Data.NoDepQty;
+                    var NotRoomCount = data.Data.NotRoomCount;
+                    $("#infoTotalRoomQty").text(NotQty);
+                    $("#infoUsingQty").text(NoUsingQty);
+                    $("#infoServiceQty").text(NoServiceQty);
+                    $("#infoStopQty").text(NoStopQty);
+                    $("#infoContinueQty").text(NoContinueQty);
+                    $("#infoArrQty").text(NoArrQty);
+                    $("#infoDepQty").text(NoDepQty);
+                    if (NotQty - NoServiceQty - NoStopQty == 0) {
+                        $("#rentalRate").text("0.00%");
+                    }
+                    else {
+                        var rentalRate = (NoUsingQty / (NotQty - NoServiceQty - NoStopQty) * 100).toFixed(2);
+                        $("#rentalRate").text(rentalRate + "%");
+                    }
+                    //$("#isRoom-1").text(NotQty);
+                    $("#isNotRoom-1").text(NotRoomCount);
+                }
+            }, 'json');
+
+            //}
+            //pictureLoad.onloadsum++;
+        }
+        //点刷新按钮刷新房态是地，取相关参数传回后台进行房态过滤
+        function getRoomStatusQueryPara() {
+            return {
+                Keyword: $("#roomStatusSearchKey").val(),
+                Source: $("#roomStatusSource").data("kendoDropDownList").value(),
+                RoomType: $("#roomStatusRoomType").data("kendoMultiSelect").value(),
+                IsEmpty: $("#roomStatusIsEmpty")[0].checked ? 1 : 0,
+                InUsing: $("#roomStatusInUsing")[0].checked ? 1 : 0,
+                IsDirty: $("#roomStatusIsDirty")[0].checked ? 1 : 0,
+                IsClean: $("#roomStatusIsClean")[0] == undefined ? 0 : $("#roomStatusIsClean")[0].checked ? 1 : 0,
+                IsHour: $("#roomStatusIsHour")[0].checked ? 1:0,
+                IsArr: $("#roomStatusIsArr")[0].checked ? 1 : 0,
+                IsDep: $("#roomStatusIsDep")[0].checked ? 1 : 0,
+                IsService: $("#roomStatusIsService")[0].checked ? 1 : 0,
+                IsStop: $("#roomStatusIsStop")[0].checked ? 1 : 0,
+                Features: $("#roomStatusFeatures").data("kendoMultiSelect").value(),
+                MarketType: $("#marketType").val(),
+                IsEan: $("#roomStatusIsEan")[0].checked ? 1 : 0,
+                IsContinue: $("#roomStatusInContinue")[0].checked ? 1 : 0,
+                //IsRoom: 1,
+                IsNotRoom: $("#isNotRoom")[0].checked ? 1 : 0,
+            };
+        }
+        function refreshRoomStatus() {
+            var listView = $("#roomStatusListView").data("kendoListView");
+            listView.dataSource.read();
+        }
+        //刷新当前iframe
+        function bntRefreshRoomStatus() {
+            $(window.parent.document).find("#mainContent iframe")[0].src = $(window.parent.document).find("#mainContent iframe")[0].src
+        }
+        //在住房状态变更时取消选中空房
+        function roomStatusInUsingChanged() {
+            var objUsing = $("#roomStatusInUsing")[0];
+            if (objUsing.checked) {
+                var objEmpty = $("#roomStatusIsEmpty")[0];
+                objEmpty.checked = false;
+            }
+        }
+        //空房选中时取消选中在住房和续住房
+        function roomStatusIsEmptyChanged() {
+            var objEmpty = $("#roomStatusIsEmpty")[0];
+            if (objEmpty.checked) {
+                var objUsing = $("#roomStatusInUsing")[0];
+                objUsing.checked = false;
+                var objUsing = $("#roomStatusInContinue")[0];
+                objUsing.checked = false;
+            }
+        }
+        //续住选中时取消空房和预离房
+        function roomStatusInContinueChanged()
+        {
+            var objEmpty = $("#roomStatusInContinue")[0];
+            if (objEmpty.checked) {
+                var objUsing = $("#roomStatusIsEmpty")[0];
+                objUsing.checked = false;
+                var objUsing = $("#roomStatusIsDep")[0];
+                objUsing.checked = false;
+            }
+        }
+        //预离选中时取消续住按钮
+        function roomStatusIsDepChanged()
+        {
+            var objEmpty = $("#roomStatusIsDep")[0];
+            if (objEmpty.checked) {
+                var objUsing = $("#roomStatusInContinue")[0];
+                objUsing.checked = false;
+            }
+        }
+        //假房保存勾选状态
+        function roomStatusisNotRoomChanged()
+        {
+            var objIsNotRoom = $("#isNotRoom")[0].checked;
+            var isNotRoom = "isNotRoom";
+            if ($.cookie(isNotRoom) != objIsNotRoom) {
+                $.removeCookie(isNotRoom, { path: '/' });
+                $.cookie(isNotRoom, objIsNotRoom, { expires: 365, path: '/' });
+            }
+        }
+        //净房和脏房互斥
+        function roomStatusIsDirChanged(data) {
+            var result = document.getElementById(data);
+            if (result.checked && data == "roomStatusIsDirty") {
+                document.getElementById("roomStatusIsEan").checked = false;
+            }
+            else if (result.checked && data == "roomStatusIsEan") {
+                document.getElementById("roomStatusIsDirty").checked = false;
+            }
+        }
+        //关闭房间详细信息提示框
+        function closeRoomInfo() {
+            $("#roomStatuInfo").parent().remove();
+        }
+        //显示房间详细信息提示框
+        function showRoomInfo(objDiv) {
+            var isEmpty = $(objDiv).attr("data-isEmpty");
+            //div距离浏览器顶部的距离
+            var height = $(top.document).find(".divred").offset().top + $(objDiv).offset().top + objDiv.offsetHeight - $(window).scrollTop();
+            //浏览器可见区域的高度
+            var topHeight = top.document.documentElement.clientHeight;
+            closeRoomInfo();
+            var $roomStatuDiv = $(objDiv);
+            var roomId = $roomStatuDiv.data("roomid");
+            $('<dd><div id="roomStatuInfo" class="guest-info"></div></dd>').appendTo($roomStatuDiv);
+            //获取房间信息
+            $.get("@Url.Action("RoomInfo")", { id: roomId }, function (data) {
+                //设置高度
+                $("#roomStatuInfo").css("top", "0px");
+                if (topHeight - height < objDiv.offsetHeight+40) {//这30px是因为在住信息比较多的情况
+                    if (isEmpty == 1) {
+                        $("#roomStatuInfo").css("top", "-80px");
+                    }
+                    else {
+                        $("#roomStatuInfo").css("top", "-150px");
+                    }
+                }
+                $("#roomStatuInfo").html(data);
+                $("#roomStatuInfo").show();
+                //选中改变样式
+                showBorder(objDiv);
+                //在住关联房改变样式
+                if (data.indexOf("关联间数") > 0) {
+                    RelationRoom(objDiv);
+                }
+            },'html');
+        }
+        //双击房态，弹出客账
+        function showOrderFolio(obj) {
+            var isEmpty = $(obj).attr("data-isEmpty");
+            if (isEmpty == 0) {
+                var regid = $(obj).attr("data-regid");
+                var url = "@Url.Action("Index","ResOrderAdd", new { area = "ResManage" })" + "?type=I"  + "&id=" + regid+"&IsRoomStatus=4";
+                top.openResKendoWindow("客单", url, null, "20020", "新预订/入住");
+            } else {
+                var regid = $(obj).find("span.new-eta-room-bg-small").attr("data-regid");
+                if (regid != null && regid != undefined && regid.length > 0) {
+                    var url = "@Url.Action("Index","ResOrderAdd", new { area = "ResManage" })" + "?type=R"  + "&id=" + regid+"&IsRoomStatus=2";
+                    top.openResKendoWindow("客单", url, null, "20020", "预订维护");
+                }
+            }
+        }
+        //选中时改变样式
+        function showBorder(data) {
+            $(".house-state-bg").removeClass("border-color");
+            $(data).addClass("border-color")
+        }
+        //在住关联房改变样式
+        function RelationRoom(data) {
+            var resid = $(data).attr("data-resid");
+            var list = $(".house-state-list .house-state-bg");
+            for (var i = 0; i < list.length; i++) {
+                var div = list[i];
+                if ($(div).attr("data-resid") == resid) {
+                    $(div).addClass("border-color");
+                }
+            }
+        }
+        //脏房转净房填写服务员
+        var DirtyWaiter = {
+            WindowObj: $("#dirtyWinodw"),
+            Onload: function () {
+                DirtyWaiter.WindowObj.kendoWindow({ title: "脏房转净房",width:"350px", visible: false, modal: true})
+            },
+            Open: function () {
+                $("#txtWaiterRemark").val("");
+                var obj =DirtyWaiter.WindowObj.data("kendoWindow");
+                obj.center().open();
+            },
+            Save: function () {
+                var result="@Model.IsDirtyLog"=="True";
+                var roomId = $("#hidRoomId").val();
+                var isDirty = $("#hidIsDirty").val();
+                var waiter = $("#waiterList").val();
+                var isContinue = $("#hidIsContinue").val();
+                var remark = $("#txtWaiterRemark").val();
+                if (result && waiter=="") {
+                    jAlert("请选择服务员", "知道了");
+                    return;
+                }
+                if(isContinue=="0")
+                {
+                    isContinue=($("#hidIsEmpty").val()=="0" ? 1 : 0);
+                }
+                $.post('@Url.Action("SetClean")', { id: roomId, isdirty: isDirty, waiter: waiter, iscontinue: isContinue, remark: remark }, function (data) {
+                    if (data.Success) {
+                        if(result)
+                            DirtyWaiter.Close();
+                        refreshRoomStatus();
+                    } else {
+                        ajaxErrorHandle(data);
+                    }
+                }, 'json');
+            },
+            Close: function () { DirtyWaiter.WindowObj.data("kendoWindow").close(); },
+        };
+        //修改房间描述
+        var UpdateRoomRemark = {
+            WindowObj: $("#updateWinodw"),
+            RoomId:"",
+            Onload: function () {
+                UpdateRoomRemark.WindowObj.kendoWindow({ title: "修改房间描述", width: "350px", visible: false, modal: true })
+            },
+            Open: function (roomid) {
+                $.post("@Url.Action("UpdateRoomRemark")", { roomid: roomid }, function (data) {
+                    if (data.Success) {
+                        $("#txtUpdateRemark").val(data.Data);
+                        UpdateRoomRemark.RoomId = roomid;
+                        var obj = UpdateRoomRemark.WindowObj.data("kendoWindow");
+                        obj.center().open();
+                    }
+                    else {
+                        ajaxErrorHandle(data);
+                    }
+                }, "json")
+
+            },
+            Save: function () {
+
+                var remark = $("#txtUpdateRemark").val();
+
+                $.post('@Url.Action("SaveRoomRemark")', {roomid: UpdateRoomRemark.RoomId ,  remark: remark }, function (data) {
+                    if (data.Success) {
+                        UpdateRoomRemark.Close();
+                        refreshRoomStatus();
+                    } else {
+                        ajaxErrorHandle(data);
+                    }
+                }, 'json');
+            },
+            Close: function () { UpdateRoomRemark.WindowObj.data("kendoWindow").close(); },
+        };
+        //房间维修或停用
+        var RoomServiceOrStop = {
+            WindowObj: $("#RoomServiceOrStopWindow"),
+            Onload: function () {
+                RoomServiceOrStop.WindowObj.kendoWindow({title: "维修停用窗口", visible: false, modal: true, close: function () { RoomServiceOrStop.InitializationControlValue(); refreshRoomStatus(); }});
+            },
+            Open: function (roomId, type) {
+                if (roomId.length <= 0) { return; }
+                if (type == 2) {
+                    $("#serviceSpan").text("解除人");
+                    $("#txtServiceUser").attr("disabled", "disabled");
+                    $("#txtServiceUser").addClass("bg-disabled");
+                }
+                else {
+                    $("#serviceSpan").text("维修人");
+                    $('#txtServiceUser').removeAttr("disabled");
+                    $("#txtServiceUser").removeClass("bg-disabled");
+                }
+                RoomServiceOrStop.InitializationControlValue();
+                var url = "";if (type == 1) {url = "@Url.Action("GetRoomStatusService")";} else if (type == 2) {url = "@Url.Action("GetRoomStatusStop")";} else {return;}
+                $.post(url, { roomId: roomId }, function (data) {
+                    if (data.Success) {
+                        if (data.Data == null) {jAlert("错误信息", "知道了"); return;}
+                        RoomServiceOrStop.SetControlValue(data.Data);
+                        var obj = RoomServiceOrStop.WindowObj.data("kendoWindow");
+                        obj.setOptions({ title: (data.Data.Type == "1" ? "设置维修房" : "设置停用房") });
+                        obj.center().open();
+                        if($("#IsRoomClean").is(':checked') && $("#endRoomServiceOrStopButton").css("display")!="none")
+                        {
+                            $("#cleanTr").css("display","");
+
+                        }
+                    } else {//jAlert(data.Data, "知道了");
+                        ajaxErrorHandle(data);
+                    }
+                }, 'json');
+            },
+            InitializationControlValue: function () {
+                $("#txtRoomId").val("");
+                $("#txtType").val("");
+                $("#txtRoomNo").val("");
+                $("#txtStartDate").val("");
+                $("#txtEndDate").data("kendoDateTimePicker").value("");
+                $("#txtReason").val("");
+                $("#txtRemark").val("");
+                $("#CleanWaiter").data("kendoDropDownList").value("");
+                $("#IsRoomClean").prop("checked",false);
+                $("#cleanTr").css("display","none");
+                $("#txtCreateUser").val("");
+                $("#txtServiceUser").val("");
+                $("#endRoomServiceOrStopButton").css("display", "none");
+            },
+            SetControlValue: function (data) {
+                if (data == null || data == undefined) { return; }
+                $("#txtRoomId").val(data.RoomId);
+                $("#txtType").val(data.Type);
+                $("#txtRoomNo").val(data.RoomNo);
+                if (data.StartDateTime != null) {
+                    $("#txtStartDate").val(new Date(parseInt(data.StartDateTime.replace('/Date(', '').replace(')/', ''))).ToDateTimeWithoutSecondString());
+                } else {
+                    $("#txtStartDate").val("");
+                }
+                if (data.PlanEndDateTime != null) {
+                    $("#txtEndDate").data("kendoDateTimePicker").value(new Date(parseInt(data.PlanEndDateTime.replace('/Date(', '').replace(')/', ''))).ToDateTimeString());
+                } else {
+                    var nowdate = new Date();
+                    nowdate.setDate(nowdate.getDate() + 1);
+                    var enddate = nowdate.ToDateString() + " 12:00";
+                    $("#txtEndDate").data("kendoDateTimePicker").value(enddate);
+                }
+                $("#txtEndDate").data("kendoDateTimePicker").min($("#txtStartDate").val());
+                $("#txtReason").val(data.Reason);
+                $("#txtRemark").val(data.Remark);
+                $("#IsRoomClean").prop("checked",data.IsRoomClean);
+                $("#CleanWaiter").data("kendoDropDownList").value(data.CleanWaiter);
+                $("#txtCreateUser").val(data.CreateUser);
+                if (data.Id == null) {$("#endRoomServiceOrStopButton").css("display", "none");}
+                else {
+                    if (data.Type == 1) {
+                        $("#endRoomServiceOrStopButton").text("完成维修房");
+                        $("#txtServiceUser").val(data.ServiceUser);
+                    } else if (data.Type == 2) {
+                        $("#endRoomServiceOrStopButton").text("解除停用房");
+                    }
+                    $("#endRoomServiceOrStopButton").css("display", "inline-block");
+                }
+            },
+            GetControlValue: function () {
+                var obj = {
+                    RoomId: $("#txtRoomId").val(),
+                    Type: $("#txtType").val(),
+                    PlanEndDateTime: $("#txtEndDate").data("kendoDateTimePicker").value(),
+                    Reason: $("#txtReason").val(),
+                    Remark: $("#txtRemark").val(),
+                    IsRoomClean: $("#IsRoomClean").is(':checked'),
+                    CleanWaiter: $("#CleanWaiter").val(),
+                    ServiceUser: $("#txtServiceUser").val(),
+                };
+                if (obj.RoomId.length <= 0) {jAlert("房间ID错误", "知道了"); return null;}
+                if (obj.Type != "1" && obj.Type != "2") {jAlert("操作类型错误", "知道了"); return null;}
+                if (obj.PlanEndDateTime == null) {jAlert("请选择结束日期", "知道了"); return null;}else {obj.PlanEndDateTime = obj.PlanEndDateTime.ToDateTimeString();}
+                if (obj.Reason.length <= 0) {jAlert("请输入原因", "知道了"); return null;}
+                if ($("#IsRoomClean").is(':checked') &&  $("#endRoomServiceOrStopButton").css("display")!="none" && $("#CleanWaiter").val()=="") {jAlert("请选择服务员", "知道了"); return null;}
+                return obj;
+            },
+            SetStatus: function () {
+                var para = RoomServiceOrStop.GetControlValue();
+                if (para == null) { return; }
+                var url = "";if (para.Type == "1") {url = "@Url.Action("SetRoomStatusService")";} else if (para.Type == "2") {url = "@Url.Action("SetRoomStatusStop")";} else {return;}
+                $.post(url, para, function (data) {
+                    if (data.Success) {
+                        jAlert("设置成功！", "知道了", function () { RoomServiceOrStop.Close(); });
+                    } else { //jAlert(data.Data, "知道了");
+                        ajaxErrorHandle(data);
+                    }
+                }, 'json');
+            },
+            EndStatus: function () {
+                var para = RoomServiceOrStop.GetControlValue();
+                if (para == null) { return; }
+                var url = "";if (para.Type == "1") {url = "@Url.Action("EndRoomStatusService")";} else if (para.Type == "2") {url = "@Url.Action("EndRoomStatusStop")";} else {return;}
+                $.post(url, para, function (data) {
+                    if (data.Success) { 
+                        if (para.Type == "1" && data.Data!=1 && !$("#IsRoomClean").is(':checked') ) {
+                            //维修房完成时，设置为脏房
+                            roomStatuContextMenu_changeToDirty(para.RoomId, 1); 
+                        }else if($("#IsRoomClean").is(':checked')){
+                            $.post('@Url.Action("SetCleanEnd")', { id: para.RoomId, isdirty: 0}, function (data) {
+                                if (data.Success) { 
+                                   
+                                } else {
+                                    ajaxErrorHandle(data);
+                                }
+                            }, 'json'); 
+                        }
+                        RoomServiceOrStop.Close();
+                    } else { //jAlert(data.Data, "知道了");
+                        ajaxErrorHandle(data);
+                    }
+                }, 'json');
+            },
+            Close: function () {RoomServiceOrStop.WindowObj.data("kendoWindow").close();},
+        };
+
+        //叫醒提醒
+        var UpdateNotify = {
+            WindowObj: $("#notifyWinodw"),
+            RoomId:"",
+            Onload: function () {
+                UpdateNotify.WindowObj.kendoWindow({ title: "叫醒提醒设置", width: "550px", visible: false, modal: true })
+            },
+            Open: function (roomid) {
+                $.post("@Url.Action("NotifySet")", { roomid: roomid }, function (data) {
+                    if (data.Success) {
+                        $("#hidNotifyId").val("");
+                        $("#notifyContent").val("");
+                        $("#notifyRemarks").val("");
+                        $("#notifyTime").data("kendoDateTimePicker").value("");
+                        var obj = UpdateNotify.WindowObj.data("kendoWindow");
+                        UpdateNotify.RoomId = roomid;
+                        if(data.Data != null)
+                        {
+                            obj.setOptions({ title: ("修改提醒") });
+
+                            $("#hidNotifyId").val(data.Data.Id);
+                            //$("#notifyTime").val(data.Data.CallTime);
+                            $("#notifyContent").val(data.Data.Content);
+                            $("#notifyRemarks").val(data.Data.Remark);
+                            $("#notifyTime").data("kendoDateTimePicker").value(data.Data.CallTime);
+                        }
+                        else
+                        {
+                            obj.setOptions({ title: ("新增提醒") });
+                            $("#notifyTime").data("kendoDateTimePicker").value(new Date());
+                        }
+                        obj.center().open();
+
+                    }
+                    else {
+                        ajaxErrorHandle(data);
+                    }
+                }, "json")
+
+            },
+            Save: function () {
+                var notifyId = $("#hidNotifyId").val();
+                var notifyTime =$("#notifyTime").data("kendoDateTimePicker").value();
+
+                var notifyContent = $("#notifyContent").val();
+                var notifyRemarks = $("#notifyRemarks").val();
+
+                var notifyTime = $("#notifyTime").data("kendoDateTimePicker").value();
+                if (notifyTime) {
+                    if(notifyTime<new Date())
+                    {
+                        jAlert("输入的时间必须大于当前时间");return;
+                    }
+                    notifyTime = notifyTime.ToDateTimeString();
+                }
+                else
+                {
+                    jAlert("请输入正确时间");return;
+                }
+                if(notifyTime == "")
+                {
+                    jAlert("请输入叫醒时间");return;
+                }
+
+                $.post('@Url.Action("NotifyAdd")', {roomid: UpdateNotify.RoomId ,notifyId:notifyId,notifyTime:notifyTime,notifyContent:notifyContent,  notifyRemarks: notifyRemarks }, function (data) {
+                    if (data.Success) {
+                        jAlert(data.Data,"知道了");
+                        UpdateNotify.Close();
+                        refreshRoomStatus();
+                    } else {
+                        ajaxErrorHandle(data);
+                    }
+                }, 'json');
+            },
+            Close: function () { UpdateNotify.WindowObj.data("kendoWindow").close(); },
+        }
+    </script>
+    <script type="text/x-kendo-tmpl" id="roomStatusContentTemplate">
+        #
+        var floor=pictureLoad.ListView!=FloorName?"bg-left":"";
+        var bgClass="";
+        var bgColor="";
+        if(IsEmpty==1){
+        bgClass="new-avai-bg-large";
+        bgColor="new-avai-bg-large-color";
+        }
+        else{
+        bgClass="new-live-room-bg-large";
+        bgColor="new-live-room-bg-large-color";
+        }
+        if(IsService==1){
+        bgClass="new-maint-room-bg-large";
+        bgColor="new-maint-room-bg-large-color";
+        }
+        if(IsStop==1){
+        bgClass="new-service-room-bg-large";
+        bgColor="new-service-room-bg-large-color";
+        }
+        var ishouse=balance>0 && IsDep == 1 && IsDirty!=0 && IsArr==1 && HouStatus>0;
+        var keyHouse=ishouse?"style=padding-top:initial":"";
+        pictureLoad.ListView=FloorName;
+        #
+        <dl data-floor="#:FloorName#" class="house-state-bg roomStatus-imgs #:bgClass# #:bgColor# #:floor#" data-resid="#:ResId#" data-hour="#:HouStatus#" data-regid="#:RegId#" data-roomid="#:RoomId#" data-isDirty="#:IsDirty#" data-isEmpty="#:IsEmpty#" data-isService="#:IsService#" data-isStop="#:IsStop#" data-roomtypeid="#:RoomTypeId#" data-isContinue="#:IsContinue#">
+            <dt class="default">#:RoomNo#</dt>
+            <dt class="roomtype">#:ShortName#</dt>
+            <dd class="dd-center"><span class="span-block"> #:GuestName#</span></dd>
+            # if(ishouse){#
+            <dd class="icon-all" style="padding-top:initial">
+                #if(HouStatus==1){#
+                <span class="new-hour-room-bg-small"></span>
+                #}#
+                #if(HouStatus==2){#
+                <span class="new-hour-room-remind-bg-small"></span>
+                #}#
+            </dd>
+            #}#
+            <dd class="icon-all" #=keyHouse#>
+                # if(balance>0){ #
+                <span class="new-arrears-room-bg-small"></span>
+                # } #
+                # if(IsStop==1){ #
+                <span class="new-service-room-bg-small"></span>
+                # } #
+                # if(IsService==1){ #
+                <span class="new-maint-room-bg-small"></span>
+                # } #
+                # if(IsDep == 1){ #
+                <span class="new-pre-room-bg-small"></span>
+                # } #
+                # if(IsContinue==1){ #
+                <span class="new-continue-room-bg-small"></span>
+                # } #
+                # if(IsDirty==1){ #
+                <span class="new-dirty-room-bg-small"></span>
+                # } #
+                # if(IsArr == 1){ #
+                <span class="new-eta-room-bg-small" data-regid="#:ArrId#"></span>
+                # } #
+                # if(IsDirty==2 &&pictureLoad.isDirty){ #
+                <span class="new-wait-room-bg-small"></span>
+                # } #
+                #if(!ishouse){
+                if(HouStatus==1){#
+                <span class="new-hour-room-bg-small"></span>
+                #}#
+                #if(HouStatus==2){#
+                <span class="new-hour-room-remind-bg-small"></span>
+                #}
+                }#
+                # if(IsBirth==1){ #
+                <span class="new-birth-room-bg-small"></span>
+                # } #
+            </dd>
+        </dl>
+
+    </script>
+}

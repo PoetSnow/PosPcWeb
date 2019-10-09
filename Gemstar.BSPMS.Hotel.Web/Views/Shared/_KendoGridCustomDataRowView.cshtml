@@ -1,0 +1,94 @@
+﻿@using System.Data;
+@using Gemstar.BSPMS.Hotel.Web.Models
+@using System.Web.Script.Serialization
+@model KendoGridCustomDataRowViewModel
+
+<style>
+
+    .selectRowBorder {
+        width: 0;
+        height: 0;
+        border-top: 7px solid red;
+        border-right: 7px solid transparent;
+        border-bottom: 0px solid transparent;
+        border-left: 0px solid red;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: none;
+    }
+
+    tr.k-state-selected span.selectRowBorder {
+        display: block !important;
+    }
+</style>
+
+@{
+    if (Model.HtmlAttributes == null)
+    {
+        Model.HtmlAttributes = new Dictionary<string, object>();
+    }
+    //处理状态列，如果有值则将其添加到html属性中
+    if (!string.IsNullOrWhiteSpace(Model.StatusColumnName))
+    {
+
+        Model.HtmlAttributes.Add("data-status", Model.StatusColumnName);
+    }
+
+    var colsSetting = GridColumnsManager.GetGridColumnSettings(Model.Area, Model.Controller, Model.Action, Model.DefaultColumnSettings);
+    var series = new JavaScriptSerializer();
+    var jsColumns = series.Serialize(colsSetting);
+}
+@(Html.Kendo().Grid<DataRowView>()
+            .Name(Model.GridControlId)
+            .Columns(cols => { GridColumnsManager.BoundColumns(cols, colsSetting); })
+            .ColumnMenu()
+            .Events(e => { e.DataBound("onDataBound"); })
+            .Filterable()
+            .Reorderable(c => c.Columns(true))
+            .Resizable(c => c.Columns(true))
+            .Scrollable(c => c.Height("100%").Enabled(Model.EnableScrollable))
+            .Sortable()
+            .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+            .Pageable(pageable => pageable.PageSizes(Gemstar.BSPMS.Common.Tools.CommonHelper.PageSizes))
+            .Pageable(pageable => pageable.Enabled(Model.EnableFunctionForPage))
+            .Pageable(pageable => pageable.Messages(c => c.ItemsPerPage("")))
+            .DataSource(dataSource =>
+            {
+                dataSource.Ajax()
+                .Read(read => read.Action("AjaxQuery", "Query", new { area = "" }).Data(Model.JsFuncForGetAjaxQueryPara))
+                .ServerOperation(Model.ServerOperation).PageSize(Gemstar.BSPMS.Common.Extensions.UrlHelperExtension.GetPageSizeForCookies(Request));
+                if (Model.Aggregates != null)
+                {
+                    dataSource.Ajax().Aggregates(Model.Aggregates);
+                }
+            })
+            .ToolBar(c =>
+            {
+                c.Custom().Name("btnManageGridColumns").Text("设置列").HtmlAttributes(new { id = "btnManageGridColumns", onclick = "btnManageGridColumnsClicked('" + Model.GridControlId + "')", href = "javascript:void(0);", style = "float:right;margin-right:40px;" });
+
+                if (Model.CustomToolbar != null && Model.EnableCustomToolbarForFirst)
+                {
+                    Model.CustomToolbar(c);
+                }
+                if (Model.EnableFunctionForQuery) c.Custom().Name("commonQuery").Text("查询").HtmlAttributes(new { onclick = "showCommonQueryWindow()", href = "javascript:void(0);" });
+                if (Model.EnableFunctionForAdd) c.Custom().Name("addGridItem").Text("增加").HtmlAttributes(new { onclick = "addGridItem()", href = "javascript:void(0);" });
+                if (Model.EnableFunctionForDelete) c.Custom().Name("batchDelete").Text("删除").HtmlAttributes(new { onclick = "batchDelete('" + Model.GridControlId + "','" + Model.KeyColumnName + "','" + Url.Action("BatchDelete") + "')", href = "javascript:void(0);" });
+                if (Model.EnableFunctionForEnable) c.Custom().Name("enable").Text("启用").HtmlAttributes(new { onclick = "enable('" + Model.GridControlId + "','" + Model.KeyColumnName + "','" + Url.Action("Enable") + "')", href = "javascript:void(0);" });
+                if (Model.EnableFunctionForDisable) c.Custom().Name("disable").Text("禁用").HtmlAttributes(new { onclick = "disable('" + Model.GridControlId + "','" + Model.KeyColumnName + "','" + Url.Action("Disable") + "')", href = "javascript:void(0);" });
+                if (Model.UpdateScores) c.Custom().Name("updateScore").Text("批量积分调整").HtmlAttributes(new { onclick = "updateScore('" + Model.GridControlId + "','" + Model.KeyColumnName + "','" + Url.Action("UpdateScore") + "')", href = "javascript:void(0);", style = "float:right;margin-right:10px;" });
+                if (Model.UpdateSales) c.Custom().Name("updatesales").Text("更换业务员").HtmlAttributes(new { onclick = "updateSale('" + Model.GridControlId + "','" + Model.KeyColumnName + "','" + Url.Action("UpdateSales") + "')", href = "javascript:void(0);", style = "float:right;" });
+                if (Model.DelayValidDate) c.Custom().Name("delay").Text("批量延期").HtmlAttributes(new { onclick = "delayValidDate('" + Model.GridControlId + "','" + Model.KeyColumnName + "','" + Url.Action("Delay") + "')", href = "javascript:void(0);", style = "float:right;" });
+                if (Model.CustomToolbar != null && !Model.EnableCustomToolbarForFirst)
+                {
+                    Model.CustomToolbar(c);
+                }
+            })
+            .HtmlAttributes(Model.HtmlAttributes)
+)
+<form action="@Url.Action("Index", "GridColumnsManage", new { area = "" })" method="post" id="@string.Format("formGridColumns_{0}",Model.GridControlId)" style="display:none">
+    <input type="hidden" name="setArea" value="@Model.Area" />
+    <input type="hidden" name="setController" value="@Model.Controller" />
+    <input type="hidden" name="setAction" value="@Model.Action" />
+    <input type="hidden" name="columns" value="@jsColumns" />
+</form>

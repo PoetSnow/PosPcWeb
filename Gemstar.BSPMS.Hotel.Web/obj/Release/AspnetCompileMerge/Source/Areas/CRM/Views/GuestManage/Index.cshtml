@@ -1,0 +1,95 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "客历";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForEdit = false,
+        EnableScrollable = true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("guestName").Title("客人姓名");
+            c.Bound("nation").Title("国籍");
+            c.Bound("birthday").Title("生日");
+            //c.Bound("cerid").Title("证件号");
+            //c.Bound("mobile").Title("手机号");
+            //c.Bound("balanceUse").Title("余额_总使用");
+            //c.Bound("nigths").Title("累计间夜数");
+            c.Bound("joinDate").Title("首次入住日期");
+            c.Bound("settleBsnsdate").Title("最后离店日期");
+            c.Bound("roomNo").Title("最后结账房号");
+            c.Bound("nights").Title("累计间夜数");
+            c.Bound("amount").Title("累计消费金额");
+            //c.Command(e => e.Custom("详情").HtmlAttributes(new { onclick = "gridItemDetail(this)" })).Title("操作");
+        },
+        CustomToolbar = c =>
+        {
+        //c.Custom().Name("comfirmtexts").Text("<div style='display: inline-block;float:left;'><a class='select-icon' href='javascript: vagueSelect(); '></a><input class='k-textbox' id='txtCondition' type='text' placeholder=姓名/手机号 style='height: 31px; '> </div>").HtmlAttributes(new { id = "comfirmtexts", href = "javascript:void(0);", style = "cursor:default;" });
+        //c.Custom().Name("comfirmtext").Text("<font style='margin-top:5px;color:red;float: right; margin-right: 10px;'>双击进入详情操作</font>").HtmlAttributes(new { id = "comfirmtext", href = "javascript:void(0);", style = "cursor:default;" });
+        c.Template(@<text>
+        <input class="k-textbox" id="txtCondition" type="text" placeholder="姓名/手机号" style="height:31px;">
+        <a class="select-icon" href="javascript:vagueSelect();"></a>
+        <a class="k-button k-button-icontext k-grid-commonQuery" href="javascript:void(0);" onclick="showCommonQueryWindow()"><span class="k-icon k-i-search"></span>综合查询</a>
+        <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addGridItem()"><span class="k-icon k-add"></span>增加</a>
+        <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="batchDelete('grid','id','@Url.Action("BatchDelete")')"><span class="k-icon k-i-unpin"></span>删除</a>
+        <a class="k-button-icontext k-grid-edittext" href="javascript:void(0);" id="edittext" style="cursor:default;"><span></span><font style="color:red;margin-top: 8px;">双击进入详情操作</font></a>
+        </text>);
+        }
+    };
+}
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+    $(function () {
+        window.onresize = onResize; onResize();
+        $("#comfirmtext,#comfirmtexts").removeClass("k-button");
+        $("#grid").on("dblclick", "tr.k-state-selected", function (e) {
+            e.preventDefault();
+            editGridItems(this);
+        });
+        $("#txtCondition").keydown(function (e) {
+            if (e.keyCode == 13) {
+                vagueSelect();
+            }
+        })
+    });
+    function vagueSelect() {
+        var condition = $("#txtCondition").val();
+        var result = "@@h99condition=" + condition;
+        GetControl("#commonQueryParameterValues").val(result);
+        refreshGrid();
+    }
+    function refreshGrid() {
+        var grid = $("#grid").data("kendoGrid");
+        grid.dataSource.page(1);
+        grid.dataSource.read();
+    }
+    //双击编辑订单
+    function editGridItems(row) {
+        var gridId = "grid";
+        var keyName = "RegId";
+        var grid = $("#" + gridId).data("kendoGrid");
+        var data = grid.dataItem($(row));
+        editGridItemInIframe(data.id);
+    }
+    function editGridItemInIframe(id) {
+        var url = "@Url.Action("Detail")" + "?id=" + id;
+        top.openKendoWindow("客历详情", url, null);
+    }
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 55;
+        $("#grid .k-grid-content").height(allHeight - showHeight);
+    }
+</script>

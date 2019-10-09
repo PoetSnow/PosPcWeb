@@ -1,0 +1,93 @@
+﻿<style>
+    .container, .container dl {
+        background-color: #4a4d59;
+    }
+
+        .container dt {
+            padding: 0;
+            margin-bottom: 0.3em;
+        }
+
+        .container dd input {
+            font-size: 2.5em;
+            padding: 0 0.5em;
+            margin: 0.1em;
+            width: 1em;
+            height: 2em;
+            float: left;
+            border-radius: 0.1em;
+            border: 1px solid #111111;
+        }
+
+            .container dd input:nth-child(5n+1) {
+                clear: both;
+            }
+
+    .number {
+        color: #fff;
+        background-color: #03b186;
+    }
+
+    .letter {
+        color: #fff;
+        background-color: #646464;
+    }
+
+    .function {
+        color: #fff;
+        background-color: #1f8fc1;
+    }
+
+    .okButton {
+        border: 1px solid #808080;
+        background-color: #fb5a5c;
+    }
+</style>
+<dl class="container">
+    <dt>
+
+    </dt>
+    <dt>
+        <input id="txtKeyword" class="k-textbox" type="text" style="width:64%;background-color:#ececec" />
+        <input id="btnOpenTabtypeWindow" type="button" class="k-primary k-button" value="确定" onclick="keywordQuery('inputWindow', $('#txtKeyword').val())" />
+        <input id="btnCloseTabtypeWindow" type="button" class="k-primary k-button" value="取消" onclick="closeWindow('inputWindow')" />
+    </dt>
+    <dd>
+        @{
+            string[] letter = new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", ".", "/", "退格", "清空" };
+            for (int i = 0; i < letter.Length; i++)
+            {
+                if (letter[i].IndexOf("退格") == -1 && letter[i].IndexOf("清空") == -1)
+                {
+                    if (i < 10)
+                    {
+                        <input id="btnKey+@letter[i]" type="button" value="@letter[i]" onclick="input('@letter[i]')" class="number" />
+                    }
+                    else
+                    {
+                        <input id="btnKey+@letter[i]" type="button" value="@letter[i]" onclick="input('@letter[i]')" class="letter" />
+                    }
+                }
+                else
+                {
+                    <input id="btnKey+@letter[i]" type="button" value="@letter[i]" onclick="input('@letter[i]')" style="float:left;font-size: 1.5em;width: 2.4em;height: 3.3em;" class="function" />
+                }
+            }
+        }
+    </dd>
+</dl>
+
+<script type="text/javascript">
+    function input(value) {
+        var val = $("#txtKeyword").val();
+        if (value.indexOf("退格") == -1 && value.indexOf("清空") == -1) {
+            $("#txtKeyword").val(val + value);
+        }
+        else if (value.indexOf("退格") > -1) {
+            $("#txtKeyword").val(val.replace(/.$/, ''));
+        }
+        else if (value.indexOf("清空") > -1) {
+            $("#txtKeyword").val("");
+        }
+    }
+</script>

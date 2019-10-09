@@ -1,0 +1,107 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@using System.Data;
+@{
+    ViewBag.Title = "合约单位消费记录";
+    var GridControlId = "grid_companytrans";
+}
+
+<style>
+    .employee-details ul {
+        list-style: none;
+        font-style: italic;
+        margin: 15px;
+        padding: 0;
+    }
+
+        .employee-details ul li {
+            margin: 0;
+            line-height: 1.7em;
+        }
+
+    .employee-details label {
+        display: inline-block;
+        width: 90px;
+        padding-right: 10px;
+        text-align: right;
+        font-style: normal;
+        font-weight: bold;
+    }
+</style>
+
+<script id="template" type="text/kendo-tmpl">
+    <div class="k-widget k-grid k-reorderable">
+        <div class="employee-details">
+            <ul>
+                <li><label>日期:</label>#= cDate #</li>
+                <li><label>营业日:</label>#= Bsnsdate #</li>
+                <li><label>操作员:</label>#= inputUser #</li>
+                <li><label>交易说明:</label>#= type #</li>
+                <li><label>营业点:</label>#= outletCode #</li>
+                <li><label>交易金额:</label>#= amount #</li>
+                <li><label>备注:</label>#= remark #</li>
+                <li><label>单号:</label>#= invno #</li>
+                <li><label>外部参考:</label>#= refno #</li>
+                <li><label>付款方式:</label>#= itemid #</li>
+                <li><label>间夜数:</label>#= nigths #</li>
+                <li><label>房间号:</label>#= roomno #</li>
+                <li><label>房间类型:</label>#= roomTypeName #</li>
+            </ul>
+        </div>
+    </div>
+</script>
+
+<script type="text/javascript">
+    function getQueryParas1()
+    {
+        return {
+            GridControlId: "@GridControlId",
+            QueryProcedureName: "up_list_companyTrans",
+            QueryParameterValues: "@@99companyid=@ViewBag.CompanyId"
+        };
+    }
+</script>
+
+@(Html.Kendo().Grid<DataRowView>()
+        .Name(GridControlId)
+        .Columns(c =>
+        {
+            c.Bound("settleBsnsdate").Title("结账营业日").Width(120);
+            c.Bound("name").Title("营业点");
+            c.Bound("regid").Title("账号");
+            c.Bound("arrDate").Title("入住时间").Width(120);
+            c.Bound("depDate").Title("离店时间").Width(120);
+            c.Bound("nights").Title("间夜数");
+            c.Bound("amount").Title("消费金额");
+            c.Bound("rateName").Title("价格代码");
+            c.Bound("rate").Title("房价");
+            c.Bound("roomTypeName").Title("房型");
+            c.Bound("roomNo").Title("房号");
+            c.Bound("remark").Title("备注").Width(130);
+        })
+        .HtmlAttributes(new { style = "height:410px;margin:10px;max-height:410px;" })
+        .ColumnMenu()
+        .Filterable()
+        .Reorderable(c => c.Columns(true))
+        .Resizable(c => c.Columns(true))
+        .Scrollable(c => c.Height("100%"))
+        .Sortable()
+        .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+        .Pageable(pageable => pageable.PageSizes(Gemstar.BSPMS.Common.Tools.CommonHelper.PageSizes))
+        .Pageable(pageable => pageable.Messages(c => c.ItemsPerPage("")))
+        //.ClientDetailTemplateId("template")
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("AjaxQuery", "Query", new { area = "" }).Data("getQueryParas1"))
+            .ServerOperation(false).PageSize(Gemstar.BSPMS.Common.Extensions.UrlHelperExtension.GetPageSizeForCookies(Request))
+        )
+)
+
+
+<script type="text/javascript">
+
+    $(function () {
+        $("#newCommonKendoWindow").parent(".k-widget.k-window").css("width", "1200px");
+    })
+</script>

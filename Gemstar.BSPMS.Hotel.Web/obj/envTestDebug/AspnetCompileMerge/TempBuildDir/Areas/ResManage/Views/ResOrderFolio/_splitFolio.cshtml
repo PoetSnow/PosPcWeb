@@ -1,0 +1,66 @@
+﻿@*拆账*@
+<div id="orderSplitFolioWindow">
+    <div class="k-grid k-widget" style="max-height: 476px;overflow:hidden;">
+        <div class="k-grid-header" style="padding-right: 17px;">
+            <div class="k-grid-header-wrap k-auto-scrollable">
+                <table>
+                    <colgroup>
+                        <col style="width:40px;">
+                        <col style="width:85px;">
+                        <col>
+                        <col style="width:85px;">
+                        <col style="width:115px;">
+                        <col style="width:115px;">
+                        <col style="width:115px;">
+                        <col style="width:115px;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="k-header" colspan="4" style="vertical-align: middle;" title="账务拆分为几份">
+                                <input type="radio" name="orderSplitFolio_quantity" id="orderSplitFolio_quantity2" class="k-radio" value="2" checked="checked"><label class="k-radio-label" for="orderSplitFolio_quantity2">2份</label>&nbsp;&nbsp;
+                                <input type="radio" name="orderSplitFolio_quantity" id="orderSplitFolio_quantity3" class="k-radio" value="3"><label class="k-radio-label" for="orderSplitFolio_quantity3">3份</label>&nbsp;&nbsp;
+                                <input type="radio" name="orderSplitFolio_quantity" id="orderSplitFolio_quantity4" class="k-radio" value="4"><label class="k-radio-label" for="orderSplitFolio_quantity4">4份</label>&nbsp;&nbsp;
+                            </th>
+                            <th class="k-header"><input class="orderSplitFolio_bill" id="orderSplitFolio_bill1" style="width:100px;" title="拆分后的第一份账务属于哪个账单" /></th>
+                            <th class="k-header"><input class="orderSplitFolio_bill" id="orderSplitFolio_bill2" style="width:100px;" title="拆分后的第二份账务属于哪个账单" /></th>
+                            <th class="k-header"><input class="orderSplitFolio_bill" id="orderSplitFolio_bill3" style="width:100px;" title="拆分后的第三份账务属于哪个账单" /></th>
+                            <th class="k-header"><input class="orderSplitFolio_bill" id="orderSplitFolio_bill4" style="width:100px;" title="拆分后的第四份账务属于哪个账单" /></th>
+                        </tr>
+                        <tr>
+                            <th class="k-header"></th>
+                            <th class="k-header">房号</th>
+                            <th class="k-header">项目</th>
+                            <th class="k-header" title="账务金额拆分为 金额1+金额2+金额3+金额4">金额</th>
+                            <th class="k-header" title="拆分后的第一份账务">金额1</th>
+                            <th class="k-header" title="拆分后的第二份账务">金额2</th>
+                            <th class="k-header" title="拆分后的第三份账务">金额3</th>
+                            <th class="k-header" title="拆分后的第四份账务">金额4</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="k-grid-content k-auto-scrollable" style="max-height: 357px;">
+            <table style="height: auto;">
+                <colgroup>
+                    <col style="width:40px;">
+                    <col style="width:85px;">
+                    <col>
+                    <col style="width:85px;">
+                    <col style="width:115px;">
+                    <col style="width:115px;">
+                    <col style="width:115px;">
+                    <col style="width:115px;">
+                </colgroup>
+                <tbody id="orderSplitFolioWindow_Tbody">
+                </tbody>
+            </table>
+        </div>
+        <div class="k-header k-grid-toolbar">
+            <button id="orderSplitFolio_averageAmount" class="k-button">生成金额</button>
+            <button id="orderSplitFolio_clearAmount" class="k-button">清除金额</button>
+            <button id="orderSplitFolio_cancel" class="k-button" style="float:right;margin-right:13px;">取消</button>
+            <button id="orderSplitFolio_submit" class="k-button" style="float:right;">确定</button>
+        </div>
+    </div>
+</div>

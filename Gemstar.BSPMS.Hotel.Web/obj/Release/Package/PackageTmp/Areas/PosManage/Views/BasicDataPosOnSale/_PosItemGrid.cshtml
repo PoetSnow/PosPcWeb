@@ -1,0 +1,27 @@
+﻿
+@(Html.Kendo().Grid<Gemstar.BSPMS.Hotel.Services.EntitiesPos.PosItem>()
+        .Name("gridItem")
+        .Columns(columns =>
+        {
+
+            columns.Bound(m => m.Id).Title("ID").Hidden();
+            columns.Bound(m => m.Id).HeaderTemplate("<input type='checkbox' value='#: Id #' onclick='checkedRowAll(this)'/>").Width(30)
+    .ClientTemplate("<input type='checkbox' value='#: Id #' onclick='checkedRow(this)'/>");
+            columns.Bound(m => m.Code).Title("编码").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+            columns.Bound(m => m.Cname).Title("名称").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+            columns.Bound(m => m.ItemClassName).Title("大类").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+           columns.Bound(m => m.SubClassName).Title("分类").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+            columns.Bound(m => m.DeptClassName).Title("部门").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+
+
+        })
+                             .HtmlAttributes(new { style = "height:100%;" })
+                            .Scrollable()
+                            .Selectable(s => s.Mode(GridSelectionMode.Multiple).Enabled(false))
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Read(read => read.Action("ListPosItemA", "BasicDataPosOnSale", new { rnd = new Random().NextDouble() }).Data("QueryText"))
+
+        )
+)
+

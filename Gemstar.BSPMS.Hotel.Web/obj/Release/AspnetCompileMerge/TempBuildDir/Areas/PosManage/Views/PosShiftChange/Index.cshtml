@@ -1,0 +1,89 @@
+﻿@model Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_query_shiftChangeResult
+<link href="~/Content/Pos/posPublic.css?version=@ViewBag.Version" rel="stylesheet" />
+@{
+    ViewBag.Title = "Pos换班次";
+}
+
+<style type="text/css">
+    table.editFormTable {
+        padding: 20px;
+        font-size: 16px;
+        position: relative;
+    }
+
+        table.editFormTable tr {
+            line-height: 40px;
+        }
+
+        table.editFormTable .textleft, table.editFormTable .textright {
+            width: auto;
+        }
+
+    form .formButtons {
+        margin: 0;
+        height: 47px;
+        position: relative;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.Posid)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Business)：</td>
+            <td class="textleft">@Model.Business</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.ShiftName)：</td>
+            <td class="textleft">@Model.ShiftName</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Shiftid)：</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Shiftid).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosShift", "BasicDataPosShift", new { rnd = new Random().NextDouble() })); })</td>
+            <td>@Html.ValidationMessageFor(m => m.Shiftid, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        @*<button id="saveEditFormButton" role="button" data-role="button">确定</button>
+            <button id="closeGeneralWindow" role="button" data-role="button">关闭</button>*@
+        <input type="button" value="确定" onclick="UpdateShift()" />
+        <input type="button" value="关闭" onclick="closeAllLayer()" />
+        @*<a href="javascript:void(0)" onclick="UpdateShift()">确定</a>
+            <a href="javascript:void(0)" onclick="closeAllLayer()">关闭</a>*@
+    </div>
+}
+<script>
+    //更换班次
+    function UpdateShift() {
+        var Shiftid = $("#Shiftid").data("kendoDropDownList");
+        var model = {
+            Id: $("#Posid").val(),
+            ShiftId: Shiftid.value()
+        };
+
+        $.ajax({
+            url: '@Url.Action("UpdateShift", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    layer.closeAll();
+                    window.location.reload();
+                } else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+    function closeAllLayer() {
+        layer.closeAll();
+    }
+</script>

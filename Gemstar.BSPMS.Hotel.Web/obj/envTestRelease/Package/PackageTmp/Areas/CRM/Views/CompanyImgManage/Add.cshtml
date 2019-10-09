@@ -1,0 +1,150 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@using System.Data;
+@{
+    ViewBag.Title = "导入签单信息原件";
+}
+<style type="text/css">
+    .insertImageInfo{
+            width:193px;
+            height:180px;
+            text-align:center;
+            float:left;
+            margin-top:10px;
+        }
+    .image_close {
+        position: relative;
+        left: -27px;
+        top: -139px;
+        height: 22px;
+        width: 22px;
+        cursor: pointer;
+    }
+</style>
+<script src="/Qiniu/Plupload/plupload.full.min.js" type="text/javascript"></script>
+<script src="/Qiniu/qiniu.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        var uploads = [];
+        function newUpload() {
+            //当前是第几份
+            var index = 0;       
+            //根据当前第几份改变绑定区域 比如第一份 绑定 class= "upImg_1"  第二份绑定 class = "upImg_2"
+            var onlyUploader = Qiniu.uploader({
+                runtimes: 'html5,flash,html4', //上传模式,依次退化
+                browse_button: 'btnUpload', //上传选择的点选按钮，**必需**
+                uptoken_url: '/Qiniu/GetUptoken',
+                unique_names: true,
+                domain: '@ViewBag.Domain',
+                max_file_size: '100mb', //最大文件体积限制
+                flash_swf_url: '/js/plupload/Moxie.swf', //引入flash,相对路径
+                max_retries: 1, //上传失败最大重试次数
+                //dragdrop: true, //开启可拖曳上传
+                //drop_element: 'upImg', //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+                chunk_size: '4mb', //分块上传时，每片的体积
+                auto_start: true, //选择文件后自动上传，若关闭需要自己绑定事件触发上传
+                init: {
+                    'Error': function (up, err, errTip) {
+                        jAlert(errTip);
+                        index = -1;
+                    },
+                    'FileUploaded': function (up, file, info) {
+                        var domain = up.getOption('domain');
+                        var res = $.parseJSON(info);
+                        var name = $.trim($("#imageName").val());
+                        if (index > 0 && name != "")
+                        {
+                            name = name + index;
+                        }
+                        var sourceLink = domain + res.key;
+                        //保存成功后刷新已上传图片显示
+                        $.post('@Url.Action("AddImage")',
+                            {name:name,  url: sourceLink,companyid:"@ViewBag.companyid" },
+                            function (data) {
+                                if (data.Success) {
+                                    index ++;
+                                    var listView = $("#imageSelectListView").data("kendoListView");
+                                    listView.dataSource.read();
+                                }
+                            },
+                            'json');
+                    },
+                    'UploadComplete': function() {
+                        //队列文件处理完毕后，处理相关的事情
+                        $("#imageName").val("");
+                        index = -1;
+                    }
+                }
+            });
+            uploads.push(onlyUploader);
+            return onlyUploader;
+        }
+        newUpload();
+    });
+    function getInsertImageQueryPara() {
+        return {
+            companyid: "@ViewBag.companyid"
+        }
+    }
+
+    function uploadImage_clicked(e) {
+            if (onlyUploader) {
+                onlyUploader.start();
+            }
+
+    }
+    //预览
+    function preview(arg) {
+        top.openIframeKendoWindow("查看大图", '@Url.Action("Detail")', { picLink: arg, r: Math.random() });
+    }
+    //删除图片
+    function QiniuImgDelete(obj,id)
+    {
+        var src = $(obj).siblings('img').attr("src");
+        jConfirm("确定要删除？", "确定", "取消", function (confirmed) {
+            if (confirmed) {
+                $.post('@Url.Action("DeleteImage")', { src: src, id: id }, function (data) {
+                    if (data.Success) {
+                        jAlert("删除成功");
+                        var listView = $("#imageSelectListView").data("kendoListView");
+                        listView.dataSource.read();
+                    }
+                    else {
+                        ajaxErrorHandle(data);
+                    }
+                }, 'json');
+            }
+        })
+    }
+</script>
+<div style="min-height:200px;">
+    <div>
+        <table>
+            <tr>
+                @if(ViewBag.isadd == 0)
+                { 
+                <td class="textright">填写图片标题</td>
+                <td>@Html.Kendo().TextBox().Name("imageName")</td>
+                <td><a id="btnUpload" class="k-button">上传图片</a></td>
+                }
+                <td><span style="color:red;margin-left:50px;" class="font-blue">双击图片查看大图</span></td>
+            </tr>
+        </table>
+    </div>
+    @(Html.Kendo().ListView<Gemstar.BSPMS.Hotel.Services.Entities.CompanySinImg>()
+        .Name("imageSelectListView")
+        .DataSource(d => d.Read(c => c.Action("Read", "CompanyImgManage").Data("getInsertImageQueryPara")).ServerOperation(true))
+        .ClientTemplateId("insertImageContentTemplate")
+        .TagName("div")
+    )   
+    
+</div>
+<script type="text/x-kendo-tmpl" id="insertImageContentTemplate">
+    <div class="insertImageInfo">
+        <img src="#:ImgAddress#" alt="#:Title#" style="width:150px;height:150px;" ondblclick="preview('#:ImgAddress#')"/>
+        <img class="image_close" title="删除" src='/Content/images/sc.png' onclick=QiniuImgDelete(this,#:Id#)  />
+        <p>#:Title == null?"":Title#</p>
+        <input type="hidden" name="hidImageID" value="#:Id#" />
+    </div>
+</script>

@@ -1,0 +1,375 @@
+﻿@{
+    Layout = "~/Areas/ScanOrder/Views/Shared/_Layout.cshtml";
+}
+@section Css{
+    <link href="~/Content/ScanOrder/orderDownForm.css" rel="stylesheet" />
+}
+
+<div class="container">
+    <!-- 点菜列表 -->
+    <ul class="remark mui-table-view">
+
+        <li class="mui-table-view-cell mui-media">
+            <div class="mui-input-row">
+                <label>金额</label>
+                <input type="number" id="totalPrice" readonly>
+            </div>
+            <div class="mui-input-row" style="display:none">
+                <label>备注</label>
+                <input type="text" class="mui-input-clear" placeholder="多放辣、少放辣、不吃辣">
+            </div>
+        </li>
+        <li class="mui-table-view-cell mui-media">
+            <div class="mui-input-row">
+                <label>支付方式</label>
+                <label style="color:#333;float:right;">在线支付</label>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<!-- 购物车 -->
+<div class="settlement">
+    <div class="downOrder">
+        <button type="button" class="mui-btn mui-btn-warning" onclick="continueAdd()"><i class="fa fa-shopping-cart" aria-hidden="true"></i> 继续添加</button>
+        <button type="button" class="mui-btn mui-btn-success" onclick="submitOrder()">提交订单</button>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            @*$.ajax({
+                url: '@Url.Action("_BillDetailList", "Order")',
+                type: 'POST',
+                data: { list: localStorage.getItem("billDetailList") },
+                dataType: 'html',
+                success: function (data) {
+                    $(".remark").before(data);
+                    mui(".mui-numbox").numbox();
+                    RefreshTotal();
+                },
+                error: function (xhr, textStatus) {
+                    console.log("getItemList：" + xhr, textStatus);
+                }
+            });*@
+            loadList();
+            RefreshTotal();
+
+
+        });
+        //获取缓存中的值
+        function detaiAllList() {
+            var model =
+            {
+                billDetailList: localStorage.getItem("billDetailList"),
+                ActionList: localStorage.getItem("ActionList"),
+                GroupList: localStorage.getItem("GroupList")
+            };
+            return model;
+        }
+         //计算金额
+
+
+        //计算总金额
+        function RefreshTotal() {
+            var list = localStorage.getItem("billDetailList");
+            var jsonObj = JSON.parse(list);//转换为json对象
+            if (jsonObj == null) {
+                $("#totalPrice").val("0.00");
+
+            }
+            else {
+                var amount = 0.0;
+                for (var i = 0; i < jsonObj.length; i++) {
+                    amount += parseFloat(jsonObj[i].Amount);
+                }
+
+                $("#totalPrice").val(amount.toFixed(2));
+            }
+
+        }
+
+
+        function loadList()
+        {
+            $.ajax({
+                url: '@Url.Action("_BillDetailList", "Order")',
+                type: 'POST',
+                data: { list: localStorage.getItem("billDetailList") },
+                dataType: 'html',
+                success: function (data) {
+                    $(".remark").before(data);
+                    mui(".mui-numbox").numbox();
+                },
+                error: function (xhr, textStatus) {
+                    console.log("getItemList：" + xhr, textStatus);
+                }
+            });
+        }
+
+
+    /* 增加 */
+    function addQuantity(obj) {
+        var model = {
+            hid: localStorage.getItem("hid"),
+            Itemid: $(obj).attr("data-id"),
+            ItemCode: $(obj).attr("data-code"),
+            ItemName: $(obj).attr("data-name"),
+            IsDiscount: $(obj).attr("data-isDiscount"),
+            IsService: $(obj).attr("data-isService"),
+            Unitid: $(obj).attr("data-unitId"),
+            UnitCode: $(obj).attr("data-unitCode"),
+            UnitName: $(obj).attr("data-UnitName"),
+            Price: $(obj).attr("data-price"),
+            Quantity: $("#item_" + $(obj).attr("data-id")).val(),
+            Tabid: localStorage.getItem("tabid")
+        };
+
+        $.ajax({
+            url: '@Url.Action("AddQuantity", "Order")',
+            type: 'POST',
+            data: {
+                model: model, list: localStorage.getItem("billDetailList")
+            },
+            dataType: 'json',
+            success: function (data) {
+                localStorage.setItem("billDetailList", data);
+                RefreshTotal();
+
+            },
+            error: function (xhr) {
+                console.log(xhr);
+            }
+        });
+    }
+
+    /* 减少 */
+    function reductionQuantity(obj) {
+        var model = {
+            Itemid: $(obj).attr("data-id"),
+            ItemCode: $(obj).attr("data-code"),
+            ItemName: $(obj).attr("data-name"),
+            IsDiscount: $(obj).attr("data-isDiscount"),
+            IsService: $(obj).attr("data-isService"),
+            Unitid: $(obj).attr("data-unitId"),
+            UnitCode: $(obj).attr("data-unitCode"),
+            UnitName: $(obj).attr("data-UnitName"),
+            Price: $(obj).attr("data-price"),
+            Quantity: $("#item_" + $(obj).attr("data-id")).val(),
+            Tabid: localStorage.getItem("tabid")
+        };
+
+        $.ajax({
+            url: '@Url.Action("ReductionQuantity", "Order")',
+            type: 'POST',
+            data: {
+                model: model, list: localStorage.getItem("billDetailList")
+            },
+            dataType: 'json',
+            success: function (data) {
+                localStorage.setItem("billDetailList", data);
+                RefreshTotal();
+                if (model.Quantity <= 0) {
+                    $(obj).parents("li").remove();
+                }
+
+            },
+            error: function (xhr) {
+                console.log(xhr);
+            }
+        });
+    }
+
+    function numberChange(obj) {
+        if ($(obj).val() == 0) {
+            reductionQuantity($(obj).next());
+        }
+
+        var number = 0;
+        var ul = $(obj).parents(".mui-table-view").first();
+
+        ul.find(".mui-input-numbox").each(function () {
+            number += Number($(this).val());
+        });
+        if (number > 0) {
+            $("#subClass_" + $(obj).attr("data-subClassid")).find("span").first().text(number);
+            $("#subClass_" + $(obj).attr("data-subClassid")).find("span").first().show();
+        }
+        else {
+            $("#subClass_" + $(obj).attr("data-subClassid")).find("span").first().hide();
+        }
+    }
+
+        function continueAdd() {
+            location.href = '@Url.Action("Index", "Order")?hid=' + localStorage.getItem("hid") + '&tabid=' + localStorage.getItem("tabid") + "&billId="+localStorage.getItem("billid");
+    }
+
+    function submitOrder() {
+        //判断是否存在添加的消费项目
+        var jsonObj = $.parseJSON(localStorage.getItem("billDetailList"));
+        if (jsonObj==null||jsonObj.length <= 0) {
+            return false;
+        }
+        var allList = detaiAllList();
+        var hid = localStorage.getItem("hid");
+        var openid = localStorage.getItem("openid");
+        var tabid = localStorage.getItem("tabid");
+        $.ajax({
+            url: '@Url.Action("AddBill", "Order")',
+            type: 'POST',
+            data: {
+                hid: hid,
+                tabid: tabid,
+                billId: localStorage.getItem("billid"),
+                openid: localStorage.getItem("openid"),
+                allList: allList
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.Success) {
+                    localStorage.setItem("billid", data.Data.Billid);
+                    var billid = data.Data.Billid;
+                    if (data.Data.wxPaytype == "2") { //后付模式
+                        localStorage.removeItem("billDetailList");
+                        localStorage.removeItem("ActionList");
+                        localStorage.removeItem("GroupList");
+                        location.href = '@Url.Action("_OrderInfo", "Order")?hid=' + hid + '&tabid=' + tabid + '&openid=' + openid + '&billid=' + billid + "&openFlag=2";
+                        return false;
+                    }
+                    //localStorage.removeItem("billDetailList");
+                    //localStorage.removeItem("ActionList");
+                    //localStorage.removeItem("GroupList");
+                    $.ajax({
+                        url: '@Url.Action("PayByWX", "Order")',
+                        type: 'POST',
+                        data: {
+                            hid: hid,
+                            openid: openid,
+                            billid: billid
+                        },
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res.Success) {
+                                var parameters = res.Data.Parameters;
+                                var billDetailId = res.Data.billDetailId;
+                                var type = res.Data.type;//type=1 调用运营微信支付，2：直接用公众号支付
+                                localStorage.setItem("billDetailId", billDetailId);
+                                if (type=="1") {
+                                    window.location.href = parameters;
+                                }
+                                else {
+                                    if (typeof WeixinJSBridge == "undefined")
+                                    {
+                                        if (document.addEventListener) {
+                                            document.addEventListener('WeixinJSBridgeReady', onBridgeReady(parameters), false);
+                                        }
+                                        else if (document.attachEvent) {
+                                            document.attachEvent('WeixinJSBridgeReady', onBridgeReady(parameters));
+                                            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady(parameters));
+                                        }
+                                        else {
+                                            onBridgeReady($.parseJSON(parameters));
+                                        }
+                                    }
+                                    else {
+                                        if (res.ErrorCode == "10") {//跳转地址
+                                            if (parameters.Result) {
+                                                if (parameters.Result.status == "200") {
+                                                    window.location.assign(parameters.RedirectUrl);
+                                                }
+                                                else {
+                                                    alert(parameters.Result.msg);
+                                                }
+                                            }
+                                            else {
+                                                alert("获取支付信息失败！");
+                                            }
+                                            return;
+                                        }
+                                        onBridgeReady($.parseJSON(parameters));
+                                    }
+                                }
+
+                            }
+                        },
+                        error: function (xhr) {
+                            console.log(xhr);
+                        }
+                    });
+                }
+                else {
+                    layer.open({
+                        content: data.Data
+                        , btn: '我知道了'
+                    });
+                }
+            },
+            error: function (xhr) {
+                console.log(xhr);
+            }
+        });
+    }
+
+    function onBridgeReady(data) {
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest', {
+                "appId": data.appId,     //公众号名称，由商户传入     
+                "timeStamp": data.timeStamp,         //时间戳，自1970年以来的秒数     
+                "nonceStr": data.nonceStr, //随机串     
+                "package": data.package,
+                "signType": data.signType,         //微信签名方式：     
+                "paySign": data.paySign //微信签名 
+            },
+            function (res) {
+                if (res.err_msg == "get_brand_wcpay_request:ok") {
+                    var hid = localStorage.getItem("hid");
+                    var tabid = localStorage.getItem("tabid");
+                    var billid = localStorage.getItem("billid");
+
+                     location.href = '@Url.Action("PaymentSuccess", "Order")?hid=' + hid + '&tabid=' + tabid + '&billid=' + billid + '&billDetailId=' + localStorage.getItem("billDetailId")+"&openFlag=1";
+
+
+                }
+            }
+        );
+    }
+    </script>
+
+    <!-- mui -->
+    <script type="text/javascript">
+        mui.init({
+            swipeBack: false
+        });
+
+        var nativeWebview, imm, InputMethodManager;
+        var initNativeObjects = function () {
+            if (mui.os.android) {
+                var main = plus.android.runtimeMainActivity();
+                var Context = plus.android.importClass("android.content.Context");
+                InputMethodManager = plus.android.importClass("android.view.inputmethod.InputMethodManager");
+                imm = main.getSystemService(Context.INPUT_METHOD_SERVICE);
+            } else {
+                nativeWebview = plus.webview.currentWebview().nativeInstanceObject();
+            }
+        };
+        var showSoftInput = function () {
+            if (mui.os.android) {
+                imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+            } else {
+                nativeWebview.plusCallMethod({
+                    "setKeyboardDisplayRequiresUserAction": false
+                });
+            }
+            setTimeout(function () {
+                var inputElem = document.querySelector('input');
+                inputElem.focus();
+                inputElem.parentNode.classList.add('mui-active'); //第一个是search，加上激活样式
+            }, 200);
+        };
+        mui.plusReady(function () {
+            initNativeObjects();
+            showSoftInput();
+        });
+    </script>
+}  

@@ -1,0 +1,146 @@
+﻿<script type="text/javascript">
+    //查询账单列表
+    function queryBillList() {
+        $.ajax({
+            url: '@Url.Action("_PosBillList", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: { tabNo: $("#txtTabNo").val() },
+            dataType: "html",
+            success: function (data) {
+                $(".mainLeft-billList").html(data);
+                SelectRowAndQuery();
+
+                $("#gridBill").on("click", "tr.k-state-selected", function (e) {
+                    e.preventDefault();
+
+                    var grid = $("#gridBill").data("kendoGrid");
+                    var selectedRows = grid.select();
+                    if (selectedRows.length > 0) {
+                        var row = selectedRows[0];
+                        var data = grid.dataItem(row);
+
+                        var model = {
+                            billid: data["billid"]
+                        };
+
+                        queryBill(model);
+                    }
+                });
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //选择第一行，并查询账单信息
+    function SelectRowAndQuery() {
+        var grid = $("#gridBill").data("kendoGrid");
+        var row = grid.tbody.find(">tr:not(.k-grouping-row)").eq(0);
+        var data = grid.dataItem(row);
+        if (data != null) {
+            grid.select(row);
+        }
+
+        //查询账单信息
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0) {
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+
+            var model = {
+                billid: data["billid"]
+            };
+
+            queryBill(model);
+        }
+        else {
+            var model = {
+                billid: 0
+            };
+            queryBill(model);
+        }
+    }
+
+    //查询账单信息
+    function queryBill(model) {
+        $.ajax({
+            url: '@Url.Action("_PosBill", "PosCashier", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $(".mainRight-details").html(data);
+                queryBillDetail(model);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //查询账单明细列表
+    function queryBillDetail(model) {
+        $.ajax({
+            url: '@Url.Action("_PosBillDetailList", "PosCashier", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $(".mainRight-table").html(data);
+                var remValue = $("#remValue").height();
+                $("#gridBillDetail .k-grid-content").height($(".mainRight").height() - $(".mainRight-details").outerHeight(true) - $("#gridBillDetail .k-grid-header").outerHeight(true) - $("#gridBillDetail .k-grid-footer").outerHeight(true) - 6.8 * remValue - 60);
+                queryPaymentMethod(model);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    function saveFormData(btn) {
+        var f = $(btn)[0].form;
+        var validator = $(f).validate();
+        if (validator.form()) {
+            $.post(
+                $(f).attr("action"),
+                $(f).serialize(),
+                function (data) {
+                    $(".mainLeft-billList").html(data);
+                    SelectRowAndQuery();
+
+                    $("#gridBill").on("click", "tr.k-state-selected", function (e) {
+                        e.preventDefault();
+
+                        var grid = $("#gridBill").data("kendoGrid");
+                        var selectedRows = grid.select();
+                        if (selectedRows.length > 0) {
+                            var row = selectedRows[0];
+                            var data = grid.dataItem(row);
+
+                            var model = {
+                                billid: data["billid"]
+                            };
+                            queryBill(model);
+                        }
+                    });
+                    closeGeneralWindow();
+                },
+                "html");
+        }
+    }
+
+    //退出
+    function exitBill() {
+        layer.closeAll();
+    }
+    function exitMsg() {
+        layer.close(layer.index);
+    }
+    $("#printFrame").attr("src", "");
+
+    //刷新界面
+    function refresh() {
+        location.reload();
+    }
+</script>

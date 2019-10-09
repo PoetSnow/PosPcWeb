@@ -1,0 +1,431 @@
+﻿@using Gemstar.BSPMS.Common.Extensions
+@using Gemstar.BSPMS.Hotel.Services.EnumsPos
+@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosRefe.PosRefeEditViewModel
+
+<style type="text/css">
+    .k-panelbar > li.k-state-default > .k-link.k-state-selected, .k-panelbar > li > .k-state-selected, .k-state-selected > .k-link {
+        color: #333;
+    }
+
+    .k-overflow-container .k-button.k-state-active:hover, .k-panelbar > li > .k-link.k-state-selected, .k-split-container .k-button.k-state-active:hover, .k-toolbar .k-button.k-state-active:hover {
+        color: #333;
+    }
+</style>
+
+<script type="text/javascript">
+    function moduleChanged() {
+        var PosId = $("#PosId").data("kendoDropDownList");
+        PosId.dataSource.read();
+    }
+    function posCode_paras() {
+        var module = $("#Module").data("kendoDropDownList");
+        var moduleCode = module.value();
+        return {
+            moduleCode: moduleCode
+        };
+    }
+    function PosChange() {
+        var pos = $("#PosId").data("kendoDropDownList");
+        var posId = pos.value();
+        var OpenInfo = $("#OpenInfo").data("kendoMultiSelect");
+        OpenInfo.dataSource.read(posId);
+    }
+    function posId_paras() {
+        var pos = $("#PosId").data("kendoDropDownList");
+        var posId = pos.value();
+        return {
+            posId: posId
+        };
+    }
+    function stylesChanged() {
+        var PosBillPrint = $("#PosBillPrint").data("kendoDropDownList");
+        PosBillPrint.dataSource.read();
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+
+    <ul id="panelbar">
+        <li class="k-state-active">
+            <span class="k-link k-state-selected">基本信息</span>
+            <div style="padding: 10px;">
+                <table class="editFormTable">
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.Code)</td>
+                        <td>@(Html.Kendo().TextBoxFor(m => m.Code).HtmlAttributes(new { style = "width:100%;", @readonly = "readonly", placeholder = "请输入代码" }))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.Cname)</td>
+                        <td>@(Html.Kendo().TextBoxFor(m => m.Cname).HtmlAttributes(new { style = "width:100%;", placeholder = "请输入名称" }))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Cname, "*")</td>
+                    </tr>
+                    <tr>
+
+                        <td class="textright">@Html.LabelFor(m => m.Ename)</td>
+                        <td>@(Html.Kendo().TextBoxFor(m => m.Ename).HtmlAttributes(new { style = "width:100%;" }))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Ename, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+                        <td>@(Html.Kendo().IntegerTextBoxFor(m => m.Seqid).HtmlAttributes(new { style = "width:100%;" }))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+                    </tr>
+                    <tr>
+
+                        <td class="textright">@Html.LabelFor(m => m.Module)</td>
+                        <td>@(Html.Kendo().DropDownListFor(e => e.Module).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosModules", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); }).Events(e => e.Change("moduleChanged")))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Module, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.PosId)</td>
+                        <td>@(Html.Kendo().DropDownListFor(e => e.PosId).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosPosByModules", "BasicDataPosPos", new { rnd = new Random().NextDouble() }).Data("posCode_paras")).ServerFiltering(true); }).Events(m => m.Change("PosChange")))</td>
+                        <td>@Html.ValidationMessageFor(m => m.PosId, "*")</td>
+                    </tr>
+                    <tr>
+                        @*<td class="textright">@Html.LabelFor(m => m.Business)</td>
+                            <td>@(Html.Kendo().DatePickerFor(e => e.Business).HtmlAttributes(new { style = " width:100%",@readonly = "readonly" }))</td>
+                            <td>@Html.ValidationMessageFor(m => m.Business, "*")</td>*@
+                        <td class="textright">@Html.LabelFor(m => m.CodeIn)</td>
+                        <td title="在挂房账、合约单位以及会员账务使用，必须与捷云对应的营业点代码相同">@Html.Kendo().TextBoxFor(m => m.CodeIn).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.CodeIn, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+                        <td>@(Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:100%;" }))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+                    </tr>
+                    <tr>
+                        @*<td class="textright">@Html.LabelFor(m => m.IsShowTableproperty)</td>
+                            <td>@(Html.Kendo().CheckBoxFor(m => m.IsShowTableproperty))</td>
+                            <td>@Html.ValidationMessageFor(m => m.IsShowTableproperty, "*")</td>*@
+                    </tr>
+                </table>
+            </div>
+        </li>
+        <li>
+            <span>开台设置</span>
+            <div style="padding: 10px;">
+
+                <table class="editFormTable">
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.RegType)</td>
+                        <td>@(Html.Kendo().DropDownListFor(m => m.RegType).BindTo(EnumExtension.ToSelectList(typeof(PosRegType))).HtmlAttributes(new { style = "width:100%;" }).Value(((byte)Model.RegType.Value).ToString()))</td>
+                        <td>@Html.ValidationMessageFor(m => m.RegType, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.OpenInfo)</td>
+                        <td>@Html.Kendo().MultiSelectFor(e => e.OpenInfo).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosOpenInfo", "BasicDataPosPos", new { rnd = new Random().NextDouble() }).Data("posId_paras")); }).AutoClose(false).Placeholder("请选择开台录入信息内容").Value(Model.OpenInfos)</td>
+                        <td>@Html.ValidationMessageFor(m => m.OpenInfo, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.Iskey)</td>
+                        <td>@(Html.Kendo().CheckBoxFor(m => m.Iskey))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Iskey, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.ISeatTime)</td>
+                        <td>@(Html.Kendo().NumericTextBoxFor<byte>(m => m.ISeatTime).Format("0").Min(0).Max(byte.MaxValue).HtmlAttributes(new { style = "width:100%;" }))</td>
+                        <td>@Html.ValidationMessageFor(m => m.ISeatTime, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IHoldAlert)</td>
+                        <td>@(Html.Kendo().NumericTextBoxFor<byte>(e => e.IHoldAlert).Format("0").Min(0).Max(byte.MaxValue).HtmlAttributes(new { style = " width:100%" }))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IHoldAlert, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.IOrderKeep)</td>
+                        <td>@(Html.Kendo().NumericTextBoxFor<byte>(e => e.IOrderKeep).Format("0").Min(0).Max(byte.MaxValue).HtmlAttributes(new { style = " width:100%" }))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IOrderKeep, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IsOpenBrush)</td>
+                        <td>@(Html.Kendo().DropDownListFor(m => m.IsOpenBrush).BindTo(EnumExtension.ToSelectList(typeof(PosIsOpenBrush))).HtmlAttributes(new { style = "width:100%;" }))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsOpenBrush, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.FloorShowData)</td>
+                        <td>@Html.Kendo().MultiSelectFor(e => e.FloorShowData).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListPosRefFloorShowData", "BasicDataPosRefe", new { rnd = new Random().NextDouble() })); }).AutoClose(false).Placeholder("请选择楼面台号显示内容").Value(Model.FloorShowDatas)</td>
+                        <td>@Html.ValidationMessageFor(m => m.FloorShowData, "*")</td>
+                    </tr>
+                    @*<tr>
+                        <td class="textright">@Html.LabelFor(m => m.RefeSalesMan)</td>
+                        <td>@Html.Kendo().MultiSelectFor(e => e.RefeSalesMan).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListPosRefeSalesMan", "BasicDataPosRefe", new { rnd = new Random().NextDouble() })); }).AutoClose(false).Placeholder("请选择推销员").Value(Model.RefeSalesMans)</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>*@
+                </table>
+            </div>
+        </li>
+        <li>
+            <span>点菜设置</span>
+            <div style="padding: 10px;">
+                <table class="editFormTable">
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IsAction)</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsAction)</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsAction, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.IsRequest)</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsRequest)</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsRequest, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.ISendAlert)</td>
+                        <td>@(Html.Kendo().NumericTextBoxFor<byte>(m => m.ISendAlert).Format("0").Min(0).Max(byte.MaxValue).HtmlAttributes(new { style = "width:100%;" }))</td>
+                        <td>@Html.ValidationMessageFor(m => m.ISendAlert, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.IPrintBillss)</td>
+                        <td>@(Html.Kendo().DropDownListFor(m => m.IPrintBillss).BindTo(EnumExtension.ToSelectList(typeof(PosPrintBillss))).HtmlAttributes(new { style = "width:100%;" }).Value(((byte)Model.IPrintBillss.Value).ToString()))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IPrintBillss, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.ITagModifyCurrent)</td>
+                        <td>@(Html.Kendo().CheckBoxFor(e => e.ITagModifyCurrent))</td>
+                        <td>@Html.ValidationMessageFor(m => m.ITagModifyCurrent, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.Isinputcur)</td>
+                        <td>@(Html.Kendo().CheckBoxFor(e => e.Isinputcur))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Isinputcur, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.Isinputdiy)</td>
+                        <td> @(Html.Kendo().CheckBoxFor(m => m.Isinputdiy))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Isinputdiy, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.Isshowcode)</td>
+                        <td> @(Html.Kendo().CheckBoxFor(m => m.Isshowcode))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Isshowcode, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.Isshowprice)</td>
+                        <td> @(Html.Kendo().CheckBoxFor(m => m.Isshowprice))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Isshowprice, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.Isshowactionprice)</td>
+                        <td> @(Html.Kendo().CheckBoxFor(m => m.Isshowactionprice))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Isshowactionprice, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IsOrderSameItem)</td>
+                        <td>@(Html.Kendo().DropDownListFor(m => m.IsOrderSameItem).BindTo(EnumExtension.ToSelectList(typeof(PosOrderSameItem))).HtmlAttributes(new { style = "width:100%;" }).Value(((byte)Model.IsOrderSameItem.Value).ToString()))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsOrderSameItem, "*")</td>
+                    </tr>
+                </table>
+            </div>
+        </li>
+        <li>
+            <span>出品设置</span>
+            <div style="padding: 10px;">
+                <table class="editFormTable">
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IsProdurce)</td>
+                        <td>@(Html.Kendo().CheckBoxFor(m => m.IsProdurce))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsProdurce, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.PdaPrinter)</td>
+                        <td>@(Html.Kendo().TextBoxFor(m => m.PdaPrinter).HtmlAttributes(new { style = "width:100%;" }))</td>
+                        <td>@Html.ValidationMessageFor(m => m.PdaPrinter, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.Selprinter)</td>
+                        <td>@(Html.Kendo().TextBoxFor(m => m.Selprinter).HtmlAttributes(new { style = "width:100%;" }))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Selprinter, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.IsTabProduce)</td>
+                        <td>@Html.Kendo().DropDownListFor(m => m.IsTabProduce).BindTo(EnumExtension.ToSelectList(typeof(PosTabProduce))).HtmlAttributes(new { style = "width:100%;" }).Value(((byte)Model.IsTabProduce.Value).ToString())</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsTabProduce, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IsLargProduce)</td>
+                        <td>@(Html.Kendo().CheckBoxFor(e => e.IsLargProduce))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsLargProduce, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.IsCanItemProd)</td>
+                        <td>@(Html.Kendo().CheckBoxFor(e => e.IsCanItemProd))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsCanItemProd, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.isCanItemPrint)</td>
+                        <td>@(Html.Kendo().CheckBoxFor(e => e.isCanItemPrint))</td>
+                        <td>@Html.ValidationMessageFor(m => m.isCanItemPrint, "*")</td>
+                        <td class="textright"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </li>
+        <li>
+            <span>收银设置</span>
+            <div style="padding: 10px;">
+
+                <table class="editFormTable">
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IsPay)</td>
+                        <td>@(Html.Kendo().CheckBoxFor(m => m.IsPay))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsPay, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.ITagDecend)</td>
+                        <td>@(Html.Kendo().DropDownListFor(m => m.ITagDecend).BindTo(EnumExtension.ToSelectList(typeof(PosTagDecend))).HtmlAttributes(new { style = "width:100%;" }).Value(((byte)Model.ITagDecend.Value).ToString()))</td>
+                        <td>@Html.ValidationMessageFor(m => m.ITagDecend, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IDecPlace)</td>
+                        <td>@(Html.Kendo().NumericTextBoxFor<byte>(m => m.IDecPlace).Format("0").Min(0).Max(byte.MaxValue).HtmlAttributes(new { style = "width:100%;" }))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IDecPlace, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.ITagPrintBill)</td>
+                        <td>@(Html.Kendo().DropDownListFor(m => m.ITagPrintBill).BindTo(EnumExtension.ToSelectList(typeof(PosTagPrintBill))).HtmlAttributes(new { style = "width:100%;" }).Value(((byte)Model.ITagPrintBill.Value).ToString()))</td>
+                        <td>@Html.ValidationMessageFor(m => m.ITagPrintBill, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IPrintAlert)</td>
+                        <td>@(Html.Kendo().NumericTextBoxFor<byte>(e => e.IPrintAlert).Format("0").Min(0).Max(byte.MaxValue).HtmlAttributes(new { style = " width:100%" }))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IPrintAlert, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.IsOrderPay)</td>
+                        <td>@(Html.Kendo().CheckBoxFor(e => e.IsOrderPay))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsOrderPay, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IsNoLimitSrv)</td>
+                        <td> @(Html.Kendo().CheckBoxFor(m => m.IsNoLimitSrv))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsNoLimitSrv, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.IsTagLimitSrv)</td>
+                        <td> @(Html.Kendo().DropDownListFor(m => m.IsTagLimitSrv).BindTo(EnumExtension.ToSelectList(typeof(PosTagLimitSrv))).HtmlAttributes(new { style = "width:100%;" }).Value(((byte)Model.IsTagLimitSrv.Value).ToString()))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsTagLimitSrv, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IsTagLimitDisc)</td>
+                        <td> @(Html.Kendo().DropDownListFor(m => m.IsTagLimitDisc).BindTo(EnumExtension.ToSelectList(typeof(PosTagLimitDisc))).HtmlAttributes(new { style = "width:100%;" }).Value(((byte)Model.IsTagLimitDisc.Value).ToString()))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsTagLimitDisc, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.IsTagSrvDisc)</td>
+                        <td> @(Html.Kendo().DropDownListFor(m => m.IsTagSrvDisc).BindTo(EnumExtension.ToSelectList(typeof(PosTagSrvDisc))).HtmlAttributes(new { style = "width:100%;" }).Value(((byte)Model.IsTagSrvDisc.Value).ToString()))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsTagSrvDisc, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IsDishPriceService)</td>
+                        <td> @(Html.Kendo().CheckBoxFor(m => m.IsDishPriceService))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsDishPriceService, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.IsBuyZeroBill)</td>
+                        <td> @(Html.Kendo().DropDownListFor(m => m.IsBuyZeroBill).BindTo(EnumExtension.ToSelectList(typeof(PosTagZeroBill))).HtmlAttributes(new { style = "width:100%;" }).Value(((byte)Model.IsBuyZeroBill.Value).ToString()))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsBuyZeroBill, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IsTagPromptFoot)</td>
+                        <td> @(Html.Kendo().DropDownListFor(m => m.IsTagPromptFoot).BindTo(EnumExtension.ToSelectList(typeof(PosTagPromptFoot))).HtmlAttributes(new { style = "width:100%;" }).Value(((byte)Model.IsTagPromptFoot.Value).ToString()))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsTagPromptFoot, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.Isclrtab)</td>
+                        <td> @(Html.Kendo().CheckBoxFor(m => m.Isclrtab))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Isclrtab, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.Label("DefaultBillStyle", "账单默认格式")</td>
+                        <td>@(Html.Kendo().DropDownListFor(e => e.PosBillPrint).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListPosBillPrint", "BasicDataPosRefe", new { rnd = new Random().NextDouble() })); }).Events(e => e.Change("stylesChanged")))</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </table>
+            </div>
+        </li>
+        <li>
+            <span>打印设置</span>
+            <div style="padding: 10px;">
+
+                <table class="editFormTable">
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IsSuitePrint)</td>
+                        <td>@(Html.Kendo().CheckBoxFor(m => m.IsSuitePrint))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsSuitePrint, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.IsFeastPrint)</td>
+                        <td>@(Html.Kendo().CheckBoxFor(m => m.IsFeastPrint))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsFeastPrint, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IsDispCanDish)</td>
+                        <td>@(Html.Kendo().CheckBoxFor(m => m.IsDispCanDish))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsDispCanDish, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.TabChgProdPrinter)</td>
+                        <td>@(Html.Kendo().TextBoxFor(m => m.TabChgProdPrinter).HtmlAttributes(new { style = "width:100%;" }))</td>
+                        <td>@Html.ValidationMessageFor(m => m.TabChgProdPrinter, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IsZeroPrintBill)</td>
+                        <td>@(Html.Kendo().DropDownListFor(e => e.IsZeroPrintBill).BindTo(EnumExtension.ToSelectList(typeof(PosTagZeroBill))).HtmlAttributes(new { style = " width:100%" }).Value(((byte)Model.IsZeroPrintBill.Value).ToString()))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsZeroPrintBill, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.IsPrintEdit)</td>
+                        <td>@(Html.Kendo().CheckBoxFor(e => e.IsPrintEdit))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsPrintEdit, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.Issellprintbill)</td>
+                        <td> @(Html.Kendo().CheckBoxFor(m => m.Issellprintbill))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Issellprintbill, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.Isbillcontinue)</td>
+                        <td> @(Html.Kendo().CheckBoxFor(m => m.Isbillcontinue))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Isbillcontinue, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.Ispaidcontinue)</td>
+                        <td> @(Html.Kendo().CheckBoxFor(m => m.Ispaidcontinue))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Ispaidcontinue, "*")</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </li>
+        <li>
+            <span>其它设置</span>
+            <div style="padding: 10px;">
+
+                <table class="editFormTable">
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.DepartNo)</td>
+                        <td>@Html.Kendo().DropDownListFor(e => e.DepartNo).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListDepot", "BasicDataPosRefe", new { rnd = new Random().NextDouble() })); }).OptionLabel("请选择二级仓库")</td>
+                        <td>@Html.ValidationMessageFor(m => m.DepartNo, "*")</td>
+                        @*<td class="textright">@Html.LabelFor(m => m.IsClearBill)</td>
+                            <td>@(Html.Kendo().CheckBoxFor(m => m.IsClearBill))</td>
+                            <td>@Html.ValidationMessageFor(m => m.IsClearBill, "*")</td>*@
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IServicesTime)</td>
+                        <td>@(Html.Kendo().DropDownListFor(m => m.IServicesTime).BindTo(EnumExtension.ToSelectList(typeof(PosTagServicesTime))).HtmlAttributes(new { style = "width:100%;" }).Value(((byte)Model.IServicesTime.Value).ToString()))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IServicesTime, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.Isoutsell)</td>
+                        <td>@(Html.Kendo().CheckBoxFor(m => m.Isoutsell))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Isoutsell, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.Weekend)</td>
+                        <td>@(Html.Kendo().TextBoxFor(e => e.Weekend).HtmlAttributes(new { style = " width:100%" }))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Weekend, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.Weekendstart)</td>
+                        <td>@(Html.Kendo().TextBoxFor(e => e.Weekendstart).HtmlAttributes(new { style = " width:100%" }))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Weekendstart, "*")</td>
+                    </tr>
+                    @*<tr>
+                            <td class="textright">@Html.LabelFor(m => m.IsBusinessend)</td>
+                            <td> @(Html.Kendo().DropDownListFor(m => m.IsBusinessend).BindTo(EnumExtension.ToSelectList(typeof(PosBusinessEnd))).HtmlAttributes(new { style = "width:100%;" }).Value(((byte)Model.IsBusinessend.Value).ToString()))</td>
+                            <td>@Html.ValidationMessageFor(m => m.IsBusinessend, "*")</td>
+                            <td class="textright">@Html.LabelFor(m => m.BusinessTime)</td>
+                            <td>@(Html.Kendo().TextBoxFor(e => e.BusinessTime).HtmlAttributes(new { style = " width:100%" }))</td>
+                            <td>@Html.ValidationMessageFor(m => m.BusinessTime, "*")</td>
+                        </tr>*@
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IsOnsaleTime)</td>
+                        <td> @(Html.Kendo().DropDownListFor(m => m.IsOnsaleTime).BindTo(EnumExtension.ToSelectList(typeof(PosOnsaleTime))).HtmlAttributes(new { style = "width:100%;" }).Value(((byte)Model.IsOnsaleTime.Value).ToString()))</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsOnsaleTime, "*")</td>
+                        <td class="textright"></td>
+                        <td>@(Html.Kendo().CheckBoxFor(m => m.IsCommitQuit)) </td>
+                        <td>@Html.ValidationMessageFor(m => m.IsCommitQuit, "*")</td>
+                    </tr>
+                </table>
+            </div>
+        </li>
+    </ul>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        $("#panelbar").kendoPanelBar({
+            expandMode: "single"
+        });
+        moduleChanged();
+    });
+</script>

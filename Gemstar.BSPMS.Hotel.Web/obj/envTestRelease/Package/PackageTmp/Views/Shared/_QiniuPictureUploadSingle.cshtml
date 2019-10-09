@@ -1,0 +1,65 @@
+﻿@Html.Hidden("ImgUploading")
+@{
+    <tr>
+        <td class="textright">添加图片</td>
+        <td colspan="4"><a id="btnUpload" class="k-button">选择图片</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td class="textright">图片预览</td>
+        <td colspan="5">
+            <div id="container" style="border:1px dashed #017dae; height:200px; width:95%;"><img src="@ViewBag.FileName" style="max-height:200px; " /></div>
+        </td>
+    </tr>
+}
+
+<script src="~/Qiniu/Plupload/plupload.full.min.js" type="text/javascript"></script>
+<script src="~/Qiniu/qiniu.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        var onlyUploader = Qiniu.uploader({
+            runtimes: 'html5,flash,html4', //上传模式,依次退化
+            browse_button: 'btnUpload', //上传选择的点选按钮，**必需**
+            uptoken_url: '/Qiniu/GetUptoken',
+            unique_names: true,
+            domain: '@ViewBag.Domain',
+            max_file_size: '100mb', //最大文件体积限制
+            flash_swf_url: '/js/plupload/Moxie.swf', //引入flash,相对路径
+            max_retries: 1, //上传失败最大重试次数
+            //dragdrop: true, //开启可拖曳上传
+            //drop_element: 'upImg', //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+            chunk_size: '4mb', //分块上传时，每片的体积
+            auto_start: true, //选择文件后自动上传，若关闭需要自己绑定事件触发上传
+            init: {
+                'Error': function (up, err, errTip) {
+                    jAlert(errTip);
+                },
+                'FileUploaded': function (up, file, info) {
+                    var domain = up.getOption('domain');
+                    var res = $.parseJSON(info);
+                    var sourceLink = domain + res.key;
+
+                    if ($("#FileName").length > 0) {
+                        $("#FileName").val(sourceLink);
+                    }
+                    else if ($("#Bmp").length > 0) {
+                        $("#Bmp").val(sourceLink);
+                    }
+
+                    $("#container img").attr("src", sourceLink);
+                    //TODO:QiniuImgDelete
+                    var uploading = $("#ImgUploading").val();
+                    if (uploading.replace(" ", "") != "")
+                        QiniuImgDelete(uploading);
+                    $("#ImgUploading").val(sourceLink);
+                }
+            }
+        });
+    });
+
+    function QiniuImgDelete(arg) {
+        $.post('@Url.Action("QiniuDelete","Qiniu", new { area = "" })', { path: arg }, function (data) {
+
+        }, 'json');
+    }
+</script>

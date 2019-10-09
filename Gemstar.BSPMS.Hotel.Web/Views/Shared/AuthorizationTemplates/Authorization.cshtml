@@ -1,0 +1,39 @@
+﻿<!--授权窗口-->
+<div id="authorizationWindow">
+    <div id="authorizationWindow_ContentDiv"></div>
+    <div style="margin-top:6.96px;margin-bottom:6.96px;">
+        <label for="authorizationWindow_Reason" style="display: block;border-radius: 4px 4px 0px 0px;padding: .65em .92em;width: 48px;height: 16px;border: 1px solid #ccc;border-bottom: 0px;border-top-width:2px;">授权原因</label>
+        <textarea id="authorizationWindow_Reason" class="k-textbox" style="width:100%;height:40px;border-top-left-radius: 0px;padding-left: 11.040px;"></textarea>
+    </div>
+    <div style="margin-top:6.96px;margin-bottom:6.96px;">
+        <div id="authorizationWindow_Tabstrip">
+            <ul>
+                <li id="authorizationWindow_LoginTab" class="k-state-active">登录授权</li>
+                <li id="authorizationWindow_WeiXinTab">微信授权</li>
+            </ul>
+            <div style="border-radius:4px;border-top-left-radius: 0px;padding-top:6.96px;padding-bottom:6.96px;">
+                <p style="padding-bottom: 6.96px;">
+                    <label for="authorizationWindow_LoginName" style="padding-right: 12px;">登录名</label>
+                    <input id="authorizationWindow_LoginName" type="text" class="k-textbox" autocomplete="off" />
+                </p>
+                <p>
+                    <label for="authorizationWindow_LoginPassword">登录密码</label>
+                    <input id="authorizationWindow_LoginPassword" type="text" onfocus="this.type='password'" class="k-textbox" autocomplete="off" />
+                </p>
+            </div>
+            <div style="border-radius:4px;border-top-left-radius: 0px;padding-top:6.96px;padding-bottom:6.96px;">
+                <p>
+                    <label for="authorizationWindow_UserId">发送给</label>
+                    <input id="authorizationWindow_UserId" />
+                    进行授权。。。
+                </p>
+            </div>
+        </div>
+    </div>
+    <div style="text-align:center;">
+        <button class="k-button" id="authorizationWindow_Submit" onclick="authorizationWindow.Submit()">授权</button>
+        <button class="k-button" id="authorizationWindow_Cancel" onclick="authorizationWindow.Close()">关闭</button>
+        <input type="hidden" id="authorizationWindow_SuccessCallBackFunction" title="授权成功后执行操作" />
+    </div>
+    <div><p id="authorizationWindow_Message" style="color:red;text-align:center;"></p></div>
+</div>

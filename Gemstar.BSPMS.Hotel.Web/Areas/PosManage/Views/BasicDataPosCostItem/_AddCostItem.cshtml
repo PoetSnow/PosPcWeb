@@ -1,0 +1,57 @@
+﻿@using Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItem
+@model PostCostItemEditAll
+@using (Html.BeginForm("AddPosCostItem"))
+{
+    @Html.HiddenFor(x => x.Hid)
+    @Html.HiddenFor(x => x.PostSysName)
+    @Html.HiddenFor(x => x.Itemid)
+    @*@Html.HiddenFor(x => x.CostItemUnitid)*@
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(x => x.CostItemid)</td>
+            <td>@Html.Kendo().DropDownListFor(x => x.CostItemid).HtmlAttributes(new { style = "width:100%" }).DataTextField("Text").DataValueField("Value").Filter("contains").DataSource(e => { e.Read(r => r.Action("ListItemsForPosCostItem", "BasicDataPosCostItem", new { rnd = new Random().NextDouble() })).ServerFiltering(true); }) </td>
+            <td>@Html.ValidationMessageFor(x => x.CostItemid, "*")</td>
+            <td class="textright">@Html.LabelFor(x => x.Unitid)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(x => x.Unitid).HtmlAttributes(new { style = "width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemPriceByItemId", "BasicDataPosCostItem", new { id = Model.Itemid })); }).OptionLabel("请选择单位")
+            </td>
+            <td>@Html.ValidationMessageFor(x => x.Unitid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(x => x.OriQuan)            </td>
+            <td>@Html.Kendo().TextBoxFor(x => x.OriQuan).HtmlAttributes(new { style = "width:100%" })            </td>
+            <td>@Html.ValidationMessageFor(x => x.OriQuan, "*")</td>
+            <td class="textright">@Html.LabelFor(x => x.XRate)</td>
+            <td> @Html.Kendo().TextBoxFor(x => x.XRate).HtmlAttributes(new { style = "width:100%", value = "1" })</td>
+            <td>@Html.ValidationMessageFor(x => x.XRate, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(x => x.Quantity2)</td>
+            <td> @Html.Kendo().TextBoxFor(x => x.Quantity2).HtmlAttributes(new { style = "width:100%" })</td>
+            <td>@Html.ValidationMessageFor(x => x.Quantity2, "*")</td>
+            <td class="textright">@Html.LabelFor(x => x.Remark)</td>
+            <td> @Html.Kendo().TextBoxFor(x => x.Remark).HtmlAttributes(new { style = "width:100%" })</td>
+            <td>@Html.ValidationMessageFor(x => x.Remark, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary();
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormBtnCost" role="button" data-role="butto">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormBtnCost" role="button" data-role="button">取消</button>
+    </div>
+}
+<script>
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+    });
+    $("#saveEditFormBtnCost").click(function (e) {
+        e.preventDefault();
+        saveFormDataForPosItem($("#saveEditFormBtnCost"), "gridCostItem");
+    });
+    $("#closeEditFormBtnCost").click(function (e) {
+        $("#posMaskWindow").html("");
+        closeGeneralWindow();
+
+    });
+
+</script>

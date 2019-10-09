@@ -1,0 +1,78 @@
+﻿
+@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+@{
+    ViewBag.Title = "分成参数名称定义";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "paraId";
+    var gridModel = new KendoGridCommonViewModel()
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForQuery = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForAdd = false,
+        EnableScrollable = true,
+    };
+    var gridHelper = new KendoGridEditInCellHtmlHelper<RoomOwnerCalcParaDefine>(
+        Html,
+        Url,
+        gridModel,
+        c =>
+        {
+            c.Bound("ParaType").Title("参数类型");
+            c.Bound("ParaCode").Title("参数代码");
+            c.Bound("ParaName").Title("参数名称");
+            c.Bound(w => w.isHidden).Title("是否隐藏").EditorTemplateName("GridForeignKey").ClientTemplate(@" <div>#: isHidden=='1'?'是':'否'#</div>");
+            c.Bound(w => w.dataType).Title("数据类型").EditorTemplateName("GridForeignKey").ClientTemplate("#= ShowDataTypeName(dataType) #");//
+            c.Bound("ParaSeqId").Title("排序号");
+        }
+     ,
+        c =>
+        {
+            c.Id(w => w.ParaId);
+            c.Field(w => w.ParaType).Editable(false);
+            c.Field(w => w.ParaCode).Editable(false);
+        }
+    );
+}
+@(gridHelper.KendoGridEditInCell())
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridModel)
+    <script type="text/javascript">
+        $(function () {
+            window.onresize = onResize; onResize();
+            $("#grid .k-grid-header th:eq(5) .k-link").click();
+        });
+        //显示消费类型名称
+        function ShowDataTypeName(value) { 
+            var text = "";
+            $.ajax({
+                type:"get",
+                url:"@Url.Action("getDataTypeName")"+"?values="+value,
+                success: function (data) { 
+                text=data.Data;
+            },
+                failure: function (data) { 
+                    text = data.Data;
+            },
+            async: false
+            });
+            return text;
+        }
+        function onResize() {
+            var allHeight = $("#mainContent", window.top.document).height();
+            var showHeight = $("#grid .k-grid-toolbar").height() + 195;
+            $("#grid .k-grid-content").height(allHeight - showHeight);
+        }
+    </script>
+}
+

@@ -1,0 +1,132 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.RoleManage.RoleMemberViewModel
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.RoleId)
+    <div id="roleMemberNotInSingle">
+        <h3>可操作成员列表</h3>
+        <select multiple="multiple" id="usersNotInRoleSelect" style="outline:none;">
+            @foreach (var u in Model.UsersNotInRole)
+            {
+                <option value="@u.Id" style="padding-top:7px;">@u.Name</option>
+            }
+        </select>
+    </div>
+    <div id="roleMemberButtons">
+        <button class="k-primary k-button addSelected">添　　 加  <font style="font-size:18px;">></font></button>
+        <button class="k-primary k-button removeSelected">移　 　除  <font style="font-size:18px;"><</font></button>
+        <button class="k-primary k-button addAll">添加全部<font style="font-size:14px;">>></font></button>
+        <button class="k-primary k-button removeAll">移除全部<font style="font-size:14px;"><<</font></button>
+    </div>
+    <div id="roleMemberInSingle">
+        <h3>已属于角色成员</h3>
+        <select multiple="multiple" name="roleMembers" id="usersInRoleSelect" style="outline:none;">
+            @foreach (var u in Model.UsersInRole)
+            {
+                <option value="@u.Id" style="padding-top:7px;">@u.Name</option>
+            }
+        </select>
+    </div>
+    <div class="formButtons" style="padding-top:20px;padding-bottom:10px;">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">　保存　</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">　返回　</button>
+    </div>
+}
+<style type="text/css">
+    h3 {
+        line-height: 25px;
+        margin: 7px 0 7px 0;
+        font-size: 18px;
+        font-weight:normal;
+        color:rgb(153,153,153);
+    }
+
+    select {
+        font-size: 17px;
+        padding-top: 7px; 
+        overflow-y: auto;
+        border-radius: 15px;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveRoleMember($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        $(".addSelected").click(function (e) {
+            e.preventDefault();
+            addSelected();
+        });
+        $(".removeSelected").click(function (e) {
+            e.preventDefault();
+            removeSelected();
+        });
+        $(".addAll").click(function (e) {
+            e.preventDefault();
+            addAll(); 
+        });
+        $(".removeAll").click(function (e) {
+            e.preventDefault();
+            removeAll();
+        });
+        $("#commonKendoWindow").parent().css("width", "620px");
+       // $("#commonKendoWindow").parent().css("height", "604px");
+    });
+    function saveRoleMember(btn, successCallback) {
+        var f = $(btn)[0].form;
+        var validator = $(f).validate();
+        var roleId = $("#RoleId").val();
+        var roleMembers = [];
+        $("#usersInRoleSelect option").each(function (i, o) { roleMembers.push(o.value);});
+        if (validator.form()) {
+            $.post(
+                "@Url.Action("MemberSingle")",
+                { roleId:roleId,roleMembers: roleMembers },
+                function (data) {
+                    if (data.Success) {
+                        closeEditFormWindow();
+                    } else {
+                        //jAlert(data.Data,"知道了");
+                        ajaxErrorHandle(data);
+                    }
+                },
+                "json");
+        }
+    }
+    function addSelected() {
+        var $selected = $("#usersNotInRoleSelect option:checked");
+        $selected.each(function (i, o) {
+            $("#usersInRoleSelect").append("<option value='"+o.value+"'>"+o.text+"</option>");
+        });
+        $selected.remove();
+    }
+    function addAll() {
+        var $selected = $("#usersNotInRoleSelect option");
+        $selected.each(function (i, o) {
+            $("#usersInRoleSelect").append("<option value='" + o.value + "'>" + o.text + "</option>");
+        });
+        $selected.remove();
+    }
+    function removeSelected() {
+        var $selected = $("#usersInRoleSelect option:checked");
+        $selected.each(function (i, o) {
+            $("#usersNotInRoleSelect").append("<option value='" + o.value + "'>" + o.text + "</option>");
+        });
+        $selected.remove();
+    }
+    function removeAll() {
+        var $selected = $("#usersInRoleSelect option");
+        $selected.each(function (i, o) {
+            $("#usersNotInRoleSelect").append("<option value='" + o.value + "'>" + o.text + "</option>");
+        });
+        $selected.remove();
+
+    }
+</script>

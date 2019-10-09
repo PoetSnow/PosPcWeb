@@ -1,0 +1,271 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MbrCardCenter.Models.MbrCardManage.MbrCardRechargeViewModel
+
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        var IsAuth = "@ViewBag.IsAuth" == "True";
+        if (!IsAuth) {
+            $("#SendMoney").attr("readonly", "readonly");
+            $("#SendMoney").css("background-color", "#f5f5f5");
+        }
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            rechargeFolioAddSave_clicked();
+        });
+
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        $("#OriginPayMoney").change(function () {
+            calculatePayMoney();
+        });
+        $("#OriginPayMoney").val("");
+    });
+    
+    //入账保存按钮点击事件，保存入账消费和付款
+    function rechargeFolioAddSave_clicked(e) {
+        if (e) {
+            e.preventDefault();
+        }
+        var itemIdValue = $("#PayWayId").data("kendoDropDownList").value();
+        if (!itemIdValue) {
+            jAlert("请选择付款方式", "确定");
+            return;
+        }
+        var splitstr = "&|&";
+        var list = itemIdValue.split(splitstr);
+        var rate = 1;
+        var actionValue = "";
+        if (list != null && list.length >= 3) {
+            itemIdValue = list[0];
+            rate = parseFloat(list[1]);
+            actionValue = list[2];
+            if (isNaN(rate)) { rate = 1;}
+        }
+        var payMoneyValue = $("#OriginPayMoney").val();
+        if (!payMoneyValue) {
+            jAlert("请输入原币储值金额", "确定");
+            return;
+        }
+        var addModel = {
+            Id: $("#Id").val(),
+            PayWayId: itemIdValue,
+            OriginPayMoney: payMoneyValue,
+            PayMoney: $("#PayMoney").val(),
+            SendMoney: $("#SendMoney").val(),
+            InvNo: $("#InvNo").val(),
+            Remark: $("#Remark").val(),
+            PayBody: "会员充值",
+            PayItemId:itemIdValue,
+            FolioAmount:payMoneyValue
+        };
+        //检查支付处理方式检验是否成功
+        if (actionValue) {
+            addModel.FolioItemAction = actionValue;
+            var payAction = createPayByAction(actionValue);
+            var beforeFuncResult = true;
+
+            if (payAction) {
+                try {
+                    beforeFuncResult = payAction.PayCheck();
+                } catch (e) { }
+            }
+               
+            if (!beforeFuncResult) {
+                return;//如果方法返回false，则不继续保存
+            }
+            //设置处理方式提交到后台的参数
+            try {
+                payAction.PaySetPara(addModel);
+            } catch (e) { }
+        }
+        $("#saveEditFormButton").attr("disabled", "disabled");
+        $.post("@Url.Action("Recharge")", addModel, function (data) {
+            if (data.Success) {
+                //如果是待支付，并且有返回回调函数，则调用回调函数进行处理
+                if (data.Data.Statu == "WaitPay" && data.Data.Callback !== "" && actionValue) {
+                    var payAction = createPayByAction(actionValue);
+                    try {
+                        payAction.PayAfterSave(data);
+                    } catch (e) {
+
+                    }
+                } else {
+                    //如果是已经支付成功，则按支付成功的进行处理
+                    jAlert("充值成功！", "确定", function () {
+                        rechargeFolioAfterSave(data);
+                    });                       
+                }
+            } else {
+
+                ajaxErrorHandle(data);
+            }
+        }, 'json');
+    }
+    //增加客账明细成功的处理方法
+    function rechargeFolioAfterSave(data) {
+        var id = $("#Id").val();
+        if (data.Data.Statu == "WaitPay") {
+            //如果是待支付的，则通过待支付记录来增加打印参数
+            $.post("@Url.Action("AddWaitPayQueryParaTemp", "SRBillReportView",new { area = "ReportManage" })", { id: data.Data.QueryTransId, print: 1 }, function (result) {
+                if (result.Success) {
+                    window.open(result.Data);
+                } else {
+                    ajaxErrorHandle(result);
+                }
+            }, 'json');
+        } else {
+            //如果不是待支付的，则直接打印
+            var parameterValues = "@@t00profileid=" + id + "&@@t00ptype=c";
+            $.post("@Url.Action("AddQueryParaTemp", "SRBillReportView",new { area = "ReportManage" })", { ProcedureName: "up_print_profileRecharge", ReportCode: "up_print_profileRecharge", ParameterValues: parameterValues, ChineseName: "充值单据", print: 1 }, function (result) {
+                if (result.Success) {
+                    window.open(result.Data);
+                } else {
+                    ajaxErrorHandle(result);
+                }
+            }, 'json');
+        }
+        var dataDiv=$("#dataDiv", $("#mainContent iframe")[0].contentWindow.document);
+        if (dataDiv.length > 0) {
+            //刷新会员详情
+            dataDiv.load($("#mainContent iframe")[0].src + "?viewType=false");
+        }
+        else {
+            //刷新会员列表
+            $("#mainContent iframe")[0].contentWindow.refreshGrid();
+        }
+        closeEditFormWindow();
+    }
+    function getSendMoney() {
+        var id = $("#Id").val();
+        var money = parseFloat($("#PayMoney").val());
+        if (id != null && id != undefined && id.length > 0 && !isNaN(money)) {
+            if (money > 0 || money < 0) {
+                $.ajax({
+                    url: "@Url.Action("GetSendMoney", "MbrCardManage",new { area= "MbrCardCenter" })",
+                    data: { id: id, money: money },
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        $("#SendMoney").val(data);
+                    }
+                });
+            }
+        }
+    }
+    function recharge_payItem_changed(e) {
+        if (e) { e.preventDefault(); }
+        //删除所有动态增加的付款处理方式参数行
+        $("#folioDynamicScript").empty();
+        $("tr.folioAddPayment").remove();
+
+        var splitstr = "&|&";
+        var selectid = $("#PayWayId").data("kendoDropDownList").value();
+        if (selectid != null && selectid != undefined && selectid.length > 0) {
+            var list = selectid.split(splitstr);
+            if (list != null && list.length >= 3) {
+                var action = list[2];
+                recharge_payActionHandle(action);
+            }
+        }
+        //调用原来的计算金额方法
+        calculatePayMoney();
+    }
+    //根据入账项目的处理方式动态加载对应的界面和js方法
+    function recharge_payActionHandle(actionValue) {
+        if (actionValue == undefined)//第一次加载默认选中请选择项目，不需要加载
+            return;
+        $.post("@Url.Action("Check", "Pay",new { area= "PayManage" })", { payAction: actionValue }, function (data) {
+            if (data.Success) {
+                var payAction = createPayByAction(actionValue, { selectorForSaveButton: "#saveEditFormButton" });
+                if (payAction) {
+                    payAction.PayInit();
+                }
+            } else {
+                //jAlert(data.Data);
+                ajaxErrorHandle(data);
+            }
+        }, 'json');
+    }
+    function calculatePayMoney() {
+        var splitstr = "&|&";
+        var selectid = $("#PayWayId").data("kendoDropDownList").value();
+        if (selectid != null && selectid != undefined && selectid.length > 0) {
+            var list = selectid.split(splitstr);
+            if (list != null && list.length >= 2) {
+                var rate = parseFloat(list[1]);
+                if (isNaN(rate) || rate == 0) {
+                    rate = 1.0;
+                }
+                var originPayMoney = parseFloat($("#OriginPayMoney").val());
+                if (isNaN(originPayMoney)) {
+                    originPayMoney = 0;
+                }
+                $("#PayMoney").val((originPayMoney * rate).toFixed(2));
+                $("#SendMoney").val("0");
+                getSendMoney();
+            }
+        } else {
+            $("#OriginPayMoney").val("0");
+            $("#PayMoney").val("0");
+            $("#SendMoney").val("0");
+        }
+    }
+</script>
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.Id)
+    <table class="editFormTable addFolioTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.MbrCardNo)</td>
+            <td colspan="3">@Html.DisplayTextFor(m => m.MbrCardNo)</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.GuestName)</td>
+            <td colspan="3">@Html.DisplayTextFor(m => m.GuestName)</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Balance)</td>
+            <td colspan="3">@Html.DisplayTextFor(m => m.Balance)</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.SendBalance)</td>
+            <td colspan="3">@Html.DisplayTextFor(m => m.SendBalance)</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.PayWayId)@Html.ValidationMessageFor(m => m.PayWayId, "*")</td>
+            <td colspan="3">@Html.Kendo().DropDownListFor(m => m.PayWayId).BindTo(ViewBag.PayWapSelectList as List<SelectListItem>).HtmlAttributes(new { style = "width:100%;" }).Events(e=>e.Change("recharge_payItem_changed"))</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.OriginPayMoney)@Html.ValidationMessageFor(m => m.OriginPayMoney, "*")</td>
+            <td colspan="3">@Html.TextBoxFor(m => m.OriginPayMoney, new { @class = "k-textbox", style = "width:100%;" })</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.PayMoney)@Html.ValidationMessageFor(m => m.PayMoney, "*")</td>
+            <td colspan="3">@Html.TextBoxFor(m => m.PayMoney, new { @class = "k-textbox k-state-disabled", style = "width:100%;background-color:#f5f5f5", @readonly= "readonly" })</td>
+        </tr>
+        <tr class="folioAddAmountForC">
+            <td class="textright">@Html.LabelFor(m => m.SendMoney)@Html.ValidationMessageFor(m => m.SendMoney, "*")</td>
+            <td colspan="3">@Html.TextBoxFor(m => m.SendMoney, new { @class = "k-textbox", style = "width:100%;" })</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.InvNo)</td>
+        <td colspan="3">@Html.TextBoxFor(m => m.InvNo, new { @class = "k-textbox", style = "width:100%;" })</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Remark)@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        <td colspan="3">@Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;" })</td>
+    </tr>
+</table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button" type="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button" type="button">返回</button>
+    </div>
+
+    <div id="folioPayResultDiv" style="margin:5px;"></div>
+    <script type="text/javascript" src="~/Scripts/qrcode.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.qrcode.min.js"></script>
+}
+

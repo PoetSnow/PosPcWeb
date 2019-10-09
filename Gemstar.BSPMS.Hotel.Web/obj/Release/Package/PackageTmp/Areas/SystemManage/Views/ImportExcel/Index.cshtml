@@ -1,0 +1,285 @@
+﻿@{
+    ViewBag.Title = "资料导入";   
+}
+@section headerContent{
+    <style>
+        .box {
+            margin: 4.5em 7.5em;
+            padding: 3em;
+            background-color: rgba(20,53,80,0.038);
+            border: 1px solid rgba(20,53,80,0.05);
+        }
+
+        #example .box {
+            margin: 4.5em auto;
+        }
+
+        .box h4, .demo-section h4 {
+            margin-bottom: 1em;
+            font-size: 12px;
+            line-height: 1em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .demo-hint {
+            line-height: 22px;
+            color: #aaa;
+            font-style: italic;
+            font-size: .9em;
+            padding-top: 1em;
+        }
+
+        #example .box a{
+            text-decoration:underline;
+        }
+
+        .demo-section.k-content {
+            box-shadow: 0 1px 2px 1px rgba(0,0,0,.08), 0 3px 6px rgba(0,0,0,.08);
+        }
+
+        .demo-section:not(.wide), #example .box:not(.wide) {
+            max-width: 400px;
+        }
+
+        .demo-section {
+            margin: 0 auto 4.5em;
+            padding: 3em;
+            border: 1px solid rgba(20,53,80,0.14);
+        }
+
+        .file-icon {
+            display: inline-block;
+            float: left;
+            width: 48px;
+            height: 48px;
+            margin-left: 10px;
+            margin-top: 13.5px;
+        }
+
+        .img-file { background-image: url(/images/upload/jpg.png) }
+        .doc-file { background-image: url(/images/upload/doc.png) }
+        .pdf-file { background-image: url(/images/upload/pdf.png) }
+        .xls-file { background-image: url(/images/upload/xls.png) }
+        .zip-file { background-image: url(/images/upload/zip.png) }
+        .default-file { background-image: url(/images/upload/default.png) }
+
+        #example .file-heading {
+            font-family: Arial;
+            font-size: 1.1em;
+            display: inline-block;
+            float: left;
+            width: 60%;
+            margin: 0 0 0 20px;
+            height: 25px;
+            -ms-text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        #example .file-name-heading {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        #example .file-size-heading {
+            font-weight: normal;
+            font-style: italic;
+        }
+
+        li.k-file .file-wrapper .k-upload-action {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        li.k-file div.file-wrapper {
+            position: relative;
+            height: 75px;
+        }
+
+        #example .k-delete{
+            background-image: url(/Content/kendo/2016.1.226/Bootstrap/sprite_old.png);
+        }
+
+        #isDeleteOldData{ padding-left:0px; }
+
+        .demo-others{padding-top:1em;}
+        .k-checkbox:checked+.k-checkbox-label:before {color: red;}
+    </style>
+
+    <script id="fileTemplate" type="text/x-kendo-template">
+        <span class='k-progress'></span>
+        <div class='file-wrapper'>
+            <span class='file-icon #=addExtensionClass(files[0].extension)#'></span>
+            <h4 class='file-heading file-name-heading' title="#=name#">文件名: #=name#</h4>
+            <h4 class='file-heading file-size-heading'>大小: #=size# bytes</h4>
+            <button type='button' class='k-upload-action'></button>
+        </div>
+    </script>
+}
+@section scripts{
+    <script type="text/javascript">
+            function filesOnSelect(e) {
+                var fileNames = [];
+                $.map(e.files, function (file) {
+                    var extension = file.extension;
+                    if (extension != ".xls" && extension != ".xlsx" && extension != ".XLS" && extension != ".XLSX") {
+                        fileNames.push(file.name);
+                    }
+                });
+                if (fileNames.length > 0) {
+                    jAlert("错误 :: \n" + fileNames.join("\n") + "\n不是一个excel文件！", "知道了");
+                    e.preventDefault();
+                    return false;
+                }
+            }
+            function filesOnUpload(e) {
+                if (e != null && e != undefined) {
+                    if (e.sender != null && e.sender != undefined) {
+                        if (e.sender.options != null && e.sender.options != undefined) {
+                            if (e.sender.options.async != null && e.sender.options.async != undefined) {
+                                if (e.sender.options.async.saveUrl != null && e.sender.options.async.saveUrl != undefined && e.sender.options.async.saveUrl.length > 0) {
+
+                                    var index = e.sender.options.async.saveUrl.indexOf("?");
+                                    if (index > 0) {
+                                        e.sender.options.async.saveUrl = e.sender.options.async.saveUrl.substring(0, index);
+                                    }
+                                    e.sender.options.async.saveUrl += "?isDeleteOldData=" + $("#isDeleteOldData")[0].checked;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            function filesOnSuccess(e) {
+                if (e.operation != "remove") {
+                    jAlert("成功 (" + getOperationName(e.operation) + ") :: " + getFileInfo(e), "知道了");
+                }
+            }
+            function filesOnError(e) {
+                if (e.operation != "remove") {
+                    var reason = "";
+                    if (e.XMLHttpRequest != null && e.XMLHttpRequest != undefined && e.XMLHttpRequest.responseText != null && e.XMLHttpRequest.responseText != undefined) {
+                        reason = "\n原因：" + e.XMLHttpRequest.responseText;
+                    }
+                    jAlert("失败 (" + getOperationName(e.operation) + ") :: " + getFileInfo(e) + reason, "知道了");
+                }
+            }
+            function addExtensionClass(extension) {
+                switch (extension) {
+                    case '.jpg':
+                    case '.img':
+                    case '.png':
+                    case '.gif':
+                        return "img-file";
+                    case '.doc':
+                    case '.docx':
+                        return "doc-file";
+                    case '.xls':
+                    case '.xlsx':
+                        return "xls-file";
+                    case '.pdf':
+                        return "pdf-file";
+                    case '.zip':
+                    case '.rar':
+                        return "zip-file";
+                    default:
+                        return "default-file";
+                }
+            }
+            function getOperationName(value) {
+                if (value == "upload") {
+                    return "上传";
+                }
+                else if (value == "remove") {
+                    return "删除";
+                }
+                return value;
+            }
+            function getFileInfo(e) {
+                return $.map(e.files, function (file) {
+                    var info = file.name;
+                    if (file.size > 0) {
+                        info += " (" + Math.ceil(file.size / 1024) + " KB)";
+                    }
+                    return info;
+                }).join(", ");
+            }
+            $(document).ready(function () {
+                $("#isDeleteOldData").change(function () {
+                    var obj = $(".demo-others");
+                    if ($("#isDeleteOldData")[0].checked) {
+                        obj.css("color", "red");
+                        jAlert("勾选会删除当天导入的数据，请慎重勾选！", "知道了");
+                    }
+                    else {
+                        obj.css("color", "#333");
+                    }
+                });
+            });
+
+            function delImportDataByCurrentDay() {
+                var selectid = $("#delDropDownList").data("kendoDropDownList").value();
+                if ($.trim(selectid) == "") {
+                    jAlert("请选择要删除的项目！", "知道了"); return;
+                }
+                $("#delButton").attr("disabled", "disabled");
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("Delete")",
+                    data: { id: selectid },
+                    dataType: "json",
+                    error: function (xhr, msg, ex) {
+                        jAlert(msg, "知道了");
+                    },
+                    success: function (result) {
+                        if (result.Success) {
+                            jAlert("删除成功！\n" + result.Data, "知道了");
+                        } else {
+                            jAlert("删除失败！\n" + result.Data, "知道了");
+                        }
+                    },
+                    complete: function () {
+                        $("#delButton").removeAttr("disabled");
+                    }
+                });
+            }
+    </script>
+}
+<div id="example">
+    <div class="box">
+        <h4>下载EXCEL模板</h4>
+        <p>
+            @foreach (var item in ViewBag.ExcelFileList)
+            {
+                <a href="@Url.Action("DownLoadFile",new { fileName = item })" target="_blank">@item</a><br />
+            }
+        </p>
+    </div>
+    <div class="demo-section k-content">
+        <h4>上传EXCEL</h4>
+        @(Html.Kendo().Upload()
+            .Multiple(false)
+            .Name("files")
+            .TemplateId("fileTemplate")
+            .Async(a => a
+                .Save("Save", "ImportExcel")
+                .Remove("Remove", "ImportExcel")
+                .AutoUpload(false)
+            )
+            .Events(e => e.Select("filesOnSelect").Upload("filesOnUpload").Success("filesOnSuccess").Error("filesOnError"))
+        )
+        <div class="demo-others"><input type="checkbox" id="isDeleteOldData" class="k-checkbox" /><label class="k-checkbox-label" for="isDeleteOldData">是否删除当天导入的数据</label></div>
+        <div class="demo-hint">只能上传<strong>EXCEL</strong>模板文件。</div>
+    </div>
+    <div class="demo-section k-content">
+        <h4>删除当天导入的数据</h4>
+        <div>
+            @Html.Kendo().DropDownList().Name("delDropDownList").BindTo((ViewBag.DelList as List<Gemstar.BSPMS.Common.Tools.KeyValuePairModel<string, string>>)).DataTextField("Value").DataValueField("Key")
+            @Html.Kendo().Button().Content("删除").Name("delButton").Events(e => e.Click("delImportDataByCurrentDay"))
+        </div>
+    </div>
+</div>

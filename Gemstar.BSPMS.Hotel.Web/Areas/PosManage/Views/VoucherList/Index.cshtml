@@ -1,0 +1,234 @@
+﻿@using Gemstar.BSPMS.Common.Extensions;
+@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPos
+@using Gemstar.BSPMS.Hotel.Web.Models;
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+
+
+@{
+    ViewBag.Title = "凭证列表";
+    var hid = ViewBag.hid;
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "Voucherid";
+    var gridModel = new KendoGridCommonViewModel()
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableScrollable = true,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForQuery = false,
+        HtmlAttributes = new { style = "height:500px" }
+
+    };
+
+    var template = "凭证日期从：" + Html.Kendo().DatePicker().Name("sqlbeginDate")
+                    .Format(DateTimeExtension.DateFormatStr)
+                    .HtmlAttributes(new{ style = "width:110px;" })
+                    .Max(DateTime.Now);
+    template += "&ensp;&ensp;至&ensp;&ensp;" + Html.Kendo().DatePicker()
+                    .Name("sqlendDate")
+                    .Format(DateTimeExtension.DateFormatStr)
+                    .HtmlAttributes(new{style = "width:110px;"})
+                    .Max(DateTime.Now); ;
+    template += "&ensp;&ensp;操作员：<input class='k-textbox' id='Creator'>";
+    template += "&ensp;<a class='k-button k-button-icontext k-grid-sql' href='javascript:void(0);' id='sql' onclick='Select()' style='cursor:default;'><span></span><span style='float:right;display:inline-block;cursor:pointer;'>查询</span></a>";
+    template += "<a class='k-button k-button-icontext k-grid-sql' href='javascript:void(0);' id='add' onclick='ADDWin.Open()' style='cursor:default;'><span></span><span style='float:right;display:inline-block;cursor:pointer;'>增加</span></a>";
+    template += "<a class='k-button k-button-icontext k-grid-sql' href='javascript:void(0);' id='del' onclick='Del()' style='cursor:default;'><span></span><span style='float:right;display:inline-block;cursor:pointer;'>删除</span></a>";
+    //template += "<a class='k-button k-button-icontext k-grid-cancel-changes' href='javascript: void(0)'><span class='k-icon k-cancel'></span>取消修改</a>";
+    //template += "<a class='k-button k-button-icontext k-grid-save-changes' href='javascript: void(0)'><span class='k-icon k-cancel'></span>保存修改</a>";
+    //template += "<a style='float:right' class='k-button k-button-icontext k-grid-sql' href='javascript:void(0);' id='muban' onclick='Muban()' style='cursor:default;'><span></span><span style='float:right;display:inline-block;cursor:pointer;'>上传模板</span></a>";
+    var gridHelper = new KendoGridEditInCellHtmlHelper<WhVoucher>
+(
+Html,
+Url,
+gridModel,
+c =>
+{
+    c.Bound("Varcharno").Title("凭证号");
+    c.Bound("Vouchertype").Title("凭证字");
+    c.Bound("Createdate").Title("生成日期").Format("{0:yyyy-MM-dd}");
+    c.Bound("VoucherDate").Title("凭证日期").Format("{0:yyyy-MM-dd}");
+    c.Bound("Dates").Title("日期区间");
+    c.Bound("Creator").Title("操作员");
+    c.Bound("Remark").Title("备注");
+    //c.Bound("Voucherid").Title("操作").ClientTemplate("<button class='k-button' onclick='detail(this)'><span></span>查看详情</button><button class='k-button' onclick='daochu(this)'><span></span>导出</button>").Width(180);
+    c.Bound("Voucherid").Title("操作").ClientTemplate("<button class='k-button' onclick='detail(this)'><span></span>查看详情</button>").Width(180);
+},
+c =>
+{
+    c.Id(w => w.Voucherid);
+    c.Field(w => w.Createdate).Editable(false);
+    c.Field(w => w.VoucherDate).Editable(false);
+    c.Field(w => w.Dates).Editable(false);
+    c.Field(w => w.Creator).Editable(false);
+    c.Field(w => w.Voucherid).Editable(false);
+    c.Field(w => w.Remark).Editable(false);
+},
+c =>
+{   
+    c.Template(template);
+}
+);
+    }
+    @(gridHelper.KendoGridEditInCell())
+
+
+    @section scripts{
+        @Html.Partial("_KendoGridEvents", gridModel)
+
+
+        <div style="display:none">
+            @* 增加凭证 *@
+            <div id="ADDWindow">
+                <div>
+                    <table style="margin:0px auto">
+                        <tr>
+                            <td>开始时间：</td>
+                            <td>
+                                @(Html.Kendo().DatePicker()
+                                                        .Name("beginDate")
+                                                        .Format(DateTimeExtension.DateFormatStr)
+                                                        .HtmlAttributes(new { style = "width:210px;" }))
+                                <span class="red-color">*</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>结束时间：</td>
+                            <td>
+                                @(Html.Kendo().DatePicker()
+                                                        .Name("endDate")
+                                                        .Format(DateTimeExtension.DateFormatStr)
+                                                        .HtmlAttributes(new { style = "width:210px;" }))
+                                <span class="red-color">*</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="formButtons" style="text-align:center;padding-top:8.12px;">
+                    <button class="k-primary k-button" role="button" data-role="button" onclick="ADDWin.Save()">确定</button>
+                    <button class="k-primary k-button" role="button" data-role="button" onclick="ADDWin.Close()">取消</button>
+                </div>
+            </div>
+        </div>
+
+<script type="text/javascript">
+ $(function () {
+        window.onresize = onResize; onResize();
+        ADDWin.Onload();
+    });
+
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 41;
+        $("#grid .k-grid-content").height(allHeight - showHeight);
+    }
+
+        //上传模板
+
+    function Muban() {
+        top.openSecondKendoWindow("导入文件附件", "/PermanentRoom/PermanentFileManage/Add"); 
+        
+    }
+
+    //查看详情
+    function detail(obj) {
+        var gridId = "@gridId";
+        var keyName = "@keyColumnName";
+        var grid = $("#" + gridId).data("kendoGrid");
+        var data = grid.dataItem($(obj).parent().parent());
+        var id = data[keyName];
+        var vouchertype = data.Vouchertype;
+        var varcharno = data.Varcharno;
+        var voucherDate = data.VoucherDate.ToDateString();
+        var remark = data.Remark;
+
+
+        top.openKendoWindow("查看详情", "@Url.Action("Detail", "VoucherList")", { Id: id, vouchertype: vouchertype, varcharno: varcharno, voucherDate: voucherDate, remark: remark})
+    }
+    //导出
+    function daochu(obj) {
+        var gridId = "@gridId";
+        var keyName = "@keyColumnName";
+        var grid = $("#" + gridId).data("kendoGrid");
+        var data = grid.dataItem($(obj).parent().parent());
+        var id = data[keyName];
+        var url = "/PosManage/VoucherList/Export?id=" + id;
+        window.open(encodeURI(url));
+    }
+
+    //删除
+        function Del() {
+            var gridId = "@gridId";
+            var keyName = "@keyColumnName";
+            var grid = $("#" + gridId).data("kendoGrid");
+            if (grid.select().length == 0) {
+                jAlert("请选中要删除的行");
+                return;
+            }
+            var ids = "";
+            for (var i = 0; i < grid.select().length; i++) {
+                var dataRows = grid.items();
+                // 获取行对象
+                var data = grid.dataItem(grid.select()[i]);
+                ids += data.id + ",";
+            }
+            $.post('@Url.Action("Del")', { ids: ids }, function (data) {
+                grid.dataSource.read();
+            }, 'json');
+
+        }
+
+        function Select() {
+            var sqlbeginDate = $("#sqlbeginDate").data("kendoDatePicker")._oldText;
+            var sqlendDate = $("#sqlendDate").data("kendoDatePicker")._oldText;
+            var Creator ="%"+ $("#Creator").val()+"%";
+            var gridId = "@gridId";
+            var keyName = "@keyColumnName";
+            var grid = $("#" + gridId).data("kendoGrid");
+            var result = "@@h99grpid=" +@hid+"&@@t00凭证开始日期=" + sqlbeginDate + "&@@t00凭证结束日期=" + sqlendDate + "&@@t00操作员=" + Creator + "";
+            GetControl("#commonQueryParameterValues").val(result);
+            grid.dataSource.read();
+        }
+
+     //增加凭证
+     var ADDWin = {
+            WindowObj: $("#ADDWindow"),
+            Onload: function () {
+                ADDWin.WindowObj.kendoWindow({ title: "增加凭证", width: "350px", visible: false, modal: true })
+            },
+            Open: function () {
+                var obj = ADDWin.WindowObj.data("kendoWindow");
+                obj.center().open();
+            },
+            Save: function () {
+                var beginDate = $("#beginDate").data("kendoDatePicker")._oldText;
+                var endDate = $("#endDate").data("kendoDatePicker")._oldText;
+                if (beginDate == "" || endDate=="") {
+                    jAlert("请填写开始和结束日期");
+                    return;
+                }
+                $.post('@Url.Action("ADD")', { beginDate: beginDate, endDate: endDate }, function (data) {
+                    if (data == "-1") {
+                        jAlert("新增凭证失败，请重新添加");
+                        ADDWin.Open();
+                    }
+                    else {
+                        var gridId = "@gridId";
+                        var grid = $("#" + gridId).data("kendoGrid");
+                        ADDWin.WindowObj.data("kendoWindow").close();
+                        grid.dataSource.read();
+                        top.openKendoWindow("查看详情", "@Url.Action("Detail", "VoucherList")", { Id: data })
+                    }
+                }, 'json');
+
+            },
+            Close: function () { ADDWin.WindowObj.data("kendoWindow").close(); },
+        };
+        </script>
+    }

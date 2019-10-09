@@ -1,0 +1,114 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.Weixin.Models.AuthLoginModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>售后工程师微信绑定</title>
+    <link rel="stylesheet" href="~/Content/weui.min.css" />
+</head>
+<body>
+    <div class="weui-msg">
+        <div class="weui-msg__icon-area"><i class="weui-icon-info weui-icon_msg"></i></div>
+        <div class="weui-msg__text-area">
+            <h2 class="weui-msg__title">微信绑定</h2>
+            <p class="weui-msg__desc">此操作将绑定售后工程师微信。</p>
+        </div>
+        <form method="post" id="loginform" action="@Url.Action("Bind")">
+            @Html.AntiForgeryToken()
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">手机号</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="Mobile" name="Mobile" type="tel" placeholder="请输入手机号">
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_vcode">
+                <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" id="CheckCode" name="CheckCode" placeholder="请输入验证码">
+                </div>
+                <div class="weui-cell__ft">
+                    <button class="weui-vcode-btn" id="getCheckCode">获取验证码</button>
+                </div>
+            </div>
+            <div class="weui-msg__opr-area">
+                <p class="weui-btn-area">
+                    @Html.HiddenFor(m => m.OpenId)
+                    @Html.HiddenFor(m => m.QrcodeId)
+                    @Html.HiddenFor(m=>m.QrcodeKey)
+                    <button class="weui-btn weui-btn_primary" name="para_loginSuccess" id="doBind" value="true">绑定</button>
+                </p>
+            </div>
+        </form>
+        <div class="weui-msg__extra-area">
+            <div class="weui-footer">
+                <p class="weui-footer__text">Copyright © 2016-2017 捷云PMS</p>
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#getCheckCode").click(function (e) {
+                e.preventDefault();
+                var mobile = $("#Mobile").val();
+                if (!mobile) {
+                    alert("请先输入手机号");
+                    return;
+                }
+                var btn = document.getElementById("getCheckCode");
+                sendCheckCodeBind(mobile, btn);
+            });
+            $("#doBind").click(function (e) {
+                e.preventDefault();
+                var mobile = $("#Mobile").val();
+                if (!mobile) {
+                    alert("请先输入手机号");
+                    return;
+                }
+                var CheckCode = $("#CheckCode").val();
+                if (!CheckCode) {
+                    alert("请先输入验证码");
+                    return;
+                }
+                $.post('@Url.Action("Bind")', { OpenId: $("#OpenId").val(), QrcodeId: $("#QrcodeId").val(), QrcodeKey: $("#QrcodeKey").val(), Mobile: mobile, CheckCode: CheckCode }, function (data) {
+                    if (data.Success) {
+                        alert("绑定成功，请关闭本窗口后重新扫描登录二维码来执行登录");
+                    } else {
+                        alert(data.Data);
+                    }
+                }, "json");
+            });
+        });
+       
+
+    //发送验证码
+    function sendCheckCodeBind(v,btn) {
+        $(btn).attr({ "disabled": "disabled" });
+        $.post('@Url.Action("SendCheckCodeByMobile")', { mobile: v }, function (data) {
+            if (data.Success) {
+                var second = parseInt(data.Data);
+                var intv = setInterval(function () {
+                    second = second - 1;
+                    $(btn).html(second + "s");
+                    if (second <= 0) {
+                        clearInterval(intv);
+                        $(btn).html("获取验证码");
+                        $(btn).removeAttr("disabled");
+                    }
+                }, 1000);
+            } else {
+                $(btn).html("获取验证码");
+                $(btn).removeAttr("disabled");
+                ajaxErrorHandle(data);
+            }
+        }, 'json');
+    }
+    </script>
+</body>
+</html>

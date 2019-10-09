@@ -1,0 +1,224 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosInSingle.ChangeTableModel
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures
+
+<style>
+    table {
+        width: 100%;
+    }
+
+    thead {
+        background: #0087ff29;
+    }
+
+        thead td {
+            padding: 0 5px;
+            border-radius: 2px;
+        }
+
+    .btn {
+        border: 1px solid #aaa;
+        background: #eee;
+        border-radius: 5px;
+        padding: 7px;
+        margin: 0;
+        width: 100%;
+        margin-top: 2px;
+        color: #333;
+    }
+</style>
+
+@{
+    var oldModel = ViewBag.oldModel as up_pos_list_billByBillidResult;
+    <table class="billDetail">
+        <thead>
+            <tr>
+                <td colspan="2">原餐台资料</td>
+            </tr>
+        </thead>
+        <tr class="txtLable">
+            <td class="textright">@Html.LabelFor(m => m.newRefeName)：</td>
+            <td><span>@oldModel.refeName</span></td>
+        </tr>
+        <tr class="txtLable">
+            <td class="textright">@Html.LabelFor(m => m.newTabName)：</td>
+            <td><span>@oldModel.tabName</span></td>
+        </tr>
+        <tr class="txtLable">
+            <td class="textright">@Html.LabelFor(m => m.newServiceRate)：</td>
+            <td><span>@oldModel.ServiceRate</span></td>
+        </tr>
+        <tr class="txtLable">
+            <td class="textright">@Html.LabelFor(m => m.newLimit)：</td>
+            <td><span>@oldModel.Limit</span></td>
+        </tr>
+    </table>
+}
+
+@using (Html.BeginForm("ChangeTable", "PosInSingle", new { rnd = new Random().NextDouble() }))
+{
+    <input type="hidden" value="@oldModel.Refeid" id="newRefeId" name="newRefeId" />
+    <input type="hidden" value="" id="newTabId" name="newTabId" />
+    <input type="hidden" value="@oldModel.Billid" id="oldBillId" name="oldBillId" />
+    <input type="hidden" value="@oldModel.TabNo" id="newTabNo" name="newTabNo" />
+
+    <input type="hidden" value='@oldModel.Tabid' id="oldTabId" name="oldTabId" />
+    <input type="hidden" value='@ViewBag.openFlag' id="openFlag" name="openFlag" />
+
+    <table class="billDetail">
+        <thead>
+            <tr>
+                <td colspan="2">新餐台资料</td>
+            </tr>
+        </thead>
+        <tr class="txtLable">
+            <td class="textright">@Html.LabelFor(m => m.newRefeName)：</td>
+            <td><span>@oldModel.refeName</span></td>
+        </tr>
+        <tr class="txtLable">
+            <td class="textright">@Html.LabelFor(m => m.newTabName)：</td>
+            <td>
+                @Html.Kendo().TextBoxFor(m => m.newTabName).HtmlAttributes(new { style = "width:100%;", @readonly = "readonly" })
+                <input type="button" value="选择餐台" onclick="SelectTab()" class="btn" />
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.newTabName, "*")</td>
+        </tr>
+        <tr class="txtLable">
+            <td class="textright">@Html.LabelFor(m => m.newServiceRate)：</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.newServiceRate).HtmlAttributes(new { style = "width:100%;", @readonly = "readonly" })</td>
+            <td>@Html.ValidationMessageFor(m => m.newServiceRate, "*")</td>
+        </tr>
+        <tr class="txtLable">
+            <td class="textright">@Html.LabelFor(m => m.newLimit)：</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.newLimit).HtmlAttributes(new { style = "width:100%;", @readonly = "readonly" })</td>
+            <td>@Html.ValidationMessageFor(m => m.newLimit, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">服务费消费政策：</td>
+            <td style="width:60%">@Html.Kendo().DropDownListFor(e => e.ServiceRateFlag).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListTabFlag", "PosInSingle", new { rnd = new Random().NextDouble() })).ServerFiltering(true); })</td>
+        </tr>
+        <tr>
+            <td class="textright">开台项目：</td>
+            <td style="width:60%">@Html.Kendo().DropDownListFor(e => e.ItemFlag).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListTabFlag", "PosInSingle", new { rnd = new Random().NextDouble() })).ServerFiltering(true); })</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons" style="margin-top:10px;">
+        <input type="button" value="确定" id="saveEditFormChangeTab" />
+        <input type="button" value="关闭" onclick="layer.closeAll()" />
+    </div>
+}
+
+<script type="text/javascript">
+    function SelectTab() {
+        var model = {
+            Refeid: $("#newRefeId").val(),
+            PageIndex: 1,
+            PageSize: 22
+        };
+        var windowWidth = $(window).width();
+        var left = windowWidth - 660;
+        $.ajax({
+            url: 'PosInSingle/_SelectPosTab',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                layer.open({
+                    type: 1,
+                    title: false,
+                    scrollbar: false,//禁止滚动条
+                    closeBtn: 0, //不显示关闭按钮
+                    shadeClose: true, //开启遮罩关闭
+                    area: ['660px', '465px'], //宽高
+                    content: data,
+                    id: "selectPosTab",
+                    offset: ['auto', left + "px"],
+                    shade: 0
+                });
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormChangeTab").click(function (e) {
+            var tabName = $("#newTabId").val();
+            if (tabName == "") {
+                layer.alert("新餐台不能为空", { title: "快点云Pos提示" });
+                return false;
+            }
+            e.preventDefault();
+            saveFormDataChangeTab($("#saveEditFormChangeTab"));
+        });
+    })
+
+    //提交表单
+    function saveFormDataChangeTab(btn) {
+        var f = $(btn)[0].form;
+        var validator = $(f).validate();
+        if (validator.form()) {
+            $.post(
+                $(f).attr("action"),
+                $(f).serialize(),
+                function (data) {
+                    if (data.Success) {
+                        if ("undefined" != typeof jsObject) {   //封装程序
+                            if (data.Data.ListDetail.length > 0 && data.Data.ListDetail != "") {
+                                jsObject.UserName = $("#userName").val();
+                                jsObject.PrintReportByChangeTab("转台通知单", "ChangeTabTable", data.Data.ListDetail, false, false);
+                            }
+                        }
+                        layer.confirm("换台成功", {
+                            btn: ['继续', '取消'] //按钮
+                            , title: '快点云Pos提示'
+                            , shade: 'rgba(0,0,0,0)'
+                        }, function () {
+                            top.window.location.href = data.Data.url;
+
+                        }, function () {
+                            layer.closeAll();
+                        });
+
+                    } else {
+                        layer.alert(data.Data, { title: "快点云Pos提示" });
+                    }
+                },
+                "json");
+        }
+    }
+
+    function setItemPriceNull() {
+        var html = "";
+        var liCount = $("#selectPosTabList ").find("content-list-tabStatus").length - 1;
+
+        return false;
+        //if (parseInt(liCount) > 0 && parseInt(liCount) < parseInt(model.PageSize)) {
+        //    var count = parseInt(model.PageSize) - liCount;
+        //    for (var i = 0; i < count; i++) {
+        //        html += '<li class="content-list-unit" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+        //    }
+        //    if (liCount == 0) {
+        //        $(".top-content-list ul:nth-child(2) li:nth-child(1)").before(html);
+        //    }
+        //    else {
+        //        $(".top-content-list ul:nth-child(2) li:nth-child(" + liCount + ")").after(html);
+        //    }
+        //}
+        //else if (parseInt(liCount) <= 0) {
+        //    var count = parseInt(model.PageSize) - liCount;
+        //    for (var i = 0; i < count; i++) {
+        //        html += '<li class="content-list-unit" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+        //    }
+        //    if (liCount <= 0) {
+        //        $(".top-content-list ul:nth-child(2) li:nth-child(1)").before(html);
+        //    }
+        //    else {
+        //        $(".top-content-list ul:nth-child(2) li:nth-child(" + liCount + ")").after(html);
+        //    }
+        //}
+    }
+</script>

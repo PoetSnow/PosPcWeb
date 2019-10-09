@@ -1,0 +1,65 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Common.Services;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "会员消费记录";
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForQuery =  false,
+        HtmlAttributes = new { style = "height:465px;max-height:465px;" },
+        EnableScrollable = true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("transDate").Title("发生时间").Width(135);
+            c.Bound("remark").Title("备注");
+            c.Bound("hname").Title("分店").Column.Visible = ViewBag.IsGroup;
+            c.Bound("outletCode").Title("营业点");
+            //c.Bound("type").Title("类型");
+            c.Bound("nigths").Title("间夜数");
+            c.Bound("amount").Title("消费金额");
+            c.Bound("roomNo").Title("房号");
+            c.Bound("regid").Title("账号").ClientTemplate("#:regid==null?'':regid.replace(hid,'')#");
+        }
+    };
+}
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+
+    <script type="text/javascript">
+        //双击编辑订单
+        function editGridItem(row) {
+            debugger;
+            var grid = $("#grid").data("kendoGrid");
+            var data = grid.dataItem($(row));
+
+           if (data.regid != null && data.regid != "") {
+               var url = "@Url.Action("Index", "ResOrderAdd", new { area= "ResManage" })" + "?type=I" + "&id=" + data.regid + "&IsRoomStatus=4";
+               top.openResKendoWindow("客单", url, null, "20020", "新预订/入住");
+           }
+                  
+            
+        }
+    </script>
+}
+@section headerContent{
+    <style type="text/css">
+        html,body{overflow:hidden;width:964px;height:474px;}
+        .wrap {
+            width: 956px;
+            height: 466px;
+            margin: 0px;
+            padding: 4px;
+            overflow:hidden;
+        }
+    </style>
+}

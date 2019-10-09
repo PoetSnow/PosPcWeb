@@ -1,0 +1,46 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MarketingManage.Models.BookingNotes.BookingNotesGroupAddViewModel
+ 
+@using (Html.BeginForm(new { action= "AddGroup" }))
+{
+        @Html.HiddenFor(m=>m.DataControlCode)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Name)</td>
+            <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:350px;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.DataControlName)</td>
+            <td>@Html.TextBoxFor(m => m.DataControlName, new { @class = "k-textbox", style = "width:180px;",@readonly="readonly" })</td>
+            <td>@Html.ValidationMessageFor(m => m.DataControlName, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td>@Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:350px;height:200px;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.SelectedResortHids)</td>
+            <td>@Html.DropDownListFor(m => m.SelectedResortHids,Model.ResortItems,new { @class= "box",multiple="multiple", style = "width:180px;height:200px;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.SelectedResortHids, "*")</td>
+        </tr>          
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        var controlType = "@Model.DataControlCode";
+        if (controlType != "@Gemstar.BSPMS.Common.Services.BasicDataControls.DataControlType.SelectedResorts.Code") {
+            $("#SelectedResortHids").attr("disabled", "disabled");
+        }
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+</script>

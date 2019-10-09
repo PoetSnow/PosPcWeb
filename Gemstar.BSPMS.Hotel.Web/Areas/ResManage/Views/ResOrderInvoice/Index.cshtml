@@ -1,0 +1,836 @@
+﻿@{
+    ViewBag.Title = "发票管理";
+}
+<style type="text/css">
+    #paneInvoices {margin-top: 2px;}
+    #paneInvoiceList {float: left;}
+    #paneInvoiceItem {float: left;margin-left: 2px;border-radius: 4px;}
+        #paneInvoiceItem .editFormTable {padding:2px 2px;}
+        #paneInvoiceItem .editFormTable #formTitle {font-size:16px;text-align:center;}
+        #paneInvoiceItem .editFormTable input {width: 100%;}
+        #paneInvoiceItem .editFormTable .lable-red {color: red;}
+        #paneInvoiceItem .editFormTable .tr-hr {height: 4px;}
+        #paneInvoiceItem .editFormTable .tr-pane {display: none;}
+        #paneInvoiceItem .editFormTable #tr-pane-open {position: relative;cursor: pointer;}
+        #paneInvoiceItem .editFormTable #tr-pane-close {display: none;position: relative;cursor: pointer;}
+        #paneInvoiceItem .formButtons {padding-bottom:4px; text-align:center;padding-left:4px;padding-right:4px;text-align:left;}
+        #gridInvoiceItemDetail table{width:570px;}
+        #gridInvoiceItemDetail tfoot th{padding-left:17px;}
+</style>
+<div id="paneInvoices">
+    <div id="paneInvoiceList">
+        @(
+        Html.Kendo().Grid<Gemstar.BSPMS.Hotel.Services.ResInvoiceManage.ResInvoiceInfo>()
+        .Name("gridInvoice")
+        //.ToolBar(t => t.Template("<a id=\"btnAddInvoices\" class=\"k-button k-button-icontext k-grid-add\" href=\"javascript:;\" onclick=\"Invoice.AddEvent()\"><span class=\"k-icon k-add\"></span>增加开票</a>"))
+        .Columns(c =>
+        {
+            c.Bound(w => w.Id).Hidden().HtmlAttributes(new { @class = "data-Id" });
+            c.Bound(w => w.ReftypeName);
+            c.Bound(w => w.TaxTypeName);
+            c.Bound(w => w.TaxName).Width(147);
+            c.Bound(w => w.Amount);
+            c.Bound(w => w.CDate).Format("{0:yyyy-MM-dd HH:mm:ss}");
+            c.Bound(w => w.Id).ClientTemplate("<a class=\"k-button k-button-icontext k-grid-delete\" onclick=\"Invoice.Del('#:Id#')\" href=\"javascript:;\"><span class=\"k-icon k-i-unpin\"></span>删除</a>").Title("操作");
+        })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Url(Url.Action("AjaxQueryInvoices")).Data("Invoice.GetPara"))
+            .Events(e => e.Error("Invoice.Error"))
+            .Model(m => m.Id(p => p.Id))
+            .ServerOperation(false)
+        )
+        .AutoBind(false)
+        .Editable(e => e.Enabled(false))
+        .Sortable(s => s.Enabled(false))
+        .Selectable(s => { s.Mode(GridSelectionMode.Single); s.Type(GridSelectionType.Row); })
+        .Events(e => e.Change("Invoice.Change").DataBound("Invoice.DataBound"))
+        )
+    </div>
+    <div id="paneInvoiceItem" class="k-widget">
+        @Html.Hidden("Id")
+        <table class="editFormTable">
+            <tr><td colspan="4" id="formTitle"></td></tr>
+            <tr>
+                <td class="textright"><label for="TaxType">发票类型</label></td>
+                <td>
+                    @(Html.Kendo().RadioButton().Name("TaxType").Value(0).Label("普通发票").Checked(true))
+                    @(Html.Kendo().RadioButton().Name("TaxType").Value(1).Label("专用发票"))
+                </td>
+                <td class="textright"><label for="PrintType">打印类型</label></td>
+                <td>
+                    @(Html.Kendo().RadioButton().Name("PrintType").Value(0).Label("纸质发票").Checked(true))
+                    @(Html.Kendo().RadioButton().Name("PrintType").Value(1).Label("电子发票"))
+                </td>
+            </tr>
+            <tr>
+                <td class="textright">是否冲销</td>
+                <td>
+                    @(Html.Kendo().CheckBox().Name("Isread").Label("冲销"))
+                </td>
+                <td class="textright">是否作废</td>
+                <td>
+                    @(Html.Kendo().CheckBox().Name("IsCancel").Label("作废"))
+                </td>
+            </tr>
+            <tr class="tr-hr">
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td class="textright"><label for="No">发票号码</label></td>
+                <td colspan="3">
+                    @(Html.Kendo().TextBox().Name("No"))
+                </td>
+            </tr>
+            <tr>
+                <td class="textright"><label for="TaxName">发票抬头</label></td>
+                <td colspan="3">
+                    @(Html.Kendo().TextBox().Name("TaxName").HtmlAttributes(new { style = "width:100%" }))
+                </td>
+            </tr>
+            <tr>
+                <td class="textright"><label for="TaxNo">税务登记号</label></td>
+                <td colspan="3">
+                    @(Html.Kendo().TextBox().Name("TaxNo"))
+                </td>
+            </tr>
+            <tr>
+                <td class="textright"><label for="TaxAddTel">发票地址和电话</label></td>
+                <td colspan="3">
+                    @(Html.Kendo().TextBox().Name("TaxAddTel").HtmlAttributes(new { style = "width:100%;" }))
+                </td>
+            </tr>
+            <tr>
+                <td class="textright"><label for="TaxBankAccount">发票银行和账号</label></td>
+                <td colspan="3">
+                    @(Html.Kendo().TextBox().Name("TaxBankAccount").HtmlAttributes(new { style = "width:100%;" }))
+                </td>
+            </tr>
+            <tr>
+                <td class="textright"><label for="Remark">备注</label></td>
+                <td colspan="3">
+                    @(Html.TextArea("Remark", new { style = "width:100%;resize:none;", @class = "k-textbox" }))
+                </td>
+            </tr>
+            <tr class="tr-hr tr-pane">
+                <td colspan="4"></td>
+            </tr>
+            <tr class="tr-pane">
+                <td class="textright"><label for="InvoiceCode">税务发票代码</label></td>
+                <td colspan="3">
+                    @(Html.Kendo().TextBox().Name("InvoiceCode"))
+                </td>
+            </tr>
+            <tr class="tr-pane">
+                <td class="textright"><label for="InvoiceNo">税务发票号</label></td>
+                <td colspan="3">
+                    @(Html.Kendo().TextBox().Name("InvoiceNo"))
+                </td>
+            </tr>
+            <tr class="tr-pane">
+                <td class="textright"><label for="InvoiceSeq">税务发票批号</label></td>
+                <td colspan="3">
+                    @(Html.Kendo().TextBox().Name("InvoiceSeq"))
+                </td>
+            </tr>
+            <tr class="tr-hr tr-pane">
+                <td colspan="4"></td>
+            </tr>
+            <tr class="tr-pane">
+                <td class="textright"><label for="InvoiceCode0" class="lable-red">原税务发票代码</label></td>
+                <td colspan="3">
+                    @(Html.Kendo().TextBox().Name("InvoiceCode0"))
+                </td>
+            </tr>
+            <tr class="tr-pane">
+                <td class="textright"><label for="InvoiceNo0" class="lable-red">原税务发票号</label></td>
+                <td colspan="3">
+                    @(Html.Kendo().TextBox().Name("InvoiceNo0"))
+                </td>
+            </tr>
+            <tr class="tr-pane">
+                <td class="textright"><label for="RedInfo" class="lable-red">红字发票信息</label></td>
+                <td colspan="3">
+                    @(Html.Kendo().TextBox().Name("RedInfo"))
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div id="tr-pane-open" class="k-splitbar k-state-default k-splitbar-vertical k-splitbar-vertical-hover" title="展开"><div class="k-icon k-expand-prev"></div><div class="k-icon k-resize-handle"></div></div>
+                    <div id="tr-pane-close" class="k-splitbar k-state-default k-splitbar-vertical k-splitbar-vertical-hover k-splitbar-draggable-vertical" title="隐藏"><div class="k-icon k-collapse-prev"></div><div class="k-icon k-resize-handle"></div></div>
+                </td>
+            </tr>
+            <tr class="tr-hr">
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div id="gridInvoiceItemDetail" class="k-widget k-grid">
+                        @*<div class="k-header k-grid-toolbar"><a class="k-button k-button-icontext k-grid-add" href="javascript:;" onclick="Invoice.Items.Add()"><span class="k-icon k-add"></span>增加项目</a></div>*@
+                        <table class="k-selectable">
+                            <thead class="k-grid-header">
+                                <tr><th class="k-header">发票项目</th><th class="k-header">税率</th><th class="k-header">含税金额</th><th class="k-header">税金</th><th class="k-header">不含税金额</th><th class="k-header" style="width:80px;">操作</th></tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot class="k-grid-header">
+                                <tr><th class="k-header">合计</th><th class="k-header" id="txtRateTaxSum">0</th><th class="k-header" id="txtAmountSum">0</th><th class="k-header" id="txtAmountTaxSum">0</th><th class="k-header" id="txtAmountNoTaxSum">0</th><th class="k-header"></th></tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div class="formButtons">
+            <a id="btnAddInvoices" class="k-button k-button-icontext k-grid-add" href="javascript:;" onclick="Invoice.AddEvent()"><span class="k-icon k-add"></span>增加开票</a>
+            <a class="k-button k-button-icontext k-grid-add" href="javascript:;" onclick="Invoice.Items.Add()"><span class="k-icon k-add"></span>增加项目</a>
+            <button class="k-primary k-button k-button-icontext k-grid-save-changes" id="saveFormButton" onclick="Invoice.Save()" style="float:right;margin-right:16px;"><span class="k-icon k-update"></span>保存</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var grid = "#gridInvoice";//表格控件ID
+    var gridItemDetail = "#gridInvoiceItemDetail";//子表格控件ID
+    var invoiceProject = [];//发票开票项目
+    var hasChanged = false;//表单内容是否有修改
+    var selectedId = null;//发票ID，选中发票ID所在的行
+    var planAmount = '@ViewBag.PlanAmount';//计划发票金额
+    $(document).ready(function(){
+        //初始化
+        Invoice.Items.Load(function(){
+            Invoice.Load();
+        });
+        //展开
+        $("#tr-pane-open").click(function(){
+            $(".tr-pane").css("display","table-row");
+            $(this).css("display","none");
+            $("#tr-pane-close").css("display","block");
+        });
+        //隐藏
+        $("#tr-pane-close").click(function(){
+            $(".tr-pane").css("display","none");
+            $(this).css("display","none");
+            $("#tr-pane-open").css("display","block");
+        });
+        //有修改
+        $("#paneInvoiceItem table input").change(function(){
+            hasChanged = true;
+        });
+        //发票抬头
+        $("#TaxName").kendoAutoComplete({
+            template: "#= TaxName #, #= TaxNo #",
+            dataTextField: "TaxName",
+            filter: "contains",
+            minLength: 3,
+            dataSource: {
+                serverFiltering: true,
+                transport: {
+                    read: {
+                        type: "POST",
+                        url:"@Url.Action("GetInvoicePartInfo")",
+                        dataType:"json",
+                        data: function() {
+                            return {
+                                taxType: $("[name='TaxType']:checked").val(),
+                                taxName: $("#TaxName").val()
+                            };
+                        }
+                    }
+                }
+            },
+            select:function(e){
+                var dataItem = this.dataItem(e.item.index());
+                if(dataItem != null){
+                    $("[name='TaxType'][value='" + dataItem.TaxType + "']")[0].checked = true;//发票类型
+                    $("#TaxName").val(dataItem.TaxName);//发票抬头
+                    $("#TaxNo").val(dataItem.TaxNo);//税务登记号
+                    $("#TaxAddTel").val(dataItem.TaxAddTel);//发票地址和电话
+                    $("#TaxBankAccount").val(dataItem.TaxBankAccount);//发票银行和账号
+                }
+            }
+        });
+    });
+    //发票
+    var Invoice={
+        Load:function(){
+            hasChanged = false;
+            $(grid).data("kendoGrid").dataSource.read();
+        },
+        AddEvent:function(){
+            if (hasChanged) {
+                jConfirm("当前数据已经修改，是否保存?", "  是  ", "  否  ", function (confirmed) {
+                    if (confirmed) {
+                        Invoice.Save();
+                    }else{
+                        hasChanged = false;
+                        Invoice.Add();
+                    }
+                }, null, "取消");
+            }else{
+                Invoice.Add();
+            }
+        },
+        Add:function(){
+            $(grid + " table tbody tr").removeClass("k-state-selected");
+            $("#formTitle").text("增加一个新的发票");
+            $("#Id").val("");//主键ID
+            $("[name='TaxType'][value='" + Invoice.GetSourceInvoiceInfo().TaxType + "']")[0].checked = true;//发票类型
+            $("[name='PrintType'][value='0']")[0].checked = true;//打印类型
+            $("#Isread")[0].checked = false;//是否冲销
+            $("#IsCancel")[0].checked = false;//是否作废
+            $("#No").val("");//发票号码
+            $("#TaxName").val(Invoice.GetSourceInvoiceInfo().TaxName);//发票抬头
+            $("#TaxNo").val(Invoice.GetSourceInvoiceInfo().TaxNo);//税务登记号
+            $("#TaxAddTel").val(Invoice.GetSourceInvoiceInfo().TaxAddTel);//发票地址和电话
+            $("#TaxBankAccount").val(Invoice.GetSourceInvoiceInfo().TaxBankAccount);//发票银行和账号
+            $("#InvoiceCode").val("");//税务发票代码
+            $("#InvoiceNo").val("");//税务发票号
+            $("#InvoiceSeq").val("");//税务发票批号
+            $("#InvoiceCode0").val("");//原税务发票代码
+            $("#InvoiceNo0").val("");//原税务发票号
+            $("#RedInfo").val("");//红字发票信息
+            $("#Remark").val("");//备注
+            Invoice.Items.SetData(null);//初始化子列表
+        },
+        SelectItemEvent:function(){
+            if (hasChanged) {
+                //改为之前的选择状态
+                var kendoGrid = $(grid).data("kendoGrid");
+                var newRow = kendoGrid.select();
+                var id = $("#Id").val();
+                if(newRow.find("td.data-Id").text() != id){
+                    $(grid + " table tbody tr").removeClass("k-state-selected");
+                    if(id.length > 0){
+                        var oldRow = kendoGrid.tbody.find("tr td.data-Id:contains('" + id + "')").parent()[0];
+                        if(oldRow != undefined){
+                            kendoGrid.select(oldRow);
+                        }
+                    }
+                }
+                jConfirm("当前数据已经修改，是否保存?", "  是  ", "  否  ", function (confirmed) {
+                    if (confirmed) {
+                        Invoice.Save();
+                    }else{
+                        hasChanged = false;
+                        kendoGrid.select(newRow);
+                        Invoice.SelectItem();
+                    }
+                }, null, "取消");
+            }else{
+                Invoice.SelectItem();
+            }
+        },
+        SelectItem:function(){
+            $("#formTitle").text("修改左侧选中的发票");
+            var kendoGrid = $(grid).data("kendoGrid");
+            var resInvoiceInfo = kendoGrid.dataItem(kendoGrid.select());
+            $("#Id").val(resInvoiceInfo.Id);//主键ID
+            $("[name='TaxType'][value='" + resInvoiceInfo.TaxType + "']")[0].checked = true;//发票类型
+            $("[name='PrintType'][value='" + resInvoiceInfo.PrintType + "']")[0].checked = true;//打印类型
+            $("#Isread")[0].checked = resInvoiceInfo.Isread;//是否冲销
+            $("#IsCancel")[0].checked = resInvoiceInfo.IsCancel;//是否作废
+            $("#No").val(resInvoiceInfo.No);//发票号码
+            $("#TaxName").val(resInvoiceInfo.TaxName);//发票抬头
+            $("#TaxNo").val(resInvoiceInfo.TaxNo);//税务登记号
+            $("#TaxAddTel").val(resInvoiceInfo.TaxAddTel);//发票地址和电话
+            $("#TaxBankAccount").val(resInvoiceInfo.TaxBankAccount);//发票银行和账号
+            $("#InvoiceCode").val(resInvoiceInfo.InvoiceCode);//税务发票代码
+            $("#InvoiceNo").val(resInvoiceInfo.InvoiceNo);//税务发票号
+            $("#InvoiceSeq").val(resInvoiceInfo.InvoiceSeq);//税务发票批号
+            $("#InvoiceCode0").val(resInvoiceInfo.InvoiceCode0);//原税务发票代码
+            $("#InvoiceNo0").val(resInvoiceInfo.InvoiceNo0);//原税务发票号
+            $("#RedInfo").val(resInvoiceInfo.RedInfo);//红字发票信息
+            $("#Remark").val(resInvoiceInfo.Remark);//备注
+            Invoice.Items.SetData(resInvoiceInfo.InvoiceDetails);//赋值子列表
+        },
+        SaveValid:function(resInvoiceInfo){
+            if(resInvoiceInfo == null || resInvoiceInfo == undefined){
+                jAlert("请填写表单！","知道了");return false;
+            }
+            if(resInvoiceInfo.Id.length > 0 && resInvoiceInfo.Id.length != 36){
+                jAlert("发票唯一标识错误！","知道了");return false;
+            }
+            if(resInvoiceInfo.Reftype != 0 && resInvoiceInfo.Reftype != 1 && resInvoiceInfo.Reftype != 2){
+                jAlert("发票业务来源错误！","知道了");return false;
+            }
+            if(resInvoiceInfo.Reftype == 0){
+                if(resInvoiceInfo.Resid.length <= 0){
+                    jAlert("参数订单ID错误！","知道了");return false;
+                }
+            }else if(resInvoiceInfo.Reftype == 1){
+                if(resInvoiceInfo.ProfileCaid <= 0){
+                    jAlert("参数会员账务ID错误！","知道了");return false;
+                }
+            }else if(resInvoiceInfo.Reftype == 2){
+                if(resInvoiceInfo.Companycaid <= 0){
+                    jAlert("参数合约单位账务ID错误！","知道了");return false;
+                }
+            }
+            if(resInvoiceInfo.TaxType != "0" && resInvoiceInfo.TaxType != "1"){
+                jAlert("请选择发票类型！","知道了");return false;
+            }
+            if(resInvoiceInfo.PrintType != "0" && resInvoiceInfo.PrintType != "1"){
+                jAlert("请选择发票打印类型！","知道了");return false;
+            }
+            //if(resInvoiceInfo.No.length <= 0){
+            //    jAlert("请输入发票号码！","知道了");return false;
+            //}
+            if(resInvoiceInfo.InvoiceDetails.length <= 0){
+                jAlert("请增加发票项目！","知道了");return false;
+            }
+            for(index in resInvoiceInfo.InvoiceDetails){
+                var item  = resInvoiceInfo.InvoiceDetails[index];
+                if(item.ItemTaxid.length <= 0){
+                    jAlert("请选择发票项目！","知道了");return false;
+                }
+                if(item.Amount == null || item.Amount == undefined){
+                    jAlert("请输入含税金额！","知道了");return false;
+                }
+                if(isNaN(item.Amount) || item.Amount < 0){
+                    jAlert("请输入正确的含税金额！","知道了");return false;
+                }
+                if(item.AmountNoTax == null || item.AmountNoTax == undefined){
+                    jAlert("请输入不含税金额！","知道了");return false;
+                }
+                if(isNaN(item.AmountNoTax) || item.AmountNoTax < 0){
+                    jAlert("请输入正确的不含税金额！","知道了");return false;
+                }
+                if(item.AmountTax == null || item.AmountTax == undefined){
+                    jAlert("请输入税金！","知道了");return false;
+                }
+                if(isNaN(item.AmountTax) || item.AmountTax < 0){
+                    jAlert("请输入正确的税金！","知道了");return false;
+                }
+                if(item.RateTax == null || item.RateTax == undefined){
+                    jAlert("请输入税率！","知道了");return false;
+                }
+                if(isNaN(item.RateTax) || item.RateTax < 0){
+                    jAlert("请输入正确的税率！","知道了");return false;
+                }
+            }
+            return true;
+        },
+        Save:function(){
+            var resInvoiceInfo={
+                Id: $("#Id").val(),//主键ID
+                Reftype: Invoice.GetPara().type,//业务来源
+                Resid: Invoice.GetPara().type==0 ? Invoice.GetPara().id : "",// 订单Id
+                Companycaid: Invoice.GetPara().type==1 ? Invoice.GetPara().id : "",// 会员账务Id
+                ProfileCaid: Invoice.GetPara().type==2 ? Invoice.GetPara().id : "",// 合约单位账务Id
+                TaxType: $("[name='TaxType']:checked").val(),//发票类型
+                PrintType: $("[name='PrintType']:checked").val(),//发票打印类型
+                Isread: $("#Isread")[0].checked,//是否冲销
+                IsCancel: $("#IsCancel")[0].checked,//是否作废
+                No: $("#No").val(),// 发票号码
+                TaxName: $("#TaxName").val(),//发票抬头
+                TaxNo: $("#TaxNo").val(),//税务登记号
+                TaxAddTel: $("#TaxAddTel").val(),//发票地址和电话
+                TaxBankAccount: $("#TaxBankAccount").val(),//发票银行和账号
+                RateTax: 0,
+                InvoiceCode: $("#InvoiceCode").val(),//税务发票代码
+                InvoiceNo: $("#InvoiceNo").val(),//税务发票号
+                InvoiceSeq: $("#InvoiceSeq").val(),//税务发票批号
+                InvoiceCode0: $("#InvoiceCode0").val(),//原税务发票代码
+                InvoiceNo0: $("#InvoiceNo0").val(),//原税务发票号
+                RedInfo: $("#RedInfo").val(),//红字发票信息
+                Remark: $("#Remark").val(),//备注
+                InvoiceDetails:Invoice.Items.GetData(),//获取发票项目信息
+                OriginInvoiceJsonData: null,
+            };
+            if(resInvoiceInfo.Id.length > 0){
+                var row = $(grid + " table tbody tr td.data-Id:contains('" + resInvoiceInfo.Id + "')").parent();
+                if(row.length > 0){
+                    var originData = $(grid).data("kendoGrid").dataItem(row[0]);
+                    if(originData != null && originData.OriginInvoiceJsonData != null && originData.OriginInvoiceJsonData.length > 0){
+                        resInvoiceInfo.OriginInvoiceJsonData = originData.OriginInvoiceJsonData;//源数据
+                    }
+                }
+            }
+            if(!Invoice.SaveValid(resInvoiceInfo)){return;}
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("SaveInvoices")",
+                data: { resInvoiceInfo:resInvoiceInfo },
+                dataType: "json",
+                success: function (data) {
+                    if (data.Success) {
+                        jAlert("保存成功！","知道了");
+                        selectedId = data.Data;
+                        Invoice.Load();
+                    } else {
+                        jAlert(data.Data, "知道了");
+                    }
+                },
+                error: function (xhr, msg, ex) {
+                    jAlert(msg, "知道了");
+                },
+                complete:function(){
+                    hasChanged = false;
+                }
+            });
+        },
+        Del:function(id){
+            jConfirm("确认删除?", "删除", "取消", function (confirmed) {
+                if(confirmed){
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("DestroyInvoices")",
+                        data: { id:id },
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.Success) {
+                                jAlert("删除成功！","知道了");
+                                Invoice.Load();
+                            } else {
+                                jAlert(data.Data, "知道了");
+                            }
+                        },
+                        error: function (xhr, msg, ex) {
+                            jAlert(msg, "知道了");
+                        }
+                    });
+                }
+            });
+        },
+        Items:{
+            Load:function(onComplete){
+                $.ajax({
+                    async: false,
+                    type: "POST",
+                    url: "@Url.Action("ListItemForInvoiceProjectType")",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != null && data != undefined && data.length > 0) {
+                            invoiceProject = data;
+                        } else {
+                            jAlert("没有[发票开票项目]信息，请选择菜单[资料设置]-[通用代码]，然后在[发票开票项目]中添加。", "知道了");
+                        }
+                    },
+                    error: function (xhr, msg, ex) {
+                        jAlert(msg, "知道了");
+                    },
+                    complete:onComplete
+                });
+            },
+            GetTdSelectId:function(){
+                return "selectItemTax_" + Math.floor(Math.random() * 10000000 + 1);
+            },
+            GetTdSelectHtml:function(id, selectedValue){
+                if(invoiceProject.length <= 0){return "<td></td>";}
+                var optionHtml=[];
+                for (index in invoiceProject){
+                    var attr = "";
+                    if(selectedValue == Invoice.Items.GetInvoiceProjectTypeId(invoiceProject[index].Value)){attr = "selected=\"selected\"";}
+                    optionHtml.push("<option value=\"" + invoiceProject[index].Value + "\" " + attr + ">" + invoiceProject[index].Text + "</option>");
+                }
+                return "<td><select id=\"" + id + "\" name=\"selectItemTax\" style=\"width:auto;\">" + optionHtml.join("") + "</select></td>";
+            },
+            GetInvoiceProjectTypeId:function(value){
+                if(value != null && value != undefined && value.length > 0){
+                    var splitstr = "&|&";
+                    var list = value.split(splitstr);
+                    if(list != null && list.length > 0){
+                        return list[0];
+                    }
+                }
+                return value;
+            },
+            GetInvoiceProjectTypeRateTax:function(value){
+                if(value != null && value != undefined && value.length > 0){
+                    var splitstr = "&|&";
+                    var list = value.split(splitstr);
+                    if(list != null && list.length == 2){
+                        var rateTax =  parseFloat(list[1]);
+                        if(isNaN(rateTax) || rateTax <= 0){
+                            rateTax = 1.0;
+                        }else{
+                            rateTax = (rateTax/100).toFixed(2);
+                        }
+                        return rateTax;
+                    }
+                }
+                return 1.0;
+            },
+            SelectChange:function(selectId){
+                var thisObj = this;
+                if(selectId != null && selectId != undefined && selectId.length > 0){
+                    thisObj = $("#" + selectId).data("kendoDropDownList");
+                }
+                var value = thisObj.value();
+                var obj = $(thisObj.element).parents(gridItemDetail + " tr").find("input[name='txtRateTax']").data("kendoNumericTextBox");
+                obj.value(Invoice.Items.GetInvoiceProjectTypeRateTax(value));
+                Invoice.Items.RateTaxChange(null,obj);
+                hasChanged = true;
+                Invoice.Items.Summary();
+            },
+            AmountChange:function(e, thisObj){
+                var amount = null;
+                var element = null;
+                if(thisObj != null && thisObj != undefined){
+                    amount = thisObj.value();
+                    element = thisObj.element;
+                }else{
+                    amount = this.value();
+                    element = this.element;
+                }
+                if(amount != null && amount != undefined){
+                    var trObj = $(element).parents(gridItemDetail + " tr");
+                    var rateTax = trObj.find("input[name='txtRateTax']").data("kendoNumericTextBox").value();
+                    var amountNoTax = amount / (1 + rateTax);
+                    var amountTax = amount - amountNoTax;
+                    trObj.find("input[name='txtAmountTax']").data("kendoNumericTextBox").value(amountTax);
+                    trObj.find("input[name='txtAmountNoTax']").data("kendoNumericTextBox").value(amountNoTax);
+                }
+                hasChanged = true;
+                Invoice.Items.Summary();
+            },
+            RateTaxChange:function(e,thisObj){
+                var rateTax = null;
+                var obj = null;
+                if(thisObj != null && thisObj != undefined){
+                    rateTax = thisObj.value();
+                    obj = thisObj.element;
+                }else{
+                    rateTax = this.value();
+                    obj = this.element;
+                }
+                if(rateTax != null && rateTax != undefined){
+                    var trObj = $(obj).parents(gridItemDetail + " tr");
+                    var amount = trObj.find("input[name='txtAmount']").data("kendoNumericTextBox").value();
+                    var amountNoTax = amount / (1 + rateTax);
+                    var amountTax = amount - amountNoTax;
+                    trObj.find("input[name='txtAmountTax']").data("kendoNumericTextBox").value(amountTax);
+                    trObj.find("input[name='txtAmountNoTax']").data("kendoNumericTextBox").value(amountNoTax);
+                }
+                hasChanged = true;
+                Invoice.Items.Summary();
+            },
+            Add:function(){
+                if(invoiceProject.length <= 0){jAlert("没有[发票开票项目]信息，请选择菜单[资料设置]-[通用代码]，然后在[发票开票项目]中添加。", "知道了");return;}
+                var tdInputHtml = "<td><input type=\"text\" name=\"{0}\" style=\"width:100%;\" /></td>";
+                var tdDelHtml = "<td><a class=\"k-button k-button-icontext k-grid-delete\" href=\"javascript:;\" onclick=\"Invoice.Items.Del(this)\"><span class=\"k-icon k-i-unpin\"></span>删除</a></td>";
+                var tdHtml = [];
+                var selectId = Invoice.Items.GetTdSelectId();
+                tdHtml.push(Invoice.Items.GetTdSelectHtml(selectId, null));
+                tdHtml.push(tdInputHtml.replace("{0}","txtRateTax"));
+                tdHtml.push(tdInputHtml.replace("{0}","txtAmount"));
+                tdHtml.push(tdInputHtml.replace("{0}","txtAmountTax"));
+                tdHtml.push(tdInputHtml.replace("{0}","txtAmountNoTax"));
+                tdHtml.push(tdDelHtml);
+                $(gridItemDetail + " table tbody").append("<tr>" + tdHtml.join("") + "</tr>");
+                $("#" + selectId).kendoDropDownList({change:Invoice.Items.SelectChange});
+                $("[name=\"txtRateTax\"]:last").kendoNumericTextBox({format: "p0",min: 0,step: 0.01,change:Invoice.Items.RateTaxChange});
+                $("[name=\"txtAmount\"]:last").kendoNumericTextBox({min: 0,change:Invoice.Items.AmountChange,spinners: false});
+                $("[name=\"txtAmountTax\"]:last").kendoNumericTextBox({min: 0,spinners: false}).data("kendoNumericTextBox").enable(false);
+                $("[name=\"txtAmountNoTax\"]:last").kendoNumericTextBox({min: 0,spinners: false}).data("kendoNumericTextBox").enable(false);
+                Invoice.Items.SelectChange(selectId);
+                hasChanged = true;
+                Invoice.Items.Summary();
+            },
+            Del:function(thisObj){
+                if(thisObj != null && thisObj != undefined && thisObj.tagName == "A"){
+                    if(thisObj.parentNode != null){
+                        if(thisObj.parentNode.parentNode != null && thisObj.parentNode.parentNode.tagName == "TR"){
+                            thisObj.parentNode.parentNode.remove();
+                            hasChanged = true;
+                            Invoice.Items.Summary();
+                        }
+                    }
+                }
+            },
+            SetData:function(data){
+                if(data == null || data.length <= 0){
+                    $(gridItemDetail + " table tbody").empty();
+                }else{
+                    var trHtml=[];
+                    var tdInputHtml = "<td><input type=\"text\" name=\"{0}\" value=\"{1}\" style=\"width:100%;\" /></td>";
+                    var tdDelHtml = "<td><a class=\"k-button k-button-icontext k-grid-delete\" href=\"javascript:;\" onclick=\"Invoice.Items.Del(this)\"><span class=\"k-icon k-i-unpin\"></span>删除</a></td>";
+                    $.each(data, function(index,item){
+                        var tdHtml = [];
+                        tdHtml.push(Invoice.Items.GetTdSelectHtml(Invoice.Items.GetTdSelectId(), item.ItemTaxid));
+                        tdHtml.push(tdInputHtml.replace("{0}","txtRateTax").replace("{1}",item.RateTax));
+                        tdHtml.push(tdInputHtml.replace("{0}","txtAmount").replace("{1}",item.Amount));
+                        tdHtml.push(tdInputHtml.replace("{0}","txtAmountTax").replace("{1}",item.AmountTax));
+                        tdHtml.push(tdInputHtml.replace("{0}","txtAmountNoTax").replace("{1}",item.AmountNoTax));
+                        tdHtml.push(tdDelHtml);
+                        trHtml.push("<tr>" + tdHtml.join("") + "</tr>");
+                    });
+                    $(gridItemDetail + " table tbody").empty().html(trHtml.join(""));
+                    $("[name=\"selectItemTax\"]").kendoDropDownList({change:Invoice.Items.SelectChange});
+                    $("[name=\"txtRateTax\"]").kendoNumericTextBox({format: "p0",min: 0,step: 0.01,change:Invoice.Items.RateTaxChange});
+                    $("[name=\"txtAmount\"]").kendoNumericTextBox({min: 0,change:Invoice.Items.AmountChange,spinners: false});
+                    $("[name=\"txtAmountTax\"]").kendoNumericTextBox({min: 0,spinners: false});
+                    $("[name=\"txtAmountNoTax\"]").kendoNumericTextBox({min: 0,spinners: false});
+                    $("[name=\"txtAmountTax\"]").each(function(){$(this).data("kendoNumericTextBox").enable(false);});
+                    $("[name=\"txtAmountNoTax\"]").each(function(){$(this).data("kendoNumericTextBox").enable(false);});
+                }
+                Invoice.Items.Summary();
+            },
+            GetData:function(){
+                var result=[];
+                $(gridItemDetail + " table tbody tr").each(function(index, item){
+                    itemObj = $(item);
+                    result.push({
+                        ItemTaxid : Invoice.Items.GetInvoiceProjectTypeId(itemObj.find("select[name='selectItemTax']").data("kendoDropDownList").value()),
+                        Amount : itemObj.find("input[name='txtAmount']").data("kendoNumericTextBox").value(),
+                        AmountTax : itemObj.find("input[name='txtAmountTax']").data("kendoNumericTextBox").value(),
+                        AmountNoTax : itemObj.find("input[name='txtAmountNoTax']").data("kendoNumericTextBox").value(),
+                        RateTax : itemObj.find("input[name='txtRateTax']").data("kendoNumericTextBox").value(),
+                    });
+                });
+                return result;
+            },
+            Summary:function(){
+                //含税金额
+                var txtAmountList = $(gridItemDetail + " table tbody tr td input[name='txtAmount']");
+                var txtAmountSum = 0;
+                for(var i=0;i<txtAmountList.length;i++){
+                    if(!isNaN(txtAmountList[i].value) && txtAmountList[i].value.length > 0){
+                        txtAmountSum += parseFloat(txtAmountList[i].value);
+                    }
+                }
+                $("#txtAmountSum").text(txtAmountSum.toFixed(2));
+                //税金
+                var txtAmountTaxList = $(gridItemDetail + " table tbody tr td input[name='txtAmountTax']");
+                var txtAmountTaxSum = 0;
+                for(var i=0;i<txtAmountTaxList.length;i++){
+                    if(!isNaN(txtAmountTaxList[i].value) && txtAmountTaxList[i].value.length>0){
+                        txtAmountTaxSum += parseFloat(txtAmountTaxList[i].value);
+                    }
+                }
+                $("#txtAmountTaxSum").text(txtAmountTaxSum.toFixed(2));
+                //不含税金额
+                var txtAmountNoTaxList = $(gridItemDetail + " table tbody tr td input[name='txtAmountNoTax']");
+                var txtAmountNoTaxSum = 0;
+                for(var i=0;i<txtAmountNoTaxList.length;i++){
+                    if(!isNaN(txtAmountNoTaxList[i].value) && txtAmountNoTaxList[i].value.length>0){
+                        txtAmountNoTaxSum += parseFloat(txtAmountNoTaxList[i].value);
+                    }
+                }
+                $("#txtAmountNoTaxSum").text(txtAmountNoTaxSum.toFixed(2));
+                //税率
+                var txtRateTaxList = $(gridItemDetail + " table tbody tr td input[name='txtRateTax']");
+                var txtRateTaxSum = 0;
+                for(var i=0;i<txtRateTaxList.length;i++){
+                    if(!isNaN(txtRateTaxList[i].value) && txtRateTaxList[i].value.length>0){
+                        txtRateTaxSum += parseFloat(txtRateTaxList[i].value);
+                    }
+                }
+                $("#txtRateTaxSum").text((txtRateTaxSum * 100).toFixed(2) + "%");
+            },
+            SetPlanAmount:function(){
+                var amount = 0;
+                if(planAmount != null && planAmount != undefined){
+                    amount = parseFloat(planAmount);
+                }
+                if(isNaN(amount) || amount <= 0){
+                    planAmount = null;
+                    return;
+                }
+                if($(gridItemDetail + " table tbody tr").length <= 0){
+                    Invoice.Items.Add();
+                    if($(gridItemDetail + " table tbody tr").length == 1){
+                        var txtAmount = $("[name=\"txtAmount\"]:last").data("kendoNumericTextBox");
+                        txtAmount.value(amount);
+                        Invoice.Items.AmountChange(null,txtAmount);
+                    }
+                }
+                planAmount = null;
+            },
+            SetPlanInvoiceDetails:function(){
+                var typeObj = Invoice.GetPara();
+                if(typeObj != null && typeObj != undefined && typeObj.id != null && typeObj.id != undefined && typeObj.id.length > 0){
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("GenerateInvoiceDetails")",
+                        data:{type : typeObj.type, id : typeObj.id },
+                        dataType: "json",
+                        success: function (result) {
+                            if(result != null && result != undefined && result.Success){
+                                if(result.Data != null && result.Data != undefined && result.Data.length > 0){
+                                    $("#gridInvoiceItemDetail tbody").empty();
+                                    $.each(result.Data, function(index, item){
+                                        Invoice.Items.Add();
+                                        if(item.Key != null && item.Key != undefined && item.Key.length > 0){
+                                            var selectItemTaxObj = $("select[name='selectItemTax']:last");
+                                            selectItemTaxObj.find("option").each(function(i,t){
+                                                if(Invoice.Items.GetInvoiceProjectTypeId(t.value) == item.Key){
+                                                    selectItemTaxObj.data("kendoDropDownList").value(t.value);
+                                                    return false;
+                                                }
+                                            });
+                                            Invoice.Items.SelectChange(selectItemTaxObj.attr("id"));
+                                        }
+                                        var txtAmount = $("[name=\"txtAmount\"]:last").data("kendoNumericTextBox");
+                                        txtAmount.value(item.Value);
+                                        Invoice.Items.AmountChange(null,txtAmount);
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+            },
+        },
+        GetPara:function(){
+            return{
+                type: @ViewBag.Type,
+                id: "@ViewBag.Id"
+            };
+        },
+        GetSourceInvoiceInfo:function(){
+            return {
+                TaxType:@ViewBag.TaxType,
+                TaxNo:'@ViewBag.TaxNo',
+                TaxName:'@ViewBag.TaxName',
+                TaxAddTel:'@ViewBag.TaxAddTel',
+                TaxBankAccount:'@ViewBag.TaxBankAccount',
+            };
+        },
+        Change:function(e){
+            Invoice.SelectItemEvent();
+        },
+        DataBound:function(){
+            var kendoGrid = $(grid).data("kendoGrid");
+            if(selectedId != null && selectedId != undefined && selectedId != "" && selectedId.length > 0){
+                var row = kendoGrid.tbody.find("tr td.data-Id:contains('" + selectedId + "')").parent()[0];
+                if(row != undefined){
+                    kendoGrid.select(row);
+                    return;
+                }
+            }
+            var row = kendoGrid.tbody.find("tr:eq(0)")[0];
+            if(row != undefined){
+                kendoGrid.select(row);
+            }else{
+                Invoice.Add();
+                Invoice.GetCompanyInvoiceInfo();//获取订单中指定合约单位的发票信息
+                //Invoice.Items.SetPlanAmount();//设置计划发票金额
+                Invoice.Items.SetPlanInvoiceDetails();//设置计划发票明细消息
+            }
+        },
+        Error:function(e){
+            jAlert("发票列表数据错误！","知道了");
+        },
+        GetCompanyInvoiceInfo:function(){
+            var typeObj = Invoice.GetPara();
+            if(typeObj != null && typeObj != undefined && typeObj.type == 0 && typeObj.id != null && typeObj.id != undefined && typeObj.id.length > 0){
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("GetCompanyInvoiceInfo")",
+                    data: { resid : typeObj.id },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.Success && result.Data != null && result.Data != undefined) {
+                            var dataItem = result.Data;
+                            $("[name='TaxType'][value='" + dataItem.TaxType + "']")[0].checked = true;//发票类型
+                            $("#TaxName").val(dataItem.TaxName);//发票抬头
+                            $("#TaxNo").val(dataItem.TaxNo);//税务登记号
+                            $("#TaxAddTel").val(dataItem.TaxAddTel);//发票地址和电话
+                            $("#TaxBankAccount").val(dataItem.TaxBankAccount);//发票银行和账号
+                        }
+                    }
+                });
+            }
+        },
+    };
+</script>

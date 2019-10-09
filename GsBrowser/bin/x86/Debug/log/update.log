@@ -1,0 +1,22 @@
+日志(2019/4/8 11:31:45)：----------程序启动----------True
+日志(2019/4/8 11:31:45)：---------0-快点云Pos系统---------
+日志(2019/4/8 11:31:45)：---------1-0---------
+**********【2019/4/8 11:31:45】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】GsAutoUpdate
+【信息提示】索引超出了数组界限。
+【堆栈跟踪】   在 GsAutoUpdate.Program.Main(String[] args) 位置 D:\work\Pos\GsAutoUpdate\Program.cs:行号 41
+【目标位置】Void Main(System.String[])
+【异常实例】
+
+日志(2019/4/9 9:51:25)：----------程序启动----------True
+日志(2019/4/9 9:51:25)：---------0-快点云Pos系统---------
+日志(2019/4/9 9:51:25)：---------1-0---------
+**********【2019/4/9 9:51:25】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】GsAutoUpdate
+【信息提示】索引超出了数组界限。
+【堆栈跟踪】   在 GsAutoUpdate.Program.Main(String[] args) 位置 D:\work\Pos\GsAutoUpdate\Program.cs:行号 41
+【目标位置】Void Main(System.String[])
+【异常实例】
+

@@ -1,0 +1,101 @@
+﻿@using Gemstar.BSPMS.Common.Enumerator﻿
+@using Gemstar.BSPMS.Hotel.Web.Controllers
+@model Gemstar.BSPMS.Hotel.Web.Models.Account.TryInfoViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+    ViewBag.Title = "体验者信息";
+}
+<h3>@ViewBag.Title</h3>
+<div class="info-list">
+    <table class="editFormTable">
+        <tr>
+            <td class="td-one">@Html.LabelFor(m => m.MobileNo)：</td>
+            <td class="td-two" style="width:190px;">@Html.TextBoxFor(m => m.MobileNo, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.MobileNo, "*")</td>
+        </tr>
+        <tr>
+            <td class="td-one">@Html.LabelFor(m => m.CheckCode)：</td>
+            <td class="td-two">
+                @Html.Kendo().TextBoxFor(m => m.CheckCode).HtmlAttributes(new { style = "width:45%;" })
+                @Html.Kendo().Button().Name("btnGetCheckCode").Content("获取验证码").Events(e => e.Click("send")).HtmlAttributes(new { style = "width:48.5%;background-color:rgb(115,182,252);color:white;border-color:white;", type = "button" }) 
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.CheckCode)<span class="span-des"> 请输入手机收到的验证码，如果一段时间没有收到，请重新获取</span></td>
+        </tr>    
+        <tr>
+            <td class="textright"></td>
+            <td colspan="2">
+                <button id="btnUpdate" class="k-primary k-button">继续体验</button>
+                <button id="btnback" onclick="javascript: history.back(-1);" class="k-primary k-button">返回</button>
+            </td>
+        </tr>
+    </table>
+
+</div>
+<script type="text/javascript">
+        $(function () {
+            $("#btnUpdate").click(function (e) {
+                e.preventDefault();
+                continueTry();
+            });
+        });
+        function continueTry() {
+            var mobile = $("#MobileNo").val();
+            if (mobile.replace(" ", "") == "") {
+                jAlert("请输入手机号码");
+                return;
+            }
+            var checkCode = $("#CheckCode").val();
+            if (checkCode.replace(" ", "") == "") {
+                jAlert("请输入手机号码");
+                return;
+            }
+            $.post('@Url.Action("TryInfo")', { MobileNo: mobile, CheckCode: checkCode}, function (data) {
+                if (data.Success) {
+                    var Days = 30; 
+                    var exp = new Date();
+                    exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+                    document.cookie = "@(AccountController.TryCookieName)="+mobile+";path=/;domain=@ViewBag.domain;expires=" + exp.toGMTString();
+                    window.location.replace(data.Data);
+                } else {
+                    //jAlert(data.Data);
+                    ajaxErrorHandle(data);
+                }
+            }, 'json');
+        }
+    function send(e) {
+        e.preventDefault();
+        var mobile = $("#MobileNo").val();
+        if (mobile.replace(" ", "") == "") {
+            jAlert("请输入手机号码");
+            return;
+        }
+        var btn = document.getElementById("btnGetCheckCode");
+        sendCheckCodeTry(mobile, '@CheckFunc.TryUsePms', btn);
+    }
+
+    //体验
+    function sendCheckCodeTry(v, f, btn) {
+        $(btn).attr({ "disabled": "disabled" });
+        sendingAnimate(btn);
+        $.post('@Url.Action("SendCheckCodeByMobile", "Account")', { mobile: v, func: f }, function (data) {
+            if (intv_sending) clearInterval(intv_sending);
+            if (data.Success) {
+                var second = parseInt(data.Data);
+                var intv = setInterval(function () {
+                    second = second - 1;
+                    $(btn).html(second + "s");
+                    if (second <= 0) {
+                        clearInterval(intv);
+                        $(btn).html("获取验证码");
+                        $(btn).removeAttr("disabled");
+                    }
+                }, 1000);
+            } else {
+                $(btn).html("获取验证码");
+                $(btn).removeAttr("disabled");
+                //jAlert(data.Data);
+                ajaxErrorHandle(data);
+            }
+        }, 'json');
+    }
+</script>

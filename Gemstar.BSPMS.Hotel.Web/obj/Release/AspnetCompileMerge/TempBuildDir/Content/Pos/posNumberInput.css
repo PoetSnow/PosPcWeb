@@ -1,0 +1,84 @@
+﻿/*---------- Pos数字输入样式 ----------*/
+
+
+.layui-layer .layui-layer-tips {
+    width: 30rem;
+}
+
+.layui-layer-tips .layui-layer-content {
+    margin: 0;
+    padding: 0;
+    height: auto;
+    width: 30rem;
+    position: relative;
+    box-shadow: none;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+#letterInput {
+    width: 100%;
+}
+
+#letterInput td {
+    width: 20%;
+}
+
+#letterInput td input {
+    padding: 0;
+    width: 100%;
+    color: #FFF;
+    height: 5rem;
+    font-size: 24px;
+    border-radius: 0.3rem;
+    border: 1px solid #151515;
+}
+
+    #letterInput tr:first-child td:last-child input {
+        width: 100%;
+        font-size: 20px;       
+        background: #fb5c5d;
+    }
+    #letterInput tr:nth-child(2) td:nth-child(4) input {
+        width: 100%;
+        font-size: 20px;
+        background: #009fc5;
+    }
+
+
+
+#letterInput tr:nth-child(3) td:last-child input {
+    width: 100%;
+    font-size: 20px;
+    background: #009fc5;
+}
+
+#letterInput tr:last-child td:last-child input {
+    font-size: 20px;
+    background: #009fc5;
+}
+
+#txtNumberValue {
+    width: 100%;
+    font-size: 20px;
+    margin: 0.1rem 0;
+}
+
+.number {
+    color: #fff;
+    background-color: #03b186;
+}
+
+.letter {
+    color: #fff;
+    background-color: #646464;
+}
+
+.function {
+    color: #fff;
+    background-color: #1f8fc1;
+}
+
+.okButton {
+    border: 1px solid #808080;
+    background-color: #fb5a5c;
+}

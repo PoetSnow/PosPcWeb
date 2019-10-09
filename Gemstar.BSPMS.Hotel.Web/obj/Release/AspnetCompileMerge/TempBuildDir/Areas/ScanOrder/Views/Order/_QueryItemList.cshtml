@@ -1,0 +1,40 @@
+﻿<style>
+    .form {
+        margin: 5px;
+        border: 1px #acacac solid;
+        width: 70%;
+        border-radius: 8px;
+        float: left;
+        display: block;
+    }
+
+    input[type=search] {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .acancel {
+        float: left;
+        margin-left: 5px;
+        font-size: 17px;
+        line-height: 50px;
+    }
+</style>
+
+<div class="mui-search-padding " style="height:80px">
+    <form action="" id="fromquery" style="width:80%;float:left;margin: 8px;">
+        <div class="mui-indexed-list-search mui-input-row " >
+
+            <input  id="searchIpt" type="search" class="mui-input-clear mui-indexed-list-search-input" placeholder="搜索">
+        </div>
+    </form>
+    <a class="acancel" onclick="closeQuery()">取消</a>
+</div>
+<!--暂留用于存储最近搜索记录-->
+<div>
+</div>
+
+<!--搜素结果-->
+<div id="itemResultList" >
+
+</div>

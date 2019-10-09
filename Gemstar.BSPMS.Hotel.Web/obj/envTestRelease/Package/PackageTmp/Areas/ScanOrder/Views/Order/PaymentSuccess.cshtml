@@ -1,0 +1,68 @@
+﻿@{
+    Layout = "~/Areas/ScanOrder/Views/Shared/_Layout.cshtml";
+}
+@section Css{
+    <style>
+        .paymentSuccess {
+            height: 100%;
+            padding: 15px;
+            text-align: center;
+        }
+
+            .paymentSuccess i {
+                font-size: 5rem;
+                color: #00bb00;
+            }
+
+            .paymentSuccess span {
+                font-size: 3rem;
+                line-height: 5rem;
+            }
+
+            .paymentSuccess div {
+                font-size: 1.5rem;
+                line-height: 3rem;
+            }
+    </style>
+}
+
+<input id="hid" type="hidden" value="@ViewBag.Hid" />
+<input id="tabid" type="hidden" value="@ViewBag.Tabid" />
+
+<div class="paymentSuccess">
+    <i class="fa fa-check-circle" aria-hidden="true"></i><br />
+    <span>支付成功</span><br />
+    <div id="countDown">5秒 返回首页</div>
+    <button type="button" class="mui-btn mui-btn-success mui-btn-block" onclick="returnHome()">返回首页</button>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            localStorage.removeItem("billDetailList");
+            localStorage.removeItem("ActionList");
+            localStorage.removeItem("GroupList");
+
+            localStorage.setItem("hid", $("#hid").val());
+            localStorage.setItem("tabid", $("#tabid").val());
+        });
+
+        var time = setInterval(showTime, 1000);
+        var second = 5;
+        function showTime() {
+            if (second == 0) {
+                clearInterval(time);
+                location.href = '@Url.Action("Index", "Order")?hid=' + localStorage.getItem("hid") + '&tabid=' + localStorage.getItem("tabid");
+            }
+            else {
+                $("#countDown").text(second + '秒 返回首页');
+                second--;
+            }
+        }
+
+        function returnHome()
+        {
+            location.href = '@Url.Action("Index", "Order")?hid=' + localStorage.getItem("hid") + '&tabid=' + localStorage.getItem("tabid");
+        }
+    </script>
+}  

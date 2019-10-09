@@ -1,0 +1,421 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.RateManage.RateGroupEditViewModel
+@using (Html.BeginForm(new { action = "EditGroup" }))
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.DataControlCode)
+    <div style="max-height:508px;overflow-y:auto;">
+        <table class="editFormTable">
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Code)</td>
+                <td>@Html.TextBoxFor(m => m.Code, new { @class = "k-textbox", style = "width:100%;" })<input type="text" id="ratecode" style="display:none;" /></td>
+                <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+
+                <td class="textright">@Html.LabelFor(m => m.Name)</td>
+                <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Marketid)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.Marketid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForMarketid", "RateManage")); })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.Marketid, "*")</td>
+
+                <td class="textright">@Html.LabelFor(m => m.Sourceid)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.Sourceid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemsForSourceid", "RateManage")); })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.Sourceid, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.NoPrintProfile)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.NoPrintProfile).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForIsPrint", "RateManage")); })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.NoPrintProfile, "*")</td>
+
+                <td class="textright">@Html.LabelFor(m => m.NoPrintCompany)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.NoPrintCompany).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForIsPrint", "RateManage")); })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.NoPrintCompany, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.HalfTime)</td>
+                <td style="width:35%;">
+                    @Html.TextBoxFor(m => m.HalfTime, new { style = "width:35%;" })
+                    @Html.LabelFor(m => m.DayTime)
+                    @Html.TextBoxFor(m => m.DayTime, new { style = "width:35%;" })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.HalfTime, "*") @Html.ValidationMessageFor(m => m.DayTime, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.BookingNotesid)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.BookingNotesid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemsForBookingNotesid", "RateManage")); })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.BookingNotesid, "*")</td>
+
+            </tr>
+
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.IsWalkIn)</td>
+                <td style="width:35%;">
+                    @Html.Kendo().DropDownListFor(e => e.IsWalkIn).HtmlAttributes(new { style = " width:35%;margin-right:12px;" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForIsWalkIn", "RateManage")); })
+                    @Html.LabelFor(m => m.Bbf)
+                    @Html.Kendo().DropDownListFor(e => e.Bbf).HtmlAttributes(new { style = " width:35%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForBBF", "RateManage")); })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.IsWalkIn, "*") @Html.ValidationMessageFor(m => m.Bbf, "*")</td>
+
+                <td class="textright">@Html.LabelFor(m => m.CtripCode)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.CtripCode).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemsForCtripCode", "RateManage")); })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.CtripCode, "*")</td>
+            </tr>
+
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.CompanyTypes)</td>
+                <td>
+                    @Html.HiddenFor(m => m.CompanyTypes)
+                    @Html.Kendo().MultiSelect().Name("CompanyTypesMultiSelect").HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForCompanyTypes", "RateManage")); }).Value(ViewBag.listCompanyTypes)
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.CompanyTypes, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.Channelids)</td>
+                <td>
+                    @Html.HiddenFor(m => m.Channelids)
+                    @Html.Kendo().MultiSelect().Name("ChannelidsMultiSelect").HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForChannelcode", "RateManage")); }).Value(ViewBag.listChannelids)
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.Channelids, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.MbrCardTypes)</td>
+                <td>
+                    @Html.HiddenFor(m => m.MbrCardTypes)
+                    @Html.Kendo().MultiSelect().Name("MbrCardTypesMultiSelect").HtmlAttributes(new { style = " width:100%" }).DataTextField("Value").DataValueField("Key").DataSource(e => { e.Read(r => r.Action("GetMbrCardTypeSelectList", "MbrCardTypeManage")); }).Value(ViewBag.listMbrCardTypes)
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.MbrCardTypes, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.RoomTypeids)</td>
+                <td>
+                    @Html.HiddenFor(m => m.RoomTypeids)
+                    @Html.Kendo().MultiSelect().Name("RoomTypeidsMultiSelect").HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForRoomType", "RateManage")); }).Value(ViewBag.listRoomTypeids)
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.RoomTypeids, "*")</td>
+            </tr>
+
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.beginDate)</td>
+                <td style="width:35%;">
+                    @(Html.Kendo().DateTimePickerFor(m => m.beginDate).HtmlAttributes(new { style = " width:100%;" }))
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.beginDate, "*")</td>
+
+                <td class="textright">@Html.LabelFor(m => m.endDate)</td>
+                <td>
+                    @(Html.Kendo().DateTimePickerFor(m => m.endDate).HtmlAttributes(new { style = " width:100%" }))
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.endDate, "*")</td>
+            </tr>
+
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.PriceMode)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.PriceMode).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemsForPriceMode", "RateManage")); })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.PriceMode, "*")</td>
+
+                <td class="textright">@Html.LabelFor(m => m.PayTypeids)</td>
+                <td colspan="1">
+                    @Html.Kendo().DropDownListFor(e => e.PayTypeids).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemsForPayTypeids", "RateManage")); })
+
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.PayTypeids, "*")</td>
+
+            </tr>
+            <tr>
+                <td name="refrate" class="textright">@Html.LabelFor(m => m.RefRateid)</td>
+                <td name="refrate">
+                    @Html.Kendo().DropDownListFor(e => e.RefRateid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForRefRateid", "RateManage", new { CurRateid = Model.Id })); })
+                </td>
+                <td name="refrate">@Html.ValidationMessageFor(m => m.RefRateid, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.IsUseScore)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.IsUseScore).DataTextField("Text").DataValueField("Value").BindTo(new List<SelectListItem>() { new SelectListItem { Text = "是", Value = true.ToString() }, new SelectListItem { Text = "否", Value = false.ToString() } }).HtmlAttributes(new { style = "width:100px;" }) <font color="red">（积分在价格信息中设置）</font>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.AddMode)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.AddMode).HtmlAttributes(new { style = " width:37%;margin-right:10px;" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForAddMode", "RateManage")); })
+                    <span id="amount">
+                        @Html.LabelFor(m => m.AddAmount)
+                        @Html.TextBoxFor(m => m.AddAmount, new { @class = "k-textbox", style = "width:34%;margin-left:4px;" })
+                        @Html.ValidationMessageFor(m => m.AddAmount, "*")
+                    </span>
+                    <span id="rate" style="display:none">
+                        @Html.LabelFor(m => m.AddRate)
+                        @Html.TextBoxFor(m => m.AddRate, new { @class = "k-textbox", style = "width:34%;margin-left:4px;" })
+                        @Html.ValidationMessageFor(m => m.AddRate, "*")
+                    </span>
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.AddMode, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.IsGetScore)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.IsGetScore).DataTextField("Text").DataValueField("Value").BindTo(new List<SelectListItem>() { new SelectListItem { Text = "是", Value = true.ToString() }, new SelectListItem { Text = "否", Value = false.ToString() } }).HtmlAttributes(new { style = "width:100px;" })
+
+                    @Html.LabelFor(m => m.IsPriceAdjustment)
+                    @Html.Kendo().DropDownListFor(e => e.IsPriceAdjustment).DataTextField("Text").DataValueField("Value").BindTo(new List<SelectListItem>() { new SelectListItem { Text = "是", Value = true.ToString() }, new SelectListItem { Text = "否", Value = false.ToString() } }).HtmlAttributes(new { style = "width:100px;" })
+
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+                <td>@Html.TextBoxFor(m => m.Seqid, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+
+                <td class="textright">时间段内</td>
+                <td>
+                    @Html.Kendo().TimePicker().Name("StartTime").HtmlAttributes(new { style = "width:70px;" })
+                    -
+                    @Html.Kendo().TimePicker().Name("EndTime").HtmlAttributes(new { style = "width:70px;" })
+                    可入住
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="6" style="padding-left:10px">
+                    <fieldset style="border-radius: 6px;">
+                        <legend>特殊设置</legend>
+                        <table class="editFormTable" style="height:35px;line-height:35px;">
+                            <tr>
+                                <td class="textright">@Html.Kendo().CheckBoxFor(e => e.isHou).HtmlAttributes(new { id = "ishours" })</td>
+                                <td colspan="5">
+                                    @Html.LabelFor(m => m.baseMinute)
+                                    @Html.Kendo().NumericTextBox().Name("baseMinute").Min(0).Spinners(false).Decimals(0).Format("n0").HtmlAttributes(new { style = "width:43px;" })
+                                    <span>分钟</span>
+                                    <span style="color:red;">（基础价格在价格信息中设置）</span>
+                                    <span>&nbsp;&nbsp;&nbsp;&nbsp;超时&nbsp;&nbsp;&nbsp;&nbsp;每</span>
+                                    @Html.Kendo().NumericTextBox().Name("addMinute").Min(0).Spinners(false).Decimals(0).Format("n0").HtmlAttributes(new { style = "width:43px;" })
+                                    <span>分钟</span>
+                                    @Html.Kendo().NumericTextBox().Name("addPrice").Min(0).Spinners(false).HtmlAttributes(new { style = "width:60px;" })
+                                    <span>元</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="textright">@Html.Kendo().CheckBoxFor(m => m.IsDayRoom)</td>
+                                <td colspan="5">
+                                    @Html.Kendo().TimePicker().Name("DayRoomTime").HtmlAttributes(new { style = "width:70px;" })
+                                    <span>前退房</span>
+                                    <span style="color:red; padding-left:12px;">（白日房价在价格信息中设置）</span>
+                                    <span>&nbsp;&nbsp;&nbsp;&nbsp;超时&nbsp;&nbsp;&nbsp;&nbsp;每</span>
+                                    @Html.Kendo().NumericTextBox().Name("DayRoomAddMinute").Min(0).Spinners(false).Decimals(0).Format("n0").HtmlAttributes(new { style = "width:43px;" })
+                                    <span>分钟</span>
+                                    @Html.Kendo().NumericTextBox().Name("DayRoomAddPrice").Min(0).Spinners(false).HtmlAttributes(new { style = "width:60px;" })
+                                    <span>元</span>
+                                </td>
+                            </tr>
+                            @if (ViewBag.IsPermanentRoom)
+                            {
+                                <tr>
+                                    <td class="textright">@Html.Kendo().CheckBoxFor(m => m.isMonth)</td>
+                                    <td colspan="4">
+                                        <label style="vertical-align:sub;color:red;">长包房的价格在“长租管理-长租房价”中设置</label>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr style="height:10px;">
+                                    <td class="textright"></td>
+                                    <td colspan="4"></td>
+                                    <td></td>
+                                </tr>
+                            } 
+                        </table>
+                    </fieldset>
+                </td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.DataControlName)</td>
+                <td>@Html.TextBoxFor(m => m.DataControlName, new { @class = "k-textbox", style = "width:100%;", @readonly = "readonly" })</td>
+                <td>@Html.ValidationMessageFor(m => m.DataControlName, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.ResortCanUpdate)</td>
+                <td>@Html.CheckBoxFor(m => m.ResortCanUpdate, new { onclick = "return false;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.ResortCanUpdate, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.SelectedResortHids)</td>
+                <td>@Html.DropDownListFor(m => m.SelectedResortHids, Model.ResortItems, new { @class = "box", multiple = "multiple", style = "width:100%;height:200px;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.SelectedResortHids, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.UpdateProperties)</td>
+                <td>@Html.DropDownListFor(m => m.UpdateProperties, Model.PropertyItems, new { @class = "box", multiple = "multiple", style = "width:180px;height:200px;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.UpdateProperties, "*")</td>
+            </tr>
+        </table>
+
+    </div>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+
+    $(function () {
+        var canEditCode = "@ViewBag.canEditCode";
+        if (canEditCode == "False") {
+            $("#Code").attr("readonly", "readonly");
+            $("#Code").css("background-color", "rgb(245,245,245)");
+        }
+        var controlType = "@Model.DataControlCode";
+        if (controlType != "@Gemstar.BSPMS.Common.Services.BasicDataControls.DataControlType.SelectedResorts.Code") {
+            $("#SelectedResortHids").attr("disabled", "disabled");
+        }
+        $("#commonKendoWindow").parent().css("width", "820px");
+        if ($("#ishours").is(':checked')) {
+            $("#zdf").css('display', 'inline-block');
+        }
+
+        $("#ratecode").val($("#Code").val());
+        $("#HalfTime").kendoTimePicker(); $("#DayTime").kendoTimePicker();
+         if ("@ViewBag.amode" == "True") {
+            amount.style.display = "none";
+            rate.style.display = "";
+        }
+        $("#AddMode").change(function () {
+            if ($("#AddMode").val() == "False") {
+                amount.style.display = "";//增减金额
+                rate.style.display = "none";
+            } else {
+                amount.style.display = "none";
+                rate.style.display = "";//增减百分比
+            }
+        });
+        $("#ishours").click(function () {
+            if ($("#ishours").is(':checked')) {
+                $("#zdf").css('display', 'inline-block');
+            } else {
+                $("#zdf").css('display', 'none');
+            }
+        });
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            var str = "";
+            if ($("#ratecode").val() != $("#Code").val()) {
+                str = jsonajax("/RateManage/checkRateExist?rateid=" + '@ViewBag.hid' + $("#ratecode").val()+"&isdel=false");
+            }
+            if (str != "") {
+                jAlert("价格代码在" + str + "已使用不可修改！", "知道了");
+            }
+            else {
+                $("#CompanyTypes").val($("#CompanyTypesMultiSelect").data("kendoMultiSelect").value());
+                $("#MbrCardTypes").val($("#MbrCardTypesMultiSelect").data("kendoMultiSelect").value());
+                $("#Channelids").val($("#ChannelidsMultiSelect").data("kendoMultiSelect").value());
+                $("#RoomTypeids").val($("#RoomTypeidsMultiSelect").data("kendoMultiSelect").value());
+                saveFormData($("#saveEditFormButton"), function () {
+                    $("#dataDiv", $("#mainContent iframe")[0].contentWindow.document).load($("#mainContent iframe")[0].src + "?viewType=false");
+                    closeEditFormWindow();
+                });
+            }
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        $("#PriceMode").change(function () {
+            changefun();
+        });
+        changefun();
+
+        //三个复选框（钟点房 和 长包房 和 白日房）不能同时勾选
+        $("#ishours").change(function () {
+            if ($("#ishours")[0].checked == true) {
+                $("#isMonth")[0].checked = false;
+                isDayRoomClear();
+            }
+        });
+        $("#isMonth").change(function () {
+            if ($("#isMonth")[0].checked == true) {
+                isHoursClear();
+                isDayRoomClear();
+            }
+        });
+        $("#IsDayRoom").change(function () {
+            if ($("#IsDayRoom")[0].checked == true) {
+                isHoursClear();
+                $("#isMonth")[0].checked = false;
+            }
+        });
+        $("#IsUseScore").change(function () {
+            if ($("#IsUseScore").val() == "True") {
+                $("#IsPriceAdjustment").data("kendoDropDownList").value("False");
+                $("#IsPriceAdjustment").data("kendoDropDownList").enable(false);
+                $("#IsGetScore").data("kendoDropDownList").value("False");
+                $("#IsGetScore").data("kendoDropDownList").enable(false);
+            } else {
+                $("#IsPriceAdjustment").data("kendoDropDownList").enable(true);
+                $("#IsGetScore").data("kendoDropDownList").enable(true);
+            }
+        });
+
+        function isDayRoomClear() {
+            $("#IsDayRoom")[0].checked = false;
+            $("#DayRoomTime").data("kendoTimePicker").value("");
+            $("#DayRoomAddMinute").data("kendoNumericTextBox").value("");
+            $("#DayRoomAddPrice").data("kendoNumericTextBox").value("");
+        }
+        function isHoursClear() {
+            $("#ishours")[0].checked = false;
+            $("#baseMinute").data("kendoNumericTextBox").value("");
+            $("#addMinute").data("kendoNumericTextBox").value("");
+            $("#addPrice").data("kendoNumericTextBox").value("");
+        }
+    });
+    function changefun() {
+        if ($("#PriceMode").val() == "1") {
+            $("#RefRateid").data("kendoDropDownList").enable(false);
+            $("#AddMode").data("kendoDropDownList").enable(false);
+            $("#AddAmount").attr("disabled", true);
+            $("#AddRate").attr("disabled", true);
+            $("#AddAmount").css("background-color", "rgb(245,245,245)");
+            $("#AddRate").css("background-color", "rgb(245,245,245)");
+            $("#RefRateid").data("kendoDropDownList").value("");
+        } else {
+            $("#RefRateid").data("kendoDropDownList").enable();
+            $("#AddMode").data("kendoDropDownList").enable();
+            $("#AddAmount").attr("disabled", false);
+            $("#AddRate").attr("disabled", false);
+            $("#AddAmount").css("background-color", "white");
+            $("#AddRate").css("background-color", "white");
+        }
+        if ($("#IsUseScore").val() == "True") {
+            $("#IsPriceAdjustment").data("kendoDropDownList").enable(false);
+            $("#IsPriceAdjustment").data("kendoDropDownList").value("False");
+            $("#IsGetScore").data("kendoDropDownList").enable(false);
+            $("#IsGetScore").data("kendoDropDownList").value("False");
+        }
+    }
+    //ajax方法
+    function jsonajax(urls) {
+        var events = {};
+        var Rand = Math.random();
+        $.ajax({
+            url: urls + "&rand=" + Rand,
+            success: function (data) {
+                events = data;
+            },
+            async: false
+        });
+        return events;
+
+    }
+</script>
+<style type="text/css">
+    .k-textbox .k-icon {
+        margin: -8px -7px 0 -7px;
+    }
+</style>

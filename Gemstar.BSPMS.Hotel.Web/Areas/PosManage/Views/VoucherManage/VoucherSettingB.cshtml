@@ -1,0 +1,67 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPos
+@using Gemstar.BSPMS.Hotel.Web.Models;
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+@{
+    ViewBag.Title = "付款方式科目设置";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "Id";
+    var ColumnName = "Authname";
+    var gridModel = new KendoGridCommonViewModel() {
+        GridControlId = gridId, KeyColumnName = keyColumnName, EnableScrollable = true,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+        ServerOperation = true,
+        HtmlAttributes = new { style = "height:500px" }
+        //EnableFunctionForSave = true,
+        // EnableFunctionForEdit = true
+
+    };
+    var gridHelper = new KendoGridEditInCellHtmlHelper<VoucherSet>(
+        Html,
+        Url,
+        gridModel,
+        c =>
+        {
+            c.Bound("Code").Title("付款代码");
+            c.Bound("TypeName").Title("付款方式");
+            c.Bound("SubjectCode").Title("科目代码");
+            c.Bound("SubjectName").Title("科目名称");
+            c.Bound("AccountType").Title("核算项目类型");
+            c.Bound("AccountCode").Title("核算项目");
+            c.Bound("AccountName").Title("核算项目名称");
+        },
+c =>
+{
+    c.Id(w => w.Id);
+    c.Field(w => w.TypeName).Editable(false);
+    c.Field(w => w.Code).Editable(false);
+}
+);
+}
+@(gridHelper.KendoGridEditInCell())
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridModel)
+    <style type="text/css">
+        .mt-10 {
+            margin-top: 20px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            window.onresize = onResize; onResize();
+        });
+
+        function onResize() {
+            var allHeight = $("#mainContent", window.top.document).height() - 30;
+            var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 145;
+            $("#grid .k-grid-content").height(allHeight - showHeight);
+        }
+    </script>
+}

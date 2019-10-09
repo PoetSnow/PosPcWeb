@@ -1,0 +1,26 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_itemSuitByItemIdResult>
+
+<ul>
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <li class="content-list-detail">
+                    <a href="javascript:void(0)" onclick="updateSuit(this)" data-id="@item.ItemId2" data-code="@item.ItemCode2" data-name="@item.ItemName" data-unitid="@item.Unitid" data-unitCode="@item.UnitCode" data-unitName="@item.UnitName" data-quantity="@item.Quantity" data-price="@item.Price" data-amount="@item.Amount" data-addPrine="@item.AddPrice">
+                        <span>@item.ItemCode2</span>
+                        <span>@item.ItemName</span>
+                        <span>@(item.Quantity.Value.ToString("F1") +" "+ item.UnitName)</span>
+                        <span style="position: absolute;right: 5px;bottom: 5px;"><i class="fa fa-check"></i></span>
+                    </a>
+                </li>
+            }
+
+            <li class="content-list-paging">
+                <a href="javascript:void(0)" onclick="getListPage(this,'1','@(Url.Action("_SuitList", "PosInSingle"))','@(Url.Action("GetItemTotal", "PosInSingle"))')">上一页</a>
+                <a href="javascript:void(0)" onclick="getListPage(this,'2','@(Url.Action("_SuitList","PosInSingle"))','@(Url.Action("GetItemTotal","PosInSingle"))')">下一页</a>
+            </li>
+        }
+        <li class="content-list-return"><input id="billDetailId" type="hidden" value="@ViewBag.BillDetailId" /><a href="javascript:void(0)" onclick="returnParent()"><img src="~/Images/posInSingle/fanh.png" /><br />返回</a></li>
+    }
+</ul>

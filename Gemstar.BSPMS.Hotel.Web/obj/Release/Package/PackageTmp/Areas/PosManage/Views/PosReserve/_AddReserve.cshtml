@@ -1,0 +1,213 @@
+﻿@using Gemstar.BSPMS.Common.Extensions;
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPos
+@{ 
+    DateTime orderDate = Convert.ToDateTime(ViewBag.OrderDate);
+}
+<input type="hidden" value="@ViewBag.tabTypeId" id="AddTabTypeId" />
+<table class="editFormTable">
+    <tr style="height:40px">
+        <td class="textright">外部订单号：</td>
+        <td>@Html.Kendo().TextBox().Name("ExternalOrder").HtmlAttributes(new { style = "width:100%;" })</td>
+
+        <td class="textright">客人姓名：</td>
+        <td> @Html.Kendo().TextBox().Name("Name").HtmlAttributes(new { style = "width:100%;" })</td>
+
+        <td class="textright">团队名称：</td>
+        <td> @Html.Kendo().TextBox().Name("TeamName").HtmlAttributes(new { style = "width:100%;" })</td>
+
+        <td class="textright">手机号：</td>
+        <td> @Html.Kendo().TextBox().Name("MobilePhone").HtmlAttributes(new { style = "width:100%;" })</td>
+    </tr>
+    <tr style="height:40px">
+        <td class="textright">会员：</td>
+
+        <td>
+            <script>
+                function onAdditionalData() {
+                    return { nameOrMobile: $("#profileComboBox").data("kendoComboBox").text() };
+                }
+            </script>
+            @(Html.Kendo().ComboBox()
+                                        .Name("profileComboBox")
+                                        .Placeholder("卡号/姓名/手机号")
+                                        .DataTextField("MbrCardNo")
+                                        .DataValueField("Id")
+                                        .Template("<label title='#= MbrCardNo # | #= GuestName # | #= Mobile == null ? '' : Mobile #'>#= MbrCardNo # | #= GuestName # </label>").Filter("contains")
+                                        .MinLength(2)
+                                        .DataSource(e => { e.Read(r => r.Url(Url.Action("ListItemsForProfiles", new { rnd = new Random().NextDouble() })).Data("onAdditionalData")).ServerFiltering(true); })
+                                        .Events(e => e.Change("editControl_changed").Select("profileComboBox_selected").DataBound("profileComboBox_databound")).AutoBind(false))
+        </td>
+        <td class="textright">合约单位：</td>
+        <td>
+            <script>function onAdditionalDataCttid() { return { text: $("#Cttid").data("kendoComboBox").text(), isNullOrWhiteSpace: false }; }</script>
+            @(Html.Kendo().ComboBox()
+                                        .Name("Cttid")
+                                        .Placeholder("代码/名称(关键字)")
+                                        .DataTextField("Key")
+                                        .DataValueField("Value")
+                                        .Template("<span style='width: 100%;white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis;'>#:Data# | #:Key#</span>")
+                                        .Filter(FilterType.Contains)
+                                        .MinLength(2)
+                                        .DataSource(e => { e.Read(r => r.Url(Url.Action("ResListItemsForCompanys", new { rnd = new Random().NextDouble() })).Data("onAdditionalDataCttid")).ServerFiltering(true); })
+                                        .Events(e => e.Change("editControl_main_changed").Select("cttid_selected")).AutoBind(false))
+        </td>
+        <td class="textright">人数：</td>
+        <td> @Html.Kendo().IntegerTextBox().Name("IGuest").HtmlAttributes(new { style = "width:100%;" })</td>
+        <td class="textright">营业经理：</td>
+        @*<td> @Html.Kendo().TextBox().Name("Sale").HtmlAttributes(new { style = "width:100%;" })</td>*@
+        <td>@Html.Kendo().DropDownList().Name("Sale").HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Text").DataSource(e => { e.Read(r => r.Action("ListSaleUser", "PosReserve", new { rnd = new Random().NextDouble() })).ServerFiltering(true); }).OptionLabel("请选择营业经理")</td>
+    </tr>
+    <tr style="height:40px">
+        <td class="textright">预抵日期：</td>
+        <td>
+            @(Html.Kendo().DateTimePicker()
+                                        .Name("orderDate")
+                                        .Value(orderDate)
+                                        .Format(DateTimeExtension.DateTimeWithoutSecondFormatStr)
+                                        .Events(e => e.Change("orderDate_changed"))
+                                        .Min(DateTime.Now)
+                                        .HtmlAttributes(new { onclick = "openKendoDatetimePicker(this)", style = "width:190px;" })
+            )
+        </td>
+        <td class="textright">市别：</td>
+        <td>
+            @(Html.Kendo().DropDownList()
+                                        .Name("Shuffle")
+                                        .DataTextField("Text")
+                                        .DataValueField("Value")
+                                        .DataSource(s => { s.Read(r => r.Url(Url.Action("ListItemsForShuffle", new { rnd = new Random().NextDouble(), refeId = ViewBag.RefeId }))); })
+                                        .HtmlAttributes(new { style = "width:100%;" })
+                                        .Events(w=>w.Change("Shuffle_changed"))
+            )
+        </td>
+        <td class="textright">客人类型：</td>
+        <td>
+            @(Html.Kendo().DropDownList()
+                                    .Name("GuestType")
+                                    .DataTextField("Text")
+                                    .DataValueField("Value")
+                                    .DataSource(s => { s.Read(r => r.Url(Url.Action("ListItemsForCustomerType", new { rnd = new Random().NextDouble() }))); })
+                                    .HtmlAttributes(new { style = "width:100%;" })
+            )
+        </td>
+        <td class="textright">预定方式：</td>
+        <td> @Html.Kendo().TextBox().Name("ReservationMode").HtmlAttributes(new { style = "width:100%;" })</td>
+
+    </tr>
+    <tr style="height:40px">
+        <td class="textright">结束日期：</td>
+        <td>
+            @(Html.Kendo().DatePicker()
+                                        .Name("EndeDate")
+                                        .Value(DateTime.Now.AddDays(1))
+                                        .Format(DateTimeExtension.DateFormatStr)
+                                        //.Events(e => e.Change("editControl_changed"))
+                                        .Min(DateTime.Now)
+                                        .HtmlAttributes(new { onclick = "openKendoDatePicker(this)", style = "width:190px;" }))
+        </td>
+        <td class="textright">定金：</td>
+        <td>
+            @(Html.Kendo().NumericTextBox().Name("EarnestMoney").HtmlAttributes(new { style = "width:100%;" }))
+        </td>
+        <td class="textright">公司名称：</td>
+        <td>
+            @(Html.Kendo().TextBox().Name("Company").HtmlAttributes(new { style = "width:100%;" }))
+        </td>
+        <td class="textright">预定时长：</td>
+        <td class="textright">
+            @(Html.Kendo().IntegerTextBox().Name("ReservedTime").HtmlAttributes(new { style = "width:100%;" }))
+        </td>
+    </tr>
+    <tr style="height:40px">
+        <td class="textright">会议返佣金额：</td>
+        <td> @Html.Kendo().NumericTextBox().Name("HYFYAmount").HtmlAttributes(new { style = "width:100%;" })</td>
+        <td class="textright">餐饮返佣金额：</td>
+        <td> @Html.Kendo().NumericTextBox().Name("CYFYAmount").HtmlAttributes(new { style = "width:100%;" })</td>
+    </tr>
+    <tr style="height:40px">
+        <td class="textright">备注：</td>
+        <td colspan="7">@(Html.Kendo().TextBox().Name("Remark").HtmlAttributes(new { style = "width:100%;" }))</td>
+    </tr>
+
+    <tr>
+        <td colspan="4">
+            <div style="width:550px;height:250px;overflow:hidden;">
+                @(Html.Kendo().Grid<up_pos_ReserveTabTypeListResult>()
+                                                            .Name("grid")
+                                                            .Columns(c =>
+                                                            {
+                                                                c.Bound(w => w.TabTypeId).Hidden();
+                                                                c.Bound(w => w.TabTypeName).Title("名称").Width(52).HtmlAttributes(new { tabTypeId = "#=TabTypeId#" }); ;
+                                                                c.Bound(w => w.KYtabNum).Title("可用数").Width(52);
+                                                                c.Bound(w => w.selectedQty).Title("已选数").Width(65).ClientTemplate("<input type='text' value='#=selectedQty#' class='k-textbox' style='width:50px;'/>");
+                                                                c.Bound(w => w.MaxTabSeat).Title("最大座位数").Width(70);
+
+                                                            })
+                                                            .Sortable(c => c.Enabled(false))
+                                                            .Scrollable()
+                                                            .DataSource(c => c.Ajax().ServerOperation(true).Read(r => r.Action("AjaxTabTypeInfo", "PosReserve").Data("AjaxQueryTabTypeInfo_setPara")))
+                                                            .Selectable(s => { s.Mode(GridSelectionMode.Single); s.Type(GridSelectionType.Row); })
+                                                            .HtmlAttributes(new { style = "height:250px;max-height:250px;" })
+                                                            .Events(e => { e.Change("grid_rowChaned"); e.DataBound("grid_dataBound"); })
+                )
+            </div>
+        </td>
+        <td colspan="4" style="vertical-align:top;">
+            <div style="width:550px;height:250px;overflow:hidden;">
+                <div>
+                    <label for="selectedRoomNos">已选餐台</label>
+                    <input type="text" class="k-textbox bg-disabled" id="selectedTabNos" readonly="readonly" style="width:475px;" /><span class="red-color">*</span>
+                    <input type="hidden" id="selectedTabIds" />
+                </div>
+                <div style="width:100%;height:210px;overflow:auto;">
+                    @(Html.Kendo().ListView<PosTab>()
+                                                                    .Name("batchListView")
+                                                                    .DataSource(d => d.Read(c => c.Action("AjaxTabList", "PosReserve").Data("AjaxQueryTabInfo_setPara")))
+                                                                    .ClientTemplateId("roomsContentTemplate")
+                                                                    .TagName("div")
+                                                                    .Events(e => e.DataBound("TabListView_dataBound"))
+                                                                    .HtmlAttributes(new { @class = "house-state-list", style = "border:0 none;" })
+                    )
+
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" style="text-align:center">@Html.Kendo().Button().Name("save").Content("保存").Events(e => e.Click("save_clicked"))</td>
+        <td colspan="4" style="text-align:center">@Html.Kendo().Button().Name("cancel").Content("取消").Events(e => e.Click("cancel_clicked"))</td>
+    </tr>
+</table>
+
+<script>
+    var CustomerCommonValues = {
+        selectedTabs: {},
+        tabTypeId: "@ViewBag.tabTypeId",
+        Business: $("#Business").val()
+    }
+</script>
+
+<script type="text/x-kendo-tmpl" id="roomsContentTemplate">
+    #
+    var bgClass = "house-state-default";
+    var tabTypeId = getSelectedTabTypeId();
+    if (CustomerCommonValues.selectedTabs[tabTypeId]) {
+    var count = CustomerCommonValues.selectedTabs[tabTypeId].tabs.length;
+    for (var i = 0; i < count; i++) {
+    var tabInfo = CustomerCommonValues.selectedTabs[tabTypeId].tabs[i];
+    if (tabInfo["tabId"] == Id) {
+    bgClass = "house-state-selected";
+    }
+    }
+    }
+
+    #
+    <dl class="house-state-bg #:bgClass#" data-Tabid="#:Id#" data-Tabno="#:TabNo#">
+        <dt style="text-overflow:ellipsis;white-space:nowrap;padding-left:2px !important" class="default">#:TabNo#</dt>
+        <dd class="icon-all">
+            @*<span class="new-eta-room-bg-small"></span>*@
+        </dd>
+    </dl>
+</script>
+

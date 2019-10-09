@@ -1,0 +1,60 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.ShiftGroupManage.ShiftGroupAddViewModel
+@using (Html.BeginForm(new { action = "Add" }))
+{ 
+    <div style="height:508px;overflow-y:auto">
+        <table class="editFormTable">
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Code)</td>
+                <td>@Html.TextBoxFor(m => m.Code, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.ShiftName)</td>
+                <td>@Html.TextBoxFor(m => m.ShiftName, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.ShiftName, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.BeginTime)</td>
+                <td>@Html.TextBoxFor(m => m.BeginTime, new { @class = "k-textbox", style = "width:40%;" })　 @Html.LabelFor(m => m.EndTime)  @Html.TextBoxFor(m => m.EndTime, new { @class = "k-textbox", style = "width:40%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.BeginTime, "*")</td>
+            </tr>
+            
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+                <td>@Html.TextBoxFor(m => m.Seqid, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.DataControlName)</td>
+                <td>@Html.TextBoxFor(m => m.DataControlName, new { @class = "k-textbox", style = "width:100%;", @readonly = "readonly" })</td>
+                <td>@Html.ValidationMessageFor(m => m.DataControlName, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.SelectedResortHids)</td>
+                <td>@Html.DropDownListFor(m => m.SelectedResortHids, Model.ResortItems, new { @class = "box", multiple = "multiple", style = "width:100%;height:150px;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.SelectedResortHids, "*")</td>
+            </tr>
+        </table>
+        @Html.HiddenFor(m => m.DataControlCode)
+    </div>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () { 
+        $("#BeginTime").kendoTimePicker();
+        $("#EndTime").kendoTimePicker();
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+</script>

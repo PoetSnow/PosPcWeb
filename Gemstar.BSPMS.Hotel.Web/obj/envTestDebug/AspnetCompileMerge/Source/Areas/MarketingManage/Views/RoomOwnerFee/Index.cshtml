@@ -1,0 +1,144 @@
+﻿
+@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+@{
+    ViewBag.Title = "业主费用记录"; 
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "FeeId"; 
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableScrollable=true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("FeeDate").Title("费用日期");
+            c.Bound("itemId").Title("费用项目");
+            c.Bound("roomNo").Title("房号");
+            c.Bound("guestName").Title("业主名");
+            c.Bound("preReadQty").Title("上次抄表数");
+            c.Bound("currentReadQty").Title("本次抄表数");
+            c.Bound("qty").Title("数量");
+            c.Bound("price").Title("单价");
+            c.Bound("amount").Title("金额");
+            c.Bound("remark").Title("备注");
+            c.Bound("inputDate").Title("录入时间");
+            c.Bound("inputUser").Title("录入操作员");
+        },
+        RowTemplate = @"<tr>
+                                        <td>#: FeeDate==null?'':FeeDate  #</td>
+                                        <td>#: itemId #</td>
+                                        <td>#: roomNo #</td>
+                                        <td>#: guestName #</td>
+                                        <td>#: preReadQty==null?'':preReadQty  #</td>
+                                        <td>#: currentReadQty==null?'':currentReadQty  #</td>
+                                        <td>#: qty==null?'':qty  #</td>
+                                        <td>#: price==null?'':price  #</td>
+                                        <td>#: amount==null?'':amount  #</td>
+                                        <td>#: remark==null?'':remark #</td>
+                                        <td>#: inputDate==null?'':inputDate  #</td>
+                                        <td>#: inputUser==null?'':inputUser  #</td>
+                                   </tr>"
+,
+        CustomToolbar = c =>
+        {
+        c.Template(@<text>
+        <table id="tb" style="border:none;">
+            <tr id="aa">
+                <td style="border:none;width:350px;">
+                    <a class="k-button k-button-icontext k-grid-commonQuery" href="javascript:void(0);" onclick="showCommonQueryWindow()"><span class="k-icon k-i-search"></span>查询</a>
+                    <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addGridItem()"><span class="k-icon k-add"></span>增加</a>
+
+                    <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="batchDelete('grid', 'FeeId', '/MarketingManage/RoomOwnerFee/BatchDelete')"><span class="k-icon k-i-unpin"></span>删除</a>
+
+                    <a class='k-button k-button-icontext k-grid-addGridItem' href='javascript:void(0);' id="comfirmtextone">导入</a>
+                </td>
+                <td style="border:none;width:50px;"><label>费用项目</label> </td>
+                <td style="border:none;width:100px;">
+                    <span>
+                        @(Html.Kendo().MultiSelect().Name("itemid")
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .HtmlAttributes(new { @id = "itemid", @style = "width:146.797px;" })
+                            .DataSource(e => { e.Read(r => r.Url(Url.Action("getOwnerItem"))); })
+                            .Placeholder("全部")
+                        )
+                    </span>
+                </td>
+                <td style="border:none;width:200px;">
+                    <a class='k-button k-button-icontext k-grid-addGridItem' href='javascript:void(0);' id="delCurImport">删除当天导入</a>
+                    <a href="~/Content/Template/导入业主费用模板.xlsx" style="text-decoration: underline;color:red;">模板文件下载</a>
+
+                </td>
+                <td style="border:none;width:900px;"> 
+                    <span>1.只能填写业主委托的房号。
+2.根据需导入的业主消费来填写模板表格 
+3.如果有填写金额则优先按此金额导入；如果没有填写金额有填写数量（单价：优先按填入的，无填入时根据消费项目设置中的）则按表达式计算：金额=数量×单价；
+   如果没有填写数量单价金额有填写抄表数（“上次抄表数”按已录入的最后抄表数）则按表达式计算：金额=（本次抄表数-上次抄表数）×单价。</span>
+                     
+                </td>
+</tr>
+        </table> 
+        </text>
+                ); 
+        } 
+
+    };
+}
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<style type="text/css">
+  .orderCondition {
+            display: block;
+            vertical-align: middle;
+            margin-bottom: 10px;
+            margin-right:12px;
+        }
+    </style>
+<script type="text/javascript">
+    $(function () {
+        $("#aa").mouseover(function () {
+            $("#aa>td").css("background-color", "white");
+        });
+        window.onresize = onResize; onResize();
+        $("#comfirmtextone").click(function () { 
+            top.openIframeKendoWindow("导入" + "@ViewBag.Title", "@Url.Action("Import")");//?profileid=" + value
+        });
+        $("#delCurImport").click(function () { 
+            var itemids = $("#itemid").data("kendoMultiSelect").value(); 
+            jConfirm("确认要删除当天导入的数据吗?", "确认", "取消", function (confirmed) {
+                if (confirmed) {
+                    $.post("@Url.Action("DelCurImport")", { owneritemid: itemids }, function (data) {
+                        if (data.Success) {
+                            var grid = $("#grid").data("kendoGrid");
+                            grid.dataSource.read();
+                        } else { 
+                            ajaxErrorHandle(data);
+                        }
+                    }, 'json');
+
+                }
+            });
+        });
+    });
+    function refreshOwnerFeeGrid() {
+        var grid = $("#grid").data("kendoGrid");
+        grid.dataSource.read();
+    }
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#grid .k-grid-toolbar").height() + 195;
+        $("#grid .k-grid-content").height(allHeight - showHeight);
+    }
+</script>

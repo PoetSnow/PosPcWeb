@@ -1,0 +1,102 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItem.PosItemEditViewModel
+
+@(Html.Kendo().Grid<Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItem.PosItemCostViewModel>()
+                .Name("gridCostItem")
+                .Columns(columns =>
+                {
+                    columns.Bound(m => m.Id).Hidden();
+                    columns.Bound(m => m.CostItemName).Title("库存名").Width(80);
+                    columns.Bound(m => m.CostItemUnitName).Title("单位").Width(70);
+                    columns.Bound(m => m.Price).Title("单价").Width(70);
+                    columns.Bound(m => m.Quantity).Title("实际数量").Width(100);
+                    columns.Bound(m => m.Amount).Title("金额").Width(70);
+                    columns.Bound(m => m.Unitid).Title("消费项目单位").Width(120);
+                })
+                .HtmlAttributes(new { ondblclick = "editGridItemOther('gridCostItem', 'Id', '/PosManage/BasicDataPosCostItem/EditCostItem', '修改物品对应库存')" })
+                .Pageable()
+                .Sortable()
+                .Scrollable()
+                .Filterable()
+                .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .PageSize(4)
+                    .Read(read => read.Action("ListCostItemByItemId", "BasicDataPosCostItem", new { id = ViewBag.id }))
+                 )
+                 .ToolBar(toolbar =>
+                 {
+                     toolbar.Template(
+                        @<text>
+                            <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addGridItemOther('/PosManage/BasicDataPosCostItem/AddCostItem','@ViewBag.id','添加物品对应库存')"><span class="k-icon k-add"></span>增加</a>
+                            <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="editGridItemOther('gridCostItem', 'Id', '/PosManage/BasicDataPosCostItem/EditCostItem', '修改物品对应库存')"><span class="k-icon k-add"></span>修改</a>
+                            <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="batchDelete('gridCostItem', 'Id', '/PosManage/BasicDataPosCostItem/BatchDeleteCost')"><span class="k-icon k-i-unpin"></span>删除</a>
+                            @*<a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="hideItemOther('itemPrice')">隐藏编辑框</a>*@
+                        </text>
+                                            );
+                         })
+)
+<script type="text/javascript">
+    //批量 删除
+    function batchDelete(gridId, keyName, url) {
+
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要删除的数据行");
+        } else {
+            jConfirm("确认要删除所有选中的数据行?", "确认", "取消", function (confirmed) {
+                if (confirmed) {
+                    var ids = [];
+                    for (var i = 0; i < selectedRows.length; i++) {
+                        var row = selectedRows[i];
+                        var data = grid.dataItem(row);
+                        ids.push(data[keyName]);
+                    }
+                    $.post(url, { id: ids.join(",") }, function (data) {
+                        if (data.Success) {
+                            grid.dataSource.read();
+                        } else {
+                            //layer.alert(data.Data);
+                            ajaxErrorHandle(data);
+                        }
+                    }, 'json');
+                }
+            });
+        }
+    }
+
+    //编辑
+    function editGridItemOther(gridId, keyName, url, title) {
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            //jAlert("请选择要修改的数据行");
+            layer.alert("请选择要修改的数据行", { title: "快点云Pos提示" });
+        } else if (selectedRows.length == 1) {
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+
+            $.ajax({
+                url: url + "?id=" + data[keyName],
+                type: "get",
+                dataType: "html",
+                success: function (result) {
+                    $("#posMaskWindow").html(result);
+                    $("#posMaskWindow_wnd_title").text("消费物品对应库存修改");
+                    $(".k-i-close").click(function () {
+                        closeGeneralWindow();
+                    });
+                    openGeneralWindow();
+                },
+                error: function (result) {
+                    alert(result.responseText);
+                }
+            });
+
+        }
+        else {
+            jAlert("请选择一行数据行");
+        }
+    }
+</script>
+

@@ -1,0 +1,170 @@
+﻿html, body {
+    font-size: 12px;
+    overflow: hidden;
+}
+
+a {
+    display: block;
+}
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    color: #b1bbcb;
+}
+
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #b1bbcb;
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #b1bbcb;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: #b1bbcb;
+}
+
+.mainRight {
+    right: 0;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    background-color: #373741;
+}
+
+.mainRight-top {
+    height: 5rem;
+    padding: 1rem 0;
+}
+
+.mainRight-top ul {
+    /*height: 100%;*/
+}
+
+.mainRight-top li {
+    /*float: left;*/
+    width: 8.5rem;
+    height: 100%;
+    margin: 0 0.5rem;
+    font-size: 20px;
+    line-height: 5rem;
+    text-align: center;
+    border-radius: 0.5rem;
+    /*box-shadow: 0px 0px 2px 1px #111 inset;*/
+}
+.staus-empty {
+    background-color: #e4e4e4;
+}
+.pageing {
+    background: url('../../images/posTabStatus/aniu03.png') center center no-repeat;
+}
+
+.mainRight-list {
+    width: calc(100% - 1.9rem);
+    height: calc(100% - 7rem);
+    overflow: hidden;
+}
+
+.mainRight-list ul {
+    padding-top: 0.8rem;
+    padding-left: 0.8rem;
+    width: calc(100% - 0.3rem);
+    height: calc(100% - 0.5rem);
+}
+
+.mainRight-list li {
+    float: left;
+    padding: 0.3rem;
+    width: calc(10rem);
+    height: calc(10rem);
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+    border: 2px solid #111;
+}
+
+.mainRight-list li:hover {
+    box-shadow: rgba(255, 255, 255, 1) 0px 0px 2px 2px;
+}
+
+    .mainRight-list a {
+        width: 100%;
+        height: 100%;
+        display: block;
+        font-size: 20px;
+        text-align: center;
+        position: relative;
+    }
+
+.mainRight-list a span {
+    width: 100%;
+    display: block;
+    text-align: center;
+}
+
+
+    .mainRight-list a span:nth-child(3) {
+      position:absolute;
+      bottom:24px;
+        font-size: 14px;
+    }
+
+    .mainRight-list a span:nth-child(4) {
+        font-size: 14px;
+        bottom: 0px;
+        position: absolute;
+    }
+
+.mainRight-foot {
+    width: 100%;
+    bottom: 0;
+    position: absolute;
+    box-shadow: rgb(35, 35, 35) 0px -3px 7px 0px;
+    background: linear-gradient(rgba(60, 60, 60, 1), rgba(40, 40, 40, 1) 7%);
+}
+
+.mainRight-foot ul li {
+    float: left;
+    width: 6rem;
+    margin: 0.5rem;
+    text-align: center;
+    line-height: 6rem;
+}
+
+.mainRight-foot ul:nth-child(2) {
+    float: right;
+    font-size: 1rem;
+    text-align: center;
+    margin-right: 1rem;
+}
+
+.mainRight-RightDetails {
+    width: 100%;
+}
+
+.ct {
+    float: left;
+    width: 7rem;
+    height: 7rem;
+    text-align: center;
+    border-radius: 0.4rem;
+    background-color: #cecece;
+}
+
+.sx {
+    color: #fff;
+    background-color: #309e24;
+    background: url('../../images/posTabStatus/aniu01.png') center center no-repeat;
+}
+
+.qt {
+    color: #fff;
+    background-color: #d04337;
+    background: url('../../images/posTabStatus/aniu02.png') center center no-repeat;
+}
+
+
+
+.mainRight-foot a {
+    color: #fff;
+    font-size: 1.35rem;
+}

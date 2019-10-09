@@ -1,0 +1,67 @@
+﻿@model Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_billByBillidResult
+
+@{
+    if (Model != null)
+    {
+        <ul id="PosBill">
+            <li>客账号：<span>@Model.BillNo</span></li>
+            <li>开台卡号：<span>@(Model.Invno)</span></li>
+            <li>营业点：<span>@Model.refeName</span></li>
+            <li>台号：<span>@Model.TabNo</span></li>
+            <li>客人名称：<span>@Model.Name</span></li>
+            <li>人数：<span>@Model.IGuest</span></li>
+            <li>会员卡号：<span>@(Model.CardNo)</span></li>
+            <li>会员姓名：<span></span></li>
+            <li>开台时间：<span>@Model.BillDate</span></li>
+            <li>开台班次：<span>@Model.shiftName</span></li>
+            <li>会员卡类型：<span>无</span></li>
+            <li>开台操作员：<span>@Model.InputUser</span></li>
+            <li>服务费率：<span>@(Model.ServiceRate < 1 ? Model.ServiceRate * 100 : Model.ServiceRate)%</span></li>
+            <li>最低消费：<span>@(Model.Limit)</span></li>
+            <li>最低消费根据：<span></span></li>
+            <li>开台市别：<span>@Model.shuffleName</span></li>
+            <li>餐台类型：<span>@Model.tabTypeName</span></li>
+            <li>全单折扣：<span>@(Model.Discount)</span></li>
+            <li>金额折：<span>@(Model.DiscAmount)</span></li>
+            <li>计时分钟：<span>@(Model.IHour)</span></li>
+            <li>营业经理：<span></span></li>
+            <li>合约单位：<span>@(Model.CttName)</span></li>
+            <li><input type="checkbox" checked="@(Model.IsService)" disabled />收服务费<span></span></li>
+            <li><input type="checkbox" checked="@(Model.IsLimit)" disabled />计最低消费<span></span></li>
+            <li>财务ID：<span>@Model.Billid.Replace(Model.Refeid, string.Empty)</span></li>
+            <li>备注：<span>@(Model.CashMemo)</span></li>
+        </ul>
+    }
+    else
+    {
+        <ul id="PosBill">
+            <li>客账号：<span></span></li>
+            <li>开台卡号：<span></span></li>
+            <li>营业点：<span></span></li>
+            <li>台号：<span></span></li>
+            <li>客人名称：<span></span></li>
+            <li>人数：<span></span></li>
+            <li>会员卡号：<span></span></li>
+            <li>会员姓名：<span></span></li>
+            <li>开台时间：<span></span></li>
+            <li>开台班次：<span></span></li>
+            <li>会员卡类型：<span></span></li>
+            <li>开台操作员：<span></span></li>
+            <li>服务费率：<span></span></li>
+            <li>最低消费：<span></span></li>
+            <li>最低消费根据：<span></span></li>
+            <li>开台市别：<span></span></li>
+            <li>餐台类型：<span></span></li>
+            <li>全单折扣：<span></span></li>
+            <li>金额折：<span></span></li>
+            <li>计时分钟：<span></span></li>
+            <li>营业经理：<span></span></li>
+            <li>合约单位：<span></span></li>
+            <li><input type="checkbox" />收服务费<span></span></li>
+            <li><input type="checkbox" />计最低消费<span></span></li>
+            <li>财务ID：<span></span></li>
+            <li>备注：<span></span></li>
+        </ul>
+    }
+}
+

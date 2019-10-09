@@ -1,0 +1,38 @@
+﻿<link href="~/Content/Pos/posPublic.css?version=@ViewBag.Version" rel="stylesheet" />
+<style type="text/css">
+    table.editFormTable {
+        padding: 20px;
+        font-size: 16px;
+        position: relative;
+    }
+
+        table.editFormTable tr {
+            line-height: 40px;
+        }
+
+        table.editFormTable .textleft, table.editFormTable .textright {
+            width: auto;
+        }
+
+    form .formButtons {
+        margin: 0;
+        height: 47px;
+        position: relative;
+    }
+</style>
+
+   
+    <table class="editFormTable">
+        <tr>
+            <td>是否@{@ViewBag.AuthName}</td>
+        </tr>
+    </table>
+    
+
+
+
+
+<div class="formButtons">
+    <input type="button" value="确定" onclick="UpdatePos()" />
+    <input type="button" value="关闭" onclick="closeAllLayer()" />
+</div>

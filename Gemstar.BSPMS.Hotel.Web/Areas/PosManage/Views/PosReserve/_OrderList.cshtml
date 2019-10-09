@@ -1,0 +1,44 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+@(Html.Kendo().Grid<up_pos_OrderBillListByDateResult>()
+                    .Name("gridServer")
+                    .Columns(columns =>
+                    {
+            //columns.Bound(m => m.Billid).Hidden();
+            columns.Bound(m => m.Status).Hidden();
+                        columns.Bound(m => m.Billid).Title("订单号").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(80);
+                        columns.Bound(m => m.Name).Title("客人姓名").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+                        columns.Bound(m => m.Mobile).Title("手机号码").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(100);
+                        columns.Bound(m => m.IGuest).Title("人数").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(40);
+                        columns.Bound(m => m.TabNo).Title("餐台号").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(80);
+                        columns.Bound(m => m.OrderDate).Format("{0:yyyy-MM-dd HH:mm:ss}").Title("预抵日期").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(180);
+                        columns.Bound(m => m.StatusText).Title("状态").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(80);
+                    })
+                    .HtmlAttributes(new { style = "height:calc(100% - 6rem);" })
+                    .Scrollable()
+                    .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Read(read => read.Action("AjaxBillOrderList", "PosReserve", new { rnd = new Random().NextDouble(), refeId = ViewBag.RefeId, ReserveDate = ViewBag.Business, TabtypeId = ViewBag.TabtypeId, Flag = ViewBag.Flag, status = ViewBag.Status }))
+                        .PageSize(10)
+
+                    )
+                    .ToolBar(toolbar =>
+                    {
+                        toolbar.Template(
+                        @<text>
+                            <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="updateOrderBill()"><span class="k-icon k-add"></span>修改</a>
+                            <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="DeleteOrderBill()"><span class="k-icon  k-i-unpin"></span>取消</a>
+                            <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="_AddPrepay()"><span class="k-icon  k-i-add"></span>定金</a>
+                            <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="_Bill()"><span class="k-icon  k-i-add"></span>菜谱</a>
+                        </text>);
+                            })
+)
+@*<div class="foot">
+        <input type="button" value="预订开台" class="button" onclick="openTabByOrder('@ViewBag.TabId','@ViewBag.Tabno','@ViewBag.Billid','@ViewBag.Status')" />
+        <input type="button" value="非预订开台" class="button" onclick="isLockTab('@ViewBag.TabId','@ViewBag.Tabno','@ViewBag.Billid','7')" />
+        <input type="button" value="退出" class="button" style="background-color:#f55858" onclick="layer.closeAll()" />
+    </div>*@
+@*<div class="formButtons">
+        <button id="saveEditFormButton" role="button" data-role="button" onclick="UpdateRestoration()">确定</button>
+        <button id="closeEditFormButton" role="button" data-role="button" onclick="closeRestoration()">关闭</button>
+    </div>*@

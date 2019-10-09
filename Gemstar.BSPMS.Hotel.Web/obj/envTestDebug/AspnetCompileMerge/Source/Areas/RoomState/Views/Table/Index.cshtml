@@ -1,0 +1,75 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntityProcedures;
+@{
+    ViewBag.Title = "房态表";
+}
+<div class="div-refresh">
+    <a class="bnt-refresh" href="javascript:void(0)" onclick="refreshRoomStatusTableInfos()"><i class="i-refresh"></i><span>刷新</span></a>
+</div>
+@(Html.Kendo().Grid<UpQueryRoomStatusInfosByRoomTypeResult>()
+        .Name("grid")
+        .Columns(
+            c =>
+            {
+                c.Bound(w => w.RoomTypeName).Title("房间类型").HtmlAttributes(new { style = "text-align:center;" }).ClientFooterTemplate("合计").HeaderHtmlAttributes(new { style = "text-align: center;" }).FooterHtmlAttributes(new { style = "text-align: center;" });
+                c.Bound(w => w.TotalRoomsQty).Title("总房数").HtmlAttributes(new { style = "text-align:center;" }).ClientFooterTemplate("<span class='color'>#=sum#<span>").HeaderHtmlAttributes(new { style = "text-align: center;" }).FooterHtmlAttributes(new { style = "text-align: center;" });
+                c.Bound(w => w.InRoomsQty).Title("在住房数").HtmlAttributes(new { style = "text-align:center;" }).ClientFooterTemplate("<span class='color'>#=sum#<span>").HeaderHtmlAttributes(new { style = "text-align: center;" }).FooterHtmlAttributes(new { style = "text-align: center;" });
+                c.Bound(w => w.ArrRoomsQty).Title("预抵房数").HtmlAttributes(new { style = "text-align:center;" }).ClientFooterTemplate("<span class='color'>#=sum#<span>").HeaderHtmlAttributes(new { style = "text-align: center;" }).FooterHtmlAttributes(new { style = "text-align: center;" });
+                c.Bound(w => w.DepRoomsQty).Title("预离房数").HtmlAttributes(new { style = "text-align:center;" }).ClientFooterTemplate("<span class='color'>#=sum#<span>").HeaderHtmlAttributes(new { style = "text-align: center;" }).FooterHtmlAttributes(new { style = "text-align: center;" });
+                c.Bound(w => w.ServiceRoomsQty).Title("维修房数").HtmlAttributes(new { style = "text-align:center;" }).ClientFooterTemplate("<span class='color'>#=sum#<span>").HeaderHtmlAttributes(new { style = "text-align: center;" }).FooterHtmlAttributes(new { style = "text-align: center;" });
+                c.Bound(w => w.StopRoomsQty).Title("停用房数").HtmlAttributes(new { style = "text-align:center;" }).ClientFooterTemplate("<span class='color'>#=sum#<span>").HeaderHtmlAttributes(new { style = "text-align: center;" }).FooterHtmlAttributes(new { style = "text-align: center;" });
+                c.Bound(w => w.HoldRoomsQty).Title("保留房数").HtmlAttributes(new { style = "text-align:center;" }).ClientFooterTemplate("<span class='color'>#=sum#<span>").HeaderHtmlAttributes(new { style = "text-align: center;" }).FooterHtmlAttributes(new { style = "text-align: center;" });
+                c.Bound(w => w.AvailableToSellQty).Title("可售房数").HtmlAttributes(new { style = "text-align:center;" }).ClientFooterTemplate("<span class='color'>#=sum#<span>").HeaderHtmlAttributes(new { style = "text-align: center;" }).FooterHtmlAttributes(new { style = "text-align: center;" });
+                c.Bound(w => w.AvailableToUseQty).Title("可用房数").HtmlAttributes(new { style = "text-align:center;" }).ClientFooterTemplate("<span class='color'>#=sum#<span>").HeaderHtmlAttributes(new { style = "text-align: center;" }).FooterHtmlAttributes(new { style = "text-align: center;" });
+                c.Bound(w => w.AvailableToUseIncludeDepQty).Title("可用房数(含预离)").HtmlAttributes(new { style = "text-align:center;" }).ClientFooterTemplate("<span class='color'>#=sum#<span>").HeaderHtmlAttributes(new { style = "text-align: center;" }).FooterHtmlAttributes(new { style = "text-align: center;" });
+                c.Bound(w=>w.RentalRate).Title("当前出租率").ClientFooterTemplate("#=TotalRoomsQty.sum-ServiceRoomsQty.sum-StopRoomsQty.sum==0?'0.00':((InRoomsQty.sum/(TotalRoomsQty.sum-ServiceRoomsQty.sum-StopRoomsQty.sum))*100).toFixed(2) #%")
+                .ClientTemplate("#=TotalRoomsQty-ServiceRoomsQty-StopRoomsQty==0?'0.00':((InRoomsQty/(TotalRoomsQty-ServiceRoomsQty-StopRoomsQty))*100).toFixed(2)#%").HtmlAttributes(new { style = "text-align:center;" }).HeaderHtmlAttributes(new { style = "text-align: center;" }).FooterHtmlAttributes(new { style = "text-align: center;" });
+
+                c.Bound(w => w.RentalRate).Title("预期出租率").ClientFooterTemplate("#=TotalRoomsQty.sum-ServiceRoomsQty.sum-StopRoomsQty.sum==0?'0.00':(((InRoomsQty.sum-(-ArrRoomsQty.sum)-DepRoomsQty.sum)/(TotalRoomsQty.sum-ServiceRoomsQty.sum-StopRoomsQty.sum))*100).toFixed(2) #%")
+                .ClientTemplate("#=TotalRoomsQty-ServiceRoomsQty-StopRoomsQty==0?'0.00':(((InRoomsQty-(-ArrRoomsQty)-DepRoomsQty)/(TotalRoomsQty-ServiceRoomsQty-StopRoomsQty))*100).toFixed(2)#%").HtmlAttributes(new { style = "text-align:center;" }).HeaderHtmlAttributes(new { style = "text-align: center;" }).FooterHtmlAttributes(new { style = "text-align: center;" });
+
+                c.Bound(w => w.RoomRate).Title("预期房租").HtmlAttributes(new { style = "text-align:center;" }).ClientFooterTemplate("<span class='color'>#=sum#<span>").HeaderHtmlAttributes(new { style = "text-align: center;" }).FooterHtmlAttributes(new { style = "text-align: center;" });
+            }
+        )
+        .Pageable(c=>c.Enabled(false))
+        .Sortable()
+        .DataSource(
+            c=>c.Ajax()
+            .Aggregates(a=> {
+                a.Add(w => w.TotalRoomsQty).Sum();
+                a.Add(w => w.InRoomsQty).Sum();
+                a.Add(w => w.ArrRoomsQty).Sum();
+                a.Add(w => w.DepRoomsQty).Sum();
+                a.Add(w => w.ServiceRoomsQty).Sum();
+                a.Add(w => w.StopRoomsQty).Sum();
+                a.Add(w => w.HoldRoomsQty).Sum();
+                a.Add(w => w.AvailableToSellQty).Sum();
+                a.Add(w => w.AvailableToUseQty).Sum();
+                a.Add(w => w.AvailableToUseIncludeDepQty).Sum();
+                a.Add(w => w.RoomRate).Sum();
+            })
+            .Read("AjaxQuery", "Table")
+        )
+        .Events(c =>
+        {
+            c.DataBound("onRoomStatusTableInfoDataBound");
+        })
+        )
+<div id="roomStatusTableInfoDescriptionDiv">
+    <p><sanp class="redcolor">*</sanp>可售房数 = 总房数 - 在住房数 - 预抵房数 + 预离房数 - 维修房数 - 停用房数 - 保留房数</p>
+    <p><span class="redcolor">*</span>可用房数 = 总房数 - 在住房数 - 维修房数 - 停用房数 - 保留房数</p>
+    <p><span class="redcolor">*</span>可用房数(含预离) = 总房数 - 在住房数 - 维修房数 - 停用房数 - 保留房数 + 预离房数</p>
+    <p><span class="redcolor">*</span>当前出租率 = 在住房/(总房数-维修房-停用房)</p>
+    <p><span class="redcolor">*</span>预期出租率 = （在住房数+预抵房数-预离房数）/(总房数-维修房-停用房) </p>
+    <p><span class="redcolor">*</span>预期房租 = 在住房价-预离房价</p>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        function refreshRoomStatusTableInfos() {
+            var grid = $("#grid").data("kendoGrid");
+            grid.dataSource.read();
+        }
+        function onRoomStatusTableInfoDataBound(e) {
+            $(".k-grid-refresh").find("span").addClass("k-icon k-i-refresh");
+        }
+    </script>
+    }

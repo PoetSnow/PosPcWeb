@@ -1,0 +1,104 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItem.PosItemAllQueryViewModel
+
+<script>
+    function posCode_paras() {
+        //var module = $("#Module").data("kendoDropDownList");
+        //var moduleCode = module.value();
+        //return {
+        //    moduleCode: moduleCode
+        //};
+        return {
+            moduleCode: 'CY'
+        };
+    }
+    function itemChanged() {
+        var SubClassid = $("#SubClassid").data("kendoDropDownList");
+        SubClassid.dataSource.read();
+
+        var item = $("#ItemClassid").data("kendoDropDownList");
+        var itemClassid = item.value();
+
+    
+        setTimeout(function () {
+            subClassChanged();
+        }, 250);
+    }
+
+    function subClassChanged() {
+        var item = $("#ItemClassid").data("kendoDropDownList");
+        var itemClassid = item.value();
+
+        var sub = $("#SubClassid").data("kendoDropDownList");
+        var subClassid = sub.value();
+
+    }
+    function posItem_paras() {
+        var item = $("#ItemClassid").data("kendoDropDownList");
+        var itemClassid = item.value();
+        return {
+            itemClassid: itemClassid,
+            isSubClass: true
+        };
+    }
+  
+</script>
+@{
+    <div style="width:450px;height:auto;max-height:530px;margin-bottom:20px;overflow:auto;">
+
+        <table id="commonQueryTable">
+            <tr>
+                <td class="textright">部门：</td>
+                <td>@Html.Kendo().DropDownListFor(e => e.DeptClassid).HtmlAttributes(new { style = " width:89%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosDeptClassByModules", "BasicDataPosDeptClass", new { rnd = new Random().NextDouble() }).Data("posCode_paras")); }).OptionLabel("请选择部门")</td>
+               
+            </tr>
+            <tr>
+                <td class="textright">大类：</td>
+                <td>@Html.Kendo().DropDownListFor(e => e.ItemClassid).HtmlAttributes(new { style = " width:89%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosItemClassByModules", "BasicDataPosItemClass", new { rnd = new Random().NextDouble() }).Data("posCode_paras")).ServerFiltering(true); }).Events(e => e.Change("itemChanged")).OptionLabel("请选择大类")</td>
+            </tr>
+            <tr>
+                <td class="textright">分类：</td>
+                <td>@Html.Kendo().DropDownListFor(e => e.SubClassid).HtmlAttributes(new { style = " width:89%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosItemByIsSubClass", "BasicDataPosItem", new { rnd = new Random().NextDouble() }).Data("posItem_paras")).ServerFiltering(true); }).OptionLabel("请选择分类").Events(e => e.Change("subClassChanged"))</td>
+            </tr>
+            <tr>
+                <td class="textright">名称（编码）：</td>
+                <td>@Html.Kendo().TextBoxFor(e => e.CodeAndName).HtmlAttributes(new { style = " width:89%" })</td>
+            </tr>
+         
+        </table>
+    </div>
+
+    @Html.ValidationSummary()
+    <div style="text-align:center;margin-bottom:20px;">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <input type="button" class="k-primary k-button" id="closeEditFormButton" value="返回" />&nbsp; &nbsp;
+    </div>
+}
+<script>
+    $("#saveEditFormButton").click(function (e) {
+        $("#queryCodeAndName").val($("#CodeAndName").val());
+        $("#queryDeptId").val($("#DeptClassid").val())
+        $("#queryItemClassid").val($("#ItemClassid").val())
+        $("#querySubClassid").val($("#SubClassid").val())
+        var grid = $("#gridItem").data("kendoGrid");
+        grid.dataSource.read();
+        closeGeneralWindow();
+      
+        //var date = $("#BillBsnsDate").val();
+        //if (date == null || date == "") {
+        //    layer.alert("营业日不能为空", { title: "快点云Pos提示" });
+        //    return false;
+        //}
+        //$("#ParentBillBsnsDate").val($("#BillBsnsDate").val());
+        //$("#ParentPosId").val($("#PosId").val());
+        //$("#ParentRefeId").val($("#RefeId").val());
+        //$("#ParentItemName").val($("#ItemName").val());
+        //$("#ParentMinAmount").val($("#MinAmount").val());
+        //$("#ParentMaxAmount").val($("#MaxAmount").val());
+        //$("#ParentPayMethod").val($("#PayMethod").val());
+        //e.preventDefault();
+        //saveFormData($("#saveEditFormButton"));
+    });
+    $("#closeEditFormButton").click(function () {
+        closeGeneralWindow();
+    })
+</script>

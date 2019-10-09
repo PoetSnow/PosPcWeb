@@ -1,0 +1,36 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPos.PosReason>
+<ul id="ReasonList">
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            if (Model[0].IstagType == (byte)Gemstar.BSPMS.Hotel.Services.EnumsPos.PosReasonIstagtype.取消)
+            {
+                <li id="AddHandWrite" class="content-list-detail">
+                    <a href="javascript:void(0)" onclick="handReason('@Url.Action("_LetterInput", "PosInSingle")')">
+                        <span style="font-size: 5rem;line-height: 5rem;">+</span>
+                    </a>
+                </li>
+            }
+            foreach (var item in Model)
+            {
+                <li class="content-list-detail">
+                    <a href="javascript:void(0)" onclick='cancelItem(this)' data-id="@item.Id" data-istagtype="@(Model[0].IstagType)" data-isreuse="@(item.Isreuse)" data-name="@item.Cname">
+                        <span>@item.Code</span>
+                        <span>@item.Cname</span>
+                        <span></span>
+                        <span><i class="fa fa-check"></i></span>
+                    </a>
+                </li>
+            }
+            <li class="content-list-paging">
+                <a href="javascript:void(0)" onclick="getListPage(this,'1','@(Url.Action("_ReasonList", "PosInSingle"))','@(Url.Action("GetReasonTotal", "PosInSingle"))')" data="@Model[0].IstagType">上一页</a>
+                <a href="javascript:void(0)" onclick="getListPage(this,'2','@(Url.Action("_ReasonList", "PosInSingle"))','@(Url.Action("GetReasonTotal", "PosInSingle"))')" data="@Model[0].IstagType">下一页</a>
+            </li>
+            <li class="content-list-return" style=""><a href="javascript:void(0)" onclick="getReasonList(this,'@(Url.Action("_ReasonList", "PosInSingle"))','@(Url.Action("GetReasonTotal", "PosInSingle"))')" data="@(Model[0].IstagType)"><img src="~/Images/posInSingle/fanh.png" /><br />返回</a></li>
+        }
+        else
+        {
+            <li class="content-list-return" style=""><a href="javascript:void(0)" onclick="getReasonList(this,'@(Url.Action("_ReasonList", "PosInSingle"))','@(Url.Action("GetReasonTotal", "PosInSingle"))')" data=""><img src="~/Images/posInSingle/fanh.png" /><br />返回</a></li>
+        }
+    }
+</ul>

@@ -1,0 +1,831 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPos;
+@{
+    Layout = "~/Areas/ScanOrder/Views/Shared/_Layout.cshtml";
+
+    var itemClasses = ViewBag.ItemClassList as List<PosItemClass>;
+    var banners = ViewBag.BannerList as List<PosMBanner>;
+    var scrolls = ViewBag.ScrollList as List<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_MScrollItemListResult>;
+
+}
+
+@section Css{
+    <link href="~/Content/ScanOrder/orderIndex.css" rel="stylesheet" />
+}
+
+<input id="hid" type="hidden" value="@ViewBag.Hid" />
+<input id="tabid" type="hidden" value="@ViewBag.Tabid" />
+<input id="openid" type="hidden" value="@ViewBag.Openid" />
+<input id="itemid" type="hidden" value="" />
+
+
+
+@*<div class="mui-bar mui-bar-nav" style="height:44px;position:fixed">
+        <h1 class="mui-title">@ViewBag.RefeName/@ViewBag.TabName</h1>
+
+    </div>*@
+<!-- 轮播图 -->
+<div class="banner mui-slider">
+    <div class="mui-slider-group mui-slider-loop">
+        @Html.Partial("_MBannerList", banners)
+    </div>
+</div>
+<!-- 跑马灯 -->
+<div class="bursting swiper-container">
+    <div class="swiper-wrapper">
+        @Html.Partial("_MScrollList", scrolls)
+    </div>
+</div>
+<!-- 选项卡 -->
+<div id="slider" class="tab mui-slider">
+    <div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+        <a class="mui-control-item mui-active" href="#item1mobile">
+            点菜
+
+        </a>
+        <a class="mui-control-item" href="#item2mobile">
+            会员
+        </a>
+        <a class="mui-control-item" href="#item3mobile">
+            订单
+        </a>
+    </div>
+
+    <div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4"></div>
+
+    <!--搜索-->
+
+    <div id="search" style="display:block">
+        <input type="text" style="width:90%;margin-top:5px;margin-bottom:5px;margin-left:5%;" placeholder="搜索菜式" onclick="openQuery()" />
+    </div>
+    <div class="mui-slider-group">
+
+        <div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+
+            <!-- 侧面选项卡 -->
+            <div class="mui-content mui-row mui-fullscreen">
+
+                <div class="mui-col-xs-3">
+                    <div id="segmentedControls" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-vertical">
+                        <!-- 消费项目大类列表 -->
+                    </div>
+                </div>
+                <div id="segmentedControlContents" class="mui-col-xs-9" style="border-left: 1px solid #c8c7cc;background-color:white">
+                    <div class="title">
+                    </div>
+                    <!-- 消费项目列表 -->
+                </div>
+            </div>
+
+        </div>
+        <div id="item2mobile" class="mui-slider-item mui-control-content">
+            <div id="scroll2" class="mui-scroll-wrapper">
+                <div class="mui-scroll">
+                    <div class="mui-loading">
+                        <div class="mui-spinner">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="item3mobile" class="mui-slider-item mui-control-content">
+            <div id="scroll3" class="mui-scroll-wrapper">
+                <div class="mui-scroll">
+                    <div class="mui-loading">
+                        <div class="mui-spinner">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/ScanOrder/ScanOrder.js"></script>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if ('@scrolls.Count' <= 0) {
+                $(".bursting").attr("style","display:none")
+            }
+            if ('@banners.Count' <= 0) {
+                $(".banner").attr("style","display:none")
+            }
+            //参数中有A的话 代表是重新进入餐台。删除缓存数据
+            if (getQueryString("flag")=="A") {
+                localStorage.removeItem("billDetailList");
+                localStorage.removeItem("ActionList");
+                localStorage.removeItem("GroupList");
+            }
+            @*var s = '@ViewBag.BillDetailList';
+            var s1 = '@ViewBag.BillDetailActionList';
+            if (localStorage.getItem("billDetailList") == null) {
+                var s2 = JSON.stringify(s);
+                console.log(s2);
+                //localStorage.setItem("billDetailList", JSON.stringify(s));
+                //localStorage.setItem("ActionList", JSON.stringify(s1));
+            }*@
+
+
+
+            banner();
+            bursting();
+            localStorage.setItem("billid", '@ViewBag.BillId');
+            localStorage.setItem("hid", $("#hid").val());
+            localStorage.setItem("tabid", $("#tabid").val());
+            localStorage.setItem("openid", $("#openid").val());
+            if (localStorage.getItem("billDetailList") == null) {
+                 $.ajax({
+                url: '@Url.Action("GetBillDetailList", "Order")',
+                type: 'POST',
+                data: {
+                    hid: localStorage.getItem("hid"),
+                    billId: localStorage.getItem("billid")
+
+                },
+                dataType: 'json',
+                success: function (data) {
+                   
+                    localStorage.setItem("billDetailList", JSON.stringify(data.Data.DetailList));
+                    localStorage.setItem("ActionList", JSON.stringify(data.Data.ActionList));
+                    //localStorage.setItem("GroupList", JSON.stringify(data.Data.GroupList));
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                }
+            });
+            }
+           
+
+            getItemClassList();
+            refreshTotalPrice();
+          //  subClassStyle(); //大类样式
+
+            
+
+         });
+
+    function banner() {
+        var mySwiper = new Swiper('.swiper-container', {
+            loop: true,    //设置循环滚动
+            // 如果需要前进后退按钮
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            speed: 3000,  //设置图片滚动速度
+
+            // 自动滚动，注意与上面的loop不一样，loop是指能否从最后位置滚动回第一的位置
+            autoplay: {
+                delay: 1,   //每滚动一个图片后等待的时间，这里设置为1ms就是代表没有等待
+                //触摸后不会停止自动滚动
+                disableOnInteraction: false,
+            },
+
+            //同时显示多少个图片
+            slidesPerView: 4,
+            spaceBetween: 30,   //两图片之间的空隙
+            breakpoints: {   //设置浏览器不同尺寸时的显示方式
+                320: {
+                    slidesPerView: 2,
+                    spaceBetween: 10
+                },
+                //当宽度小于等于640
+                640: {
+                    slidesPerView: 3,
+                    spaceBetween: 20
+                }
+            },
+
+        });
+
+        //因为这里需要用到mouseover事件，所以前面要引入jQuery库
+        $('.swiper-container').mouseover(function () {
+            mySwiper.autoplay.stop();   //鼠标悬停在跑马灯上时停止滚动
+        });
+        $('.swiper-container').mouseout(function () {
+            mySwiper.autoplay.start();
+        });
+
+        //swiper中设置了图片的滚动动画是ease-out，需要改成linear才有平稳滚动的效果
+        mySwiper.$wrapperEl.css({ '-webkit-transition-timing-function': "linear", "-moz-transition-timing-function": "linear", "-ms-transition-timing-function": "linear", "-o-transition-timing-function": "linear", "transition-timing-function": "linear" });
+    }
+
+    function bursting() {
+        //获得slider插件对象
+        var gallery = mui('.banner');
+        gallery.slider({
+            interval: 1000 //自动轮播周期，若为0则不自动播放，默认为0；
+        });
+    }
+
+
+
+    function refreshItemPrice(itemid) {
+        $.ajax({
+            url: '@Url.Action("RefreshItemPrice", "Order")',
+            type: 'POST',
+            data: { itemid: itemid, list: localStorage.getItem("billDetailList") },
+            dataType: 'text',
+            success: function (data) {
+                $(".selectSpecSumit .price").text(data);
+            },
+            error: function (xhr, textStatus) {
+                console.log(xhr, textStatus);
+            }
+        });
+    }
+
+
+    function getItemClassList() {
+        $.ajax({
+            url: '@Url.Action("_ItemSubClassList", "Order")',
+            type: 'POST',
+            data: { hid: localStorage.getItem("hid"), tabid: localStorage.getItem("tabid") },
+            dataType: 'html',
+            success: function (data) {
+                $("#segmentedControls").html("");//先清空 再赋值
+                $("#segmentedControls").append(data);
+
+                $("#segmentedControlContents").html(" <div class='title'></div >");
+                var itemclasss = $("#segmentedControls").find("a");
+                $(itemclasss).each(function () {
+                    var content = "<div id='content" + $(this).attr("data-id") + "' class='mui-control-content'></div>";
+                    $("#segmentedControlContents").append(content);
+                });
+
+                $('#segmentedControls .mui-control-item').on('tap', function () {
+                    getItemList(this);
+                });
+
+                if ($("#segmentedControls").find(".mui-active").length == 0) {
+                    $("#segmentedControls").find("a").first().click();
+
+                    /* 左侧选项卡 */
+                    var controls = document.getElementById("segmentedControls");
+                    var contents = document.getElementById("segmentedControlContents");
+
+                    if (controls.querySelector('.mui-control-item') != null) {
+                        //默认选中第一个
+                        controls.querySelector('.mui-control-item').classList.add('mui-active');
+                        contents.querySelector('.mui-control-content').classList.add('mui-active');
+                    }
+                }
+                subClassStyle();
+            },
+            error: function (xhr, textStatus) {
+                console.log(xhr, textStatus);
+            }
+        });
+     }
+     ///加载消费项目列表
+    function getItemList(obj) {
+
+        var title = $(obj).prop('firstChild').nodeValue;
+
+        $("#segmentedControlContents .title").text(title);
+        $.ajax({
+            url: '@Url.Action("_ItemList", "Order")',
+            type: 'POST',
+            data: { hid: localStorage.getItem("hid"), classid: $(obj).attr("data-id") },
+            dataType: 'html',
+            success: function (data) {
+                var id = $(obj).attr("href");
+                $(id).html(data);
+                var list = JSON.parse(localStorage.getItem("billDetailList"));
+                if (list != null) {
+                    $(id).find("span").each(function () {
+                        for (var i = 0; i < list.length; i++) {
+                            if ($(this).attr("data-id") == list[i].Itemid) {
+                                $(this).html(list[i].Quantity);
+                                $(this).css("display", "block");
+                                $(this).prev().css("display", "block");
+                            }
+                        }
+                    });
+                }
+
+                mui(".mui-numbox").numbox();
+            },
+            error: function (xhr, textStatus) {
+                console.log(xhr, textStatus);
+            }
+        });
+    }
+
+    //显示购物车
+    function showShopCart() {
+        $.ajax({
+            url: '@Url.Action("_ShopCart", "Order")',
+            type: 'POST',
+            data: { list: localStorage.getItem("billDetailList") },
+            dataType: 'html',
+            success: function (data) {
+                layer.closeAll();
+                layer.open({
+                    type: 1
+                    , anim: false
+                    , content: data
+                    , style: 'position:fixed; bottom:73px; left:0; width: 100%; height: 300px; padding:0; border:none;',
+                });
+                mui(".mui-numbox").numbox();
+            },
+            error: function (xhr, textStatus) {
+                console.log(xhr, textStatus);
+            }
+        });
+    }
+
+        //选择规格
+        function selectSpec(obj) {
+            var model = {
+                hid: localStorage.getItem("hid"),
+                Itemid: $(obj).attr("data-id"),
+                ItemCode: $(obj).attr("data-code"),
+                ItemName: $(obj).attr("data-name"),
+                IsDiscount: $(obj).attr("data-isDiscount"),
+                IsService: $(obj).attr("data-isService"),
+                Unitid: $(obj).attr("data-unitId"),
+                UnitCode: $(obj).attr("data-unitCode"),
+                UnitName: $(obj).attr("data-UnitName"),
+                Price: $(obj).attr("data-price"),
+                Quantity: 1,
+                Tabid: localStorage.getItem("tabid"),
+                itemClassId: $(obj).attr("data-subclassid")
+            };
+            $("#itemid").val($(obj).attr("data-id"));
+            var allList = detaiAllList();
+            $.ajax({
+                url: '@Url.Action("AddQuantity", "Order")',
+                type: 'POST',
+                data: {
+                    model: model,
+                    allList: allList,
+                    flag:"B"
+                },
+                dataType: 'json',
+                success: function (data) {
+                    localStorage.setItem("billDetailList", JSON.stringify(data.Data.DetailList));
+                    localStorage.setItem("ActionList", JSON.stringify(data.Data.ActionList));
+                    localStorage.setItem("GroupList", JSON.stringify(data.Data.GroupList));
+                    allList = detaiAllList();
+                    subClassStyle();
+                    $.ajax({
+                        url: '@Url.Action("_SelectSpec", "Order")',
+                        type: 'POST',
+                        data: { model: model, allList: allList, subclassid: $(obj).attr("data-subclassid")},
+                        dataType: 'html',
+                        success: function (data) {
+                            layer.closeAll();
+                            layer.open({
+                                type: 1
+                                , anim: false
+                                , content: data
+                                , style: 'position:fixed; bottom:0; left:0; width: 100%; height: auto; padding:0; border:none;',
+                            });
+                            mui(".mui-numbox").numbox();
+                        },
+                        error: function (xhr) {
+                            console.log(xhr.responseText);
+                        }
+                    });
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                }
+            });
+
+        }
+
+        //去下单
+        function downForm() {
+            location.href = '@Url.Action("DownForm", "Order")?hid=' + localStorage.getItem("hid") + '&tabid=' + localStorage.getItem("tabid");
+        }
+
+
+        function closeSelectSpec() {
+
+            refreshTotalPrice();
+            layer.closeAll();
+        }
+
+        //选择单位
+        function selectUnit(obj) {
+
+            var arr = new Array();
+
+            var list = localStorage.getItem("billDetailList");
+            var jsonObj = JSON.parse(list);//转换为json对象
+            var amount = 0;
+            if (jsonObj != null) {
+                $(".selectSpec-unit a").removeClass("spec-active");
+                for (var i = 0; i < jsonObj.length; i++) {
+                    if ($(obj).attr("data-itemid") == jsonObj[i].Itemid) {
+                        jsonObj[i].Unitid = $(obj).attr("data-unitId");
+                        jsonObj[i].UnitCode = $(obj).attr("data-code");
+                        jsonObj[i].UnitName = $(obj).attr("data-name");
+                        jsonObj[i].Price = $(obj).attr("data-price");
+                        jsonObj[i].Amount = jsonObj[i].Quantity * $(obj).attr("data-price");
+                        $("#price_" + $(obj).attr("data-id")).addClass("spec-active");
+                        amount = jsonObj[i].Amount;
+                    }
+                    arr.push(jsonObj[i]);
+                }
+                $(".selectSpecSumit .price").text(amount.toFixed(2));  //计算金额
+                localStorage.setItem("billDetailList", JSON.stringify(arr));
+            }
+        }
+
+        //修改做法
+        function updateItemAction(obj) {
+            var itemid = $("#itemid").val();
+            var billDetailList = localStorage.getItem("billDetailList");    //账单明细
+            var ActionList = localStorage.getItem("ActionList");    //作法列表
+            var GroupList = localStorage.getItem("GroupList");  //分组列表
+            var igroupid = $("#igroupid").val();    //分组ID
+
+            //把字符串转换成json
+            var jsonDetailList = JSON.parse(billDetailList);
+            var jsonActionList = JSON.parse(ActionList);
+            var jsonGroupList = JSON.parse(GroupList);
+
+            var actionArr = new Array();    //作法
+            var orderId = -1;
+            for (var i = 0; i < jsonDetailList.length; i++) {
+                if (itemid == jsonDetailList[i].Itemid) {
+                    orderId = jsonDetailList[i].OrderId;
+                    break;
+                }
+            }
+
+            var addFlag = false;//判断是否添加做法
+            var itemActionArr = new Array();
+            for (var j = 0; j < jsonActionList.length; j++) {
+                if (jsonActionList[j].OrderId == orderId) {
+                    //作法不存在 添加做法
+                    if ($(obj).attr("data-code") != jsonActionList[j].ActionNo) {
+                        actionArr.push(jsonActionList[j]);
+                        itemActionArr.push(jsonActionList[j]);//用于作法分组
+                        addFlag = true;
+                    }
+                    else {
+                        addFlag = false;
+                    }
+
+                }
+                else {
+                    addFlag = true;
+                    actionArr.push(jsonActionList[j]);
+                }
+            }
+            if (addFlag || itemActionArr.length<=0) {
+                var addModel = {
+                    OrderId: orderId,
+                    ActionOrderId: 0,
+                    Hid: localStorage.getItem("hid"),
+                    Igroupid: igroupid,
+                    ActionNo: $(obj).attr("data-code"),
+                    ActionName: $(obj).attr("data-name"),
+                    AddPrice: $(obj).attr("data-price"),
+                    Nmultiple: $(obj).attr("data-multiple"),
+                    IByQuan: $(obj).attr("data-IByQuan"),
+                    IByGuest: $(obj).attr("data-IByQuan"),
+                    Amount: 0,
+                    Quan: 0,
+                    DeptClassid: null,
+                    PrtNo: $(obj).attr(" data-PrtNo"),
+                    ModiUser: null,
+                    ModiDate: null,
+                    Memo: null,
+                    LimitQuan: $(obj).attr("data-LimitQuan"),
+                };
+                actionArr.push(addModel);
+
+                itemActionArr.push(addModel);
+            }
+
+            localStorage.setItem("ActionList", JSON.stringify(actionArr));
+
+            //设置作法分组
+            var groupArr = new Array();
+            if (jsonGroupList != null) {
+                for (var i = 0; i < jsonGroupList.length; i++) {
+                    if (jsonGroupList[i].OrderId != orderId) {
+                        groupArr.push(jsonGroupList[i]);
+                    }
+                }
+            }
+
+
+            //把当前操作的消费项目作法分组。存储起来
+            var group = grouplist(itemActionArr, "Igroupid");
+            for (var i = 0; i < group.length; i++) {
+                groupArr.push(group[i].data)
+            }
+            localStorage.setItem("GroupList", JSON.stringify(groupArr));
+
+            getActionGroupList(localStorage.getItem("GroupList"));
+            getItemActionList(itemid);
+            window.setTimeout(function () {
+                var groups = $(".selectSpec-actionGroup .list").find("a");
+                var actions = $(".selectSpec-action .list").find("a");
+                groups.each(function () {
+                    var group = $(this);
+                    if (group.attr("data-id") == $("#igroupid").val()) {
+                        group.addClass("spec-active");
+                        actions.each(function () {
+                            var name = $(this).attr("data-name");
+                            if (group.attr("data-names").indexOf(name) != -1) {
+                                $(this).addClass("spec-active");
+                            }
+                        });
+                    }
+                });
+            }, 500);
+
+        }
+
+        function getItemActionList(itemid) {
+            $.ajax({
+                url: '@Url.Action("_ItemActionList", "Order")',
+                type: 'post',
+                data: {
+                    hid:localStorage.getItem("hid"),
+                    itemid: itemid
+                },
+                dataType: 'html',
+                success: function (data) {
+                    $(".selectSpec-action .list").html(data);
+
+                },
+                error: function (xhr) {
+                    console.log(xhr);
+                }
+            });
+        }
+
+        function getActionGroupList(list) {
+            $.ajax({
+                url: '@Url.Action("_ActionGroupList", "Order")',
+                type: 'post',
+                data: {
+                    list:list
+                },
+                dataType: 'html',
+                success: function (data) {
+                    $(".selectSpec-actionGroup .list").html(data);
+
+                },
+                error: function (xhr) {
+                    console.log(xhr);
+                }
+            });
+        }
+
+        //设置作法分组
+        function setGroup(obj) {
+            $("#igroupid").val($(obj).attr("data-id"));
+            $(".selectSpec-actionGroup .list").find("a").removeClass("spec-active");
+            $(obj).addClass("spec-active");
+
+            var groups = $(".selectSpec-actionGroup .list").find("a");
+            var actions = $(".selectSpec-action .list").find("a");
+            groups.each(function () {
+                var group = $(this);
+                //设置分组选中样式
+                if (group.attr("data-id") == $("#igroupid").val()) {
+                    group.addClass("spec-active");
+
+                    //设置作法选中样式
+                    actions.removeClass("spec-active");
+                    actions.each(function () {
+                        var name = $(this).attr("data-name");
+                        if (group.attr("data-names").indexOf(name) != -1) {
+                            $(this).addClass("spec-active");
+                        }
+                    });
+                }
+            });
+        }
+
+        //增加作法分组
+        function addGroup() {
+            var igroupid = $("#igroupid").val();
+            igroupid = Number(igroupid) + 1;
+            $("#igroupid").val(igroupid);
+
+            $(".selectSpec-action .list").find("a").removeClass("spec-active");
+            $(".selectSpec-actionGroup .list").find("a").removeClass("spec-active");
+            $("#addIgroupid").addClass("spec-active");
+
+            var groups = $(".selectSpec-actionGroup .list").find("a");
+            var actions = $(".selectSpec-action .list").find("a");
+            groups.each(function () {
+                var group = $(this);
+                //设置分组选中样式
+                if (group.attr("data-id") == $("#igroupid").val()) {
+                    group.addClass("spec-active");
+
+                    //设置作法选中样式
+                    actions.removeClass("spec-active");
+                    actions.each(function () {
+                        var name = $(this).attr("data-name");
+                        if (group.attr("data-names").indexOf(name) != -1) {
+                            $(this).addClass("spec-active");
+                        }
+                    });
+                }
+            });
+        }
+
+        //选择要求
+        function selectRequest(obj) {
+            var arr = new Array();
+
+            var list = localStorage.getItem("billDetailList");
+            var jsonObj = JSON.parse(list);//转换为json对象
+            if (jsonObj != null) {
+                $(".selectSpec-request a").removeClass("spec-active");
+                for (var i = 0; i < jsonObj.length; i++) {
+                    if ($("#itemid").val() == jsonObj[i].Itemid) {
+                        jsonObj[i].Request = $(obj).attr("data-name");
+                        $(obj).addClass("spec-active");
+                    }
+                    arr.push(jsonObj[i]);
+                }
+                refreshItemPrice($("#itemid").val());
+                localStorage.setItem("billDetailList", JSON.stringify(arr));
+            }
+
+        }
+
+        function saveSpec() {
+            layer.closeAll();
+        }
+
+         //添加购物车
+        function addShoppingCart() {
+            layer.closeAll();
+            refreshTotalPrice();
+        }
+
+        //获取缓存中的值
+        function detaiAllList()
+        {
+            var model =
+            {
+                billDetailList: localStorage.getItem("billDetailList"),
+                ActionList: localStorage.getItem("ActionList"),
+                GroupList: localStorage.getItem("GroupList")
+            };
+            return model;
+        }
+
+        //打开查询窗口
+        function openQuery()
+        {
+            document.activeElement.blur();//屏蔽默认键盘弹出；
+           $.ajax({
+                url: '@Url.Action("_QueryItemList", "Order")',
+                type: 'post',
+                data: {},
+                dataType: 'html',
+                success: function (data) {
+
+                     queryIndex = layer.open({
+                        type: 1,
+                        content: data,
+                        area: ['100%', '100%'],
+                        maxmin: true,
+                         style: 'border:none;width:100%;height: 100%;background-color:#e8e0e0;',
+                         shade: false,
+                         success: function (layero) {
+                             document.getElementById('searchIpt').focus();
+                             $(".settlement").attr("style", "display:none;");
+                             mui('.mui-input-row input').input();
+                             $("#searchIpt").on('keypress', function (e) {
+                                 var keycode = e.keyCode;
+                                 var searchName = $(this).val();
+                                 //keycode是键码，13也是电脑物理键盘的 enter
+                                 if (keycode == '13') {
+
+                                     e.preventDefault();
+
+                                     //请求搜索接口
+                                     $.ajax({
+                                          url: '@Url.Action("_QueryItemResultList", "Order")',
+                                          type: 'post',
+                                          data: {
+                                              searchName: searchName
+                                          },
+                                          dataType: 'html',
+                                         success: function (data) {
+                                             $("#itemResultList").html(data);
+                                             var list = JSON.parse(localStorage.getItem("billDetailList"));
+                                             if (list != null) {
+                                                 $("#itemResultList li").find("span").each(function () {
+                                                     for (var i = 0; i < list.length; i++) {
+                                                         if ($(this).attr("data-id") == list[i].Itemid) {
+                                                             $(this).html(list[i].Quantity);
+                                                             $(this).css("display", "block");
+                                                             $(this).prev().css("display", "block");
+                                                         }
+                                                     }
+                                                 });
+                                             }
+
+                                          },
+                                          error: function (xhr) {
+                                                console.log(xhr);
+                                          }
+                                     });
+
+                                 }
+                             });
+                         }
+                    });
+
+
+                    //$("#searchIpt").focus();
+
+                },
+                error: function (xhr) {
+                    console.log(xhr);
+                }
+            });
+
+
+        }
+        var queryIndex;
+        //查询界面关闭事件
+        function closeQuery()
+        {
+            $(".settlement").attr("style", "display:block;");
+            var list = JSON.parse(localStorage.getItem("billDetailList"));
+            layer.close(queryIndex);
+            if (list != null && list.length>0) {
+                $("#segmentedControlContents .mui-control-content").each(function () {
+
+                    if ($(this).hasClass("mui-active")) {
+                        $(this).find("span").each(function () {
+                            for (var i = 0; i < list.length; i++) {
+                                if ($(this).attr("data-id") == list[i].Itemid) {
+                                    $(this).html(list[i].Quantity);
+                                    $(this).css("display", "block");
+                                    $(this).prev().css("display", "block");
+                                }
+                            }
+                        });
+                    }
+
+                });
+            }
+
+
+
+        }
+    </script>
+
+
+    <!-- mui -->
+    <script type="text/javascript">
+        mui.init({
+            swipeBack: false
+        });
+
+        /* Tab选项卡 */
+        (function ($) {
+            $('.mui-scroll-wrapper').scroll({
+                indicators: true //是否显示滚动条
+            });
+
+            document.getElementById('slider').addEventListener('slide', function (e) {
+                if (e.cancelable) {
+                    // 判断默认行为是否已经被禁用
+                    if (!e.defaultPrevented) {
+                        e.preventDefault();
+                    }
+                }
+                if (e.detail.slideNumber == 0) {
+                    // getItemClassList();
+                    jQuery("#search").css("display", "block");
+                    jQuery(".settlement").attr("style", "display:block;");
+                }
+                else if (e.detail.slideNumber == 1) {
+                    jQuery("#search").css("display", "none");
+                    jQuery(".settlement").attr("style", "display:none;");
+                    var index = e.detail.slideNumber + 1;
+                    switchTab(index, '#item' + index + 'mobile', '会员');
+
+                } else if (e.detail.slideNumber == 2) {
+                    jQuery("#search").css("display", "none");
+                    jQuery(".settlement").attr("style", "display:none;");
+                    var index = e.detail.slideNumber + 1;
+                    switchTab(index, '#item' + index + 'mobile', '订单');
+
+                }
+            }, true)
+        })(mui);
+    </script>
+}
+

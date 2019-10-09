@@ -1,0 +1,639 @@
+﻿@model Gemstar.BSPMS.Hotel.Services.Entities.RateDetail
+@using Kendo.Mvc.UI
+<html>
+<head>
+    <script language="javascript">
+
+        //鼠标移上修改日历背景颜色
+        function changeColor(obj, fcolor) {
+            obj.className = fcolor;
+        }
+        //ajax方法
+        function jsonajax(urls) {
+            var events = {};
+            var Rand = Math.random();
+            $.ajax({
+                url: urls + "&rand=" + Rand,
+                success: function (data) {
+                    events = data;
+                },
+                async: false
+            });
+            return events;
+        }
+        //设置开始时间和结束时间
+
+        function settime() {
+            var syear = $("#selyear").val();//选择年份
+            var smonth = $("#selmonth").val();//选择月份
+            var now = new Date(syear,smonth-1,1);
+            var result = now.getFullYear() + "-" + ((now.getMonth() + 1) < 10 ? "0" + (now.getMonth() + 1) : (now.getMonth() + 1)) + "-" + now.getDate();
+            var end = new Date(syear,smonth,0);
+            var resultend = end.getFullYear() + "-" + ((end.getMonth() + 1) < 10 ? "0" + (end.getMonth() + 1) : (end.getMonth() + 1)) + "-" + end.getDate();
+            $("#begintime").val(result);
+            $("#endtime").val(resultend);
+            $("#begintimeRULE").val(result);
+            $("#endtimeRULE").val(resultend);
+
+        }
+        //显示日历以及对应价格
+        function showCalendar() {
+            var rateid = $("#rateid").val(); var rmtype = $("#rmtype").val();
+            var syear = $("#selyear").val();//选择年份
+            var smonth = $("#selmonth").val();//选择月份
+            var events = jsonajax("/RateManage/getData?rateid=" + rateid + "&rmtype=" + rmtype + "&year=" + syear + "&month=" + smonth);
+            var selTime = syear + "/" + smonth + "/01";
+            var my = new Date(selTime);//转换为时间格式
+            var now = new Date();
+            var calendStr = "";
+            var k = 1, j = 1, today, tomonth, theday = 1, max, temp, tempday;
+            calendStr += "<table id='tbcalendar' cellspacing='0'><tr class='tr-td-week'><td><font color='red'>日</font></td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td><font color='red'>六</font></td></tr>";//日历表头
+            temp = my.getDate();
+            my.setDate(1);
+            tempday = my.getDay();//返回第一天是星期几
+            my.setDate(temp);
+            today = my.getDay();//返回现在星期几
+            var year = my.getYear();
+            switch ((my.getMonth() + 1)) {
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 8:
+                case 10:
+                case 12:
+                    max = 31;
+                    break;
+                case 4:
+                case 6:
+                case 9:
+                case 11:
+                    max = 30;
+                    break;
+                default:
+                    max = ((year % 400 == 0) || ((year % 4 == 0) && (year % 100 != 0))) ? 29 : 28;
+            }
+            for (k = 0; k < 6; k++) {
+
+                calendStr += "<tr>";
+                for (j = 0; j <= 6; j++) {
+                    calendStr += "<td " + ((j >= (tempday) && theday <= max) ? "onmouseover='changeColor(this,\"focuscolor\")'   onmouseout='changeColor(this,\"nofocuscolor\")'" : "") + " >";
+                    if (j >= (tempday)) {
+                        tempday = 0;//设置为最小，相当于取消判断条件
+                        if (theday <= max) {
+                            var roomcount = "";
+                            var cancelname = "";
+                            var guarateename = "";
+                            var closeName = "";
+                            var guarateeTime = "";
+                            var cancelTime = "";
+                            for (var o in events) {
+                                var event = events[o];
+                                var rdata = event.RateDate;
+                                var date = new Date(parseInt(rdata.replace("/Date(", "").replace(")/", ""), 10));
+                                var result = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+                                if (result == my.getFullYear() + "-" + (my.getMonth() + 1) + "-" + theday) {
+                                    roomcount = (event.Rate == null ? "" : event.Rate);
+                                    cancelname = event.Cancelid == null ? "" : event.Cancelid;
+                                    guarateename = event.Guaranteeid == null ? "" : event.Guaranteeid;
+                                    closeName = event.IsClose ? "关闭" : "";
+                                    guarateeTime = event.GuaranteeTime == null ? "" : event.GuaranteeTime;
+                                    cancelTime = (event.CancelHours == null || event.CancelHours == 0) ? "" : event.CancelHours;
+                                    break;
+                                }
+                            }
+                            var IsbgRedClose = closeName == "关闭" ? "bg-red-close" : "";
+                            var IsWeekend = j == 0 || j == 6 ? "triangle_border_nw_red" : "triangle_border_nw_bule";
+                            calendStr += "<a title=" + my.getFullYear() + "-" + (my.getMonth() + 1) + "-" + theday + " target='_blank'>";// href=detail.asp?date=" + theday + "
+                            calendStr += "<div class='" + IsWeekend + "'></div>" +
+                                              "<div class='div-day'><span color='red'>" + theday + " </span></div>" +
+                                              "<div class='div-count'><span>" + roomcount + "</span></div>" +
+                                                "<div class='div-guar'><span>" + guarateename + "</span><span class='span-time'>" + guarateeTime + "</span></div>" +
+                                              "<div class='div-content'><span>" + cancelname + "</span><span class='span-time'>" + cancelTime + "</span><span class='span-close " + IsbgRedClose + "'></span></div>" +
+                                               "</a>";
+
+                            theday++;
+                        }
+                    }
+                    calendStr += "</td>";
+
+                }
+                calendStr += "</tr>";
+            }
+            calendStr += "</table>";
+            $("#calendarDiv").html(calendStr);
+            removeTr();
+        }
+        function removeTr() {
+            //移除多余tr
+            var lastTd = $("#tbcalendar tr").last().find("td").first().text();
+            if (lastTd == "") {
+                $("#tbcalendar tr").last().remove();
+            }
+            $("#tbcalendar tr").last().find("td").each(function (i, data) {
+                $(data).css("border-bottom", "0px")
+            })
+            $("#tbcalendar tr").each(function (i, data) {
+                $(data).find("td").last().css("border-right", "0px")
+            })
+            $("#tbcalendar").addClass("table-border");
+        }
+        //初始化日期时间
+        $(document).ready(function () {
+            $("input[name=weektext]").attr("readonly", "readonly");
+            //设置日期格式和默认值
+            $("#begintime").kendoDatePicker({ 
+                culture: "zh-CN", 
+                format: "yyyy-MM-dd",
+                value:new Date(),
+                min:new Date() });
+            $("#endtime").kendoDatePicker({ 
+                culture: "zh-CN", 
+                format: "yyyy-MM-dd", 
+                value: new Date(@DateTime.Today.Year,@DateTime.Today.AddMonths(0).Month,0),
+                min:new Date() });
+            $("#begintimeRULE").kendoDatePicker({ 
+                culture: "zh-CN", 
+                format: "yyyy-MM-dd",
+                value:new Date(),
+                min:new Date() });
+            $("#endtimeRULE").kendoDatePicker({ 
+                culture: "zh-CN", 
+                format: "yyyy-MM-dd", 
+                value: new Date(@DateTime.Today.Year,@DateTime.Today.AddMonths(0).Month,0),
+                min:new Date() }); 
+            $("#guaranteeTime").kendoTimePicker();
+            var date = new Date();
+            $("#selyear").val(date.getFullYear());
+            $("#selmonth").val(date.getMonth() + 1); 
+            showCalendar();
+            $("#Cancelid").change(function () {
+                if ($("#Cancelid").val() == "03") {
+                    cancel.style.display = "";
+                } else {
+                    cancel.style.display = "none";
+                    $("#cancelHours").val("");
+                }
+            });
+            $("#Guaranteeid").change(function () {
+                if ($("#Guaranteeid").val() == "02" || $("#Guaranteeid").val() == "03") {
+                    guaranteet.style.display = "";
+                } else {
+                    guaranteet.style.display = "none";
+                    $("#guaranteeTime").val("");
+                }
+            });
+            $("#commonKendoWindow").parent().css("width", "1015px");
+            $("#begintime").change(function () {
+                if($("#endtime").val()<$("#begintime").val())
+                {
+                    var end1 = new Date($("#begintime").val());
+                    var end = new Date( end1.getFullYear(),end1.getMonth()+1,0);
+                    var resultend = end.getFullYear() + "-" + ((end.getMonth() + 1) < 10 ? "0" + (end.getMonth() + 1) : (end.getMonth() + 1)) + "-" + end.getDate();
+                    $("#endtime").val(resultend);
+                }
+
+            });
+            $("#begintimeRULE").change(function () {
+                if($("#endtimeRULE").val()<$("#begintimeRULE").val())
+                {
+                    var end1 = new Date($("#begintimeRULE").val());
+                    var end = new Date( end1.getFullYear(),end1.getMonth()+1,0);
+                    var resultend = end.getFullYear() + "-" + ((end.getMonth() + 1) < 10 ? "0" + (end.getMonth() + 1) : (end.getMonth() + 1)) + "-" + end.getDate();
+                    $("#endtimeRULE").val(resultend);
+                }
+
+            });
+
+        });
+        //修改保留房设置   `
+        function changeRoomhold() {
+            var begintime = new Date($("#begintime").val());
+            var endtime = new Date($("#endtime").val());
+            if (begintime > endtime) {
+                jAlert("开始时间不能大于结束时间！");
+                return;
+            }
+            begintime = begintime.getFullYear() + "-" + (begintime.getMonth() + 1) + "-" + begintime.getDate();
+            endtime = endtime.getFullYear() + "-" + (endtime.getMonth() + 1) + "-" + endtime.getDate();
+            var rateid = $("#rateid").val(); var roomtypeid = $("#rmtype").val();
+            var events = updateRH(begintime, endtime, rateid, roomtypeid);
+            if (events == "成功") {
+                updateroomhold.style.display = 'none';
+                jAlert("修改成功");
+                showCalendar();
+            } else {
+                if (events == "失败") {
+                    jAlert("修改" + events);
+                } else {
+                    jAlert(events);
+                }
+            }
+        }
+        //修改价格信息
+        function updateRH(begintime, endtime, rateid, roomtypeid) {
+            var selval = $('input[name="selTimeType"]:checked ').val();
+            var isempty = 0;//每周价格的文本框为空数
+            var valarr = "";
+            if (selval == "2") {
+                for (var i = 1; i <= 7; i++) {
+                    if($("#text" + i).val() == "")
+                    {
+                        isempty+=1;
+                    }
+                    valarr += ($("#text" + i).val() == "" ? "0" : $("#text" + i).val()) + ",";
+                }
+            } else {
+                for (var i = 1; i <= 7; i++) {
+                    if($("#textday").val()== "")
+                    {
+                        return "成功";
+                    }
+                    valarr += ($("#textday").val() == "" ? "0" : $("#textday").val()) + ",";
+                }
+            }
+            if (isempty < 7 && isempty > 0) {//每周价格的文本框部分为空
+                return "设置失败，每周价格不能部分为空";
+            }
+            var events = jsonajax("/RateManage/changeRateDetail?begintime=" + begintime + "&endtime=" + endtime + "&strarr=" + valarr + "&rateid=" + rateid + "&roomtype=" + roomtypeid + "&ratename=" + '@ViewData["rateidname"]' + "&roomtypename=" + '@ViewData["roomtypename"]');
+            return events;
+        }
+
+        //修改政策信息   `
+        function changeRule() {
+            var begintime = new Date($("#begintimeRULE").val());
+            var endtime = new Date($("#endtimeRULE").val());
+            if (begintime > endtime) {
+                jAlert("开始时间不能大于结束时间！");
+                return;
+            }
+            begintime = begintime.getFullYear() + "-" + (begintime.getMonth() + 1) + "-" + begintime.getDate();
+            endtime = endtime.getFullYear() + "-" + (endtime.getMonth() + 1) + "-" + endtime.getDate();
+            var rateid = $("#rateid").val();
+            var roomtypeid = $("#rmtype").val();
+            var Cancelid = $("#Cancelid").val();
+            var Guaranteeid = $("#Guaranteeid").val();
+            var Cancelname = $("#Cancelid option:selected").text();
+            var Guaranteename = $("#Guaranteeid option:selected").text();
+            var cancelHours = $("#cancelHours").val();
+            var guaranteeTime = $("#guaranteeTime").val();
+            var isClose = $("#IsClose")[0].checked ? 1 : 0;
+            var events = jsonajax("/RateManage/changeRule?begintime=" + begintime + "&endtime=" + endtime + "&rateid=" + rateid + "&roomtype=" + roomtypeid + "&cancelid=" + Cancelid + "&guaranteeid=" + Guaranteeid + "&cancelhours=" + cancelHours + "&guaranteetime=" + guaranteeTime + "&ratename=" + '@ViewData["rateidname"]' + "&roomtypename=" + '@ViewData["roomtypename"]' + "&Cancelname=" + Cancelname + "&Guaranteename=" + Guaranteename + "&isClose=" + isClose);
+            if (events == "成功") {
+                updaterule.style.display = 'none';
+                jAlert("修改成功");
+                showCalendar();
+            } else {
+                if (events == "失败") {
+                    jAlert("修改" + events);
+                } else {
+                    jAlert(events);
+                }
+            }
+        }
+
+        function checkText(obj) {
+            if (isNaN($(obj).val())) {
+                $(obj).val("");
+            }
+        }
+
+        function filltext(obj) {
+
+            var aaa = $("#divchage").children();
+            for (var i = 0; i < aaa.length; i++) {
+                if (aaa[i].value != "2") {//单选按钮
+                    aaa[i].value = $(obj).val();
+                }
+            }
+        }
+        function enabletext(obj) {
+            if ($(obj).val() == "1") {
+                $("input[name=weektext]").attr("readonly", "readonly");
+                $("input[name=daytext]").attr("readonly", false);
+            } else {
+                $("input[name=daytext]").attr("readonly", "readonly");
+                $("input[name=weektext]").attr("readonly", false);
+            }
+        }
+
+        var Dragging = function (validateHandler) { //参数为验证点击区域是否为可移动区域，如果是返回欲移动元素，负责返回null
+            var draggingObj = null; //dragging Dialog
+            var diffX = 0;
+            var diffY = 0;
+            function mouseHandler(e) {
+                switch (e.type) {
+                    case 'mousedown':
+                        draggingObj = validateHandler(e);//验证是否为可点击移动区域
+                        if (draggingObj != null) {
+                            diffX = e.clientX - draggingObj.offsetLeft - 300;
+                            diffY = e.clientY - draggingObj.offsetTop;
+                        }
+                        break;
+
+                    case 'mousemove':
+                        if (draggingObj) {
+                            draggingObj.style.left = (e.clientX - diffX) + 'px';
+                            draggingObj.style.top = (e.clientY - diffY) + 'px';
+                        }
+                        break;
+
+                    case 'mouseup':
+                        draggingObj = null;
+                        diffX = 0;
+                        diffY = 0;
+                        break;
+                }
+            };
+
+            return {
+                enable: function () {
+                    document.addEventListener('mousedown', mouseHandler);
+                    document.addEventListener('mousemove', mouseHandler);
+                    document.addEventListener('mouseup', mouseHandler);
+                },
+                disable: function () {
+                    document.removeEventListener('mousedown', mouseHandler);
+                    document.removeEventListener('mousemove', mouseHandler);
+                    document.removeEventListener('mouseup', mouseHandler);
+                }
+            }
+        }
+
+        function getDraggingDialog(e) {
+            var target = e.target;
+            while (target && target.className.indexOf('dialog-title') == -1) {
+                target = target.offsetParent;
+            }
+            if (target != null) {
+                return target.offsetParent;
+            } else {
+                return null;
+            }
+        }
+        function closewindow() {
+            $("#dataDiv", $("#mainContent iframe")[0].contentWindow.document).load($("#mainContent iframe")[0].src + "?viewType=false");
+            closeEditFormWindow();
+        }
+
+        Dragging(getDraggingDialog).enable();
+    </script>
+    <style>
+        .triangle_border_nw_bule {
+            width: 0;
+            border-width: 30px 60px 0 0;
+            border-style: solid;
+            border-color: #004793 transparent transparent transparent;
+        }
+
+        .triangle_border_nw_red {
+            width: 0;
+            border-width: 30px 60px 0 0;
+            border-style: solid;
+            border-color: red transparent transparent transparent;
+        }
+
+        .div-day {
+            text-align: left;
+            margin-left: 10px;
+            margin-top: -30px;
+            color: white;
+        }
+
+        .div-count {
+            color: red;
+            width: auto;
+            margin-top: -20px;
+            float: right;
+            margin-right: 5px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .div-content {
+            height: 25px;
+            text-align: left;
+            margin-left: 5px;
+        }
+
+        .span-close {
+            float: right;
+            margin-top: 5px;
+            margin-right: 4px;
+        }
+
+        .span-time {
+            margin-left: 7px;
+        }
+
+        .div-guar {
+            height: 25px;
+            text-align: left;
+            /*margin-bottom: -10px;*/
+            margin-top: 10px;
+            margin-left: 5px;
+        }
+
+        .tr-td-week td {
+            height: 40px !important;
+        }
+
+        .wrap {
+            margin: 0px;
+            width: auto;
+            width: 742px;
+        }
+
+        table {
+            text-align: center;
+            border: 1px;
+        }
+
+        .table-border {
+            border: 1px solid #aeaeae;
+            border-radius: 12px;
+        }
+
+        #tbcalendar td {
+            height: 75px;
+            width: 130px;
+            border-bottom: 1px solid #aeaeae;
+            border-right: 1px solid #aeaeae;
+        }
+
+        select {
+            cursor: pointer;
+            background: white;
+            width: auto;
+            /*padding: 5px;*/
+            font-size: 12px;
+            border: 1px solid #ccc;
+            height: 24px;
+            /*-webkit-appearance: none;*/
+            color: black;
+            border-radius: 4px;
+        }
+
+        .focuscolor {
+            background-color: rgb(227,242,249);
+        }
+
+        .nofocuscolor {
+            background-color: white;
+        }
+
+        #divchage input {
+            width: 40px;
+            height: 20px;
+            margin-left: 5px;
+            border: 1px solid gray;
+        }
+
+        input {
+            border-radius: 3px;
+        }
+
+        #divhead span {
+            display: inline-block;
+            width: 55px;
+            margin-left: 5px;
+        }
+
+        #lupdateroomhold, #lupdaterule {
+            position: absolute;
+            top: 150px;
+            background-color: white;
+            color: black;
+            line-height: 30px;
+            height: auto;
+            width: 600px;
+            padding-bottom: 30px;
+            text-align: center;
+            border: 1px solid gray;
+            -webkit-box-shadow: 1px 1px 3px #292929;
+            -moz-box-shadow: 1px 1px 3px #292929;
+            box-shadow: 1px 1px 3px #292929;
+            left: 50%;
+            margin-left: -300px;
+            border-radius: 4px;
+        }
+
+        .dialog-title {
+            background-color: rgb(0,71,147);
+            cursor: move;
+            height: 30px;
+            line-height: 30px;
+            color: white;
+        }
+
+        .dialog-content {
+            padding: 4px;
+        }
+    </style>
+
+</head>
+
+<body style="TEXT-ALIGN: center;">
+    <div align="center" style="margin-left:auto;margin-right:auto; width:1000px;">
+        <div align="center" style="margin-top:30px;width:100%;">
+            价格名称：<input id="rateid" value="@ViewData["rateid"]" type="text" style="display:none" /><span class="color">@ViewData["rateidname"]</span>
+            房型：<input id="rmtype" value="@ViewData["roomtype"]" type="text" style="display:none" /><span class="color">@ViewData["roomtypename"]</span>
+            <span style="margin-left:100px;">
+                <select id="selyear" style="display:initial" onchange="showCalendar(); settime();">
+                    @for (var i = DateTime.Now.AddYears(-5).Year; i < DateTime.Now.AddYears(5).Year; i++)
+                    {
+                        <option value=@i>@i</option>
+                    }
+                </select>　年
+
+                <select id="selmonth" style="width:40px; display:initial" onchange="showCalendar(); settime();">
+                    @for (var i = 1; i < 13; i++)
+                    {
+                        <option value=@i>@i</option>
+                    }
+                </select>　月
+            </span>
+
+            <input type="button" value="修改价格" onclick="updateroomhold.style.display = ''; updaterule.style.display = 'none';" class="k-button" style="margin-left:160px" />
+            <input type="button" value="修改政策" onclick="updaterule.style.display = ''; updateroomhold.style.display = 'none'; " class="k-button" style="margin-left:10px;" />
+            <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button" style="margin-left:10px" onclick="closewindow()">返回</button>
+        </div>
+
+        <div align="center" style="margin-top:20px; overflow-y:auto;height:510px">
+            <div id="calendarDiv"></div>
+        </div>
+
+        <div id="updateroomhold" style="display:none;">
+            <div id="lupdateroomhold">
+                <div style="text-align:left;font-size:1.2em;" class="dialog-title"> 　修改价格明细     <div style="float:right;line-height:30px;height:30px;cursor:pointer;padding-right:4px;"> <span onclick="updateroomhold.style.display = 'none';" role="presentation" class="k-icon k-i-close">Close</span> </div> </div>
+                <hr width="100%" style="background-color:red;height:1px;" />
+                <div class="dialog-content">
+                    <div id="divdate" style="margin-top:20px;text-align:left;padding-left:38px;">日期从：　<input id='begintime' />　到　<input id='endtime' />　@*<select id='selTimeType' style="background-color:white;"><option value='1'>周</option><option value='2'>日</option></select>*@</div>
+                    <div id="divDay" style="margin-top:25px;text-align:left;padding-left:40px;">
+                        <span style="display: inline-block; width: 83px;"><input type="radio" name="selTimeType" value="1" id="rad1" checked="checked" onclick="enabletext(this)" /> <label for="rad1"><span>每天</span>@ViewBag.isUseScore：</label></span>
+                        <input type="text" id="textday" name="daytext" onblur="checkText(this); filltext(this);" style="width:40px;height:20px;border:1px solid gray;" />
+                    </div>
+                    <div id="divWeek">
+                        <table>
+                            <tr>
+                                <td style="text-align:right;">　 </td>
+                                <td>
+                                    <div id="divhead" style="margin-top:10px;text-align:center;padding-left:45px;">
+                                        <span>　　</span>  <span>周一</span><span>周二</span><span>周三</span><span>周四</span><span>周五</span><span>周六</span><span>周日</span><br />
+                                    </div>
+                                    <div id="divchage" style="margin-top:15px;padding-left:18px;">
+                                        <input type="radio" name="selTimeType" value="2" style="width:13px;height:13px;" id="rad2" onclick="enabletext(this)" /> <label for="rad2"><span>每周</span>@ViewBag.isUseScore：</label>
+                                        <input name="weektext" type="text" id="text1" onblur="checkText(this)" />
+                                        <input name="weektext" type="text" id="text2" onblur="checkText(this)" />
+                                        <input name="weektext" type="text" id="text3" onblur="checkText(this)" />
+                                        <input name="weektext" type="text" id="text4" onblur="checkText(this)" />
+                                        <input name="weektext" type="text" id="text5" onblur="checkText(this)" />
+                                        <input name="weektext" type="text" id="text6" onblur="checkText(this)" />
+                                        <input name="weektext" type="text" id="text7" onblur="checkText(this)" />
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div style="margin-top:10px;">
+                        <input type="button" value="保存" onclick="changeRoomhold()" class='k-button' />
+                        <input type="button" value="返回" onclick="updateroomhold.style.display = 'none';" class='k-button' />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="updaterule" align="center" style="display:none;margin-right:auto;">
+            <div id="lupdaterule" align="center">
+                <div style="text-align:left;font-size:15px;" class="dialog-title"> 　修改政策信息 <div style="float:right;line-height:30px;height:30px;cursor:pointer;padding-right:4px;"> <span onclick="updaterule.style.display = 'none';" role="presentation" class="k-icon k-i-close">Close</span> </div> </div>
+                <hr width="100%" style="background-color:red;height:1px;" />
+                <div class="dialog-content">
+                    <div id="divdate" style="margin-top:20px;">
+                        <span>　</span>日期从： <input id='begintimeRULE' />　到　<input id='endtimeRULE' />
+                    </div>
+                    <div style="margin-top:20px;text-align:left;padding-left:100px;">
+                        取消政策：                     @Html.DropDownListFor(m => m.Cancelid, ViewData["Cancelid"] as List<SelectListItem>)
+                        <span id="cancel" style="display:none"><span>　</span>取消提前小时数： <input type="text" id="cancelHours" onblur="checkText(this)" style="width:65px;height:28px;border:1px solid rgb(204,204,204)" /></span>
+                    </div>
+                    <div style="margin-top:20px;text-align:left;padding-left:100px;">
+                        担保政策：                            @Html.DropDownListFor(m => m.Guaranteeid, ViewData["Guaranteeid"] as List<SelectListItem>)
+                        <span id="guaranteet" style="display:none">
+                            <span>　　　　</span>峰时时间：
+                            <input type="text" id="guaranteeTime" style="width:80px;" />
+
+                        </span>
+                    </div>
+                    <div style="margin-top:20px;text-align:left;padding-left:100px;">
+                        @(Html.Kendo().CheckBoxFor(m => m.IsClose).Label("关闭"))
+                    </div>
+
+                    <div style="margin-top:20px;">
+                        <input type="button" value="保存" onclick="changeRule()" class='k-button' />
+                        <input type="button" value="返回" onclick="updaterule.style.display = 'none';" class='k-button' />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

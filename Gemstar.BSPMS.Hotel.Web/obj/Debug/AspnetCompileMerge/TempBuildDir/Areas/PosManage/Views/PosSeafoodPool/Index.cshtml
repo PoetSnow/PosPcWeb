@@ -1,0 +1,468 @@
+﻿
+
+@using Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosSeafoodPool;
+@model SeaFoodPoolQueryViewModel
+@{
+    ViewBag.Title = "Pos海鲜池";
+}
+
+<link href="~/Content/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="~/Scripts/layer-v3.1.1/theme/default/layer.css" rel="stylesheet" />
+<link href="~/Content/Pos/PosSeadFoodPool.css?version=@ViewBag.Version" rel="stylesheet" />
+<link href="~/Content/Pos/posPublic.css?version=@ViewBag.Version" rel="stylesheet" />
+
+<style>
+    .layui-layer-content {
+        border-radius: 1rem;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    <input id="pageIndex" type="hidden" value="@(Model.PageIndex)" />
+    <input id="pageSize" type="hidden" value="@(Model.PageSize)" />
+    <input id="pageTotal" type="hidden" value="@(Model.PageTotal)" />
+    <input id="searchText" type="hidden" value="" />
+    <div class="mainRight">
+        <div class="mainRight-list">
+            <ul><li></li></ul>
+        </div>
+        <div class="mainRight-foot">
+            <ul>
+                <li class="sx"><a href="javascript:void(0)" onclick="refresh()">刷新</a></li>
+                <li class="qt"><a href="javascript:void(0)" onclick="searchData()">查询</a></li>
+                <li class="qt"><a href="javascript:void(0)" onclick="WeighedList()">已称重</a></li>
+                <li class="qt"><a href="javascript:void(0)" onclick="fullScreen(this)">全屏</a></li>
+                <li class="sx"><a href="javascript:void(0)" onclick="exitTabStatus()">退出</a></li>
+            </ul>
+            <ul>
+                <li class="pageing"><a href="javascript:void(0)" style="color:#fff" onclick="pageTurning('1')">上一页</a></li>
+                <li class="pageing"><a href="javascript:void(0)" style="color:#fff" onclick="pageTurning('2')">下一页</a></li>
+            </ul>
+        </div>
+
+    </div>
+}
+<script type="text/javascript">
+        var index=-1;
+    function weigh(obj)
+    {
+        //不需要刷卡
+        if (@ViewBag.WeighIsPayCard== "0") {
+            _WeighInput('B',  $(obj).attr("data-id"));
+        }
+
+        else {
+            var cardModel = {
+                ReturnType: 1,
+                Message: "请刷卡...",
+                Callback: "_WeighInput('B','" + $(obj).attr("data-id")+"');",
+
+            };
+            $.ajax({
+                url: '@Url.Action("_PayByCard", "PosSeafoodPool")',
+                type: "post",
+                data: cardModel,
+                dataType: "html",
+                success: function (cardData) {
+                    layer.open({
+                        type: 1,
+                        title: "刷卡",
+                        skin: 'layui-layer-demo', //样式类名
+                        closeBtn: 0, //不显示关闭按钮
+                        area: ['auto', 'auto'], //宽高
+                        content: cardData
+                    });
+
+                },
+                error: function (cardData) {
+                    layer.alert(cardData.responseText, { title: "快点云Pos提示", skin: 'err' });
+                }
+            })
+
+
+        }
+
+
+    }
+
+    function _WeighInput(WeighFlag,Id)
+    {
+        layer.closeAll();
+        var model = {
+            WeighFlag: WeighFlag,
+            mId: Id
+        };
+        //如果是海鲜并且称重 弹出称重界面
+        $.ajax({
+            url:'@Url.Action("_WeighInput", "PosSeafoodPool")',
+            type: "post",
+            data: model,
+            datatype: "html",
+            success: function (dataResult) {
+                var boolJson = isJson(dataResult);//判断是否为json格式
+                if (boolJson) { //如果是json 格式
+                    if (dataResult.Success == false) {
+                        layer.alert(dataResult.Data, { title: "快点云Pos提示", skin: 'err'});
+                        return false;
+                    }
+                }
+                layer.open({
+                    type: 1,
+                    title: "称重",
+                    closeBtn: 0, //不显示关闭按钮
+                    area: ['auto', '380px'], //宽高
+                    content: dataResult
+                });
+            },
+            error: function (dataResult) {
+                layer.alert(dataResult.responsetext, { title: "快点云pos提示", skin: 'err' });
+            }
+        });
+    }
+
+    window.setInterval(function () {
+        InSeaFootPollList();
+    }, 20 * 1000);
+
+  @*  $(window).resize(function () {          //当浏览器大小变化时
+        setTimeout(function () {
+            InTabStatusList();
+        }, 200);
+    });*@
+
+    $(function () {
+        InSeaFootPollList();
+
+    });
+
+    //初始化海鲜池列表
+    function InSeaFootPollList() {
+        splitInterval();
+
+        var listHeight = Math.floor($(".mainRight-list ul").height());
+        var listWidth = Math.floor($(".mainRight-list ul").width());
+        var liHeight = $(".mainRight-list li").first().outerHeight(true);
+        var liWidth = $(".mainRight-list li").first().outerWidth(true);
+
+        var widthDecimal = parseFloat(listWidth / liWidth) - Math.floor(listWidth / liWidth);
+        var heightDecimal = parseFloat(listHeight / liHeight) - Math.floor(listHeight / liHeight);
+
+        var size = parseInt(listWidth / liWidth) * parseInt(listHeight / liHeight);
+
+        if(widthDecimal > 0.5 && heightDecimal > 0.5)
+        {
+            size =  Math.ceil(listWidth / liWidth) *  Math.floor(listHeight / liHeight);
+        }
+        else if(widthDecimal > 0.1 && heightDecimal > 0.5)
+        {
+            size = Math.floor(listWidth / liWidth) * Math.floor(listHeight / liHeight);
+        }
+        $("#pageIndex").val(1);
+        $("#pageSize").val(size);
+
+        var model = {
+            PageIndex: $("#pageIndex").val(),
+            PageSize: $("#pageSize").val(),
+            TabId: $("#TabId").val()
+        };
+        queryBillDetail(model);
+    }
+    //查询海鲜池数据
+    function queryBillDetail(model) {
+        $.ajax({
+            url: '@Url.Action("_PosSeaFoodPoolList", "PosSeafoodPool")',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#pageIndex").val(model.PageIndex);
+                $(".mainRight-list").html(data);
+                splitInterval();
+                getTotal(model);
+              //  $("#query").hide();
+
+              // layer.close(index);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示", skin: 'err' });
+            }
+        });
+    }
+
+    //翻页
+    function pageTurning(operation) {
+        var index = parseInt($("#pageIndex").val());
+        var total = parseInt($("#pageTotal").val());
+        var size = parseInt($("#pageSize").val());
+        var number = (total % size) > 0 ? parseInt(total / size) + 1 : parseInt(total / size);
+
+        if (operation == "1") {
+            index -= 1;
+        }
+        else {
+            index += 1;
+        }
+
+        if (index < 1 || index > number) {
+            return false;
+        }
+
+        var model = {
+            PageIndex: index,
+            PageSize: $("#pageSize").val(),
+            TabId: $("#TabId").val()
+
+        };
+        queryBillDetail(model);
+    }
+
+    function searchData()
+    {
+        $.ajax({
+            url: '@Url.Action("_Query", "PosSeafoodPool")',
+            type: "post",
+            data: {},
+            dataType: "html",
+            success: function (data) {
+                index=   layer.open({
+                    type: 1,
+                    title: false,
+                    shadeClose: false,
+                    skin: 'layui-layer-demo', //样式类名
+                    closeBtn: 0, //不显示关闭按钮
+                    area: ['auto', '150px'], //宽高
+                    content: data,
+                    id:"query"
+                });
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示", skin: 'err' });
+            }
+        });
+    }
+    //已称重列表
+    function WeighedList()
+    {
+          $.ajax({
+            url: '@Url.Action("_WeighedList", "PosSeafoodPool")',
+            type: "post",
+            data: {},
+            dataType: "html",
+            success: function (data) {
+                layer.open({
+                    type: 1,
+                    title: "已称重列表",
+                    skin: 'layui-layer-demo', //样式类名
+                    shadeClose: false,
+                    closeBtn: 1, //不显示关闭按钮
+                    area: ['70%', '50%'], //宽高
+                    content: data
+                });
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示", skin: 'err' });
+            }
+        });
+    }
+
+
+    function splitInterval()
+    {
+        var remValue = $("#remValue").height();
+        var listHeight = Math.floor($(".mainRight-list ul").height());
+        var listWidth = Math.floor($(".mainRight-list ul").width());
+        var liHeight = $(".mainRight-list ul li").first().outerHeight(true);
+        var liWidth = $(".mainRight-list ul li").first().outerWidth(true);
+
+        //平均分配餐台间隔
+        var right = Math.floor((listWidth % liWidth) / (listWidth / liWidth));
+        var bottom = Math.floor((listHeight % liHeight) / (listHeight / liHeight));
+
+        if(right > 0 && bottom > 0)
+        {
+            $(".mainRight-list li").css({ "margin-right": right + 0.5*remValue + "px", "margin-bottom": bottom + 0.5*remValue + "px" });
+        }
+        else if(right > 0 && bottom <= 0)
+        {
+            $(".mainRight-list li").css({ "margin-right": right + 0.5*remValue + "px" });
+        }
+        else if(right <= 0 && bottom > 0)
+        {
+            $(".mainRight-list li").css({ "margin-bottom": bottom + 0.5*remValue + "px" });
+        }
+    }
+
+
+
+    function getTotal(model)
+    {
+       $.ajax({
+            url: '@Url.Action("GetSeaFoodPoolListCount", "PosSeafoodPool")',
+            type: "post",
+            data: model,
+            dataType: "html",
+           success: function (data) {
+               $("#pageTotal").val(data);
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示", skin: 'err' });
+            }
+        });
+    }
+
+
+
+    //刷新
+    function refresh() {
+        var model = {
+            PageIndex: $("#pageIndex").val(),
+            PageSize: $("#pageSize").val(),
+        };
+        queryBillDetail(model);
+    }
+
+
+    //全屏/正常
+    function fullScreen(obj) {
+        if ($(obj).text() == "全屏") {
+            $(obj).text("正常");
+            requestFullScreen();
+        }
+        else {
+            $(obj).text("全屏");
+            exitFullscreen();
+        }
+    }
+
+
+
+    //显示提示
+    function tipShow(obj) {
+        layer.tips($(obj).attr("data-msg"), $(obj), {
+            tips: [$(obj).attr("data-position"),"#111"], //还可配置颜色
+            time: $("#tipsTime").val(),
+        });
+    }
+
+    //隐藏提示
+    function tipHide(obj) {
+        layer.closeAll('tips');
+    }
+
+    //提示消息
+    function tipMsg(obj) {
+        layer.msg($(obj).attr("data-msg"), {
+            time: $("#tipsTime").val(),
+        });
+    }
+
+    function exitTabStatus()
+    {
+        if ("undefined" != typeof jsObject) {   //封装程序登录
+            cardModel = {
+                ReturnType: 2,
+                Message: "请刷卡退出程序……",
+                Callback: "ExitProcedure()",
+                Flag:"C"
+            };
+
+            $.ajax({
+                url: '@Url.Action("_PayByCard", "Shared")',
+                type: "post",
+                data: cardModel,
+                dataType: "html",
+                success: function (cardData) {
+                    layer.open({
+                        type: 1,
+                        title: "刷卡",
+                        skin: 'layui-layer-demo', //样式类名
+                        closeBtn: 0, //不显示关闭按钮
+                        area: ['auto', 'auto'], //宽高
+                        content: cardData
+                    });
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示", skin: 'err' });
+                }
+            });
+        }
+        else
+        {
+            if ($("#isAutoLogin").val() == "true") {
+                location.href = '@Url.Action("Index", "../Account")';
+            }else{
+                location.href = '@Url.Action("Index", "../Home")';
+            }
+        }
+    }
+
+    //退出程序
+    function ExitProcedure() {
+        if ("undefined" != typeof jsObject) //如果是封装程序
+        {
+            jsObject.Exit();
+        }
+    }
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return r[2]; return '';
+    }
+
+
+    //验证字符串是否是json格式
+    function isJson(str){
+        if (typeof str == 'string') {
+            try {
+                var obj=JSON.parse(str);
+                if(typeof obj == 'object' && obj ){
+                    return true;
+                }else{
+                    return false;
+                }
+
+            } catch(e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+</script>
+<script>
+    //打开手写板
+    function openHandwrite(obj, parentobj) {
+        if ("undefined" != typeof jsObject && jsObject.IsHandwrite) //如果是封装程序
+        {
+            var parobj = $(obj).parents(parentobj);
+            var x = parseInt($(parobj).first().offset().left);
+
+            var y = parseInt($(obj).offset().top + $(obj).outerHeight(true));
+            jsObject.OpenHandwrite($(obj).attr("id"), x, y);
+        }
+    }
+
+    //获取手写词
+    function GetHandwrittenValue(id, value) {
+        if ("undefined" != typeof jsObject && jsObject.IsHandwrite) //如果是封装程序
+        {
+            $("#" + id).val($("#" + id).val() + value);
+        }
+    }
+
+    //获取手写词
+    function DeleteInput(id) {
+        if ("undefined" != typeof jsObject && jsObject.IsHandwrite) //如果是封装程序
+        {
+            var val = $("#" + id).val();
+            val = val.substring(0, val.length - 1);
+            $("#" + id).val(val);
+        }
+    }
+</script>
+<script src="~/Scripts/layer-v3.1.1/layer.js"></script>

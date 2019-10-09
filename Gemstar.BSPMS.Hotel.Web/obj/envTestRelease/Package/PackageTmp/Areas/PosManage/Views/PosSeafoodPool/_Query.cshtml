@@ -1,0 +1,36 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosSeafoodPool.SeaFoodPoolQueryViewModel
+
+@{
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">餐台名(编码)：</td>
+            <td>@Html.Kendo().TextBoxFor(e => e.TabId).HtmlAttributes(new { style = " width:89%",onclick= "openHandwrite(this,'table')" })</td>
+        </tr>
+    </table>
+
+
+
+    <div class="formButtons">
+        <input type="button" id="saveEditFormButtonForAjax" value="确定" />
+        <input type="button" id="closeEditFormButtonA" value="关闭" />
+
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $("#saveEditFormButtonForAjax").bind("click", function () {
+            $("#searchText").val($("#TabId").val());
+            var model = {
+                PageIndex: $("#pageIndex").val(),
+                PageSize: $("#pageSize").val(),
+                TabId: $("#TabId").val()
+            };
+            queryBillDetail(model);
+            layer.close(index);
+        })
+        $("#closeEditFormButtonA").bind("click", function () {
+            layer.closeAll();
+        })
+    })
+
+</script>

@@ -1,0 +1,135 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "合约单位签单人";
+
+    var _controllerName = "CompanySignerManage";
+}
+<style type="text/css">
+        body {
+        overflow-y: hidden;
+    }
+    .mt-10 {
+        margin-top: 20px;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+
+    });
+    //设置查询grid参数
+    function setQuerySignerParas() {
+        return {
+            companyId:"@ViewBag.companyId"
+        }
+    }
+    //增加修改签单人记录时，给其赋默认值
+    function setSignerDefaultValue(e) {
+        e.model.CompanyId = "@ViewBag.companyId";
+    }
+    //在grid加载完数据后，自动将数据保存到一个隐藏域里面
+    function gridDatasourceRequestEnded(e) {
+        if (e.type === "read" && e.response) {
+            if (e.response.Data) {
+                $("#kendoGridOriginModelValues").val(JSON.stringify(e.response.Data));
+            }
+        }
+        if ((e.type == "create" || e.type == "update")&& e.response.Success != null
+            && !e.response.Success) {
+            jAlert(e.response.Data);            
+        }
+    }
+    function gridDataSourceSynced(e) {
+        //增加修改后，把数据源里面的内容设置为原始值
+        var data = this.data();
+        $("#kendoGridOriginModelValues").val(JSON.stringify(data));
+    }
+    function getUpdatedOriginValues() {
+        var jsonStr = $("#kendoGridOriginModelValues").val();
+        var originModels = $.parseJSON(jsonStr);
+        return { originModels: originModels };
+    }
+    function gridDatasourceRequestError(e, status) {
+        alert("1");
+        if (e.errors) {
+            var message = "<font color='red'>操作错误！</font>\n";
+            $.each(e.errors, function (key, value) {
+                if (value.errors) {
+                    message += value.errors.join("\n");                    
+                }
+            });
+            jAlert(message, "知道了");            
+        }
+    }
+
+    //批量删除
+    function batchDelete(gridId, keyName, url) {
+
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要删除的数据行");
+        } else {
+            jConfirm("确认要删除所有选中的数据行?", "确认", "取消", function (confirmed) {
+                if (confirmed) {
+                    var ids = [];
+                    for (var i = 0; i < selectedRows.length; i++) {
+                        var row = selectedRows[i];
+                        var data = grid.dataItem(row);
+                        ids.push(data[keyName]);
+                    }
+                    $.post(url, { id: ids.join(",") }, function (data) {
+                        if (data.Success) {
+                            grid.dataSource.read();
+                        } else {
+                            //jAlert(data.Data);
+                            ajaxErrorHandle(data);
+                        }
+                    }, 'json');
+                }
+            });
+        }
+    }
+</script>
+<input type="hidden" id="kendoGridOriginModelValues" />
+@(Html.Kendo().Grid<CompanySigner>()
+            .Name("gridSigner")
+            .Columns(c =>
+            {
+                c.Bound("Name").Title("姓名");
+                c.Bound("Position").Title("称谓");
+                c.Bound("Mobile").Title("手机");
+                c.Bound("Remark").Title("备注");
+            })
+            .ColumnMenu()
+            .Editable(c => c.Mode(GridEditMode.InCell).Enabled(true))
+            .Filterable()
+            .Reorderable(c => c.Columns(true))
+            .Resizable(c => c.Columns(true))
+            .Scrollable(c => c.Height("100%").Enabled(true))
+            .Sortable()
+            .Selectable(s => s.Mode(GridSelectionMode.Multiple).Enabled(true))
+            .Pageable(pageable => pageable.PageSizes(CommonHelper.PageSizes))
+            .HtmlAttributes(new { @class = "grid-300",style = "height:410px;" })
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Read(read => read.Action("AjaxQuerySigner", _controllerName).Data("setQuerySignerParas"))
+                .ServerOperation(false).PageSize(Gemstar.BSPMS.Common.Extensions.UrlHelperExtension.GetPageSizeForCookies(System.Web.HttpContext.Current.Request))
+                .Batch(true)
+                .Model(c => c.Id(w => w.Id))
+                .Update(update => update.Action("Update", _controllerName).Data("getUpdatedOriginValues"))
+                .Create("Add", _controllerName)
+                .Events(e => { e.RequestEnd("gridDatasourceRequestEnded"); e.Sync("gridDataSourceSynced"); e.Error("gridDatasourceRequestError"); })
+            )
+            .ToolBar(c =>
+            {
+                c.Create().Text("增加");
+
+                c.Save();
+
+                c.Custom().Name("batchDelete").Text("删除").HtmlAttributes(new { onclick = "batchDelete('gridSigner','Id','" + Url.Action("BatchDelete", _controllerName) + "')", href = "javascript:void(0);" });
+
+            })
+            .Events(e => { e.Edit("setSignerDefaultValue"); })
+    )

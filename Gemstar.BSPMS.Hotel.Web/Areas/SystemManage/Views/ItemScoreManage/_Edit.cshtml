@@ -1,0 +1,77 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.ItemScoreManage.ItemScoreEditViewModel
+@using (Html.BeginForm())
+{
+    ViewBag.PicAdd = Model.PicAdd;
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Code)</td>
+            <td colspan="4">@Html.TextBoxFor(m => m.Code, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Name)</td>
+            <td colspan="4">@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+        </tr>
+        <tr style="display:none;">
+            <td class="textright">@Html.LabelFor(m => m.PicAdd)</td>
+            <td colspan="4">@Html.TextBoxFor(m => m.PicAdd, new { @class = "k-textbox", style = "width:100%; background-color:#eee;", @readonly = "true" })</td>
+            <td>@Html.ValidationMessageFor(m => m.PicAdd, "*")</td>
+        </tr>
+        @Html.Partial("_QiniuPictureUploadSingle")
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td colspan="4">@Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+            <td colspan="4">@Html.TextBoxFor(m => m.Seqid, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+        </tr>
+        @if (ViewBag.isgroupingroup)
+        {
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.BelongHotel)</td>
+            <td colspan="4">
+                @Html.HiddenFor(m => m.BelongHotel)
+              @Html.Kendo().MultiSelect().Name("BelonghotelMultiSelect").HtmlAttributes(new { style = " width:100%" }).DataTextField("Hotelshortname").DataValueField("Hid").BindTo(ViewBag.Hotels).AutoClose(false).Value(ViewBag.listBelonghotels)
+            </td>
+            <td></td>
+        </tr>
+        }
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            console.log("@ViewBag.isgroupingroup");
+            if ("@ViewBag.isgroupingroup"=="True") { 
+                $("#BelongHotel").val($("#BelonghotelMultiSelect").data("kendoMultiSelect").value());
+            } 
+            e.preventDefault();
+            var uploaded = "@ViewBag.PicAdd";
+            var uploading = $("#ImgUploading").val();
+            if (uploading.replace(" ", "") != "" && uploaded != uploading) {
+                QiniuImgDelete(uploaded);
+            }
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            var uploading = $("#ImgUploading").val();
+            if (uploading.replace(" ", "") != "") {
+                QiniuImgDelete(uploading);
+            }
+            closeEditFormWindow();
+        });
+    });
+</script>

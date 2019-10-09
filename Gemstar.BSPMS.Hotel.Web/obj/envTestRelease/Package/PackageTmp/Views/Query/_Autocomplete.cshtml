@@ -1,0 +1,9 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Models.Query.QueryViewModel
+@*@{
+    var autoCompleteInfo = Model.CustomViewPara as AutoCompleteParameter;
+    if (autoCompleteInfo != null)
+    {
+        @Html.Partial("_AutoComplete",autoCompleteInfo)
+    }
+}*@
+

@@ -1,0 +1,459 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntityProcedures;
+@using Gemstar.BSPMS.Hotel.Services.Enums;
+@using Gemstar.BSPMS.Common.Extensions;
+@using System.Web.Script.Serialization
+@using Gemstar.BSPMS.Hotel.Web.Models
+@{
+    var series = new JavaScriptSerializer();
+
+    ViewBag.Title = "预订列表";
+    var colsDefault = new List<GridColumnSetting>
+       {
+                new GridColumnSetting {Name = "StatuName", Title = "状态", Hidden = false, Order = 1, Width = 64 },
+                new GridColumnSetting {Name = "ResNo", Title = "主单号", Hidden = false, Order = 2, Width = 105 },
+                new GridColumnSetting {Name = "RegId", Title = "账号", Hidden = false, Order = 3, Width = 80, HtmlAttributes = new { @class = "td_regid_a", hid="#: Hid #", regid="#: RegId #", statusname="#: StatuName #" ,style="#:IsCustemSecret==1?'color:red;':''#"} },
+                new GridColumnSetting {Name = "Name", Title = "主单名称", Hidden = false,Order = 4, Width = 90 },
+                new GridColumnSetting {Name = "ResCustName", Title = "联系人", Hidden = false,Order = 5, Width = 78 },
+                new GridColumnSetting {Name = "RoomQty", Title = "房数", Hidden = false,Order = 6, Width = 65 },
+                new GridColumnSetting {Name = "RateCode", Title = "价格代码", Hidden = false,Order = 7, Width = 100 },
+                new GridColumnSetting {Name = "Bbf", Title = "早餐数", Hidden = false,Order = 8, Width = 78 },
+                new GridColumnSetting {Name = "RoomTypeName", Title = "房型", Hidden = false,Order = 9, Width = 85 },
+                new GridColumnSetting {Name = "Rate", Title = "房价", Hidden = false,Order = 10, Width = 65 },
+                new GridColumnSetting {Name = "GuestName", Title = "入住人", Hidden = false,Order = 11, Width = 78 },
+                new GridColumnSetting {Name = "RoomNo", Title = "房号", Hidden = false,Order = 12, Width = 65 },
+                new GridColumnSetting {Name = "ArrDate", Title = "抵店时间", Hidden = false,Order = 13, Width = 120 },
+                new GridColumnSetting {Name = "DepDate", Title = "离店时间", Hidden = false,Order = 14, Width = 120},
+                new GridColumnSetting {Name = "SourceName", Title = "客人来源", Hidden = false,Order = 15, Width =120},
+                new GridColumnSetting {Name = "CompanyName", Title = "合约单位", Hidden = false,Order = 16, Width =120},
+                new GridColumnSetting {Name = "MbrCardNo", Title = "会员卡号", Hidden = false,Order = 17, Width = 120},
+                new GridColumnSetting {Name = "DebitAmount", Title = "消费金额", Hidden = false,Order = 18, Width = 120},
+                new GridColumnSetting {Name = "CreditAmount", Title = "付款金额", Hidden = false,Order = 19, Width = 120},
+                new GridColumnSetting {Name = "BalanceAmount", Title = "余额", Hidden = false,Order = 20, Width = 120},
+                new GridColumnSetting {Name = "CardAuthAmount", Title = "授权金额", Hidden = false,Order = 21, Width = 120},
+                new GridColumnSetting {Name = "Remark", Title = "备注", Hidden = false,Order = 22, Width = 240},
+                new GridColumnSetting {Name = "Billtype", Title = "团/散", Hidden = false,Order = 23, Width = 120},
+            };
+    var colsSetting = GridColumnsManager.GetGridColumnSettings("ResManage", "ResOrders", "Index", colsDefault);
+    var jsColumns = series.Serialize(colsSetting);
+}
+@(Html.Kendo().Grid<UpQueryResDetailResult>()
+            .Name("grid")
+            .AutoBind(false)
+            .Pageable(pageable => pageable.PageSizes(Gemstar.BSPMS.Common.Tools.CommonHelper.PageSizes))
+            .Pageable(pageable => pageable.Messages(c => c.ItemsPerPage("")))
+            .Sortable()
+            .Filterable()
+            .ColumnMenu()
+            .Scrollable()
+            .Selectable(s => s.Mode(GridSelectionMode.Single))
+            .Events(e => e.DataBound("ConvertCell"))
+            .DataSource(c =>
+            {
+                c.Ajax().Read(r => r.Action("IndexAjax", "ResOrders").Data("setQueryPara")).PageSize(Gemstar.BSPMS.Common.Extensions.UrlHelperExtension.GetPageSizeForCookies(Request));
+            })
+            .Columns(cols => { GridColumnsManager.BoundColumns(cols, colsSetting); })
+            .ToolBar(c =>
+            {
+            c.Template(@<text>
+        <form method="post">
+            <div class="toolbar">
+                <div style="margin-bottom:10px">
+                    <input type="button" class="k-button" value="设置列" id="btnManageGridColumns" style="float:right;margin-right:40px;" />
+                    @(Html.Kendo().Button().Name("liveOrders").Content("当前在住").Events(e => e.Click("liveOrders_clicked")).HtmlAttributes(new { type = "button" }))
+                    @(Html.Kendo().Button().Name("todayArriveOrders").Content("当天预抵").Events(e => e.Click("todayArriveOrders_clicked")).HtmlAttributes(new { type = "button" }))
+                    @(Html.Kendo().Button().Name("validOrders").Content("有效预订").Events(e => e.Click("validOrders_clicked")).HtmlAttributes(new { type = "button" }))
+                    @(Html.Kendo().Button().Name("checkOutOrders").Content("离店迟付").Events(e => e.Click("checkOutOrders_clicked")).HtmlAttributes(new { type = "button" }))
+                    @(Html.Kendo().Button().Name("allOrders").Content("历史客单").Events(e => e.Click("allOrders_clicked")).HtmlAttributes(new { type = "button" }))
+                    <div style="float:right;padding-top:7px;padding-right:20px;"><label style="color: red;">点击账号进入客账，双击记录进入客情，红色为客情保密</label></div>
+                </div>
+
+                <div style="display:inline-block">
+                    <span class="orderCondition">
+                        <label for="arrBeginDate">抵店日期从</label>
+                        @(Html.Kendo().DatePicker().Name("arrBeginDate").Format(DateTimeExtension.DateFormatStr))
+                        <label for="arrEndDate">至</label>
+                        @(Html.Kendo().DatePicker().Name("arrEndDate").Format(DateTimeExtension.DateFormatStr))
+                    </span>
+                    <span class="orderCondition">
+                        <label for="depBeginDate">离店日期从</label>
+                        @(Html.Kendo().DatePicker().Name("depBeginDate").Format(DateTimeExtension.DateFormatStr))
+                        <label for="depEndDate">至</label>
+                        @(Html.Kendo().DatePicker().Name("depEndDate").Format(DateTimeExtension.DateFormatStr))
+                    </span>
+                </div>
+                <div style="display:inline-block">
+                    <span class="orderCondition">
+                        <label for="orderNo">单号</label>
+                        @(Html.Kendo().TextBox().Name("orderNo").HtmlAttributes(new { placeholder = "主单号/外部订单号" }))
+                    </span>
+                    <span class="orderCondition">
+                        <label for="status">状态</label>
+                        @(Html.Kendo().DropDownList().Name("status").OptionLabel("全部").BindTo(EnumExtension.ToSelectList(typeof(ResDetailStatus), EnumValueType.Text, EnumValueType.Description)).Events(e => e.Select("statusOnSelect")))
+                        @(Html.Kendo().DropDownList().Name("statusFolio").Template("#= Text #").DataTextField("ShowText").DataValueField("Value").OptionLabel("全部").BindTo(new[] { new { ShowText = "未结", Text = "账务未结", Value = "false" }, new { ShowText = "已结", Text = "账务已结", Value = "true" } }).HtmlAttributes(new { style = "width:65px;" }))
+                    </span>
+                </div>
+                <div style="display:inline-block">
+                    <span class="orderCondition">
+                        <label for="roomNo">房账号</label>
+                        @(Html.Kendo().TextBox().Name("roomNoAndRegId").HtmlAttributes(new { placeholder = "房号/账号", title = "房号/账号" }))
+                    </span>
+                    <span class="orderCondition">
+                        <label for="mobileNo">卡机号</label>
+                        @(Html.Kendo().TextBox().Name("mobileNo").HtmlAttributes(new { placeholder = "会员卡号/手机号" }))
+                    </span>
+                </div>
+                <div style="display:inline-block;">
+                    <span class="orderCondition">
+                        <label for="orderName">名称</label>
+                        @(Html.Kendo().TextBox().Name("orderNameAndUserNameAndCompanyName").HtmlAttributes(new { placeholder = "客名/主单名/合约单位", title = "客名/主单名/合约单位" }))
+                    </span>
+                    <span class="orderCondition" style="text-align: right;">
+                        <label for="roomNo">房型</label>
+                        <input class="k-textbox" id="temp" name="temp" style="visibility:hidden;width:0px;padding:0px;margin:0px;border:0px;">
+                        @(Html.Kendo().MultiSelect()
+                .Name("roomType")
+                .DataTextField("Value").DataValueField("Key")
+                .HtmlAttributes(new { @style = "float:right;width:146.797px;" })
+                .DataSource(e => { e.Read(r => r.Action("GetRoomTypeSelectList", "RoomTypeManage", new { area = "SystemManage" })); })
+                .AutoClose(false)
+                .Placeholder("全部房型")
+                        )
+                    </span>
+                </div>
+                <div style="display:inline-block;">
+                    <span class="orderCondition">
+                        <label for="rateCode">价格代码</label>
+                        <input class="k-textbox" id="temp2" name="temp2" style="visibility:hidden;width:0px;border:0px;margin:0px;padding:0px;">
+                        @(Html.Kendo().MultiSelect()
+                .Name("rateCode")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .HtmlAttributes(new { @style = "float:right;width:146.797px;" })
+                .DataSource(e => { e.Read(r => r.Url(Url.Action("ListItemsForRates"))); })
+                .AutoClose(false)
+                .Placeholder("全部价格代码")
+                        )
+                    </span>
+                    <span class="orderCondition">
+                        <label for="rateCode">客人来源</label>
+                        <input class="k-textbox" id="temp3" name="temp3" style="visibility:hidden;width:0px;border:0px;margin:0px;padding:0px;">
+                        @(Html.Kendo().MultiSelect()
+                .Name("customerSource")
+                .HtmlAttributes(new { @style = "float:right;width:146.797px;" })
+                .DataTextField("Name")
+                .DataValueField("Id")
+                .DataSource(e => { e.Read(r => r.Action("GetCustomerSourceSelectList", "CommonCodeManage", new { area = "SystemManage" })); })
+                .AutoBind(false)
+                .Placeholder("全部客人来源")
+                        )
+                    </span>
+                </div>
+
+                <div style="display:inline-block;">
+                    <span class="orderCondition">
+                        @(Html.Kendo().Button().Name("query").Content("查询").Events(e => e.Click("queryButton_clicked")).HtmlAttributes(new { type = "submit" }))
+                    </span>
+                    <span class="orderCondition">
+                        @(Html.Kendo().CheckBox().Name("isGroupByResid").Label("显示主单").HtmlAttributes(new { style = "padding-left:1.920px;" }))
+                    </span>
+                </div>
+                <div style="display:none;">
+                    <span class="orderCondition">
+                        <label for="orderName">主单名称</label>
+                        @(Html.Kendo().TextBox().Name("orderName").HtmlAttributes(new { placeholder = "主单名称" }))
+                    </span>
+                    <span class="orderCondition">
+                        <label for="name">客人名</label>
+                        @(Html.Kendo().TextBox().Name("name").HtmlAttributes(new { placeholder = "预订人/入住人姓名" }))
+                    </span>
+                    <span class="orderCondition">
+                        <label for="companyName">合约单位</label>
+                        @(Html.Kendo().TextBox().Name("companyName").HtmlAttributes(new { placeholder = "合约单位名称" }))
+                    </span>
+                    <span class="orderCondition">
+                        <label for="roomNo">房号</label>
+                        @(Html.Kendo().TextBox().Name("roomNo").HtmlAttributes(new { placeholder = "房号" }))
+                    </span>
+                    <span class="orderCondition">
+                        <label for="regId">　账　号</label>
+                        @(Html.Kendo().TextBox().Name("regId").HtmlAttributes(new { placeholder = "账号" }))
+                    </span>
+                </div>
+            </div>
+        </form>
+            </text>);
+            })
+)
+
+<form action="@Url.Action("Index", "GridColumnsManage", new { area = "" })" id="@string.Format("formGridColumns_{0}","grid")" method="post" style="display:none">
+    <input type="hidden" name="setArea" value="ResManage" />
+    <input type="hidden" name="setController" value="ResOrders" />
+    <input type="hidden" name="setAction" value="Index" />
+    <input type="hidden" name="columns" value="@jsColumns" />
+    <button type="submit" id="btnsumbit">submit</button>
+</form>
+@section scripts{
+    <script type="text/javascript">
+        var businessToday = '@(ViewBag.businessToday)';
+        var today = '@(ViewBag.today)';
+        var todayAmonthAgo = '@(ViewBag.aMonthAgoToday)';
+        $(function () {
+            window.onresize = onResize; onResize();
+            $("#grid").on("dblclick", "tr.k-state-selected", function (e) {
+                e.preventDefault();
+                editGridItem(this);
+            });
+            document.getElementById("liveOrders").click();
+            $("#liveOrders").addClass("k-state-focused");
+            $("#btnManageGridColumns").click(function () {
+                var btn = $("#btnsumbit");
+                if (btn == null || btn == undefined) {
+                    jAlert("没有找到与表格id对应的管理自定义表格列form"); return;
+                }
+                btn.click();
+            });
+        });
+        //常用查询条件按钮事件
+        function clearAllQueryParaValues() {
+            $("#arrBeginDate").data("kendoDatePicker").value("");
+            $("#arrEndDate").data("kendoDatePicker").value("");
+            $("#depBeginDate").data("kendoDatePicker").value("");
+            $("#depEndDate").data("kendoDatePicker").value("");
+            $("#status").data("kendoDropDownList").value("");
+            $("#orderName").val("");
+            $("#orderNo").val("");
+            $("#name").val("");
+            $("#mobileNo").val("");
+            $("#roomNo").val("");
+            $("#companyName").val("");
+            $("#regId").val("");
+            $("#orderNameAndUserNameAndCompanyName").val("");
+            $("#roomNoAndRegId").val("");
+            $("#roomType").data("kendoMultiSelect").value("");
+            $("#rateCode").data("kendoMultiSelect").value("");
+            $("#customerSource").data("kendoMultiSelect").value("");
+            document.getElementById("isGroupByResid").checked = false;
+            statusOnSelect();
+        }
+        function todayArriveOrders_clicked(e) {
+            e.preventDefault();
+            clearAllQueryParaValues();
+            $("#arrBeginDate").data("kendoDatePicker").value(businessToday);
+            $("#arrEndDate").data("kendoDatePicker").value(today);
+            $("#status").data("kendoDropDownList").value('@ResDetailStatus.R.ToString()');
+            reloadData();
+        }
+        function validOrders_clicked(e) {
+            e.preventDefault();
+            clearAllQueryParaValues();
+            $("#status").data("kendoDropDownList").value('@ResDetailStatus.R.ToString()');
+            reloadData();
+        }
+        function allOrders_clicked(e) {
+            e.preventDefault();
+            clearAllQueryParaValues();
+            $("#status").data("kendoDropDownList").value('@ResDetailStatus.C.ToString()');
+            $("#depBeginDate").data("kendoDatePicker").value(businessToday);
+            $("#depEndDate").data("kendoDatePicker").value(businessToday);
+            reloadData();
+        }
+        function liveOrders_clicked(e) {
+            e.preventDefault();
+            clearAllQueryParaValues();
+            $("#status").data("kendoDropDownList").value('@ResDetailStatus.I.ToString()');
+            reloadData();
+        }
+        function checkOutOrders_clicked(e) {
+            e.preventDefault();
+            clearAllQueryParaValues();
+            $("#status").data("kendoDropDownList").value('@ResDetailStatus.O.ToString()');
+            reloadData();
+        }
+        //查询
+        function queryButton_clicked(e) {
+            if (e) { e.preventDefault(); }
+            reloadData();
+        }
+        function reloadData() {
+            var grid = $("#grid").data("kendoGrid");
+            grid.dataSource.page(1);
+        }
+        function setQueryPara() {
+            var arrBeginDateValue = $("#arrBeginDate").data("kendoDatePicker").value();
+            if (arrBeginDateValue) {
+                arrBeginDateValue = arrBeginDateValue.ToDateString();
+            }
+            var arrEndDateValue = $("#arrEndDate").data("kendoDatePicker").value();
+            if (arrEndDateValue) {
+                arrEndDateValue = arrEndDateValue.ToDateString();
+            }
+            var depBeginDateValue = $("#depBeginDate").data("kendoDatePicker").value();
+            if (depBeginDateValue) {
+                depBeginDateValue = depBeginDateValue.ToDateString();
+            }
+            var depEndDateValue = $("#depEndDate").data("kendoDatePicker").value();
+            if (depEndDateValue) {
+                depEndDateValue = depEndDateValue.ToDateString();
+            }
+            return {
+                ArrDateBegin: arrBeginDateValue,
+                ArrDateEnd: arrEndDateValue,
+                DepDateBegin: depBeginDateValue,
+                DepDateEnd: depEndDateValue,
+                Status: $("#status").data("kendoDropDownList").value(),
+                IsSettle: $("#statusFolio").data("kendoDropDownList").value(),
+                OrderNo: $("#orderNo").val(),
+                OrderName: $("#orderName").val(),
+                Name: $("#name").val(),
+                MobileNo: $("#mobileNo").val(),
+                RoomNo: $("#roomNo").val(),
+                CompanyName: $("#companyName").val(),
+                RegId: $("#regId").val(),
+                OrderNameAndUserNameAndCompanyName: $("#orderNameAndUserNameAndCompanyName").val(),
+                RoomNoAndRegId: $("#roomNoAndRegId").val(),
+                RoomType: $("#roomType").data("kendoMultiSelect").value(),
+                RateCode: $("#rateCode").data("kendoMultiSelect").value(),
+                CustomerSource: $("#customerSource").data("kendoMultiSelect").value(),
+                IsGroupByResid: document.getElementById("isGroupByResid").checked,
+            };
+        }
+        //双击编辑订单
+        function editGridItem(row) {
+            var gridId = "grid";
+            var keyName = "RegId";
+            var grid = $("#" + gridId).data("kendoGrid");
+            var data = grid.dataItem($(row));
+            editGridItemInIframe(data[keyName].split('§')[0], (data["StatuName"].split('§')[0] == "在住" ? "I" : "R"));
+        }
+        function editGridItemInIframe(id, type, isRoomStatus) {
+            var linkId = "resDetail_edit";
+            if (isRoomStatus == null || isRoomStatus == undefined || isRoomStatus.length <= 0) { isRoomStatus = "2"; }
+            var url = "@Url.Action("Index","ResOrderAdd")" + "?type=" + type + "&id=" + id + "&IsRoomStatus=" + isRoomStatus;
+            top.openResKendoWindow("客单", url, null, "20020", "新预订/入住");
+        }
+        function regid_clicked(thisObj) {
+            var grid = $("#grid").data("kendoGrid");
+            var data = grid.dataItem($(thisObj).parents("tr"));
+            editGridItemInIframe(data["RegId"], (data["StatuName"] == "在住" ? "I" : "R"), "4");
+        }
+        function onResize() {
+            var allHeight = $("#mainContent", window.top.document).height();
+            var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 41;
+            $("#grid .k-grid-content").height(allHeight - showHeight);
+        }
+        function statusOnSelect(e) {
+            var statusParent = $("#status").parent();
+            var statusFolioParent = $("#statusFolio").parent();
+
+            statusParent.width("12.4em");
+            statusFolioParent.css("display", "none");
+            $("#statusFolio").data("kendoDropDownList").value("");
+
+            if (e != null && e != undefined && e.item != null && e.item != undefined) {
+                var dataItem = this.dataItem(e.item);
+                if (dataItem != null && dataItem != undefined) {
+                    if (dataItem.Value == "@ResDetailStatus.N.ToString()") {
+                        statusParent.width("80px");
+                        statusFolioParent.css("display", "inline-block");
+                    }
+                }
+            }
+        }
+        function ConvertCell() {
+            //替换§为<br/>
+            var td_list = $("#grid td:contains('§')");
+            var td_length = td_list.length;
+            for (var i = 0; i < td_length; i++) {
+                var td = td_list[i];
+                var temp = td.innerHTML.split('§');
+                for (ii = 0; ii < temp.length; ii++) {
+                    if ($.trim(temp[ii]) == "") {
+                        temp[ii] = "&nbsp;";
+                    }
+                }
+                td.innerHTML = temp.join("<br />");
+                //td.innerHTML = td.innerHTML.replace(/§/g, "<br />");
+            }
+            //替换null为空
+            var tdnull_list = $("#grid td:contains('null')");
+            var tdnull_length = tdnull_list.length;
+            for (var j = 0; j < tdnull_length; j++) {
+                var tdnull = tdnull_list[j];
+                tdnull.innerHTML = tdnull.innerHTML.replace(/null/g, "<br />");
+            }
+            //ExtType改变行背景颜色
+            var tr_extType_list = $("#grid tr[exttype]");
+            var tr_extType_list_length = tr_extType_list.length;
+            for (var k = 0; k < tr_extType_list_length; k++) {
+                var tr_extType = tr_extType_list[k];
+                var tr_extType_Entity = $(tr_extType);
+                var extTypeValue = tr_extType.getAttribute("exttype");
+                if ($.trim(extTypeValue) != "" && (extTypeValue.indexOf('1') > -1 || extTypeValue.indexOf('2') > -1 || extTypeValue.indexOf('3') > -1)) {
+                    if (!tr_extType_Entity.hasClass("orderExtType")) {
+                        tr_extType_Entity.addClass("orderExtType");
+                    }
+                }
+            }
+            //a标签
+            var aHtml = "<a href=\"javascript:;\" class=\"tdaRegId\" onclick=\"editGridItemInIframe('{:RegId}','{:Status}','4')\" title=\"点击进入客账\">{:Name}</a>";
+            var td_a_list = $("#grid tr td.td_regid_a");
+            var td_a_list_length = td_a_list.length;
+            for (var l = 0; l < td_a_list_length; l++) {
+                var a_list = [];
+                var entity = $(td_a_list[l]);
+
+                var hid = entity.attr("hid");
+                var regids = entity.attr("regid");
+                var statusnames = entity.attr("statusname");
+
+                var regidList = regids.split('§');
+                var statusnamesList = statusnames.split('§');
+
+                var len = regidList.length;
+                for (var m = 0; m < len; m++) {
+                    var regid = regidList[m];
+                    var name = regidList[m].substring(hid.length);
+                    var status = statusnamesList.length > m ? (statusnamesList[m] == "在住" ? "I" : "R") : "R";
+                    a_list.push(aHtml.replace("{:RegId}", regid).replace("{:Name}", name).replace("{:Status}", status));
+                }
+                entity.html(a_list.join("<br />"));
+            }
+        }
+
+    </script>
+}
+@section headerContent{
+    <style type="text/css">
+        html, body {
+            overflow: hidden;
+        }
+
+        .orderExtType {
+            color: green;
+        }
+
+        .orderCondition {
+            display: block;
+            vertical-align: middle;
+            margin-bottom: 10px;
+            margin-right: 12px;
+        }
+
+        .k-multiselect-wrap {
+            height: 2.42em;
+        }
+
+            .k-multiselect-wrap .k-input {
+                margin-top: 3px;
+            }
+
+        .tdaRegId {
+            color: #004793;
+            text-decoration: none;
+        }
+
+            .tdaRegId:hover {
+                text-decoration: underline;
+            }
+    </style>
+}

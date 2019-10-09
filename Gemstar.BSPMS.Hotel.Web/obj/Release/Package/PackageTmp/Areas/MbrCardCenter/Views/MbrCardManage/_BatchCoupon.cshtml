@@ -1,0 +1,100 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MbrCardCenter.Models.MbrCardManage.MbrCardGiveCouponViewModel
+<div style="text-align:center;width:100%;">
+    <table class="editFormTable" style="width:100%;table-layout:fixed;">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.TicketTypeid)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.TicketTypeid).HtmlAttributes(new { style = " width:100%;text-align: left" }).DataTextField("Text").DataValueField("Value").DataSource(e => e.Read(r => { r.Action("listForCoupon", "MbrCardManage", new { rnd = new Random().NextDouble() }); })).OptionLabel("---选择券类型---")
+            </td>
+        </tr>
+        <tr>
+            <td class="textright" style="padding-top: 10px;">券金额:</td>
+            <td style="text-align:left;padding-top: 10px;">
+                @*@Html.TextBox("couponMoney", "", new { @class = "k-textbox k-state-disabled", style = "width:100%;background-color:rgb(245, 245, 245);", disabled = "disabled" })*@
+                <span id="couponMoney"></span>
+            </td>
+            
+            
+        </tr>
+        <tr><td class="textright" style="padding-top: 10px;">有效期:</td>
+            <td   style="text-align:left;padding-top: 10px;">
+                @*@Html.TextBox("ValidDate", "", new { @class = "k-textbox k-state-disabled", style = "width:100%;background-color:rgb(245, 245, 245);", disabled = "disabled" })*@
+                <span id="ValidDate" class="textleft"></span>（天）
+            </td></tr>
+        <tr>
+            <td class="textright" style="padding-top: 10px;">券备注:</td>
+            <td  style="word-wrap:break-word;text-align:left;padding-top: 10px;"><span id="TicketRemarks"></span></td>
+        </tr>
+        <tr>
+            <td class="textright" style="padding-top: 10px;">@Html.LabelFor(m => m.Number)</td>
+            <td style="padding-top: 10px;">@Html.TextBoxFor(m => m.Number, new { @class = "k-textbox", style = "width:100%;", type = "number" })</td>
+            
+        </tr>
+       <tr><td class="textright" style="padding-top: 10px;">@Html.LabelFor(m => m.Remarks)</td>
+    <td style="padding-top: 10px;">@Html.TextAreaFor(m => m.Remarks, new { @class = "k-textbox", style = "width:100%;" })</td></tr>
+        <tr>
+            @*<td class="textright">券备注:</td>
+            <td colspan="5">@Html.TextBox("TicketRemarks","", new { @class = "k-textbox k-state-disabled", style = "width:100%;background-color:rgb(245, 245, 245);", disabled = "disabled" })
+                <span id="TicketRemarks" class="textright"></span>
+            </td>
+
+            <td></td>*@
+            
+        </tr>
+        <tr>
+            <td colspan="2" stype="margin-top:20px;text-align:center;">
+                <button class="k-primary k-button" id="save" role="button" onclick="save()" data-role="button">保存</button>&nbsp;&nbsp;
+                <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<input type="text" value="@ViewBag.ids" style="display:none" id="idstr" />
+<script type="text/javascript">
+    $(function () {
+        $("#commonKendoWindow").parent().css("width", "500px");
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        $("#TicketTypeid").change(
+            function() {
+                var ticketTypeid = $("#TicketTypeid").val();
+                $.post("/MbrCardManage/GetTicket", { ticketTypeId: ticketTypeid },
+                    function (data) {
+                        if (data.Success && data.Data != null) {
+                            $("#couponMoney").text(data.Data.CouponMoney);
+                            $("#ValidDate").text(data.Data.ValidDate);
+                            if (data.Data.Remark != null) {
+                                $("#TicketRemarks").text(data.Data.Remark);
+                            }
+                            else {
+                                $("#TicketRemarks").text("");
+                            }
+                        }
+                        else
+                        {
+                            $("#couponMoney").text("");
+                            $("#ValidDate").text("");
+                            $("#TicketRemarks").text("");
+                        }
+                    })
+            }
+        );
+    });
+
+    function save() {
+        var ticketTypeid = $("#TicketTypeid").val();
+        var number = $("#Number").val();
+        var remarks = $("#Remarks").val();
+        var ids = $("#idstr").val();
+        $.post("/MbrCardManage/GiveCoupons", { id: ids, ticketTypeid: ticketTypeid, number: number, remarks: remarks }, function (data) {
+            if (data.Success) {
+                jAlert("发放成功！");
+                closeEditFormWindow();
+                $(document).find("iframe")[0].contentWindow.refreshGrid();
+            } else {
+                ajaxErrorHandle(data);
+            }
+        }, 'json');
+    }
+</script>

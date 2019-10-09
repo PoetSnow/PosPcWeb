@@ -1,0 +1,98 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@using System.Data;
+@{
+    ViewBag.Title = "合约单位账务";
+    var GridControlId = "grid_companyca";
+}
+
+<style>
+    .employee-details ul {
+        list-style: none;
+        font-style: italic;
+        margin: 15px;
+        padding: 0;
+    }
+
+        .employee-details ul li {
+            margin: 0;
+            line-height: 1.7em;
+        }
+
+    .employee-details label {
+        display: inline-block;
+        width: 90px;
+        padding-right: 10px;
+        text-align: right;
+        font-style: normal;
+        font-weight: bold;
+    }
+</style>
+
+<script id="template" type="text/kendo-tmpl">
+    <div class="k-widget k-grid k-reorderable">
+        <div class="employee-details">
+            <ul>
+                <li><label>发生时间:</label>#= transDate #</li>
+                <li><label>营业日:</label>#= transBsnsdate #</li>
+                <li><label>操作员:</label>#= inputUser #</li>
+                <li><label>交易说明:</label>#= typeName #</li>
+                <li><label>营业点:</label>#= outletCode #</li>
+                <li><label>房号:</label>#= roomNo==null?"":roomNo #</li>
+                <li><label>客人名:</label>#= guestname==null?"":guestname #</li>
+                <li><label>账号:</label>#= regid==null?"":regid.replace(hid,'') #</li>
+                <li><label>交易金额:</label>#= amount #</li>
+                <li><label>签单人:</label>#= sign #</li>
+                <li><label>备注:</label>#= remark #</li>
+                <li><label>单号:</label>#= invno #</li>
+                <li><label>外部参考:</label>#= refno==null?"":refno #</li>
+                <li><label>付款方式:</label>#= itemName==null?"":itemName #</li>
+                <li><label>核销单号:</label>#= checkNo==null?"":checkNo #</li>
+                <li><label>核销时间:</label>#= checkDate==null?"":checkDate #</li>
+                <li><label>核销人:</label>#= checkUser==null?"":checkUser #</li>
+            </ul>
+        </div>
+    </div>
+</script>
+
+<script type="text/javascript">
+    function getQueryParas()
+    {
+        return {
+            GridControlId: "@GridControlId",
+            QueryProcedureName: "up_list_companyCa",
+            QueryParameterValues: "@@99companyid=@ViewBag.CompanyId"
+        };
+    }
+</script>
+@(Html.Kendo().Grid<DataRowView>()
+        .Name(GridControlId)
+        .Columns(columns =>
+        {
+            columns.Bound("transDate").Title("发生时间");
+            columns.Bound("typeName").Title("交易说明").Width(90);
+            columns.Bound("sign").Title("签单人").Width(80);
+            columns.Bound("remark").Title("备注").Width(100);
+            columns.Bound("outletCode").Title("营业点").Width(80);
+            columns.Bound("amount").Title("交易金额").Width(100);
+            columns.Bound("transBsnsdate").Title("营业日").Width(90);
+            columns.Bound("inputUser").Title("操作员").Width(80);
+        })
+        .HtmlAttributes(new { style="height:410px;" })
+        .ColumnMenu()
+        .Filterable()
+        .Reorderable(c => c.Columns(true))
+        .Resizable(c => c.Columns(true))
+        .Scrollable(c => c.Height("100%"))
+        .Sortable()
+        .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+        .Pageable(pageable => pageable.PageSizes(Gemstar.BSPMS.Common.Tools.CommonHelper.PageSizes))
+        .Pageable(pageable => pageable.Messages(c => c.ItemsPerPage("")))
+        .ClientDetailTemplateId("template")
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("AjaxQuery", "Query", new { area = "" }).Data("getQueryParas"))
+            .ServerOperation(false).PageSize(Gemstar.BSPMS.Common.Extensions.UrlHelperExtension.GetPageSizeForCookies(Request))
+        )
+)

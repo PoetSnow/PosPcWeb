@@ -1,0 +1,454 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItem.PosItemAddViewModel
+
+<script type="text/javascript">
+    var arr = new Array();
+    var otherList = null;
+    $(function () {
+        var othrtList = $("#tabOther input[type=checkbox]");
+        $("#tabOther input[type=checkbox]").each(function () {
+
+            if ($(this).attr("checked") == "checked") {
+                arr.push($(this).attr("id"))
+            }
+        })
+
+    })
+    function moduleChanged() {
+        var ItemClassid = $("#ItemClassid").data("kendoDropDownList");
+        ItemClassid.dataSource.read();
+
+        var DeptClassid = $("#DeptClassid").data("kendoDropDownList");
+        DeptClassid.dataSource.read();
+
+        var Unitid = $("#Unitid").data("kendoDropDownList");
+        Unitid.dataSource.read();
+
+        var Requestid = $("#Requestid").data("kendoDropDownList");
+        Requestid.dataSource.read();
+
+        setTimeout(function () {
+            itemChanged();
+        }, 250);
+    }
+
+    function itemChanged() {
+        var SubClassid = $("#SubClassid").data("kendoDropDownList");
+        SubClassid.dataSource.read();
+
+        var item = $("#ItemClassid").data("kendoDropDownList");
+        var itemClassid = item.value();
+
+        AutoCode(itemClassid, "");
+        setTimeout(function () {
+            subClassChanged();
+        }, 250);
+    }
+
+    function subClassChanged() {
+        var item = $("#ItemClassid").data("kendoDropDownList");
+        var itemClassid = item.value();
+
+        var sub = $("#SubClassid").data("kendoDropDownList");
+        var subClassid = sub.value();
+
+        if (otherList != null) {
+            for (var i = 0; i < otherList.length; i++) {
+                $("#" + otherList[i]).removeAttr("checked");
+            }
+        }
+
+        for (var i = 0; i < arr.length; i++) {
+            $("#" + arr[i]).attr("checked", "true");
+        }
+        if (subClassid!="") {
+            $.ajax({
+                url: '@Url.Action("GetItemOtherList", "BasicDataPosItem")',
+                data: { itemId: subClassid },
+                type: "post",
+                dataType: "json",
+                success: function (result) {
+                    if (result.Success == true) {
+                        if (result.Data.length > 0) {
+                            otherList = result.Data;
+                            for (var i = 0; i < result.Data.length; i++) {
+                                $("#" + result.Data[i]).attr("checked", "true");
+                            }
+                        }
+
+                    }
+                },
+                error: function (result) {
+                    alert(result.responseText);
+                }
+            });
+        }
+
+
+
+        setTimeout(function () {
+            AutoCode(itemClassid, subClassid);
+        }, 250);
+    }
+
+    function posCode_paras() {
+        var module = $("#Module").data("kendoDropDownList");
+        var moduleCode = module.value();
+        return {
+            moduleCode: moduleCode
+        };
+    }
+
+    function posItem_paras() {
+        var item = $("#ItemClassid").data("kendoDropDownList");
+        var itemClassid = item.value();
+        return {
+            itemClassid: itemClassid,
+            isSubClass: true
+        };
+    }
+
+    function AutoCode(classid, subclassid) {
+        $.ajax({
+            url: '@Url.Action("ItemCodeForPosItemByClassid", "BasicDataPosItem")',
+            data: { itemClassid: classid, subClassid: subclassid },
+            type: "post",
+            dataType: "html",
+            success: function (result) {
+                $("#Code").val(result);
+            },
+            error: function (result) {
+                alert(result.responseText);
+            }
+        });
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    <ul id="panelbar">
+        <li class="k-state-active">
+            <span class="k-link k-state-selected">基本信息</span>
+            <div style="padding: 10px;">
+                <table class="editFormTable">
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.Module)</td>
+                        <td>@Html.Kendo().DropDownListFor(e => e.Module).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosModules", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); }).Events(e => e.Change("moduleChanged"))</td>
+                        <td>@Html.ValidationMessageFor(m => m.Module, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.DeptClassid)</td>
+                        <td>@Html.Kendo().DropDownListFor(e => e.DeptClassid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosDeptClassByModules", "BasicDataPosDeptClass", new { rnd = new Random().NextDouble() }).Data("posCode_paras")).ServerFiltering(true); })</td>
+                        <td>@Html.ValidationMessageFor(m => m.DeptClassid, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.ItemClassid)</td>
+                        <td>@Html.Kendo().DropDownListFor(e => e.ItemClassid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosItemClassByModules", "BasicDataPosItemClass", new { rnd = new Random().NextDouble() }).Data("posCode_paras")).ServerFiltering(true); }).Events(e => e.Change("itemChanged"))</td>
+                        <td>@Html.ValidationMessageFor(m => m.ItemClassid, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.SubClassid)</td>
+                        <td>@Html.Kendo().DropDownListFor(e => e.SubClassid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosItemByIsSubClass", "BasicDataPosItem", new { rnd = new Random().NextDouble() }).Data("posItem_paras")).ServerFiltering(true); }).OptionLabel("请选择分类").Events(e => e.Change("subClassChanged"))</td>
+                        <td>@Html.ValidationMessageFor(m => m.SubClassid, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.Code)</td>
+                        <td>@Html.Kendo().TextBoxFor(m => m.Code).HtmlAttributes(new { style = "width:100%;", placeholder = "请输入代码", onkeyup = "checkCode(this)" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.Cname)</td>
+                        <td>@Html.Kendo().TextBoxFor(m => m.Cname).HtmlAttributes(new { style = "width:100%;", placeholder = "请输入中文名称" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Cname, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.Ename)</td>
+                        <td>@Html.Kendo().TextBoxFor(m => m.Ename).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Ename, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.Oname)</td>
+                        <td>@Html.Kendo().TextBoxFor(m => m.Oname).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Oname, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.Unitid)</td>
+                        <td>@Html.Kendo().DropDownListFor(e => e.Unitid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosUnitByModules", "BasicDataPosUnit", new { rnd = new Random().NextDouble() }).Data("posCode_paras")).ServerFiltering(true); }).OptionLabel("请选择单位")</td>
+                        <td>@Html.ValidationMessageFor(m => m.Unitid, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.Price)</td>
+                        <td>@Html.Kendo().NumericTextBoxFor(m => m.Price).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Price, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.Status)</td>
+                        <td>@Html.Kendo().DropDownListFor(e => e.Status).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosStatus", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Status, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.IsSubClass)</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsSubClass).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsSubClass, "*")</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.Barcode)</td>
+                        <td>
+                            @Html.TextAreaFor(m => m.Barcode,new { @class = "k-textbox", style = "width:100%;height:60px;resize:none;"})
+                            @*@Html.Kendo().TextBoxFor(m => m.Barcode).HtmlAttributes(new { style = "width:100%;height:45px;", onfocus = "barCodeInput()" })*@
+                        </td>
+                        <td>@Html.ValidationMessageFor(m => m.Barcode, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+                        <td>@Html.Kendo().TextBoxFor(m => m.Seqid).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.CookID)</td>
+                        <td>@Html.Kendo().TextBoxFor(m => m.CookID).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.CookID, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.PreferDiscount)</td>
+                        <td>@Html.Kendo().NumericTextBoxFor(m => m.PreferDiscount).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.PreferDiscount, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.ItemTaxid)</td>
+                        <td>@Html.Kendo().DropDownListFor(m => m.ItemTaxid).HtmlAttributes(new { style = "width:100%;" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsPosInvoiceItem", "BasicDataPosItem", new { rnd = new Random().NextDouble() })); }).OptionLabel("请选发票开票项目")</td>
+                        <td>@Html.ValidationMessageFor(m => m.ItemTaxid, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.IsProdName)</td>
+                        <td>@Html.Kendo().DropDownListFor(e => e.IsProdName).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosIsProdName", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); }).OptionLabel("请选择出品名称")</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsProdName, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.TaxRate)</td>
+                        <td>@Html.Kendo().NumericTextBoxFor(m => m.TaxRate).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.TaxRate, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.IsOrderAction)</td>
+                        <td>@Html.Kendo().DropDownListFor(e => e.IsOrderAction).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosIsOrderAction", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); }).OptionLabel("是否点作法选项")</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsOrderAction, "*")</td>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.IsStock)</td>
+                        <td>@Html.Kendo().DropDownListFor(e => e.IsStock).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosIsStock", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); }).OptionLabel("请选择是否减库存")</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsStock, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.Requestid)</td>
+                        <td>@Html.Kendo().DropDownListFor(e => e.Requestid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosRequestByModules", "BasicDataPosRequest", new { rnd = new Random().NextDouble() }).Data("posCode_paras")).ServerFiltering(true); }).OptionLabel("请选择默认要求")</td>
+                        <td>@Html.ValidationMessageFor(m => m.Requestid, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+                        <td>@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.ShowSet)</td>
+                        <td>@Html.Kendo().MultiSelectFor(m => m.ShowSet).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListShowSet", "BasicDataPosItem", new { rnd = new Random().NextDouble() })); }).AutoClose(false).Placeholder("请选择项目显示").Value(Model.ShowSets)</td>
+                        <td>@Html.ValidationMessageFor(m => m.ShowSet, "*")</td>
+
+                    </tr>
+                </table>
+            </div>
+        </li>
+        <li>
+            <span>其他设置</span>
+            <div style="padding: 10px;">
+                <table class="editFormTable" id="tabOther">
+                    <tr>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsAvoidOpenItem)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsAvoidOpenItem).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsAvoidOpenItem, "*")</td>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsLimit)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsLimit).HtmlAttributes(new { style = "width:100%;" }).Checked(true)</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsLimit, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsAvoidLimit)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsAvoidLimit).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsAvoidLimit, "*")</td>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsService)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsService).HtmlAttributes(new { style = "width:100%;" }).Checked(true)</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsService, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsDiscount)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsDiscount).HtmlAttributes(new { style = "width:100%;" }).Checked(true)</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsDiscount, "*")</td>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsLargess)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsLargess).HtmlAttributes(new { style = "width:100%;" }).Checked(true)</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsLargess, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsLgService)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsLgService).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsLgService, "*")</td>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsQuan)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsQuan).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsQuan, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsHandWrite)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsHandWrite).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsHandWrite, "*")</td>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsInput)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsInput).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsInput, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsSuite)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsSuite).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsSuite, "*")</td>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsFeast)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsFeast).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsFeast, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsUserDefined)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsUserDefined).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsUserDefined, "*")</td>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsSeaFood)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsSeaFood).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsSeaFood, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsWeight)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsWeight).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsWeight, "*")</td>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsSort)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsSort).HtmlAttributes(new { style = "width:100%;" }).Checked(true)</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsSort, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsAutoAction)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsAutoAction).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsAutoAction, "*")</td>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsCurrent)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsCurrent).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsCurrent, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsTea)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsTea).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsTea, "*")</td>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsAutoSellout)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsAutoSellout).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsAutoSellout, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsSelfhelp)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsSelfhelp).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsSelfhelp, "*")</td>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsFreq)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsFreq).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsFreq, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsCash)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsCash).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsCash, "*")</td>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsNosh)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsNosh).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsNosh, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsOrderPrt)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsOrderPrt).HtmlAttributes(new { style = "width:100%;" }).Checked(true)</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsOrderPrt, "*")</td>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsDiy)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsDiy).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsDiy, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsMbrBaseamt)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsMbrBaseamt).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsMbrBaseamt, "*")</td>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsWineBar)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsWineBar).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsWineBar, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsSale)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsSale).HtmlAttributes(new { style = "width:100%;" }).Checked(true)</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsSale, "*")</td>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsEra)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsEra).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsEra, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsSplit)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsSplit).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsSplit, "*")</td>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsPresent)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsPresent).HtmlAttributes(new { style = "width:100%;" }).Checked(true)</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsPresent, "*")</td>
+                    </tr>
+                    <tr>
+                        <td class="textright">@*@Html.LabelFor(m => m.IsScore)*@</td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsScore).HtmlAttributes(new { style = "width:100%;" }).Checked(true)</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsScore, "*")</td>
+                        <td class="textright"></td>
+                        @* <td>@Html.Kendo().CheckBoxFor(m => m.IsWxShow).HtmlAttributes(new { style = "width:100%;" }).Checked(true)</td>
+                            <td>@Html.ValidationMessageFor(m => m.IsWxShow, "*")</td>*@
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsOpenItem).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsOpenItem, "*")</td>
+                    </tr>
+                    <tr>
+                        @*<td class="textright"></td>
+        <td>@Html.Kendo().CheckBoxFor(m => m.IsPaidShow).HtmlAttributes(new { style = "width:100%;" }).Checked(true)</td>
+        <td>@Html.ValidationMessageFor(m => m.IsPaidShow, "*")</td>*@
+                        <td class="textright">@*@Html.LabelFor(m => m.IsOpenItem)*@</td>
+
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsTimes).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsTimes, "*")</td>
+
+                        <td class="textright"></td>
+                        <td>@Html.Kendo().CheckBoxFor(m => m.IsModiPrice).HtmlAttributes(new { style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.IsModiPrice, "*")</td>
+                    </tr>
+                    <tr></tr>
+                </table>
+            </div>
+        </li>
+    </ul>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+
+
+<script type="text/javascript">
+    var load = 0;
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+           
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+            // saveFormDataForPostItem($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        $("#panelbar").kendoPanelBar({
+            expandMode: "single"
+        });
+        moduleChanged();
+    });
+
+    function barCodeInput() {
+
+    }
+
+    //function saveFormDataForPostItem(btn) {
+    //    var f = $(btn)[0].form;
+    //    var validator = $(f).validate();
+    //    if (validator.form()) {
+    //        $.post(
+    //            $(f).attr("action"),
+    //            $(f).serialize(),
+    //            function (data) {
+    //                if (data.Success) {
+    //                    closeEditFormWindow();
+    //                    // top.openKendoWindow("修改" + "Pos消费项目", "/PosManage/BasicDataPosItem/Edit", { id: data.Data });
+    //                } else {
+    //                    jAlert(data.Data);
+    //                }
+    //            },
+    //        "json");
+    //    }
+    //}
+
+</script>

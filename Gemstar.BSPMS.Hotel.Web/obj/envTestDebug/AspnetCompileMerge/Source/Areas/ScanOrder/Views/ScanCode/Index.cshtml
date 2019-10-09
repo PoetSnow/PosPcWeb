@@ -1,0 +1,74 @@
+﻿@using Senparc.Weixin.MP.AdvancedAPIs.OAuth;
+
+@{
+    Layout = "~/Areas/ScanOrder/Views/Shared/_Layout.cshtml";
+}
+
+@model OAuthAccessTokenResult
+
+<input id="hid" type="hidden" value="@ViewBag.Hid" />
+<input id="tabid" type="hidden" value="@ViewBag.Tabid" />
+
+@if (Model != null && Model.openid != null)
+{
+    <input id="openid" type="hidden" value="@Model.openid" />
+    <input id="errMsg" type="hidden" value="@Model.errmsg" />
+    <input id="isOpenid" type="hidden" value='@(Model != null && Model.openid != null ? "true":"false")' />
+}
+
+<ul>
+    <li>酒店：@ViewBag.Hid</li>
+    <li>餐台：@ViewBag.Tabid</li>
+
+    @if (Model != null)
+    {
+        <li style="color:#e00000">@Html.Raw(Model.errmsg)</li>
+    }
+
+    @if (Model != null && Model.openid != null)
+    {
+        <li><a href="@Html.Raw(Url.Action("Index","Order",new { hid = ViewBag.Hid, tabid = ViewBag.Tabid, openid = Model.openid}))">开始点餐</a></li>
+    }
+</ul>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            localStorage.setItem("hid", $("#hid").val());
+            localStorage.setItem("tabid", $("#tabid").val());
+
+            var client = IsWeixinOrAlipay();
+            if (client == "other") {
+                layer.open({
+                    content: '请使用微信扫一扫'
+                    , btn: '我知道了'
+                });
+            }
+            else if (client == "weixin") {
+                localStorage.setItem("client", client);
+            }
+            else if (client == "alipay") {
+                localStorage.setItem("client", client);
+            }
+
+            if ($("#isOpenid").val()) {
+                localStorage.setItem("openid", $("#openid").val());
+                location.href = '@Url.Action("Index", "Order")?hid=' + $("#hid").val() + '&tabid=' + $("#tabid").val() + '&openid=' + $("#openid").val();
+            }
+        });
+
+        function IsWeixinOrAlipay() {
+            var ua = window.navigator.userAgent.toLowerCase();
+            //微信
+            if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+                return "weixin";
+            }
+            //支付宝
+            if (ua.match(/AlipayClient/i) == 'alipayclient') {
+                return "alipay";
+            }
+            //其他
+            return "other";
+        }
+    </script>
+}

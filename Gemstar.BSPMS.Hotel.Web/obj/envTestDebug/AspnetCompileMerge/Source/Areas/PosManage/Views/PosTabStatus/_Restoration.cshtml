@@ -1,0 +1,28 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+@(Html.Kendo().Grid<up_pos_listTabLogResult>()
+    .Name("gridSelect")
+    .Columns(columns =>
+    {
+        columns.Bound(m => m.Id).Hidden();
+        columns.Bound(m => m.Id).HeaderTemplate("<input type='checkbox' value='#: Id #' onclick='checkedRowAll(this)'/>").Width(30)
+            .ClientTemplate("<input type='checkbox' value='#: Id #' onclick='checkedRow(this)'/>");
+        columns.Bound(m => m.BillNo).Title("客账号").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(80);
+        columns.Bound(m => m.TabNo).Title("台号").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+        columns.Bound(m => m.Msg).Title("信息").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(180);
+        columns.Bound(m => m.CreateDate).Format("{0:yyyy-MM-dd HH:mm:ss}").Title("开台日期").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(80);
+    })
+    .HtmlAttributes(new { style = "height:calc(100% - 4rem);" })
+    .Scrollable()
+    .Selectable(s => s.Mode(GridSelectionMode.Multiple).Enabled(false))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read=>read.Action("ListPosTabLog", "PosTabStatus").Data(ViewBag.refeID))
+    )
+)
+<div class="formButtons">
+    <button id="saveEditFormButton" role="button" data-role="button" onclick="UpdateRestoration()">确定</button>
+    <button id="closeEditFormButton" role="button" data-role="button" onclick="closeRestoration()">关闭</button>
+</div>
+<script type="text/javascript">
+    
+</script>

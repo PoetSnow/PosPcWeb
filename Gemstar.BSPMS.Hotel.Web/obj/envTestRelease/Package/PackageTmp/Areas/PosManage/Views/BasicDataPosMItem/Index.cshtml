@@ -1,0 +1,78 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+<link href="~/Content/Pos/posPublic.css?version=@ViewBag.Version" rel="stylesheet" />
+@{
+    ViewBag.Title = "Pos扫码点餐菜式";
+}
+
+@(Html.Kendo().Grid<up_pos_scan_list_PosItemByShowSetResult>()
+        .Name("grid")
+        .Columns(columns =>
+        {
+            columns.Bound(m => m.Id).Hidden();
+            columns.Bound(m => m.Hid).Hidden();
+            columns.Bound(m => m.Code).Title("项目代码");
+            columns.Bound(m => m.Cname).Title("中文名");
+            columns.Bound(m => m.Ename).Title("英文名");
+            columns.Bound(m => m.Bmp).Title("图片").ClientTemplate("<img alt='' src='#= Bmp #' style='height:100px;' />");
+            columns.Bound(m => m.DeptClassName).Title("部门类别");
+            columns.Bound(m => m.SubClassName).Title("所属分类");
+            columns.Bound(m => m.ShowSet).Title("显示设置");
+            columns.Bound(m => m.Remark).Title("备注");
+        })
+        .Sortable()
+        .Scrollable()
+        .Resizable(r => r.Columns(true))
+        .Selectable(s => s.Mode(GridSelectionMode.Single))
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("ListMItemByHid", "BasicDataPosMItem", new { rnd = new Random().NextDouble() })))
+        .HtmlAttributes(new { @style = "height:100%", ondblclick = "editMItem()" })
+        .ToolBar(toolbar =>
+        {
+            toolbar.Template(
+                @<text>
+                    <a class="k-button-icontext k-grid-comfirmtextone" href="javascript:void(0);" id="comfirmtextone" style="color:red;margin-top:9px;margin-left:10px;cursor:default;"><span></span>双击可修改</a>
+                </text>
+                            );
+                })
+)
+<script src="~/Scripts/layer-v3.1.1/layer.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        window.onresize = onResize; onResize();
+    });
+
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 145;
+        $("#grid .k-grid-content").height(allHeight - showHeight);
+    }
+
+    //这里是添加后的回调
+    function saveFormData(e) {
+        top.saveKendoWindowFormData(e, function () {
+            $("#grid").data("kendoGrid").dataSource.read();
+        });
+    }
+
+    function editMItem() {
+        var grid = $("#grid").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0) {
+            var row = selectedRows[0];
+            var dataRow = grid.dataItem(row);
+            top.openKendoWindow("编辑菜式", '@Url.Action("Edit", "BasicDataPosMItem")?id=' + dataRow["Id"]);
+        }
+        else {
+            layer.alert("请选择要操作的菜式", { title: "快点云Pos提示" });
+        }
+    }
+</script>

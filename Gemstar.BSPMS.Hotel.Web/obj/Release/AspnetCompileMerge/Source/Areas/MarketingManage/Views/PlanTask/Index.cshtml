@@ -1,0 +1,42 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "计划任务";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForAdd = true,
+        EnableFunctionForDelete = true,
+        EnableFunctionForEdit = true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("cdate").Title("日期");
+            c.Bound("amount").Title("客房收入");
+        },
+        CustomToolbar = c =>
+        {
+            c.Custom().Name("comfirmtext").Text("<span style='float:right;display:inline-block;color:red;margin-right:50px;padding-top:8px;'>双击可修改</span>").HtmlAttributes(new { id = "comfirmtext", href = "javascript:void(0);", style = "cursor:default;" });
+        }
+    };
+}
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+    $(function () {
+        $("#comfirmtext").removeClass("k-button");
+
+    });
+    function refreshGrid() {
+        var grid = $("#grid").data("kendoGrid");
+        grid.dataSource.read();
+    }
+</script>

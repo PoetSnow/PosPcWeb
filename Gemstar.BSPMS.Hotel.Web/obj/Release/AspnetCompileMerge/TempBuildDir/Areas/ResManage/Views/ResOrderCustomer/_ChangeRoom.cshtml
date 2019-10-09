@@ -1,0 +1,147 @@
+﻿@*换房*@
+
+<div id="changeRoomWindow">
+    <div id="changeRoomDiv" class="k-block" style="background-color:#fff;">
+        <table class="editFormTable">
+            <tbody>
+                <tr>
+                    <td class="textright">原房型</td>
+                    <td><input class="k-textbox" type="text" id="changeRoom_roomTypeName" value="" disabled="disabled" style="background-color: #f5f5f5;" /></td>
+                    <td class="textright">新房型</td>
+                    <td>
+                        <script type="text/javascript">
+                            function onAdditionalDataRoomTypeNew() {
+                                var arriveDateValue = $("#arriveDate").data("kendoDateTimePicker").value();
+                                var depDateValue = $("#depDate").data("kendoDateTimePicker").value();
+                                return {
+                                    arrDate: arriveDateValue == null ? null : arriveDateValue.ToDateTimeString(),
+                                    depDate: depDateValue == null ? null : depDateValue.ToDateTimeString(),
+                                    regId: $("#regId").val(),
+                                    type: "I",
+                                };
+                            }
+                        </script>
+                        @(Html.Kendo().DropDownList()
+                            .Name("changeRoom_roomTypeNew")
+                            .OptionLabel("请选择房间类型")
+                            .DataTextField("name")
+                            .DataValueField("id")
+                            .Template("#= name # #= roomqty #")
+                            .DataSource(s => s.Read(r => r.Action("GetRoomType", "ResOrderCustomer").Data("onAdditionalDataRoomTypeNew")))
+                            .Events(e => e.Change("ChangeRoomWindow.RoomTypeChange")).AutoBind(false))
+                    </td>
+                </tr>
+                <tr>
+                    <td class="textright">原房号</td>
+                    <td><input class="k-textbox" type="text" id="changeRoom_roomNo" value="" disabled="disabled" style="background-color: #f5f5f5;" /></td>
+                    <td class="textright">新房号</td>
+                    <td>
+                    @(Html.Kendo().DropDownList()
+                        .Name("changeRoom_roomNoNew")
+                        .OptionLabel("请选择房号")
+                        .Filter(FilterType.Contains)
+                        .DataTextField("roomno")
+                        .DataValueField("Roomid")
+                        .Template("#= preFix ##= roomno # #= remark #")
+                        .Events(e => e.Change("ChangeRoomWindow.RoomNoChange")).AutoBind(false).HtmlAttributes(new { style = "width:91px;" }))
+                        <button id="changeRoom_selectRoom" name="changeRoom_selectRoom" class="k-button" type="button">选房</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="textright">原房价</td>
+                    <td><input class="k-textbox" type="text" id="changeRoom_roomPrice" value="" disabled="disabled" style="background-color: #f5f5f5;" /></td>
+                    <td class="textright">新房价</td>
+                    <td>
+                        <input type="hidden" id="changeRoom_roomPriceNewJson" />
+                        <input class="k-textbox" type="text" id="changeRoom_roomPriceNew" value="" disabled="disabled" style="background-color: #f5f5f5;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="textright">说明</td>
+                    <td colspan="3">
+                        <textarea class="k-textbox" cols="20" id="changeRoom_remark" name="changeRoom_remark" rows="2" style="width:377px;resize:none;"></textarea>
+                    </td>
+                </tr>
+                <tr><td colspan="4" style="height:4px;"></td></tr>
+                <tr>
+                    <td class="textright"></td>
+                    <td style="text-align:left;">
+                        <button id="changeRoom_editRatePlan" name="changeRoom_editRatePlan" class="k-button" type="button">修改价格</button>
+                        @(Html.Kendo().CheckBox().Name("changeRoom_freeUpgrade").Label("免费升级"))
+                    </td>
+                    <td class="textright"></td>
+                    <td style="text-align:right;padding-right:7px;">
+                        <button id="changeRoom_save" name="changeRoom_save" class="k-button" type="button">确定</button>
+                        <button id="changeRoom_cancel" name="changeRoom_cancel" class="k-button" type="button">取消</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div id="changeRoom_selectRoomWindow">
+    <div style="width:200px;margin-right:4px;float:left;">
+        <div id="changeRoom_selectRoomWindowGrid"></div>
+    </div>
+    <div style="width:546px;float:left;">
+        <table>
+            <tr>
+                <td>楼层</td>
+                <td><input id="changeRoom_selectRoomWindowListView_floor" type="text" style="width:165px" /></td>
+                <td>&nbsp;房间特色</td>
+                <td><input id="changeRoom_selectRoomWindowListView_feature" type="text" style="width:165px" /></td>
+                <td>&nbsp;房号</td>
+                <td><input id="changeRoom_selectRoomWindowListView_roomno" type="text" class="k-textbox" style="width:77px;" /></td>
+            </tr>
+        </table>
+        <style type="text/css">
+            #changeRoom_selectRoomWindow .house-state-list .house-state-bg {
+                width: 60px;
+                height: 60px;
+                border: 1px solid #000;
+                margin: 2px;
+            }
+
+            #changeRoom_selectRoomWindow .house-state-bg .icon-all {
+                padding-top: 10px;
+            }
+
+            #changeRoom_selectRoomWindow .house-state-list .house-state-default {
+                background-color: white;
+            }
+
+            #changeRoom_selectRoomWindow .house-state-list .house-state-selected {
+                background-color: cornflowerblue;
+            }
+
+            #changeRoom_selectRoomWindow .house-state-list .house-state-bg .default {
+                padding-left: 6px;
+                float: left;
+                color: black;
+                font-weight: bold;
+            }
+        </style>
+        <div id="changeRoom_selectRoomWindowListView" class="house-state-list" style="border:0 none;border:1px solid #ccc; height:273px;overflow-y:scroll;border-radius: 4px;"></div>
+    </div>
+    <div style="clear:both;text-align:center;padding-top:7px;">
+        <button id="changeRoom_selectRoomWindow_save" name="changeRoom_selectRoomWindow_save" class="k-button" type="button">确定</button>
+        <button id="changeRoom_selectRoomWindow_cancel" name="changeRoom_selectRoomWindow_cancel" class="k-button" type="button">取消</button>
+    </div>
+</div>
+<script type="text/x-kendo-template" id="changeRoom_selectRoomWindow_Template">
+    <dl class="house-state-bg house-state-default" data-Roomid="#:Roomid#" data-roomno="#:roomno#">
+        <dt class="default">#:roomno#</dt>
+        <dd class="icon-all">
+            # if(isStop==1){ #
+            <span class="new-service-room-bg-small"></span>
+            # } else if(isService==1){ #
+            <span class="new-maint-room-bg-small"></span>
+            # } else if(isDirty==1){ #
+            <span class="new-dirty-room-bg-small"></span>
+            # } #
+            # if(isReg == 1){ #
+            <span class="new-pre-room-bg-small"></span>
+            # } #
+        </dd>
+    </dl>
+</script>

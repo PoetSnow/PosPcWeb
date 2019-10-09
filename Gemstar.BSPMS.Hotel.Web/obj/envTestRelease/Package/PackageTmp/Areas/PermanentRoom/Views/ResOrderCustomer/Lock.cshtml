@@ -1,0 +1,58 @@
+﻿@using Kendo.Mvc.UI;
+@{
+    Layout = null;
+}
+<script type="text/javascript">
+        var CustomerCommonValues = {
+                lockType: '@ViewBag.lockType',
+                lockCode: '@ViewBag.lockCode',
+                lockEditionName: '@ViewBag.lockEditionName',
+                GetLockInfo: "@Url.Action("GetLockInfo")",
+                GetLockWriteCardPara: "@Url.Action("GetLockWriteCardPara")",
+                WriteLock: "@Url.Action("WriteLock")",
+                CancelLock: "@Url.Action("CancelLock")",
+                GetResIdByLockInfo: "@Url.Action("GetResIdByLockInfo")",
+                ResOrderAdd: "@Url.Action("Index","ResOrderAdd")",
+            };
+        //加载独立门锁卡
+    var IndependLock = {
+            IsInitialization : false,
+            HasLock: function () {
+                var lockType = CustomerCommonValues.lockType;
+                var lockCode = CustomerCommonValues.lockCode;
+                if (lockType != null && lockType != undefined && lockType.length > 0 && lockCode != null && lockCode != undefined && lockCode.length > 0) {
+                    return true;
+                }
+                return false;
+            },
+            Initialization: function () {
+                if (IndependLock.HasLock()) {
+                    LockWindow.Initialization();
+                }
+            },
+            LoadMenu: function () {
+                if (IndependLock.HasLock()) {
+                    var linkId = "independLock";
+                    var url = "/ResManage/ResOrderCustomer/Lock/";
+                    if (window.document.getElementById(linkId) == null) {
+                        var link = "<a id=\"" + linkId + "\" class=\"secondLevelAuth tab-switch\" data-authurl=\"" + url + "\" href=\"javascript:IndependLock.Open('" + url + "','门卡管理','30002_65');\">门卡管理</a>";
+                        $("#secondLevelMenu", window.document).append(link);
+                    }
+                    else {
+                        var obj = $("#" + linkId, window.document);
+                        obj.attr("data-authurl", url);
+                        obj.attr("href", "javascript:IndependLock.Open('" + url + "','门卡管理','30002_65');");
+                    }
+                }
+            },
+            Open: function () {
+                if (IndependLock.HasLock()) {
+                    if (IndependLock.IsInitialization == false) {
+                        IndependLock.Initialization();
+                        IndependLock.IsInitialization = true;
+                    }
+                    LockWindow.Open();
+                }
+            },
+        };
+</script>

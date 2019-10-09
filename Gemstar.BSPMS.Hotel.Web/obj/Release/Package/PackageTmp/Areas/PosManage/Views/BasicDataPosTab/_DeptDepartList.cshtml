@@ -1,0 +1,86 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures
+@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_DepartResult>
+
+@*<script src="~/Scripts/jquery-1.12.3.min.js"></script>*@
+<link href="~/Content/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Content/bootstrap/js/bootstrap.min.js"></script>
+
+<script src="~/Content/bootstrap/js/bootstrap-select.js"></script>
+
+<style>
+    .departTab tr {
+        border-bottom: 1px solid;
+    }
+    .departTab {
+        width: 100%
+    }
+    .btn {
+        border: 0;
+        margin: 5px;
+        color: #fff;
+        font-size: 16px;
+        border-radius: 8px;
+        padding: 10px;
+        background: #009fff;
+    }
+    
+</style>
+<div style="padding:5px">
+    <table class="departTab">
+        <tr style="height:30px" >
+            <td>部门</td>
+            <td>出品部门</td>
+        </tr>
+        @{
+            foreach (IGrouping<string, up_pos_list_DepartResult> group in Model.GroupBy(c => c.deptClassName))
+            {
+                <tr>
+                    <td>@group.Key</td>
+                    <td>
+                        <div >
+                            <select style="width:120px" class="selectpicker show-tick form-control"  data-actions-box="true">
+                                <option value="-1">请选择</option>
+                                @foreach (up_pos_list_DepartResult stu in group.OrderBy(a => a.Seqid))
+                                {
+
+                                    <option value="@stu.id">@stu.Cname</option>
+                                }
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+             
+
+
+            }
+        }
+    </table>
+  
+</div>
+<div>
+    <input type="button" value="确定" class="btn"  id="btnSaveDepart"/>
+</div>
+<script>
+    var selectVal = "";
+    var selectText = "";
+    $(function () {
+        //$('.selectpicker').selectpicker();
+        $("#btnSaveDepart").bind("click", function () {
+            //$('#testSelect option:selected').val();//选中的值
+            $(".departTab select").each(function () {
+                if ($(this).find("option:selected").val()!="-1") {
+                    selectVal += $(this).find("option:selected").val() + ",";
+                    selectText += $(this).find("option:selected").text() + ",";
+                }
+                
+            });
+            $("#DepartName").val(selectText.substring(0, selectText.length - 1));
+            $("#DeptDepart").val(selectVal.substring(0, selectVal.length - 1));
+            closeGeneralWindow();
+        })
+    })
+</script>
+
+
+
+

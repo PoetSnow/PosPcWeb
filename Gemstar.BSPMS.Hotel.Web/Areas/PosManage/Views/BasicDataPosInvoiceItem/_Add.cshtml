@@ -1,0 +1,68 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosInvoiceItem.InvoiceItemAddViewModel
+@using (Html.BeginForm())
+{
+<table class="editFormTable">
+
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Code)</td>
+        <td>@Html.Kendo().TextBoxFor(m => m.Code).HtmlAttributes(new { style = "width:80%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Name)</td>
+        <td>@Html.Kendo().TextBoxFor(m => m.Name).HtmlAttributes(new { style = "width:80%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+    </tr>
+
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+        <td>@Html.Kendo().MultiSelectFor(m => m.Remark).HtmlAttributes(new { style = " width:80%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListiItemSpecial", "BasicDataPosInvoiceItem", new { rnd = new Random().NextDouble() })); }).AutoClose(false)</td>
+        <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+    </tr>
+
+    <tr>
+        <td class="textright"></td>
+        <td colspan="2">发票信息请对照发票系统填写</td>
+
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Name2)</td>
+        <td>@Html.Kendo().TextBoxFor(m => m.Name2).HtmlAttributes(new { style = "width:80%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Name2, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Name3)</td>
+        <td>@Html.Kendo().TextBoxFor(m => m.Name3).HtmlAttributes(new { style = "width:80%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Name3, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.ZoneCode)</td>
+        <td>@Html.Kendo().TextBoxFor(m => m.ZoneCode).HtmlAttributes(new { style = "width:80%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.ZoneCode, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Name4)</td>
+        <td>@Html.Kendo().TextBoxFor(m => m.Name4).HtmlAttributes(new { style = "width:30%;" })%</td>
+        <td>@Html.ValidationMessageFor(m => m.Name4, "*")</td>
+    </tr>
+</table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+
+</script>

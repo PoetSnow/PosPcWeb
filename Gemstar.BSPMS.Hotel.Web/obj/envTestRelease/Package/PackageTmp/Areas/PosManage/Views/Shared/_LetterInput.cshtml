@@ -1,0 +1,116 @@
+﻿@{
+    Layout = null;
+}
+@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.LetterInputViewModel
+<link href="~/Content/Pos/posLetterInput.css?version=@ViewBag.Version" rel="stylesheet" />
+
+<input id="txtInputValue" class="k-textbox" type="text" placeholder="@Model.Message" style="width:99%;margin:0.5% 0.5% 0% 0.5%;background-color:#ececec;display:@(string.IsNullOrWhiteSpace(Model.Display)?"block":Model.Display);" value=""  />
+<table id="letterInput">
+    <tr>
+        <td><input id="btnKey1" type="button" value="1" onclick="input('1')" class="number" /></td>
+        <td><input id="btnKey2" type="button" value="2" onclick="input('2')" class="number" /></td>
+        <td><input id="btnKey3" type="button" value="3" onclick="input('3')" class="number" /></td>
+        <td colspan="2" rowspan="2" style="width:100%;height:100%;">
+             <input id="btnOpenTabtypeWindow" type="button" value="确定" style="width:100%;height:100%;" onclick="input('确定')" /></td>
+    </tr>
+    <tr>
+        <td><input id="btnKey4" type="button" value="4" onclick="input('4')" class="number" /></td>
+        <td><input id="btnKey5" type="button" value="5" onclick="input('5')" class="number" /></td>
+        <td><input id="btnKey6" type="button" value="6" onclick="input('6')" class="number" /></td>
+    </tr>
+    <tr>
+        <td><input id="btnKey7" type="button" value="7" onclick="input('7')" class="number" /></td>
+        <td><input id="btnKey8" type="button" value="8" onclick="input('8')" class="number" /></td>
+        <td><input id="btnKey9" type="button" value="9" onclick="input('9')" class="number" /></td>
+        <td colspan="2"><input id="btnKeyTg" type="button" value="退格" onclick="input('退格')" /></td>
+    </tr>
+    <tr>
+        <td><input id="btnKey." type="button" value="." onclick="input('.')" class="number" /></td>
+        <td><input id="btnKey0" type="button" value="0" onclick="input('0')" class="number" /></td>
+        <td><input id="btnKey/" type="button" value="/" onclick="input('/')" class="number" /></td>
+        <td><input id="btnKeyA" type="button" value="A" onclick="input('A')" class="letter" /></td>
+        <td><input id="btnKeyB" type="button" value="B" onclick="input('B')" class="letter" /></td>
+    </tr>
+    <tr>
+        <td><input id="btnKeyC" type="button" value="C" onclick="input('C')" class="letter" /></td>
+        <td><input id="btnKeyD" type="button" value="D" onclick="input('D')" class="letter" /></td>
+        <td><input id="btnKeyE" type="button" value="E" onclick="input('E')" class="letter" /></td>
+        <td><input id="btnKeyF" type="button" value="F" onclick="input('F')" class="letter" /></td>
+        <td><input id="btnKeyG" type="button" value="G" onclick="input('G')" class="letter" /></td>
+    </tr>
+    <tr>
+        <td><input id="btnKeyH" type="button" value="H" onclick="input('H')" class="letter" /></td>
+        <td><input id="btnKeyI" type="button" value="I" onclick="input('I')" class="letter" /></td>
+        <td><input id="btnKeyJ" type="button" value="J" onclick="input('J')" class="letter" /></td>
+        <td><input id="btnKeyK" type="button" value="K" onclick="input('K')" class="letter" /></td>
+        <td><input id="btnKeyL" type="button" value="L" onclick="input('L')" class="letter" /></td>
+    </tr>
+    <tr>
+        <td><input id="btnKeyM" type="button" value="M" onclick="input('M')" class="letter" /></td>
+        <td><input id="btnKeyN" type="button" value="N" onclick="input('N')" class="letter" /></td>
+        <td><input id="btnKeyO" type="button" value="O" onclick="input('O')" class="letter" /></td>
+        <td><input id="btnKeyP" type="button" value="P" onclick="input('P')" class="letter" /></td>
+        <td><input id="btnKeyQ" type="button" value="Q" onclick="input('Q')" class="letter" /></td>
+    </tr>
+    <tr>
+        <td><input id="btnKeyR" type="button" value="R" onclick="input('R')" class="letter" /></td>
+        <td><input id="btnKeyS" type="button" value="S" onclick="input('S')" class="letter" /></td>
+        <td><input id="btnKeyT" type="button" value="T" onclick="input('T')" class="letter" /></td>
+        <td><input id="btnKeyU" type="button" value="U" onclick="input('U')" class="letter" /></td>
+        <td><input id="btnKeyV" type="button" value="V" onclick="input('V')" class="letter" /></td>
+    </tr>
+    <tr>
+        <td><input id="btnKeyW" type="button" value="W" onclick="input('W')" class="letter" /></td>
+        <td><input id="btnKeyX" type="button" value="X" onclick="input('X')" class="letter" /></td>
+        <td><input id="btnKeyW" type="button" value="Y" onclick="input('W')" class="letter" /></td>
+        <td><input id="btnKeyX" type="button" value="Z" onclick="input('X')" class="letter" /></td>
+        <td><input id="btnKeyQk" type="button" value="清空" onclick="input('清空')" class="letter" /></td>
+    </tr>
+</table>
+
+<script>
+    $(document).ready(function () {
+        if ("undefined" != typeof jsObject) //如果是封装程序
+        {
+            $("#txtInputValue").focus(function () {
+                if (jsObject.EnableKeyboard) {
+                    jsObject.ScreenKeyboard();  //调用屏幕键盘
+                }
+            });
+            $("#txtInputValue").blur(function () {
+                if (jsObject.EnableKeyboard) {
+                    jsObject.ScreenKeyboardClose(); //关闭屏幕键盘
+                }
+            });
+        }
+    });
+
+
+    //处理输入
+    function input(value) {
+        var val = $("#txtInputValue").val();
+        if (value.indexOf("退格") === -1 && value.indexOf("清空") === -1 && value.indexOf("确定") === -1) {
+            $("#txtInputValue").val(val + value);
+            $("@Model.Tag").val(val + value);
+        }
+        else if (value.indexOf("退格") > -1) {
+            $("#txtInputValue").val(val.replace(/.$/, ''));
+            $("@Model.Tag").val(val.replace(/.$/, ''));
+        }
+        else if (value.indexOf("清空") > -1) {
+            $("#txtInputValue").val("");
+            $("@Model.Tag").val("");
+        }
+        else if (val == "")
+        {
+            layer.alert('@Model.Message', { title: "快点云Pos提示" });
+            return false;
+        }
+        else if(value.indexOf("确定") > -1)
+        {
+            @(Html.Raw(Model.Callback))
+            return false;
+        }
+        @(Html.Raw(Model.InputCallback))
+    }
+</script>

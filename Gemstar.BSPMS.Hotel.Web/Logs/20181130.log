@@ -1,0 +1,44 @@
+--------------------------
+2018/11/30 14:36:59 错误信息:Timeout performing HGETALL u0mzq5a14vfu5hpaehrtq13q, inst: 1, mgr: ExecuteSelect, err: never, queue: 4, qu: 0, qs: 4, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=3,Free=8188,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/30 14:36:59 错误信息:Timeout performing HGETALL u0mzq5a14vfu5hpaehrtq13q, inst: 1, mgr: CheckForStaleConnections, err: never, queue: 4, qu: 0, qs: 4, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=3,Free=8188,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/30 14:36:59 错误信息:Timeout performing HGETALL u0mzq5a14vfu5hpaehrtq13q, inst: 1, mgr: RecordConnectionFailed_OnDisconnected, err: never, queue: 0, qu: 0, qs: 0, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=3,Free=8188,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/30 14:39:54 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/30 14:40:17 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：在一个非套接字上尝试了一个操作。
+--------------------------
+2018/11/30 14:46:43 错误信息:Timeout performing HGETALL u0mzq5a14vfu5hpaehrtq13q, inst: 1, mgr: ExecuteSelect, err: never, queue: 4, qu: 0, qs: 4, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=3,Free=8188,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/30 14:46:43 错误信息:SocketFailure on HGETALL
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1935
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)

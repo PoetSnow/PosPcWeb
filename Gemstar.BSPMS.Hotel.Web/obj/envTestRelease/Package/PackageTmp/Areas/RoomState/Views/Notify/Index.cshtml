@@ -1,0 +1,258 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Common.Services;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "提醒记录";
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForQuery = false,
+        HtmlAttributes = new { style = "height:465px;max-height:465px;" },
+        EnableScrollable = true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("wakeCallTypeName").Title("提醒类型");
+            c.Bound("type").Title("状态");
+            c.Bound("roomNo").Title("房号");
+            c.Bound("callTime").Title("提醒时间");
+            c.Bound("content").Title("提醒内容").HtmlAttributes(new {style = "overflow:hidden;white-space:nowrap;" });
+            c.Bound("remark").Title("备注").HtmlAttributes(new { style = "overflow:hidden;white-space:nowrap;" });
+            //c.Bound("creater").Title("创建人");
+            //c.Bound("createTime").Title("创建时间");
+            c.Bound("reader").Title("接单人");
+            c.Bound("readTime").Title("接单时间");
+        },
+        CustomToolbar = toolbar =>
+        {
+        toolbar.Template(@<text>
+        <div class="toolbar">
+            <label class="category-label" for="category">提醒类型：</label>
+            @(Html.Kendo().DropDownList()
+                            .Name("wakeCallTypeName")
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .Events(e => e.Change("wakeCallTypeNameChange"))
+                            .HtmlAttributes(new { style = "width: 120px;" })
+                            .BindTo(new List<SelectListItem>() {
+                            new SelectListItem() {
+                                Text = "全部",
+                                Value = ""
+                            },
+                            new SelectListItem() {
+                                Text = "房间提醒",
+                                Value = "房间提醒"
+                            },
+                            new SelectListItem() {
+                                Text = "订单提醒",
+                                Value = "订单提醒"
+                            }
+                        })
+                        .Value("")
+            )
+            <label class="category-label" for="category">开始提醒时间：</label>
+            @Html.Kendo().DateTimePicker().Name("txtBegDate").Format(Gemstar.BSPMS.Common.Extensions.DateTimeExtension.DateTimeWithoutSecondFormatStr).HtmlAttributes(new { onclick = "openKendoDatetimePicker(this)" })
+            <label class="category-label" for="category">结束提醒时间：</label>
+            @Html.Kendo().DateTimePicker().Name("txtEndDate").Format(Gemstar.BSPMS.Common.Extensions.DateTimeExtension.DateTimeWithoutSecondFormatStr).HtmlAttributes(new { onclick = "openKendoDatetimePicker(this)" })
+            
+            <label class="category-label" for="category">状态：</label>
+            @(Html.Kendo().DropDownList()
+                            .Name("categories")
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .Events(e => e.Change("categoriesChange"))
+                            .HtmlAttributes(new { style = "width: 80px;" })
+                            .BindTo(new List<SelectListItem>() {
+                            new SelectListItem() {
+                                Text = "未处理",
+                                Value = "1"
+                            },
+                            new SelectListItem() {
+                                Text = "已处理",
+                                Value = "2"
+                            },
+                            new SelectListItem() {
+                                Text = "已作废",
+                                Value = "3"
+                            }
+                        })
+                        .Value("0")
+            )
+            <button class="k-primary k-button" style="display:inline-block;"  role="button" data-role="button" onclick="queryNot()">查询</button>
+            @*<button class="k-primary k-button" style="display:inline-block;" id="NotifyRead" role="button" data-role="button" onclick="read()">已读</button>
+            <button class="k-primary k-button" style="display:inline-block"
+                     id="NotifyNoRead" role="button" data-role="button" onclick="Noread()">未读</button>*@
+            <span class="span-red"  style="padding-top:5px;">双击处理提醒</span>
+        </div>
+        </text>);
+        }
+    };
+}
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+    <script>
+        var value = "1";
+        var wakeCallTypeName = "";
+        function categoriesChange() {
+            value = this.value();
+            queryNot();
+        }
+        function wakeCallTypeNameChange()
+        {
+            wakeCallTypeName = this.value();
+            queryNot();
+        }
+        function queryNot()
+        {
+            //loadPrintBnt(value);
+            var begDate = $("#txtBegDate").data("kendoDateTimePicker").value();
+            var endDate = $("#txtEndDate").data("kendoDateTimePicker").value();
+            var obj = $("#commonQueryParameterValues");
+            if (begDate == null || begDate == "")
+            {
+                begDate = "";
+            }
+            else
+            {
+                begDate = begDate.ToDateTimeString();
+            }
+            if (endDate == null || endDate == "") {
+                endDate = "";
+            }
+            else {
+                endDate = endDate.ToDateTimeString();
+            }
+                var dateindex = obj.val().lastIndexOf("@@notifyDateBegin");
+                //var index = obj.val().lastIndexOf("&");
+                if (dateindex == -1) {
+                    obj.val(obj.val() + "&@@status=" + value);
+                } else {
+                    obj.val(obj.val().toString().substring(0, dateindex - 1) + "&@@notifyDateBegin=" + begDate + "&@@notifyDateEnd=" + endDate + "&@@status=" + value + "&@@wakeCallTypeName=" + wakeCallTypeName);
+                }
+                gridRead();
+        }
+        function gridRead() {
+            var grid = $("#grid").data("kendoGrid");
+            grid.dataSource.read();
+        }
+        $(function () {
+            $("#txtBegDate").data("kendoDateTimePicker").value("");
+            $("#txtEndDate").data("kendoDateTimePicker").value('@ViewBag.endDate');
+            //loadPrintBnt("0");
+            window.top.getNotify();
+        })
+        //设置按钮的隐藏显示
+        function loadPrintBnt(value)
+        {
+            if (value == "0") {
+                $("#NotifyRead").show();
+                $("#NotifyCancel").show();
+                $("#NotifyNoRead").hide();
+
+            }
+            else if (value == "1")
+            {
+                $("#NotifyRead").hide();
+                $("#NotifyCancel").show();
+                $("#NotifyNoRead").show();
+            }
+            else
+            {
+                $("#NotifyRead").hide();
+                $("#NotifyCancel").hide();
+                $("#NotifyNoRead").hide();
+            }
+        }
+        //批量已读
+        @*function read() {
+            var grid = $("#grid").data("kendoGrid");
+            var selectedRows = grid.select();
+            if (selectedRows.length == 0) {
+                jAlert("请选择行");
+                return;
+            }
+            else {
+                var ids = [];
+                for (var i = 0; i < selectedRows.length; i++) {
+                    var row = selectedRows[i];
+                    var data = grid.dataItem(row);
+                    ids.push(data["id"]);
+                }
+                $.post("@Url.Action("BatchRead")", { id: ids.join(",") }, function (data) {
+                if (data.Success) {
+                    jAlert("操作成功", "知道了");
+                    window.top.getNotify();
+                    gridRead();
+                } else { jAlert(data.Data); }
+                }, 'json');
+            }
+        }*@
+        //批量未读
+        @*function Noread()
+        {
+            var grid = $("#grid").data("kendoGrid");
+            var selectedRows = grid.select();
+            if (selectedRows.length == 0) {
+                jAlert("请选择行");
+                return;
+            }
+            else {
+                var ids = [];
+                for (var i = 0; i < selectedRows.length; i++) {
+                    var row = selectedRows[i];
+                    var data = grid.dataItem(row);
+                    ids.push(data["id"]);
+                }
+                $.post("@Url.Action("BatchNoRead")", { id: ids.join(",") }, function (data) {
+                    if (data.Success) {
+                        jAlert("操作成功", "知道了");
+                        window.top.getNotify();
+                        gridRead();
+                    } else { jAlert(data.Data); }
+                }, 'json');
+            }
+        }*@
+        //双击查看详情
+        function editGridItem(row) {
+            var grid = $("#grid").data("kendoGrid");
+            var data = grid.dataItem($(row));
+            var url = "@Url.Action("Detail")" + "?id=" + data.id;
+            top.openKendoWindow("提醒详情", url, null);
+        }
+    </script>
+}
+@section headerContent{
+    <style type="text/css">
+        html, body {
+            overflow: hidden;
+            width: 1200px;
+            height: 474px;
+        }
+
+        .wrap {
+            width: 1192px;
+            height: 466px;
+            margin: 0px;
+            padding: 4px;
+            overflow: hidden;
+        }
+
+        .sp-title {
+            display: block;
+            text-align: center;
+        }
+
+        .sp-list {
+            display: block;
+            text-align: right;
+        }
+    </style>
+}

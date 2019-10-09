@@ -1,0 +1,39 @@
+﻿
+@(Html.Kendo().Grid<Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosOnSale.PosOnSaleGridViewModel>()
+        .Name("gridItem")
+        .Columns(columns =>
+        {
+
+            columns.Bound(m => m.Id).Title("ID").Hidden();
+            columns.Bound(m => m.hid).Title("HID").Hidden();
+            columns.Bound(m => m.Id).HeaderTemplate("<input type='checkbox' value='#: Id #' onclick='checkedRowAll(this)'/>").Width(30)
+    .ClientTemplate("<input type='checkbox' value='#: Id #' onclick='checkedRow(this)'/>");
+            columns.Bound(m => m.itemName).Title("项目名称").Width(60);
+            columns.Bound(m => m.unitName).Title("单位").Width(60);
+            columns.Bound(m => m.price).Title("价格").Width(60);
+            columns.Bound(m => m.refeName).Title("营业点").Width(60);
+            columns.Bound(m => m.customerTypeName).Title("客人类型").Width(80);
+            columns.Bound(m => m.tabTypeName).Title("餐台类型").Width(80);
+            columns.Bound(m => m.iTagperiodName).Title("日期类型").Width(80);
+            columns.Bound(m => m.StartTime).Title("开始时间").Width(80);
+            columns.Bound(m => m.EndTime).Title("结束时间").Width(80);
+            columns.Bound(m => m.iCmpTypeText).Title("计算类型").Width(80);
+
+            columns.Bound(m => m.discount).Title("折扣率").Width(60);
+            columns.Bound(m => m.isLimitText).Title("是否最低消费").Width(100);
+            columns.Bound(m => m.isServiceText).Title("是否计服务费").Width(100);
+            columns.Bound(m => m.isDiscountText).Title("是否打折").Width(80);
+            columns.Bound(m => m.isUsedText).Title("是否启用").Width(80);
+        })
+                             .HtmlAttributes(new { style = "height:100%;" })
+                            .Scrollable()
+                            .Selectable(s => s.Mode(GridSelectionMode.Multiple).Enabled(false))
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Read(read => read.Action("ListPosSale", "BasicDataPosOnSale", new { rnd = new Random().NextDouble() }).Data("QueryText"))
+
+        )
+
+
+)
+

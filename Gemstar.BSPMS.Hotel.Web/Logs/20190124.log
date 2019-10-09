@@ -1,0 +1,38 @@
+--------------------------
+2019/1/24 8:36:03 错误信息:No connection is available to service this operation: HGETALL xqusugslycavmwtfg3fbpppg
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2019/1/24 8:36:53 错误信息:No connection is available to service this operation: HGETALL xqusugslycavmwtfg3fbpppg
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2019/1/24 8:36:53 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Sessionxqusugslycavmwtfg3fbpppgValueKey
+--------------------------
+2019/1/24 8:36:59 错误信息:No connection is available to service this operation: HGETALL xqusugslycavmwtfg3fbpppg
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2019/1/24 8:37:03 错误信息:No connection is available to service this operation: HGETALL xqusugslycavmwtfg3fbpppg
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2019/1/24 8:37:04 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Sessionxqusugslycavmwtfg3fbpppgValueKey

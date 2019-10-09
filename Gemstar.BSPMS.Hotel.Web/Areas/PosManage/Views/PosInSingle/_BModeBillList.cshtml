@@ -1,0 +1,28 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPos.PosBill>
+<ul id="tabList">
+    @{        
+        <li class="content-list-tabStatus staus-empty tabStatusList">
+            <a href="javascript:void(0)" onclick="AddNewBModeBill()">
+                <span style="font-size: 5rem;line-height: 5rem;">+</span>
+            </a>
+        </li>      
+
+        if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <li class="content-list-tabStatus">
+                    <a href="javascript:void(0);" onclick="OpenBModeBill('@item.Billid')">
+                        <span>@item.TabNo</span>
+                    </a>
+                </li>
+            }
+        }
+
+        <li class="content-list-paging">
+            <a href="javascript:void(0)" onclick="BmodeBillList(1)">上一页</a>
+            <a href="javascript:void(0)" onclick="BmodeBillList(2)">下一页</a>
+        </li>
+        <li class="content-list-return" style=""><a href="javascript:void(0)" onclick="BmodeBillList(0)"><img src="~/Images/posInSingle/fanh.png" /><br />返回</a></li>
+    }
+</ul>

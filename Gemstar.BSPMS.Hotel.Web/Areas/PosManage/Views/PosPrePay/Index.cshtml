@@ -1,0 +1,68 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+
+
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+@{
+    ViewBag.Title = "Pos定金管理";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var colsDefault = new List<GridColumnSetting>
+{
+
+new GridColumnSetting {Name = "billNo", Title = "押金单号", Hidden = false, Order = 2, Width = 0},
+new GridColumnSetting {Name = "vGuest", Title = "姓名", Hidden = false, Order = 1, Width = 0},
+new GridColumnSetting {Name = "mobile", Title = "联系电话", Hidden = false, Order = 1, Width = 0},
+new GridColumnSetting {Name = "iTypeText", Title = "押金类型", Hidden = false, Order = 3, Width = 0},
+new GridColumnSetting {Name = "payModeName", Title = "付款方式", Hidden = false,Order = 4, Width = 0},
+new GridColumnSetting {Name = "amount", Title = "原币金额", Hidden = false,Order = 11, Width = 0},
+new GridColumnSetting {Name = "amountbwb", Title = "本位币金额", Hidden = false,Order = 12, Width = 0},
+new GridColumnSetting {Name = "iPrepayText", Title = "状态", Hidden = false,Order = 13, Width = 0},
+new GridColumnSetting {Name = "dBusiness", Title = "营业日", Hidden = false,Order = 13, Width = 0},
+new GridColumnSetting {Name = "ShiftName", Title = "班次", Hidden = false,Order = 13, Width = 0},
+new GridColumnSetting {Name = "creator", Title = "创建人", Hidden = false,Order = 13, Width = 0},
+new GridColumnSetting {Name = "createDate", Title = "创建时间", Hidden = false,Order = 13, Width = 0},
+
+
+};
+    var gridViewModel = new KendoGridCustomDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+
+        EnableFunctionForEnable = false,
+        EnableFunctionForDisable = false,
+        EnableScrollable = true,
+        Area = "PosManage",
+        Controller = "PosPrePay",
+        Action = "Index",
+        DefaultColumnSettings = colsDefault,
+        EnableFunctionForEdit = false,
+        CustomToolbar = c =>
+        {
+            c.Template(@<text>
+    <a class="k-button k-button-icontext k-grid-btnManageGridColumns" href="javascript:void(0);" id="btnManageGridColumns" onclick="btnManageGridColumnsClicked('grid')" style="float:right;margin-right:40px;"><span></span>设置列</a>
+    <a class="k-button k-button-icontext k-grid-commonQuery" href="javascript:void(0);" onclick="showCommonQueryWindow()"><span class="k-icon k-i-search"></span>查询</a><a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addGridItem()"><span class="k-icon k-add"></span>增加</a>
+    <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="batchDelete('grid', 'id', '/PosManage/PosPrePay/BatchDelete')"><span class="k-icon k-i-unpin"></span>删除</a>
+    <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="Refund()"><span class="k-icon k-i-unpin"></span>退押金</a>
+            </text>);
+       }
+   };
+
+}
+@Html.Partial("_KendoGridCustomDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+    function Refund()
+    { }
+</script>

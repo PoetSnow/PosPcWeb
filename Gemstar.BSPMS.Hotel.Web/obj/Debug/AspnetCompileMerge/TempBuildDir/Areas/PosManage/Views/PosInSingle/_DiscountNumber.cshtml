@@ -1,0 +1,183 @@
+﻿@{
+    Layout = null;
+}
+<link href="~/Content/Pos/posNumberInput.css" rel="stylesheet" />
+<div style="padding-top:10px;margin-bottom:6px">
+    <input type="hidden" value="@ViewBag.discType" id="DiscountdiscType" />
+    <input type="hidden" value="@ViewBag.BillId" id="DiscountBillId" />
+    <input type="hidden" value="@ViewBag.detailIdList" id="detailIdList" />
+    <input id="txtDiscount" class="k-textbox" type="text" style="background-color:#ececec;width:100%;height:48px;font-size:initial;" value="" placeholder="请输入折扣" onkeyup="clearNoNum(this)" onpaste="return false" ondragenter="return false" >
+</div>
+<div style="clear:both"></div>
+<table id="letterInput">
+    <tr>
+        <td><input id="btnKey1" type="button" value="1" onclick="inputDiscount('1')" class="number" /></td>
+        <td><input id="btnKey2" type="button" value="2" onclick="inputDiscount('2')" class="number" /></td>
+        <td><input id="btnKey3" type="button" value="3" onclick="inputDiscount('3')" class="number" /></td>
+        <td colspan="2"  style="width:100%;height:100%;"><input id="btnOpenTabtypeWindow" type="button" value="确定" onclick="AddDiscount()" /></td>
+    </tr>
+    <tr>
+        <td><input id="btnKey4" type="button" value="4" onclick="inputDiscount('4')" class="number" /></td>
+        <td><input id="btnKey5" type="button" value="5" onclick="inputDiscount('5')" class="number" /></td>
+        <td><input id="btnKey6" type="button" value="6" onclick="inputDiscount('6')" class="number" /></td>
+        <td colspan="2"><input id="btnKeyTg" type="button" value="退格" onclick="inputDiscount('退格')" /></td>
+    </tr>
+    <tr>
+        <td><input id="btnKey7" type="button" value="7" onclick="inputDiscount('7')" class="number" /></td>
+        <td><input id="btnKey8" type="button" value="8" onclick="inputDiscount('8')" class="number" /></td>
+        <td><input id="btnKey9" type="button" value="9" onclick="inputDiscount('9')" class="number" /></td>
+        <td colspan="2"><input id="btnKeyQk" type="button" value="清空" onclick="inputDiscount('清空')" class="letter" /></td>
+
+    </tr>
+    <tr>
+        <td><input id="btnKey." type="button" value="." onclick="inputDiscount('.')" class="number" /></td>
+        <td colspan="2"><input id="btnKey0" type="button" value="0" onclick="inputDiscount('0')" class="number" /></td>
+        <td colspan="2"><input id="btnclose" type="button" value="退出" onclick="Signout()" class="letter" /></td>
+    </tr>
+</table>
+
+<script>
+    var index = layer.index;
+   // 0：全单折；1：照单全折；2：全单金额折；3：照单金额折；4：单道折扣；5：单道金额折
+    function clearNoNum(obj) {
+        
+        if (obj.value != '' && obj.value.substr(0, 1) == '.') {
+            obj.value = "";
+        }
+        obj.value = obj.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+        obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的     
+        obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数     
+        if (obj.value.indexOf(".") < 0 && obj.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+            if (obj.value.substr(0, 1) == '0' && obj.value.length == 2) {
+                obj.value = obj.value.substr(1, obj.value.length);
+            }
+        }
+        if ($("#DiscountdiscType").val() == "0" || $("#DiscountdiscType").val() == "1" || $("#DiscountdiscType").val() == "4") {
+            
+            if (Number(obj.value) > 100) {
+                obj.value = obj.value.replace(/.$/, '');
+            }
+            if (obj.value == "100.") {
+                obj.value = obj.value.replace(/.$/, '');
+            }
+        }
+       
+        if (obj.value.indexOf(".00") > -1) {
+            obj.value = obj.value.replace(".00", '');
+        }
+    }
+    function inputDiscount(value) {
+        var val = $("#txtDiscount").val();
+        if (value.indexOf("退格") === -1 && value.indexOf("清空") === -1 && value.indexOf("确定") === -1) {
+            var sumVal = val + value;
+           
+            if (sumVal != '' && sumVal.substr(0, 1) == '.') {
+                sumVal = "";
+            }
+            sumVal = sumVal.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+            sumVal = sumVal.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的     
+            sumVal = sumVal.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            sumVal = sumVal.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数  
+
+            if (sumVal.indexOf(".") < 0 && sumVal != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+                if (sumVal.substr(0, 1) == '0' && sumVal.length == 2) {
+                    sumVal = sumVal.substr(1, sumVal.length);
+                }
+            }
+            if ($("#DiscountdiscType").val() == "0" || $("#DiscountdiscType").val() == "1" || $("#DiscountdiscType").val() == "4") {
+                if (Number(sumVal) > 100) {
+                    sumVal = sumVal.replace(/.$/, '');
+                }
+                if (sumVal == "100.") {
+                    sumVal = sumVal.replace(/.$/, '');
+                }
+            }
+            if (sumVal.indexOf(".00")>-1) {
+                sumVal = sumVal.replace(".00", '');
+            }
+            $("#txtDiscount").val(sumVal);
+        }
+        else if (value.indexOf("退格") > -1) {
+           $("#txtDiscount").val(val.replace(/.$/, ''));
+        }
+        else if (value.indexOf("清空") > -1) {
+            $("#txtDiscount").val("");
+        } 
+    }
+
+    //折扣
+    function AddDiscount() {
+        if ($("#txtDiscount").val() != "") {
+            var reg = /^\d+(\.\d{1,2})?%?$/;
+            if (!reg.test($("#txtDiscount").val())) {
+                $("#txtDiscount").val(0);
+                return false;
+            }
+        }
+        else {
+            layer.alert("折扣输入不能为空", { title: "快点云Pos提示" });
+            return false;
+        }
+        var model = {
+            Id: $("#DiscountBillId").val(), //主张单ID
+            disCount: $("#txtDiscount").val(),  //输入的折扣金额或者折扣率
+            discType: $("#DiscountdiscType").val(), //折扣类型
+            detailIdList: $("#detailIdList").val() //选择的账单明细列表
+        };
+        $.ajax({
+            url: '@Url.Action("UpdatePosDiscType", "PosInSingle", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (data) {
+                    if (data.Success) {
+                        var url = window.location.href; //获取当前Url
+                        if (url.indexOf("PosInSingle") > -1) {
+                            //入单界面折扣修改 
+                            $("#grid").data("kendoGrid").dataSource.read();
+                            getStatistics(1);
+                        }
+                        else {
+                            //收银界面的折扣修改
+                            $("#gridBillDetailA").data("kendoGrid").dataSource.read();
+                            $("#gridBillDetailA").data("kendoGrid").refresh();
+
+                            $("#gridBillDetail").data("kendoGrid").dataSource.read();
+                            $("#gridBillDetail").data("kendoGrid").refresh();
+                        }                      
+                        layer.close(index);
+                    } else {
+                        layer.alert(data.Data, { title: "快点云Pos提示" });
+                    }
+                
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+
+    }
+   
+    function check(obj)
+    {
+        var reg = /^((?!0)\d{1,2}|100)$/;
+        var num = $(obj).val();
+        if (!num.match(reg)) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+    function Signout() {
+        var url = window.location.href;
+        if (url.indexOf("PosInSingle") > -1) {
+            if (isHandle == true) {
+                isHandle = false;
+            }
+        }
+
+        layer.closeAll();
+    }
+</script>

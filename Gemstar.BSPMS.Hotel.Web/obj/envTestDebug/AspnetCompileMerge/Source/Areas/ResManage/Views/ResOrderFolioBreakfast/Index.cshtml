@@ -1,0 +1,279 @@
+﻿@{ 
+    ViewBag.Title = "电子早餐";
+}
+<div style="display:none;">
+    <audio id="audioBeepSuccess" preload="auto">
+        <source src="~/Content/audio/beep_success.wav" type="audio/wav" />
+        <source src="~/Content/audio/beep_success.wav" type="audio/wav" />
+        <embed src="~/Content/audio/beep_success.wav" />
+    </audio>
+    <audio id="audioBeepError" preload="auto">
+        <source src="~/Content/audio/beep_error.wav" type="audio/wav" />
+        <source src="~/Content/audio/beep_error.wav" type="audio/wav" />
+        <embed src="~/Content/audio/beep_error.wav" />
+    </audio>
+    <input id="hardwareCallback_Error" value="hardwareCallback_ReadCard_Callback_ResOrderFolioBreakfast" />
+</div>
+<div>
+    @(Html.Kendo().Grid<Gemstar.BSPMS.Hotel.Services.Entities.ResFolioBreakfastInfo>()
+        .Name("gridBreakfast")
+        .AutoBind(true)
+        .Scrollable(s => s.Enabled(true))
+        .Pageable(pageable => pageable.Refresh(true).Numeric(true).PreviousNext(false).Input(false).Info(true).ButtonCount(1).PageSizes(false))
+        .HtmlAttributes(new { style = "height: 500px;max-height: 500px;" })
+        .DataSource(c => { c.Ajax().Read(r => r.Action("IndexAjax", "ResOrderFolioBreakfast")).PageSize(999999); })
+        .Events(e => e.DataBound("gridBreakfast_dataBound"))
+        .Pageable(c => c.Messages(m => m.Empty("今天的早餐记录暂无！")))
+        .Columns(c =>
+        {
+            c.Bound(w => w.Id).Hidden();
+            c.Bound(w => w.CDate).Title("刷卡时间").Format("{0: yyyy-MM-dd HH:mm:ss}");
+            c.Bound(w => w.RoomNo).Title("房号");
+            c.Bound(w => w.GuestName).Title("客人名");
+            c.Bound(w => w.BbfCount).Title("房间总份数");
+            c.Bound(w => w.BbfIndex).Title("本次第几份");
+            c.Bound(w => w.Status).Title("是否成功").ClientTemplate("#= Status==1?'成功':'失败' #");
+            c.Bound(w => w.Remark).Title("备注");
+            c.Bound(w => w.CardNo).Title("卡号");
+        })
+        .ToolBar(c => c.Template(@<text>
+            <input type="hidden" id="autoReadCardStatus" value="end" />
+            <div id="divBreakfastTitle"><h2>电子早餐</h2></div>
+            <ul class="ulBreakfast">
+                <li><label class="li-label-breakfast" for="isAutoReadCard" style="visibility:hidden;">刷卡</label><input type="checkbox" id="isAutoReadCard" class="k-checkbox" checked="checked"><label class="k-checkbox-label" for="isAutoReadCard">自动读卡</label></li>
+                <li><label class="li-label-breakfast" for="roomNo">房号</label><input id="roomNo" class="k-textbox" /><button class="k-button" id="btnRoomNo">确定</button></li>
+            </ul>
+            <div id="divBreakfastMessageList">
+            </div>
+        </text>))
+    )
+</div>
+@section hardwareIframe{
+    @Html.Partial("_HardwareIframe")
+}
+@section headerContent{
+    <style type="text/css">
+        html,body{overflow:hidden;font-size: 14px;}
+        .wrap{margin-right:36px;margin-top:18px;}
+        #divBreakfastTitle{float: left;height: 80px;line-height: 80px;border-right: 1px solid #ccc;padding-right: 10px;margin-right: 10px;}
+        .ulBreakfast{float:left;}
+        .ulBreakfast li{height:40px;line-height:40px;}
+        #isAutoReadCard{padding-left:0px;}
+        .li-label-breakfast{margin-right:6px;}
+        #divBreakfastMessageList{float:left;overflow:hidden;}
+        .divBreakfastMessage{float: left;height: 80px;line-height: 80px;border-left: 1px solid #d0dfd0;padding-left: 10px;padding-right:10px;margin-left: 10px;color: #507f50;background-color: #f0fff0;overflow:hidden;}
+    </style>
+}
+@section scripts{
+    <script type="text/javascript">
+        //设置宽高
+        function setSize() {
+            var height = $(window).height() - 36;
+            $("#gridBreakfast").css("height", height).css("max-height", height);
+            var width = $(window).width() - (36 * 2) - 400;
+            $("#divBreakfastMessageList").css("width", width).css("max-width", width);
+        }
+        setSize();
+        var Breakfast = {
+            //配置
+            Options: {
+                IsDataBoundGrid: false,
+                Timeout: (1000 * 10),
+                Duration: 0,
+                Interval: 1000,
+                LockType: "@ViewBag.LockType",
+                LockCode: "@ViewBag.LockCode",
+                LockEditionName: "@ViewBag.LockEditionName",
+                UrlCardNo: "@Url.Action("ToHaveBreakfastByCardNo")",
+                UrlRoomNo: "@Url.Action("ToHaveBreakfastByRoomNo")",
+            },
+            //消息
+            Message: function (value, style) {
+                switch (style) {
+                    case "success":
+                        style = "k-success-colored";
+                        break;
+                    case "error":
+                        style = "k-error-colored";
+                        break;
+                    default:
+                        style = "k-info-colored";
+                }
+                var messageId = (Math.random() + "").replace(".", "");
+                $("#divBreakfastMessageList").append("<div id=\"" + messageId + "\" class=\"divBreakfastMessage " + style + "\">" + value + "</div>");
+                setTimeout(function () {
+                    var obj = $("#" + messageId);
+                    if (obj != null && obj != undefined) {
+                        obj.animate({overflow: 'hidden', padding: '0px 0px', margin: '0px 0px 0px 0px', width: '0px', opacity: '0'}, 1000, function () { obj.remove(); });
+                    }
+                }, 5000);
+            },
+            //读卡
+            ReadCard: function () {
+                var lockType = Breakfast.Options.LockType;
+                var lockCode = Breakfast.Options.LockCode;
+                var lockEditionName = Breakfast.Options.LockEditionName;
+                if (lockType == null || lockType == undefined || $.trim(lockType).length <= 0 ||
+                    lockCode == null || lockCode == undefined || $.trim(lockCode).length <= 0) {
+                    Breakfast.Message("失败！原因：没有开通门锁卡扫描接口！", "error");$("#isAutoReadCard")[0].checked = false; $("#autoReadCardStatus").val("end"); document.getElementById("audioBeepError").play();
+                    return;
+                }
+                var hardwareCallPara = { Type: lockType, ID: lockCode, Operate: 'ReadCard', Para: { LockId: '', LockInfo: '', BeginTime: '', EndTime: '', GuestName: '', IsNew: '', SeqNo: '', UserName: '' }, EditionName: lockEditionName };
+                callHardware(hardwareCallPara);
+                Breakfast.Message("正在读卡。。。", "info");
+                $("#autoReadCardStatus").val("ing");
+            },
+            //读卡回调
+            ReadCardCallBack: function (data) {
+                if (data == null || data == undefined || data.CardNo == null || data.CardNo == undefined || $.trim(data.CardNo).length <= 0) {
+                    Breakfast.Message("失败！原因：卡号为空！", "error"); $("#autoReadCardStatus").val("end"); document.getElementById("audioBeepError").play();
+                    return;
+                }
+                Breakfast.Message("卡号：" + data.CardNo + "，正在处理。。。", "info");
+                Breakfast.ToHaveBreakfast("cardNo", data.CardNo);
+            },
+            //房号回调
+            RoomNoCallBack: function () {
+                var roomNo = $("#roomNo").val();
+                if (roomNo == null || roomNo == undefined || $.trim(roomNo).length <= 0) {
+                    Breakfast.Message("失败！原因：房号为空！", "error"); $("#autoReadCardStatus").val("end"); $("#btnRoomNo").removeAttr("disabled"); document.getElementById("audioBeepError").play();
+                    return;
+                }
+                Breakfast.Message("房号：" + roomNo + "，正在处理。。。", "info");
+                Breakfast.ToHaveBreakfast("roomNo", roomNo);
+            },
+            //处理
+            ToHaveBreakfast: function (type, value) {
+                var urlCardNo = Breakfast.Options.UrlCardNo;
+                var urlRoomNo = Breakfast.Options.UrlRoomNo;
+                var dataCardNo = { cardNo: value };
+                var dataRoomNo = { roomNo: value };
+                var url = null;
+                var data = null;
+                if (type == "cardNo"){
+                    url = urlCardNo;
+                    data = dataCardNo;
+                }
+                else if (type == "roomNo") {
+                    url = urlRoomNo;
+                    data = dataRoomNo;
+                }
+                else {
+                    Breakfast.Message("失败！原因：参数[type]错误，请联系管理员！", "error");
+                    $("#isAutoReadCard")[0].checked = false; $("#autoReadCardStatus").val("end"); if (type == "roomNo") { $("#btnRoomNo").removeAttr("disabled"); } document.getElementById("audioBeepError").play();
+                    return;
+                }
+                if (url == null || url == undefined || $.trim(url).length <= 0) {
+                    Breakfast.Message("失败！原因：参数[url]错误，请联系管理员！", "error");
+                    $("#isAutoReadCard")[0].checked = false; $("#autoReadCardStatus").val("end"); if (type == "roomNo") { $("#btnRoomNo").removeAttr("disabled"); } document.getElementById("audioBeepError").play();
+                    return;
+                }
+                if (data == null || data == undefined || value == null || value == undefined || $.trim(value).length <= 0) {
+                    Breakfast.Message("失败！原因：参数[value]错误，请联系管理员！", "error");
+                    $("#isAutoReadCard")[0].checked = false; $("#autoReadCardStatus").val("end"); if (type == "roomNo") { $("#btnRoomNo").removeAttr("disabled"); } document.getElementById("audioBeepError").play();
+                    return;
+                }
+                $("#autoReadCardStatus").val("post");
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    dataType: "json",
+                    success: function (result) {
+                        var isTrue = false;
+                        if (result != null && result != undefined && result.Success && result.Data != null && result.Data != undefined && result.Data.length > 0) {
+                            if (result.Data[0] != null && result.Data[0] != undefined) {
+                                var grid = $("#gridBreakfast").data("kendoGrid");
+                                if (grid != null && grid != undefined && grid.dataSource != null && grid.dataSource != undefined) {
+                                    result.Data[0].CDate = new Date(parseInt(result.Data[0].CDate.replace('/Date(', '').replace(')/', '')));
+                                    grid.dataSource.insert(0, result.Data[0]);
+                                    if (result.Data[0].Status == 1) {
+                                        isTrue = true;
+                                    }
+                                    $("#gridBreakfast .k-grid-content").scrollTop(0);
+                                }
+                            }
+                        }
+                        if (isTrue) {
+                            Breakfast.Message("成功！房号：" + result.Data[0].RoomNo, "success");
+                            document.getElementById("audioBeepSuccess").play();
+                        }
+                        else {
+                            var msg = "失败！原因：";
+                            if (result == null || result == undefined) {
+                                msg += "";
+                            }
+                            else if (result.Data != null && result.Data != undefined && result.Data.length > 0) {
+                                if (typeof (result.Data[0]) == "object") {
+                                    if (result.Data[0].Remark != null && result.Data[0].Remark != undefined && result.Data[0].Remark.length > 0) {
+                                        msg += result.Data[0].Remark;
+                                    }
+                                }
+                                else {
+                                    msg += result.Data;
+                                }
+                            }
+                            Breakfast.Message(msg, "error");document.getElementById("audioBeepError").play();
+                        }
+                    },
+                    error: function (xhr, msg, ex) {
+                        Breakfast.Message("失败！原因：" + msg, "error");document.getElementById("audioBeepError").play();
+                    },
+                    complete: function () {
+                        $("#autoReadCardStatus").val("end_start");
+                        setTimeout(function () { $("#autoReadCardStatus").val("end"); if (type == "roomNo") { $("#btnRoomNo").removeAttr("disabled"); } }, 3000);
+                    },
+                });
+            },
+        };
+        //读卡回调函数
+        function hardwareCallback_01_ReadCard(data) {
+            Breakfast.ReadCardCallBack(data);
+        }
+        function hardwareCallback_ReadCard_Callback_ResOrderFolioBreakfast(result) {
+            if (result != null && result != undefined) {
+                if (result.Success) {
+                    hardwareCallback_01_ReadCard(result.Data);
+                } else {
+                    if (result.Data != null && result.Data != undefined) {
+                        Breakfast.Message("失败！原因：" + result.Data + "！", "error"); //$("#autoReadCardStatus").val("end"); //document.getElementById("audioBeepError").play();
+                    }
+                }
+            }
+        }
+        //列表绑定
+        function gridBreakfast_dataBound(e) {
+            Breakfast.Options.IsDataBoundGrid = true;
+        }
+        //全局控制
+        function GlobalControl() {
+            Breakfast.Options.Duration += Breakfast.Options.Interval;
+            var statusObj = $("#autoReadCardStatus");
+            if ($("#isAutoReadCard")[0].checked == true) {
+                if (statusObj.val() == "end") {
+                    statusObj.val("begin");Breakfast.Options.Duration = 0;$("#divBreakfastMessageList").empty();
+                    Breakfast.ReadCard();
+                }
+            }
+            if (statusObj.val() == "ing" && Breakfast.Options.Duration >= 5000) {
+                statusObj.val("end");
+            }
+            if (statusObj.val() == "post" && Breakfast.Options.Duration >= Breakfast.Options.Timeout) {
+                statusObj.val("end");
+            }
+            if (statusObj.val() == "begin" && Breakfast.Options.Duration >= (Breakfast.Options.Timeout * 2)) {
+                statusObj.val("end");
+            }
+        }
+        //开始
+        window.onload = function () {
+            setInterval(function () { if (Breakfast.Options.IsDataBoundGrid == true) { GlobalControl(); } }, Breakfast.Options.Interval);
+            $("#btnRoomNo").click(function () {
+                if (Breakfast.Options.IsDataBoundGrid == true) {
+                    $("#btnRoomNo").attr("disabled", "disabled");$("#divBreakfastMessageList").empty();
+                    Breakfast.RoomNoCallBack();
+                }
+            });
+        };
+    </script>
+}

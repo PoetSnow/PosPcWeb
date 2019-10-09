@@ -1,0 +1,93 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItem.PosItemSuitViewModel
+
+<script type="text/javascript">
+    function itemId_paras() {
+        var module = $("#ItemId2").data("kendoDropDownList");
+        var itemid = module.value();
+        return {
+            ItemId: itemid
+        };
+    }
+    function itemChanged() {
+        $("#Unitid").data("kendoDropDownList").dataSource.read();
+    }
+
+    function unitChange() {
+        var item = $("#ItemId2").data("kendoDropDownList");
+        var unit = $("#Unitid").data("kendoDropDownList");
+        $.ajax({
+            url: '@Url.Action("GetPriceByItemAndUnit", "BasicDataPosItem")',
+            data: { ItemId: item.value(), unitId: unit.value() },
+            type: "post",
+            dataType: "html",
+            success: function (result) {
+                $("#Price").val(result);
+            },
+            error: function (result) {
+                layer.alert(result.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+</script>
+@using (Html.BeginForm("AddPosItemSuit", "BasicDataPosItem", new { rnd = new Random().NextDouble() }))
+{
+    @Html.HiddenFor(m => m.ItemId)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.IGrade)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.IGrade).HtmlAttributes(new { style = "width:100%;" }).Value(0)</td>
+            <td>@Html.ValidationMessageFor(m => m.IGrade, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.IsAuto)</td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsAuto).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsAuto, "*")</td>
+
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.ItemId2)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.ItemId2).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").Filter("contains").DataSource(e => { e.Read(r => r.Action("ListItemsBySuit", "BasicDataPosItem", new { rnd = new Random().NextDouble() })); }).OptionLabel("请选择消费项目").Events(e => e.Change("itemChanged"))</td>
+            <td>@Html.ValidationMessageFor(m => m.ItemId2, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Unitid)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Unitid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListUnitByItem", "BasicDataPosItem", new { rnd = new Random().NextDouble() }).Data("itemId_paras")).ServerFiltering(true); }).Events(e => e.Change("unitChange")).OptionLabel("请选择单位")</td>
+            <td>@Html.ValidationMessageFor(m => m.Unitid, "*")</td>
+
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Price)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Price).HtmlAttributes(new { style = "width:100%;", @readonly = "readonly" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Price, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Quantity)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.Quantity).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Quantity, "*")</td>
+
+        </tr>
+        <tr>
+            <td class="textright"></td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsPrice).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsPrice, "*")</td>
+            <td class="textright"></td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsBuild).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsBuild, "*")</td>
+
+        </tr>
+
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButtonSuit" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButtonSuit" role="button" data-role="button">取消</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButtonSuit").click(function (e) {
+            e.preventDefault();
+            saveFormDataForPosItem($("#saveEditFormButtonSuit"), "gridPosItemSuit");
+        });
+        $("#closeEditFormButtonSuit").click(function (e) {
+            $("#posMaskWindow").html("");
+            closeGeneralWindow();
+
+        });
+    });
+</script>

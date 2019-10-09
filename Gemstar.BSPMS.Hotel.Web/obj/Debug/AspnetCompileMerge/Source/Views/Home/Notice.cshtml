@@ -1,0 +1,78 @@
+﻿
+@using Gemstar.BSPMS.Hotel.Services.EntityProcedures;
+@using Gemstar.BSPMS.Common.Extensions;
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<style type="text/css">
+     .editFormTable td:nth-child(odd) {
+            width: 84px;
+        }
+</style>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>公告</title>
+    @Html.Partial("_HeaderCss")
+    @Html.Partial("_HeaderJs")
+
+    <style type="text/css">
+        .message-hd {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            padding-left: 18.5%;
+            line-height: 60px;
+            background: #222222;
+            letter-spacing: 2px;
+        }
+    </style>
+  
+</head>
+<body>
+        <table class="editFormTable">
+            <tr>
+                <td style="text-align:right">标题</td>
+                <td class="textright" colspan="3">
+
+                    <input type="text"  class="k-textbox" style="width:100%" value="@ViewBag.title" />
+                </td>
+               
+            </tr>
+            <tr>
+                <td style="text-align:right">内容</td>
+                <td colspan="3">
+                    @(Html.Kendo().Editor()
+      .Name("Content")
+      .HtmlAttributes(new { style = "width: 100%;height:440px" })
+      .Tools(tools => tools
+
+          .Clear()
+          // .CustomButton(c => c.Name("customerInsertImage").ToolTip("插入图片").Exec("customInsertImage_clicked"))
+          .Bold().Italic().Underline().Strikethrough()
+          .JustifyLeft().JustifyCenter().JustifyRight().JustifyFull()
+          .InsertUnorderedList().InsertOrderedList()
+          .Outdent().Indent()
+          .SubScript()
+          .SuperScript()
+          .TableEditing()
+          .ViewHtml()
+          .Formatting()
+          .CleanFormatting()
+          .FontName().FontSize()
+          .FontColor().BackColor()
+
+      )
+                    )
+                </td>
+        </table>
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        $(".k-editor-toolbar-wrap").hide();
+    });
+</script>

@@ -1,0 +1,46 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_ItemClassBySingleResult>
+<ul>
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                if (item.Id == "suite")
+                {
+                    <li id="initSuite">
+                        <a href="javascript:void(0);" onclick="initItemSuit('suite')" data-id="@item.Id"  data-iTagperiod="@item.iTagperiod" >
+                            <span>&nbsp;</span>
+                            <span>@item.Cname</span>
+                        </a>
+                    </li>
+                    <li id="updateSuite" style="display:none;" onclick="updateSuite()">
+                        <a href="javascript:void(0);" onclick="">
+                            <span>&nbsp;</span>
+                            <span>修改</span>
+                        </a>
+                    </li>
+                    <li id="finishSuite" style="display:none;" onclick="finishSuite()">
+                        <a href="javascript:void(0);" onclick="">
+                            <span>&nbsp;</span>
+                            <span>完成</span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="javascript:void(0);" onclick="initItem('@item.Id')" data-id="@item.Id"  data-iTagperiod="@item.iTagperiod">
+                            <span>@item.Code</span>
+                            <span>@item.Cname</span>
+                        </a>
+                    </li>
+                }
+            }
+        }
+        <li>
+            <a href="javascript:void(0);" onclick="classPage()">
+                <img src="~/Images/posInSingle/fanye.png" /><span>翻页</span>
+            </a>
+        </li>
+    }
+</ul>

@@ -1,0 +1,65 @@
+﻿@model Gemstar.BSPMS.Hotel.Services.ResFolioManage.ResFolioAbatementInfo
+
+<div>
+    <input type="hidden" id="authorizationWindow_Url" value="@Url.Action("SubmitAuthByAbatement", "ResOrderFolio",new { area = "ResManage" })" />
+    <input type="hidden" id="authorizationWindow_UrlCallBack" value="@Url.Action("GetAuthResultByAbatement", "ResOrderFolio",new { area = "ResManage" })" />
+    <input type="hidden" id="authorizationWindow_Type" value="2" />
+    <input type="hidden" id="authorizationWindow_Content" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model)" />
+</div>
+<div class="k-grid k-widget" style="max-height: 500px;overflow:hidden;">
+    <div class="k-grid-header" style="padding-right: 17px;">
+        <div class="k-grid-header-wrap k-auto-scrollable">
+            <table>
+                <colgroup>
+                    <col style="width:71px;">
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="k-header" colspan="2">消费入账</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="k-grid-content k-auto-scrollable" style="max-height: 140px;">
+        <table style="height: auto;">
+            <colgroup>
+                <col style="width:71px;">
+                <col>
+            </colgroup>
+            <tbody>
+                @if (Model != null)
+                {
+                    <tr>
+                        <td>账单</td>
+                        <td>房号:@Model.RoomNo　账号:@Model.RegId.Substring(Model.Hid.Length)　客人名:@Model.CustomerName</td>
+                    </tr>
+                    <tr>
+                        <td>项目</td>
+                        <td>@Model.ItemCode-@Model.ItemName</td>
+                    </tr>
+                    if (Model.Quantity != null && Model.Quantity.HasValue && Model.Quantity != 0)
+                    {
+                        <tr>
+                            <td>数量</td>
+                            <td>@Model.Quantity</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>金额</td>
+                        <td>@Model.Amount</td>
+                    </tr>
+                    <tr>
+                        <td>单号</td>
+                        <td>@Model.InvNo</td>
+                    </tr>
+                    <tr>
+                        <td>备注</td>
+                        <td>@Model.Remark</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

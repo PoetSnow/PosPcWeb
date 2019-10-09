@@ -1,0 +1,56 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.ChargeFreeManage.ChargeFreeEditViewModel
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.MbrCardTypeid)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.MbrCardTypeid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Value").DataValueField("Key").DataSource(e => { e.Read(r => r.Action("GetMbrCardTypeSelectList", "MbrCardTypeManage", new { rnd = new Random().NextDouble() })); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.MbrCardTypeid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.BeginAmount)</td>
+            <td>@Html.TextBoxFor(m => m.BeginAmount, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.BeginAmount, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.EndAmount)</td>
+            <td>@Html.TextBoxFor(m => m.EndAmount, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.EndAmount, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Amount)</td>
+            <td>@Html.TextBoxFor(m => m.Amount, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Amount, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Rate)</td>
+            <td>@Html.TextBoxFor(m => m.Rate, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>%@Html.ValidationMessageFor(m => m.Rate, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        var txtRate = $("#Rate");
+        txtRate.val((parseFloat(txtRate.val()) * 100).toFixed(2));
+    });
+
+</script>

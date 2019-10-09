@@ -1,0 +1,49 @@
+﻿@using Kendo.Mvc.UI
+@model Gemstar.BSPMS.Hotel.Web.Areas.Percentages.Models.OperatorPlan.OperatorPlanAddViewModel
+@using (Html.BeginForm())
+{
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.OperatorIds)</td>
+            <td>
+                @Html.Kendo().MultiSelectFor(e => e.OperatorIds).HtmlAttributes(new { style = " width:100%;" }).DataTextField("Text").DataValueField("Value").DataSource(e => e.Read(r => { r.Action("ListItemsForOperator", "OperatorPlan", new { area = "Percentages", rnd = new Random().NextDouble() }); }))
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.OperatorIds, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.PlanDate)</td>
+            <td>@Html.Kendo().DatePickerFor(m => m.PlanDate).Format("yyyy-MM").Value(DateTime.Now).HtmlAttributes(new { style = " width:100%;" }).Start(CalendarView.Year).Depth(CalendarView.Year)</td>
+            <td>@Html.ValidationMessageFor(m => m.PlanDate, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.PlanSource)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.PlanSource).HtmlAttributes(new { style = " width:100%;" }).DataTextField("Text").DataValueField("Value").DataSource(e => e.Read(r => { r.Action("ListItemsForSource", "OperatorPlan", new { area = "Percentages", rnd = new Random().NextDouble() }); }))
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.PlanSource, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.PlanAmount)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.PlanAmount).Min(1).Format("n0").Decimals(0).Value(1).HtmlAttributes(new { style = " width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.PlanAmount, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+</script>

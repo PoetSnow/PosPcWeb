@@ -1,0 +1,16 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPos.PosRefe>
+<ul>
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <li class="content-list-detail">
+                    <a href="javascript:void(0)" >
+                        @item.Cname
+                    </a>
+                </li>
+            }          
+        }
+    }
+</ul>

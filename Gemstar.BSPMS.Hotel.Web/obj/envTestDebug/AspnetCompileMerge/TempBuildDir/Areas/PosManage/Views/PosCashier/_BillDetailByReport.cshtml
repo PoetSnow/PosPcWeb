@@ -1,0 +1,84 @@
+﻿@model Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_billByBillidResult
+@{
+    Layout = null;
+}
+<link href="~/Content/Pos/posCashier.css" rel="stylesheet" />
+<link href="~/Content/Pos/posPublic.css" rel="stylesheet" />
+<style>
+    .mainRight {
+        margin-left:0px;
+        float:none;
+        position:relative;
+    }
+</style>
+<div class="mainRight">
+    <div class="mainRight-details">
+        <ul>
+            <li style="width:100%;"></li>
+        </ul>
+    </div>
+    <div class="mainRight-table">
+    </div>
+    <div class="mainRight-paymentMethod">
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var billId = '@Model.Billid';
+        var model = {
+            billid: billId
+        };
+        queryBill(model);
+    });
+    //查询账单信息
+    function queryBill(model) {
+        $.ajax({
+            url: '@Url.Action("_PosBill", "PosCashier", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $(".mainRight-details").html(data);
+                queryBillDetail(model);
+                queryPaymentMethod(model);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //查询账单明细列表
+    function queryBillDetail(model) {
+        $.ajax({
+            url: '@Url.Action("_PosBillDetailList", "PosCashier", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $(".mainRight-table").html(data);
+             //   $("#gridBillDetail .k-grid-content").height($(".mainRight").height() - $(".mainRight-details").outerHeight(true) - $("#gridBillDetail .k-grid-header").outerHeight(true) - $("#gridBillDetail .k-grid-footer").outerHeight(true) - 50);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //查询付款方式列表
+    function queryPaymentMethod(model) {
+        $.ajax({
+            url: '@Url.Action("_PaymentMethodList", "Shared", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $(".mainRight-paymentMethod").html(data);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+</script>

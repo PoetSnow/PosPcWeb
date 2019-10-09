@@ -1,0 +1,184 @@
+﻿
+@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "付款方式";
+    var hotelItems = new List<SelectListItem>();
+    if (ViewBag.Hotels != null)
+    {
+        hotelItems.Add(new SelectListItem { Value = "", Text = "全部" });
+        foreach (var hotel in ViewBag.Hotels)
+        {
+            hotelItems.Add(new SelectListItem { Value = hotel.Hid, Text = (string.IsNullOrEmpty(hotel.Hotelshortname) ? hotel.Name : hotel.Hotelshortname) });
+        }
+    }
+    var gridIdP = "gridPayClassify";
+    var keyColumnNameP = "id";
+    var gridFatherName = "name";
+
+    var gridViewModelP = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridIdP,
+        JsFuncForGetAjaxQueryPara = "getFatherQueryParas",
+        KeyColumnName = keyColumnNameP,
+        EnableFunctionForPage = true,
+        EnableFunctionForDelete = false,
+        EnableFunctionForQuery = false,
+        EnableFunctionForAdd = false,
+        EnableCustomToolbarForFirst = false,
+        EnableFunctionForEnable = false,
+        EnableFunctionForDisable = false,
+        EnableScrollable = true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("hotelname").Title("分店");
+            c.Bound("code").Title("付款代码");
+            c.Bound("name").Title("付款类型");
+            c.Bound("seqid").Title("排序号");
+            c.Command(e => e.Custom("下级").HtmlAttributes(new { onclick = "selectFatherRow(this)", Href = "javascript:void(0);" }))
+            .Width("110px")
+            .Title("操作");
+        },
+        CustomToolbar = c =>
+        {
+        c.Template(@<text>
+        分店
+        @(Html.Kendo().DropDownList().Name("Hotelname").DataTextField("Text").DataValueField("Value").BindTo(hotelItems))
+        付款类型 <input id='fname' style='height:26px;border:1px solid #ccc;width:70px;' /> <input type='button' value='查询' class='k-button k-button-icontext k-grid-commonQuery' onclick='queryData()' />
+        <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addGridItemPayClassifyGroup()"><span class="k-icon k-add"></span>增加</a>
+        <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="batchDelete('gridPayClassify', 'pk', '/SystemManage/PayClassifyGroupManage/BatchDelete')"><span class="k-icon k-i-unpin"></span>删除</a>
+        </text>);
+        }
+    };
+
+    //下级列表
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var columnName = "@s09付款类型";
+    var btnShowId = "TitleMemberId";
+    var btnShowName = "付款类型：";
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForPage = true,
+        EnableFunctionForDelete = true,
+        EnableFunctionForQuery = false,
+        EnableFunctionForAdd = false,
+        EnableCustomToolbarForFirst = true,
+        EnableFunctionForEnable = true,
+        EnableFunctionForDisable = true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("hotelname").Title("分店");
+            c.Bound("code").Title("项目代码");
+            c.Bound("name").Title("名称");
+            c.Bound("isRetun").Title("是否找回");
+            c.Bound("isCharge").Title("是否可充值");
+            c.Bound("isInput").Title("是否可手工录入");
+            c.Bound("action").Title("处理方式");
+            c.Bound("notScore").Title("是否可积分");
+            c.Bound("rate").Title("汇率");
+            c.Bound("seqid").Title("排序");
+        },
+        RowTemplate = @"<tr style=#: status==51?'text-decoration:line-through;color:red;':'' #>
+                                        <td>#: hotelname #</td>
+                                        <td>#: code #</td>
+                                        <td>#: name #</td>
+                                        <td>#: isRetun==true?'是':'否' #</td>
+                                        <td>#: isCharge==true?'是':'否' #</td>
+                                        <td>#: isInput==true?'是':'否' #</td>
+                                        <td>#: action==null?'':action #</td>
+                                        <td>#: notScore==true?'是':'否' #</td>
+                                        <td>#: rate==null?'':rate #</td>
+                                        <td>#: seqid==null?'':seqid #</td>
+                                   </tr>",
+        CustomToolbar = c =>
+        {
+            c.Custom().Name("paywaytype").Text("　付款类型：　").HtmlAttributes(new { id = @btnShowId, href = "javascript:void(0);", style = "cursor:default" });
+            c.Custom().Name("comfirmtext").Text("<font style='color:red'>双击可修改，自定义代码不能尾数为0（尾数为0是系统固定代码）</font>").HtmlAttributes(new { id = "comfirmtext", href = "javascript:void(0);", style = "cursor:default;cursor:default;margin-right:5px;" });//margin-left:20px;margin-right:30px;
+            c.Custom().Name("commonQuery").Text("查询").HtmlAttributes(new { id = "queryGridItems", onclick = "showCommonQueryWindow()", href = "javascript:void(0);" });
+            c.Custom().Name("addGridItem").Text("增加").HtmlAttributes(new { id = "addGridItems", onclick = "addGridItemNew()", href = "javascript:void(0);" });
+        }
+    };
+}
+<div style="width:30%; float:left;">
+    @Html.Partial("_KendoGridDataRowView", gridViewModelP)
+</div>
+<div style="width:68%; float:right;">
+    @Html.Partial("_KendoGridDataRowView", gridViewModel)
+</div> 
+<input type="hidden" id="querytext" />
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+
+<script type="text/javascript">
+    $(function () {
+        //  $("#gridPayClassify .k-grid-header th:eq(2) .k-link").click();
+        $("#" + "@btnShowId").removeClass("k-button");
+        $("#comfirmtext").removeClass("k-button");
+        //var c = $("#grid").width() - 892;
+        //$("#comfirmtext").css("margin-left", c);
+        //$("#comfirmtxt").removeClass("k-button");
+        $(".k-grid-content").css("max-height", "650px");
+        $("#gridPayClassify").attr('ondblclick', '').unbind('dblclick').on("dblclick", "tr.k-state-selected", function (e) {
+            var gridId = "gridPayClassify";
+            var keyName = "pk";
+            var grid = $("#" + gridId).data("kendoGrid");
+            var data = grid.dataItem($(this));
+            top.openKendoWindow("修改付款类型", "/SystemManage/PayClassifyGroupManage/Edit", { id: data[keyName] });
+        });
+    });
+    function getFatherQueryParas() {
+        return {
+            QueryProcedureName: "up_list_pmsCodeList_GrpDistrib",
+            QueryParameterValues: "@@h99typeCode=03" + $("#querytext").val()
+        };
+    }
+    function gridPayClassify_dataBoundEnded() {
+        var firstBtn = $("[onclick='selectFatherRow(this)']:first");
+        firstBtn.click();
+    }
+    function selectFatherRow(column) {
+        var grid = $("#" + "@gridIdP").data("kendoGrid");
+        var data = grid.dataItem($(column).parent().parent());
+        selectDoCommonQuery(data["@keyColumnNameP"], data["@gridFatherName"], data["code"]);
+        var btnwidth = $("#" + "@btnShowId").width();
+        var c = $("#grid").width() - 755 - btnwidth;
+        $("#comfirmtext").css("margin-left", c);
+    } 
+
+    function selectDoCommonQuery(id, name, code) {
+        document.getElementById('commonQueryParameterValues').value = ("@columnName" + "=" + id);
+        $("#" + "@btnShowId").html("<span></span>" + "@btnShowName" + code + " " + name);
+        var grid = $("#" + $("#commonQueryGridId").val()).data("kendoGrid");
+        grid.dataSource.read();
+    }
+    function addGridItemNew() {
+        var value = document.getElementById('commonQueryParameterValues').value;
+        value = value.replace(("@columnName" + "="), "");
+        top.openKendoWindow("增加" + "@ViewBag.Title", "/SystemManage/PayWayManage/Add?pcid=" + value);
+    }
+    //father js
+    function getFatherQueryParas() {
+        return {
+            QueryProcedureName: "up_list_pmsCodeList_GrpDistrib",
+            QueryParameterValues: "@@h99typeCode=03" + $("#querytext").val()
+        };
+    }
+    function addGridItemPayClassifyGroup() {
+        top.openKendoWindow("增加付款类型", "/SystemManage/PayClassifyGroupManage/Add?typeCode=03");
+    }
+
+    function queryData() {
+        var Hotelname = $("#Hotelname").val(); var fname = $("#fname").val();
+        var result = "&@@s23分店=" + Hotelname + "&@@t00关键字=" + fname;
+        $("#querytext").val(result);
+        var grid = $("#" + "@gridIdP").data("kendoGrid");
+        grid.dataSource.read();
+    }
+</script>

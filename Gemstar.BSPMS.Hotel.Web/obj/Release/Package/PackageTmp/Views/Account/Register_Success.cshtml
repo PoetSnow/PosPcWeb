@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "注册成功";
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+}
+<div class="wrapper reg-success">
+    <h3><i class="icon-reg-success"></i>注册成功</h3>
+    <div class="f-password-item bg-color">
+        <p>感谢注册使用深圳市捷信达电子有限公司的PMS产品！</p>
+        <p style="color:red;">请备份并牢记以下信息：</p>
+        <p style="color:red;">酒店代码：<b>@ViewBag.Hid</b></p>
+        <p style="color:red;">登录名：<b>@ViewBag.LoginCode</b></p>
+        <div class="login-now">
+            <a class="k-button k-primary" href="@Url.Action("Index","Account",new { hid=ViewBag.Hid,userName=ViewBag.LoginCode })">马上登录 </a>
+        </div>
+    </div>
+</div>

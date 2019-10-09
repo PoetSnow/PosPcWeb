@@ -1,0 +1,1093 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItem.PosItemEditViewModel
+<script src="~/Scripts/SearchSelect/jquery.searchableSelect.js" charset="UTF-8"></script>
+<link href="~/Scripts/SearchSelect/jquery.searchableSelect.css" rel="stylesheet" />
+<link href="~/Content/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/bootstrap/css/bootstrap-select.min.css" rel="stylesheet" />
+<script src="~/Content/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/Content/bootstrap/js/bootstrap-select.min.js"></script>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    a, img {
+        border: 0;
+    }
+
+    body {
+        font: 12px/180% Arial, Helvetica, sans-serif, "新宋体";
+    }
+
+    .tab1 {
+        border-bottom: #cccccc solid 1px;
+        float: left;
+        width: 52%;
+    }
+
+    .menu {
+        height: 28px;
+        border-right: #ccc solid 1px;
+        font-size: 14px;
+        border-top: #ccc solid 1px;
+    }
+
+        .menu li {
+            float: left;
+            width: 113px;
+            text-align: center;
+            line-height: 28px;
+            height: 28px;
+            cursor: pointer;
+            border-left: #ccc solid 1px;
+            border-bottom: #ccc solid 1px;
+            color: #666;
+            overflow: hidden;
+            background: #E0E2EB;
+        }
+
+            .menu li.off {
+                background: #fff;
+                color: #336699;
+                font-weight: bold;
+                border-bottom: none;
+            }
+
+    .menudiv {
+        border-left: #cccccc solid 1px;
+        border-right: #cccccc solid 1px;
+        border-top: 0;
+        background: #fefefe;
+        height: 446px;
+    }
+
+        .menudiv div {
+            line-height: 28px;
+        }
+
+    .formButtons {
+        margin-top: 10px;
+    }
+    /*表格样式*/
+    .table-head {
+        padding-right: 17px;
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+        zoom: 1;
+    }
+
+    .table-body {
+        width: 100%;
+        height: 300px;
+        overflow-y: scroll;
+    }
+
+        .table-head table, .table-body table {
+            width: 100%;
+        }
+
+            .table-body table tr:nth-child(2n+1) {
+                background-color: #f2f2f2;
+            }
+
+    .table-head th {
+        overflow: hidden;
+        border-style: solid;
+        border-width: 0 0 1px 1px;
+        font-weight: 400;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        text-align: left;
+    }
+
+    #table1 .inputNum {
+        height: 36px;
+        width: 70px;
+        border: 1px solid #3d3d3e;
+        border-radius: 3px;
+    }
+
+    #table3 .searchable-select {
+        min-width: 70px;
+    }
+
+    #table3 .searchable-select-holder {
+        width: 80px;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    input[type="text"] {
+        color: #333;
+    }
+
+
+    .searchable-select-item2 {
+        margin-left: 100px;
+    }
+
+    #table3 .inputtxt {
+        height: 36px;
+        width: 60px;
+        border: 1px solid #3d3d3e;
+        border-radius: 3px;
+    }
+
+    .Check + label {
+        background-color: white;
+        border-radius: 3px;
+        border: 1px solid #d3d3d3;
+        width: 1em;
+        height: 1em;
+        display: inline-block;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 15px;
+        margin-top: 3px;
+        margin-right: 2px;
+    }
+
+    .Check:checked + label {
+        background-color: #eee;
+    }
+
+        .Check:checked + label:after {
+            content: "\2714";
+        }
+</style>
+<script>
+    //选项卡切换
+    var name_0 = 'one';
+    var cursel_0 = 1;
+    var links_len;
+    $(function () {
+        //选项卡
+        var links = document.getElementById("tab1").getElementsByTagName('li')
+        links_len = links.length;
+        setTab(name_0, cursel_0);
+
+    })
+    function setTab(name, cursel) {
+        cursel_0 = cursel;
+        for (var i = 1; i <= links_len; i++) {
+            if (i == cursel) {
+                $("#" + name + i).attr("class", "off");
+                $("#con_" + name + "_" + i).attr("style", "display:block;padding:15px");
+            }
+            else {
+
+                $("#" + name + i).removeClass("off");
+                $("#con_" + name + "_" + i).attr("style", "display:none");
+            }
+        }
+    }
+</script>
+<script type="text/javascript">
+    var unitData;   //单位
+    var itemClassData;  //大类
+    var refeData;
+    var ShuffleDate;
+    var printA;     //出品打印机
+    var printB      //传菜打印机
+    function QueryText() {
+        return {
+            DeptId: $("#queryDeptId").val(),
+            ItemClassid: $("#queryItemClassid").val(),
+            SubClassid: $("#querySubClassid").val(),
+            CodeAndName: $("#queryCodeAndName").val()
+        };
+    }
+    $(document).ready(function () {
+        //alert("进入批量修改项目");
+        //单位数据
+        $.ajax({
+            url: '@Url.Action("ListItemsForPosUnitByModules", "BasicDataPosUnit", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: { },
+            dataType: "json",
+            success: function (data) {
+                unitData = data;
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+
+        //大类
+        $.ajax({
+            url: '@Url.Action("ListItemsForPosItemAndSubClass", "BasicDataPosItemClass", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                itemClassData = data;
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+        //营业点
+        $.ajax({
+            url: '@Url.Action("ListItemsForPosRefe", "BasicDataPosRefe", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                refeData = data;
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+        //营业点
+        $.ajax({
+            url: '@Url.Action("ListShuffle", "BasicDataPosShuffle", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                ShuffleDate = data;
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+        //出品/传菜打印机
+        $.ajax({
+            url: '@Url.Action("ListItemsForProdPrinterByModules", "BasicDataPosProdPrinter", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                printA = data;
+                printB = data;
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    })
+
+
+</script>
+
+<input type="hidden" id="queryDeptId" />
+<input type="hidden" id="queryItemClassid" />
+<input type="hidden" id="querySubClassid" />
+<input type="hidden" id="queryCodeAndName" />
+
+<div style="float:left;width:48%;height:482px">
+    <ul id="panelbar">
+        <li class="k-state-active">
+            <div class="k-header k-grid-toolbar k-grid-top">
+                <a class="k-button k-button-icontext k-grid-commonQuery" href="javascript:void(0);" onclick="query()"><span class="k-icon k-i-search"></span>查询</a>
+            </div>
+            <div style="padding: 10px;height:414px">
+                @(Html.Kendo().Grid<Gemstar.BSPMS.Hotel.Services.EntitiesPos.PosItem>()
+                    .Name("gridItem")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(m => m.Id).Title("ID").Hidden();
+                        columns.Bound(m => m.Id).HeaderTemplate("<input type='checkbox' value='#: Id #' onclick='checkedRowAll(this)'/>").Width(30)
+                        .ClientTemplate("<input type='checkbox' value='#: Id #' onclick='checkedRow(this)'/>");
+                        columns.Bound(m => m.Code).Title("编码").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                        columns.Bound(m => m.Cname).Title("名称").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+                        columns.Bound(m => m.ItemClassName).Title("大类").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+                        columns.Bound(m => m.SubClassName).Title("分类").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+                        columns.Bound(m => m.DeptClassName).Title("部门").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+                    })
+                    .HtmlAttributes(new { style = "height:100%;" })
+                    .Scrollable()
+                    .Selectable(s => s.Mode(GridSelectionMode.Multiple).Enabled(false))
+                    .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("ListPosItemA", "BasicDataPosItem", new { rnd = new Random().NextDouble() }).Data("QueryText")))
+                )
+            </div>
+        </li>
+    </ul>
+</div>
+@{
+    <!--选中的项目ID-->
+    <input id="selIds" type="hidden" value="" />
+
+    <div class="tab1" id="tab1">
+        <div class="menu">
+            <ul>
+                <li id="one1" onclick="setTab('one',1)">其他设置</li>
+                <li id="one2" onclick="setTab('one',2)">单位价格</li>
+                <li id="one3" onclick="setTab('one',3)">项目大类</li>
+                <li id="one4" onclick="setTab('one',4)">营业点</li>
+            </ul>
+        </div>
+        <div class="menudiv">
+            <div id="con_one_1" style="padding:15px;">
+                <table class="editFormTable">
+                    @*<tr>
+                            <td colspan="3"><input type="checkbox" id="isUpdate"    />是否修改（勾选此项才能修改其他设置）</td>
+                            @*<td><input class="k-checkbox k-checkbox" id="IsAvoidOpenItem" name="IsAvoidOpenItem" style="width:100%;" type="checkbox" value="true">
+                            <input name="IsAvoidOpenItem" type="hidden" value="false"></td>
+
+                        </tr>*@
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="myCheck1" style="display:none" class="Check">
+                            <label for="myCheck1"></label>
+                            @Html.Kendo().CheckBoxFor(m => m.IsAvoidOpenItem).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck2" style="display:none" class="Check">
+                            <label for="myCheck2"></label>@Html.Kendo().CheckBoxFor(m => m.IsLimit).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck3" style="display:none" class="Check">
+                            <label for="myCheck3"></label>@Html.Kendo().CheckBoxFor(m => m.IsAvoidLimit).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="myCheck4" style="display:none" class="Check">
+                            <label for="myCheck4"></label>@Html.Kendo().CheckBoxFor(m => m.IsService).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck37" style="display:none" class="Check">
+                            <label for="myCheck37"></label>@Html.Kendo().CheckBoxFor(m => m.IsDiscount).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck5" style="display:none" class="Check">
+                            <label for="myCheck5"></label>@Html.Kendo().CheckBoxFor(m => m.IsLargess).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="myCheck6" style="display:none" class="Check">
+                            <label for="myCheck6"></label>@Html.Kendo().CheckBoxFor(m => m.IsLgService).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck7" style="display:none" class="Check">
+                            <label for="myCheck7"></label>@Html.Kendo().CheckBoxFor(m => m.IsQuan).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck8" style="display:none" class="Check">
+                            <label for="myCheck8"></label>@Html.Kendo().CheckBoxFor(m => m.IsHandWrite).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="myCheck9" style="display:none" class="Check">
+                            <label for="myCheck9"></label>@Html.Kendo().CheckBoxFor(m => m.IsInput).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck10" style="display:none" class="Check">
+                            <label for="myCheck10"></label>@Html.Kendo().CheckBoxFor(m => m.IsSuite).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck11" style="display:none" class="Check">
+                            <label for="myCheck11"></label>@Html.Kendo().CheckBoxFor(m => m.IsFeast).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="myCheck12" style="display:none" class="Check">
+                            <label for="myCheck12"></label>@Html.Kendo().CheckBoxFor(m => m.IsUserDefined).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck13" style="display:none" class="Check">
+                            <label for="myCheck13"></label>@Html.Kendo().CheckBoxFor(m => m.IsSeaFood).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck14" style="display:none" class="Check">
+                            <label for="myCheck14"></label>@Html.Kendo().CheckBoxFor(m => m.IsWeight).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="myCheck15" style="display:none" class="Check">
+                            <label for="myCheck15"></label>@Html.Kendo().CheckBoxFor(m => m.IsSort).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck16" style="display:none" class="Check">
+                            <label for="myCheck16"></label>@Html.Kendo().CheckBoxFor(m => m.IsAutoAction).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck17" style="display:none" class="Check">
+                            <label for="myCheck17"></label>@Html.Kendo().CheckBoxFor(m => m.IsCurrent).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="myCheck18" style="display:none" class="Check">
+                            <label for="myCheck18"></label>@Html.Kendo().CheckBoxFor(m => m.IsTea).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck18" style="display:none" class="Check">
+                            <label for="myCheck19"></label>@Html.Kendo().CheckBoxFor(m => m.IsAutoSellout).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck20" style="display:none" class="Check">
+                            <label for="myCheck20"></label>@Html.Kendo().CheckBoxFor(m => m.IsSelfhelp).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="myCheck21" style="display:none" class="Check">
+                            <label for="myCheck21"></label>@Html.Kendo().CheckBoxFor(m => m.IsFreq).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck22" style="display:none" class="Check">
+                            <label for="myCheck22"></label>@Html.Kendo().CheckBoxFor(m => m.IsCash).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck23" style="display:none" class="Check">
+                            <label for="myCheck23"></label>@Html.Kendo().CheckBoxFor(m => m.IsNosh).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="myCheck24" style="display:none" class="Check">
+                            <label for="myCheck24"></label>@Html.Kendo().CheckBoxFor(m => m.IsOrderPrt).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck25" style="display:none" class="Check">
+                            <label for="myCheck25"></label>@Html.Kendo().CheckBoxFor(m => m.IsDiy).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck26" style="display:none" class="Check">
+                            <label for="myCheck26"></label>@Html.Kendo().CheckBoxFor(m => m.IsMbrBaseamt).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="myCheck27" style="display:none" class="Check">
+                            <label for="myCheck27"></label>@Html.Kendo().CheckBoxFor(m => m.IsWineBar).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck28" style="display:none" class="Check">
+                            <label for="myCheck28"></label>@Html.Kendo().CheckBoxFor(m => m.IsSale).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck29" style="display:none" class="Check">
+                            <label for="myCheck29"></label>@Html.Kendo().CheckBoxFor(m => m.IsEra).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="myCheck30" style="display:none" class="Check">
+                            <label for="myCheck30"></label>@Html.Kendo().CheckBoxFor(m => m.IsSplit).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck31" style="display:none" class="Check">
+                            <label for="myCheck31"></label>@Html.Kendo().CheckBoxFor(m => m.IsPresent).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck32" style="display:none" class="Check">
+                            <label for="myCheck32"></label>@Html.Kendo().CheckBoxFor(m => m.IsScore).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="myCheck33" style="display:none" class="Check">
+                            <label for="myCheck33"></label>@Html.Kendo().CheckBoxFor(m => m.IsWxShow).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck34" style="display:none" class="Check">
+                            <label for="myCheck34"></label>@Html.Kendo().CheckBoxFor(m => m.IsPaidShow).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck35" style="display:none" class="Check">
+                            <label for="myCheck35"></label>@Html.Kendo().CheckBoxFor(m => m.IsOpenItem).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="myCheck36" style="display:none" class="Check">
+                            <label for="myCheck36"></label>@Html.Kendo().CheckBoxFor(m => m.IsTimes).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+                        <td>
+                            <input type="checkbox" id="myCheck38" style="display:none" class="Check">
+                            <label for="myCheck38"></label>@Html.Kendo().CheckBoxFor(m => m.IsModiPrice).HtmlAttributes(new { style = "width:100%;" })
+                        </td>
+
+                    </tr>
+                </table>
+            </div>
+            <div id="con_one_2" style="display:none;">
+
+                <div style="width: 100%;">
+                    <div class="k-widget k-grid" id="gridItemPrice" data-role="grid">
+                        <div class="k-header k-grid-toolbar k-grid-top">
+                            <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addUnit()"><span class="k-icon k-add"></span>增加</a>
+                            <div style="float:right">
+                                <label class="single"><input type="radio" name="unit" value="add" checked />添加</label>
+                                <label class="single"><input type="radio" name="unit" value="update" />修改</label>
+                            </div>
+                        </div>
+                        <div class="k-grid-header" style="padding-right: 17px;">
+                            <div class="k-grid-header-wrap k-auto-scrollable">
+                                <table role="grid">
+                                    <colgroup>
+                                        <col style="width:150px">
+                                        <col>
+                                        <col>
+                                        <col style="width:60px">
+                                        <thead role="rowgroup">
+                                            <tr role="row">
+                                                <th class="k-header k-filterable k-with-icon" scope="col" data-role="columnsorter">单位 </th>
+                                                <th class="k-header k-filterable k-with-icon" scope="col" data-role="columnsorter">价格 </th>
+                                                <th class="k-header k-filterable k-with-icon" scope="col" data-role="columnsorter">差价</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="k-grid-content" style="height:300px">
+                            <table id="table1" role="grid" data-role="selectable" class="k-selectable" aria-multiselectable="true" style="touch-action: pan-y;">
+                                <colgroup>
+                                    <col style="width:150px">
+                                    <col>
+                                    <col>
+                                    <col style="width:60px">
+                                </colgroup>
+                                <tbody role="rowgroup">
+                                    <!--table 内容-->
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+            <div id="con_one_3" style="display:none;">
+                <div style="width: 100%;">
+                    <div class="k-widget k-grid" id="gridItemClass" data-role="grid">
+                        <div class="k-header k-grid-toolbar k-grid-top">
+                            <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addItemClass()"><span class="k-icon k-add"></span>增加</a>
+                            <div style="float:right">
+                                <label class="single"><input type="radio" name="itemClass" value="add" checked />添加</label>
+                                <label class="single"><input type="radio" name="itemClass" value="update" />修改</label>
+                            </div>
+                        </div>
+                        <div class="k-grid-header" style="padding-right: 17px;">
+                            <div class="k-grid-header-wrap k-auto-scrollable">
+                                <table role="grid">
+                                    <colgroup>
+
+                                        <col>
+                                        <col>
+                                        <col style="width:60px">
+                                        <thead role="rowgroup">
+                                            <tr role="row">
+                                                <th class="k-header k-filterable k-with-icon" scope="col" data-role="columnsorter">原大类 </th>
+                                                <th class="k-header k-filterable k-with-icon" scope="col" data-role="columnsorter">大类 </th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="k-grid-content" style="height:300px">
+                            <table id="table2" role="grid" data-role="selectable" class="k-selectable" aria-multiselectable="true" style="touch-action: pan-y;">
+                                <colgroup>
+                                    <col>
+                                    <col>
+                                    <col style="width:60px">
+                                </colgroup>
+                                <tbody role="rowgroup">
+                                    <!--table 内容-->
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+            <div id="con_one_4" style="display:none;">
+                <div style="width: 100%;">
+                    <div class="k-widget k-grid" id="gridItemClass" data-role="grid">
+                        <div class="k-header k-grid-toolbar k-grid-top">
+                            <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addRefe()"><span class="k-icon k-add"></span>增加</a>
+                            <div style="float:right">
+                                <label class="single"><input type="radio" name="refe" value="add" checked />添加</label>
+                                <label class="single"><input type="radio" name="refe" value="update" />修改</label>
+                            </div>
+                        </div>
+                        <div class="k-grid-header" style="padding-right: 17px;">
+                            <div class="k-grid-header-wrap k-auto-scrollable">
+                                <table role="grid">
+                                    <colgroup>
+
+                                        <col style="width:100px">
+                                        <col style="width:100px">
+                                        <col>
+                                        <col>
+                                        <col style="width:30px">
+                                        <thead role="rowgroup">
+                                            <tr role="row">
+                                                <th class="k-header k-filterable k-with-icon" scope="col" data-role="columnsorter">营业点 </th>
+                                                <th class="k-header k-filterable k-with-icon" scope="col" data-role="columnsorter">市别 </th>
+                                                <th class="k-header k-filterable k-with-icon" scope="col" data-role="columnsorter">出品打印机 </th>
+                                                <th class="k-header k-filterable k-with-icon" scope="col" data-role="columnsorter">传菜打印机 </th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="k-grid-content" style="height:300px">
+                            <table id="table3" role="grid" data-role="selectable" class="k-selectable" aria-multiselectable="true" style="touch-action: pan-y;">
+                                <colgroup>
+
+                                    <col style="width:100px">
+                                    <col style="width:100px">
+                                    <col>
+                                    <col>
+                                    <col style="width:30px">
+                                </colgroup>
+                                <tbody role="rowgroup" style=" overflow-y scroll;">
+                                    <!--table 内容-->
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="formButtons" style="height:30px;clear:both;margin-left:62%">
+    <label class="single"><input type="radio" name="submit" value="all" checked />全部</label>
+    <label class="single"><input type="radio" name="submit" value="notall" />单页</label>
+    <input type="button" value="确定" class="k-primary k-button" id="btntest" />
+    <input type="button" value="关闭" class="k-primary k-button" id="btnClose" />
+</div>
+
+<script>
+    var Unitindex = 1;
+    var itemClassIndex = 1;
+    var refeIndex = 1;
+    $(function () {
+        $("#btntest").bind("click", function () {
+
+
+            //添加的单位的值
+            var tr = $("#table1 tr");
+            var unitVal = "";   //最后的总的值拼接
+            var trVal = "";   //每一行的值
+            var unitCkVal = $('input:radio[name="unit"]:checked').val();
+            var errMsg = "";
+            for (var i = 0; i < tr.length; i++) {
+                trVal = "";
+                var b = $(tr[i]).find(".searchable-select-items > .selected").attr("data-value");
+                var bName = $(tr[i]).find(".searchable-select-items > .selected").html();
+                var inputnum = $(tr[i]).find(".inputNum ");
+
+                //循环获取输入框的值
+                for (var j = 0; j < inputnum.length; j++) {
+                    var c = $(inputnum[j]).val();
+                    if (unitCkVal == "add" && j == 0 && c == "") {
+                        errMsg = "【" + bName + "】必须输入价格,";
+                        break;
+                    }
+                    else if (unitCkVal == "update" && j == 1) {
+                        //错误提示
+                        var d = $(inputnum[j]).val();
+                        var e = $(inputnum[j - 1]).val();
+                        if (d == "" && e == "") {
+                            errMsg = "【" + bName + "】价格或者差价必须填写一个";
+                            break;
+                        }
+                    }
+                    trVal += c + "_";
+                }
+                trVal += b + "_";
+                unitVal += trVal + "|";
+            }
+            if (errMsg != "") {
+                layer.alert(errMsg, { title: "快点云Pos提示" });
+                return false;
+            }
+
+            //其他设置
+            var otherSelects = "";
+            var td = $('.editFormTable td');
+            for (var i = 0; i < td.length; i++) {
+                if ($(td[i]).find(".Check").is(':checked') == true) {
+                    otherSelects += $(td[i]).find("input[type=checkbox]").last().attr("name");
+                    if ($(td[i]).find("input[type=checkbox]").last().is(':checked') == true) {
+                        otherSelects += ":1|";
+                    }
+                    else {
+                        otherSelects += ":0|";
+                    }
+                }
+            }
+
+
+            //项目大类数据
+            var itemClassVal = "";
+            var tr2 = $("#table2 tr");
+            for (var i = 0; i < tr2.length; i++) {
+                var select = $(tr2[i]).find(".searchable-select-items > .selected");
+
+                var tr2Val = "";
+                for (var j = 0; j < select.length; j++) {
+                    tr2Val += $(select[j]).attr("data-value") + "_";
+                }
+                itemClassVal += tr2Val + "|";
+            }
+
+            //营业点数据
+            var refeVal = "";
+            var tr3Val = "";   //每一行的值
+            var tr3 = $("#table3 tr");
+            var err = 1;    //正确
+            for (var i = 0; i < tr3.length; i++) {
+                refeVal = "";
+                trVal = "";
+
+
+                var b = $(tr3[i]).find(".searchable-select-items > .selected").attr("data-value");//营业点
+
+                var s = $(tr3[i]).find(".selectpicker").selectpicker('val');    //市别
+                if (b == "0" || s == null) {
+                    err = 0;
+                    break;
+                }
+
+                var printa = $(tr3[i]).find(".printA").selectpicker('val');//出品打印机
+                var printb = $(tr3[i]).find(".printB").selectpicker('val');//传菜打印机
+
+                tr3Val += b + "_" + s + "_" + printa + "_" + printb + "|";
+
+            }
+            if (err == 0) {
+                layer.alert("请选择营业点或者市别", { title: "快点云Pos提示" });
+                return false;
+            }
+            var model;
+            if ($('input:radio[name="submit"]:checked').val() == "all")
+            {
+                model = {
+                    itemIds: $("#selIds").val(),
+                    otherSelects: otherSelects,
+                    unitVal: unitVal,   //单位
+                    isUnitStatus: $('input:radio[name="unit"]:checked').val(),   //单位选中状态
+                    isItemClassStatus: $('input:radio[name="itemClass"]:checked').val(),
+                    itemClassVal: itemClassVal,
+                    isRefeStatus: $('input:radio[name="refe"]:checked').val(),
+                    refeVal: tr3Val
+                };
+            }
+            else {
+                $("#tab1 .menu ul li").each(function () {
+                    if ($(this).attr("class") == "off") {
+                        var selectid = $(this).attr("id");
+                        if (selectid == "one1") {
+                            
+                            model = {
+                                itemIds: $("#selIds").val(),
+                                otherSelects: otherSelects,
+                            };
+                        }
+                        else if (selectid == "one2") {
+                            model = {
+                                itemIds: $("#selIds").val(),
+                                unitVal: unitVal,   //单位
+                                isUnitStatus: $('input:radio[name="unit"]:checked').val()   //单位选中状态
+                            };
+                        }
+                        else if (selectid == "one3") {
+                            model = {
+                                itemIds: $("#selIds").val(),
+                                isItemClassStatus: $('input:radio[name="itemClass"]:checked').val(),
+                                itemClassVal: itemClassVal
+                            };
+                        }
+                        else if (selectid == "one4") {
+                            model = {
+                                itemIds: $("#selIds").val(),
+                                isRefeStatus: $('input:radio[name="refe"]:checked').val(),
+                                refeVal: tr3Val
+                            };
+                        }
+                    }
+                })
+            }
+            
+            $.ajax({
+                url: '@Url.Action("EditItemAll", "BasicDataPosItem", new { rnd = new Random().NextDouble() })',
+                type: "post",
+                data: model,
+                dataType: "json",
+                success: function (data) {
+                   
+                    if (data.Success) {
+                        layer.alert("修改成功", { title: "快点云Pos提示" });
+                    }
+
+                    else {
+                        layer.alert(data.Data, { title: "快点云Pos提示" });
+                    }
+
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        })
+        $("#btnClose").bind("click", function () {
+            closeEditFormWindow();
+        })
+    })
+    function query() {
+        $.ajax({
+            url: '@Url.Action("_QueryEditAll", "BasicDataPosItem", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: {},
+            dataType: "html",
+            success: function (data) {
+                $("#posMaskWindow").html(data);
+                $("#posMaskWindow_wnd_title").text("请选择查询条件");
+                $(".k-i-close").click(function () {
+                    closeGeneralWindow();
+                });
+                openGeneralWindow();
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+
+
+    }
+
+    //全选以及反选
+    function checkedRowAll(obj) {
+        var ids = "";
+        $("#selIds").val("");
+        var grid = $("#gridItem").data("kendoGrid");
+
+        if ($(obj).is(":checked")) {
+            grid.tbody.find(">tr:not(.k-grouping-row) input[type='checkbox']").prop("checked", true);
+
+            var dataRows = grid.items();
+            for (var i = 0; i < dataRows.length; i++) {
+                var row = grid.tbody.find(">tr:not(.k-grouping-row)").eq(i);
+                var data = grid.dataItem(dataRows[i]);
+                ids += "|" + data["Id"];
+            }
+            $("#selIds").val(ids);
+        }
+        else {
+            grid.tbody.find(">tr:not(.k-grouping-row) input[type='checkbox']").prop("checked", false);
+        }
+    }
+
+    //单选
+    function checkedRow(obj) {
+        var ids = $("#selIds").val();
+        var grid = $("#gridItem").data("kendoGrid");
+
+        if ($(obj).is(":checked")) {
+            $("#selIds").val(ids + "|" + $(obj).val());
+
+            var dataRows = grid.items();
+            for (var i = 0; i < dataRows.length; i++) {
+                var row = grid.tbody.find(">tr:not(.k-grouping-row)").eq(i);
+                var data = grid.dataItem(dataRows[i]);
+            }
+        }
+        else {
+            //  ids = "";
+            var arr = $.grep(ids.split('|'), function (value) {
+                return value !== $(obj).val();
+            });
+            dataRows = grid.items();
+            ids = "";
+            for (i = 0; i < dataRows.length; i++) {
+
+                row = grid.tbody.find(">tr:not(.k-grouping-row)").eq(i);
+                data = grid.dataItem(dataRows[i]);
+                for (var j = 0; j < arr.length; j++) {
+                    if (data["Id"] === arr[j]) {
+                        ids += "|" + data["Id"];
+                    }
+                }
+            }
+            $("#selIds").val(ids);
+        }
+    }
+
+
+    function addUnit() {
+        var html = "";
+        html += "<tr>";
+        html += "<td style='overflow:inherit'><select id='sel" + Unitindex + "'>";
+        for (var i = 0; i < unitData.length; i++) {
+            html += " <option value='" + unitData[i].Value + "'>" + unitData[i].Text + "</option>";
+        }
+        html += "</select></td>";
+        html += "<td><input type=\"number\" class=\"inputNum\" ></td>";
+        html += "<td><input type=\"number\" class=\"inputNum\" ></td>";
+        html += "<td><a href='javascript:void(0);' onclick='remove(this)'>删 除</a></td>";
+        html += "</tr>";
+
+        $("#table1").append(html);
+        $("#sel" + Unitindex).searchableSelect();
+
+        Unitindex++;
+
+
+    }
+    function remove(obj) {
+        $(obj).closest("tr").remove();
+    }
+
+    function addItemClass() {
+
+        var map = {},
+        dest = [];
+        for (var i = 0; i < itemClassData.length; i++) {
+            var ai = itemClassData[i];
+            if (!map[ai.ItemClassName]) {
+                dest.push({
+                    id: ai.ItemClassName,
+                    name: ai.ItemClassName,
+                    data: [ai]
+                });
+                map[ai.ItemClassName] = ai;
+            } else {
+                for (var j = 0; j < dest.length; j++) {
+                    var dj = dest[j];
+                    if (dj.id == ai.ItemClassName) {
+                        dj.data.push(ai);
+                        break;
+                    }
+                }
+            }
+        }
+        var html = "";
+        html += "<tr>";
+
+        html += "<td style='overflow:inherit'><select id='oldselitemClass" + itemClassIndex + "'>";
+        for (var i = 0; i < dest.length; i++) {
+            html += "<optgroup label='" + dest[i].id + "'>";
+            for (var j = 0; j < dest[i].data.length; j++) {
+                html += " <option value='" + dest[i].data[j].Id + "'>" + dest[i].data[j].Cname + "</option>";
+            }
+
+            html += "</optgroup>";
+        }
+        html += "</select></td>";
+
+        html += "<td style='overflow:inherit'><select id='selitemClass" + itemClassIndex + "'>";
+        for (var i = 0; i < dest.length; i++) {
+            html += "<optgroup label='" + dest[i].id + "'>";
+            for (var j = 0; j < dest[i].data.length; j++) {
+                html += " <option value='" + dest[i].data[j].Id + "'>" + dest[i].data[j].Cname + "</option>";
+            }
+
+            html += "</optgroup>";
+        }
+        html += "</select></td>";
+
+
+
+        html += "<td><a href='javascript:void(0);' onclick='remove(this)'>删 除</a></td>";
+        html += "</tr>";
+        $("#table2").append(html);
+        $("#selitemClass" + itemClassIndex).searchableSelect();
+        $("#oldselitemClass" + itemClassIndex).searchableSelect();
+        itemClassIndex++;
+    }
+
+    function addRefe() {
+
+        var html = "";
+        html += "<tr>";
+        html += "<td style='overflow:inherit' class='refedr' ><select id='refe" + refeIndex + "' data-live-search='true'>";
+        html += "<option value='0'  >请选择</option>";
+        for (var i = 0; i < refeData.length; i++) {
+            html += " <option value='" + refeData[i].Value + "'  >" + refeData[i].Text + "</option>";
+        }
+        html += "</select></td>";
+
+        html += "<td style='overflow:inherit'>";
+
+        html += "  <select class=\"selectpicker\" multiple >";
+
+        html += " </select>      </td>";
+
+        html += "<td style='overflow:inherit'  ><select id='printA" + refeIndex + "' multiple  class='printA' >";
+
+        for (var i = 0; i < printA.length; i++) {
+            html += " <option value='" + printA[i].Value + "'  >" + printA[i].Text + "</option>";
+        }
+        html += "</select></td>";
+
+
+        html += "<td style='overflow:inherit'  ><select id='printB" + refeIndex + "' multiple  class='printB'>";
+       // html += "<option value='0'  >请选择</option>";
+        for (var i = 0; i < printB.length; i++) {
+            html += " <option value='" + printB[i].Value + "'  >" + printB[i].Text + "</option>";
+        }
+        html += "</select></td>";
+
+        html += "<td><a href='javascript:void(0);' onclick='remove(this)'>删 除</a></td>";
+        html += "</tr>";
+        $("#table3").append(html);
+
+        //$(".selectpicker").selectpicker({
+        //    noneSelectedText: '请选择',
+        //    countSelectedText: function () { }
+        //});
+        $("#refe" + refeIndex).searchableSelect();
+        $("#printA" + refeIndex).selectpicker({
+            noneSelectedText: '请选择',
+            countSelectedText: function () { }
+        });
+        $("#printB" + refeIndex).selectpicker({
+            noneSelectedText: '请选择',
+            countSelectedText: function () { }
+        });
+        refeIndex++;
+    }
+</script>

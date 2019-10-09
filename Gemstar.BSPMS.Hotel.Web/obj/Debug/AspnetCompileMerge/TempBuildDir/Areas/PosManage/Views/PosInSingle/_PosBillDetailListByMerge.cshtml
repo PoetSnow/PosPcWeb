@@ -1,0 +1,290 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EnumsPos;
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosInSingle.ChangeTableModel
+<script type="text/javascript">
+    //选择行
+    function selDetailRowByMerge() {
+        var grid = $("#gridSelectByMerge").data("kendoGrid");
+        var dataRows = grid.items();
+        for (var i = 0; i < dataRows.length; i++) {
+            var row = grid.tbody.find(">tr:not(.k-grouping-row)").eq(i);
+            var dataRow = grid.dataItem(dataRows[i]);
+            //如果是套餐明细 不能进行转菜操作
+            if (dataRow["SP"] == false && dataRow["SD"] == true) {
+                row.find("input").attr('disabled', "disabled");
+                row.find("input").css('display', "none");
+
+            }
+            if (dataRow["Status"] == "4" || dataRow["Status"] > 50) {
+                row.find("input").attr('disabled', "disabled");
+                row.find("input").css('display', "none");
+            }
+            row.removeClass();
+            //根据状态修改背景色
+            if (Number(dataRow["Status"]) === 0) {
+                row.addClass("normal-state");
+            }
+            else if (Number(dataRow["Status"]) === 1) {
+                row.addClass("case-state");
+            }
+            else if (Number(dataRow["Status"]) === 2) {
+                row.addClass("give-state");
+            }
+            else if (Number(dataRow["Status"]) === 4) {
+                row.addClass("neworder-state");
+            }
+            else if (Number(dataRow["Status"]) === 51 || Number(dataRow["Status"]) === 52) {
+                row.addClass("cancel-state");
+            }
+            //是否套餐明细
+            if (dataRow["SD"] == true) {
+                row.removeClass();
+                row.addClass("package-state");
+            }
+
+        }
+    }
+    function checkedRowAllByMerge(obj) {
+        var grid = $("#gridSelectByMerge").data("kendoGrid");
+
+        if ($(obj).is(":checked")) {
+            grid.tbody.find(">tr:not(.k-grouping-row) input[type='checkbox']").prop("checked", true);
+
+            var dataRows = grid.items();
+            for (var i = 0; i < dataRows.length; i++) {
+                var row = grid.tbody.find(">tr:not(.k-grouping-row)").eq(i);
+                var data = grid.dataItem(dataRows[i]);
+
+            }
+        }
+        else {
+            grid.tbody.find(">tr:not(.k-grouping-row) input[type='checkbox']").prop("checked", false);
+        }
+    }
+
+    function checkedRowByMerge() { }
+</script>
+@{
+    var oldModel = ViewBag.oldModel as up_pos_list_billByBillidResult;
+    <div style="width:50%;float:left;color:black">
+        <table class="billDetail">
+            <thead>
+                <tr>
+                    <td colspan="2">原餐台资料</td>
+                </tr>
+            </thead>
+            <tr class="txtLable">
+                <td class="textright">@Html.LabelFor(m => m.newRefeName)：</td>
+                <td><span>@oldModel.refeName</span></td>
+            </tr>
+            <tr class="txtLable">
+                <td class="textright">@Html.LabelFor(m => m.newTabName)：</td>
+                <td><span>@oldModel.tabName</span></td>
+            </tr>
+            <tr class="txtLable">
+                <td class="textright">@Html.LabelFor(m => m.newServiceRate)：</td>
+                <td><span>@oldModel.ServiceRate</span></td>
+            </tr>
+            <tr class="txtLable">
+                <td class="textright">@Html.LabelFor(m => m.newLimit)：</td>
+                <td><span>@oldModel.Limit</span></td>
+            </tr>
+        </table>
+    </div>
+    <div style="color:black">
+        <table class="billDetail">
+            <thead>
+                <tr>
+                    <td colspan="2">新餐台资料</td>
+                </tr>
+            </thead>
+            <tr class="txtLable">
+                <td class="textright">@Html.LabelFor(m => m.newRefeName)：</td>
+                <td><span>@oldModel.refeName</span></td>
+            </tr>
+            <tr class="txtLable">
+                <td class="textright">@Html.LabelFor(m => m.newTabName)：</td>
+                <td>@Model.newTabName</td>
+                <td></td>
+            </tr>
+            <tr class="txtLable">
+                <td class="textright">@Html.LabelFor(m => m.newServiceRate)：</td>
+                <td>@Model.newServiceRate</td>
+                <td></td>
+            </tr>
+            <tr class="txtLable">
+                <td class="textright">@Html.LabelFor(m => m.newLimit)：</td>
+                <td>@Model.newLimit</td>
+                <td></td>
+            </tr>
+            @if (string.IsNullOrEmpty(Model.newBillId))
+            {
+                <tr>
+                    <td class="textright">服务费消费政策：</td>
+                    <td style="width:60%">@Html.Kendo().DropDownListFor(e => e.ServiceRateFlag).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListTabFlag", "PosInSingle", new { rnd = new Random().NextDouble() })).ServerFiltering(true); })</td>
+                </tr>
+                <tr>
+                    <td class="textright">开台项目：</td>
+                    <td style="width:60%">@Html.Kendo().DropDownListFor(e => e.ItemFlag).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListTabFlag", "PosInSingle", new { rnd = new Random().NextDouble() })).ServerFiltering(true); })</td>
+                </tr>
+            }
+            else
+            {
+                <tr style="display:none">
+                    <td class="textright">服务费消费政策：</td>
+                    <td style="width:60%">@Html.Kendo().DropDownListFor(e => e.ServiceRateFlag).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListTabFlag", "PosInSingle", new { rnd = new Random().NextDouble() })).ServerFiltering(true); })</td>
+                </tr>
+                <tr style="display:none">
+                    <td class="textright">开台项目：</td>
+                    <td style="width:60%">@Html.Kendo().DropDownListFor(e => e.ItemFlag).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListTabFlag", "PosInSingle", new { rnd = new Random().NextDouble() })).ServerFiltering(true); })</td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div>
+        @(Html.Kendo().Grid<up_pos_list_BillDetailByBillidResult>()
+    .Name("gridSelectByMerge")
+    .Columns(columns =>
+    {
+        columns.Bound(m => m.Id).Hidden();
+        columns.Bound(m => m.Itemid).Hidden();
+        columns.Bound(m => m.Unitid).Hidden();
+        columns.Bound(m => m.SP).Hidden();
+        columns.Bound(m => m.SD).Hidden();
+        columns.Bound(m => m.Status).Hidden();
+        columns.Bound(m => m.Id).HeaderTemplate("<input type='checkbox' value='#: Id #' onclick='checkedRowAllByMerge(this)' />")
+            .ClientTemplate("<input type='checkbox' value='#: Id #' />").Width(30);
+        columns.Bound(m => m.Row).Title("行").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(40);
+        columns.Bound(m => m.ItemName).Title("名称").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(150);
+        columns.Bound(m => m.Quantity).Title("数量").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+        columns.Bound(m => m.UnitName).Title("单位").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+        columns.Bound(m => m.Price).Title("价格").HtmlAttributes(new { @style = "white-space: nowrap;" });
+        columns.Bound(m => m.Request).Title("转菜数量").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(150)
+          .ClientTemplate("<input type='textbox' class='k-textbox' style='width:120px' />");
+    })
+    .HtmlAttributes(new { style = "height:calc(100% - 6rem);" })
+  .Selectable(s => s.Mode(GridSelectionMode.Single))
+    .Scrollable()
+
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("ListUpBillDetailByBillid", "PosInSingle", new { billid = Model.oldBillId }))
+    )
+    .Events(e => e.DataBound("selDetailRowByMerge"))
+        )
+    </div>
+}
+
+<div class="formButtons">
+    <input type="button" value="确定" onclick="changeItemByMerge()" />
+    <input type="button" value="关闭" onclick="layer.closeAll()" />
+</div>
+
+<script type="text/javascript">
+    function changeItemByMerge() {
+
+        var selectCount = 0;//选中的数量
+        var json = [];
+
+        var grid = $("#gridSelectByMerge").data("kendoGrid");
+        var dataRows = grid.items();
+        var errorMsg = "";
+        for (var i = 0; i < dataRows.length; i++) {
+            var row = grid.tbody.find(">tr:not(.k-grouping-row)").eq(i);
+            var dataRow = grid.dataItem(dataRows[i]);
+
+            var ck = row.find("input[type=checkbox]");
+
+            if (ck.is(":checked") && ck.attr("disabled") != "disabled") {
+                selectCount++;
+                var inputNum = row.find("input[type=textbox]");
+                //var reNum = /^\d*$/;
+                if (isNaN(inputNum.val())) {
+                    errorMsg += dataRow["ItemName"] + "转菜数量输入不合法；";
+                } else {
+                    if (Number(inputNum.val()) > Number(dataRow["Quantity"])) {
+                        errorMsg += dataRow["ItemName"] + "转菜数量不能大于原数量；";
+                    }
+
+                    if (dataRow["SP"] == true && dataRow["SD"] == false) {
+                        //套餐
+                        if (inputNum.val() != "") {
+                            var re = /^[1-9]+[0-9]*]*$/;
+                            if (!re.test(inputNum.val())) {
+                                errorMsg += dataRow["ItemName"] + "转菜数量不能为小数；";
+                            }
+                        }
+
+                    }
+                }
+                var item = {
+                    id: ck.val(),
+                    num: inputNum.val()
+                };
+                json.push(item);
+            }
+        }
+        if (errorMsg != "") {
+
+            layer.alert(errorMsg, { title: "快点云Pos提示" });
+            return false;
+        }
+        if (parseInt(selectCount) <= 0) {
+            layer.alert("请选择需要转的消费项目", { title: "快点云Pos提示" });
+            return false;
+        }
+        var computerName = "";
+        if ("undefined" != typeof jsObject) {
+            computerName = jsObject.ComputerName;
+        }
+        var a = JSON.stringify(json);
+        var model = {
+            oldBillId: '@Model.oldBillId',
+            newTabId: '@Model.newTabId',
+            newRefeId: '@Model.newRefeId',
+            newBillId: '@Model.newBillId',
+            newServiceRate: '@Model.newServiceRate',
+            newLimit: '@Model.newLimit',
+            ServiceRateFlag: $("#ServiceRateFlag").val(),
+            ItemFlag: $("#ItemFlag").val(),
+            ChangeItemJson: a,
+            ComputerName: computerName
+
+        };
+        $.ajax({
+            url: '@Url.Action("ChangeItemByMerge", "PosInSingle")',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    $("#grid").data("kendoGrid").dataSource.read();
+                    getStatistics(1);
+                    if ("undefined" != typeof jsObject) {   //封装程序
+                        if (data.Data.length > 0 && data.Data != "") {
+                            jsObject.UserName = $("#userName").val();
+                            jsObject.PrintReportByChangeItem("转菜通知单", "ChangeItemTable", data.Data, false, false);
+                        }
+                    }
+                    layer.confirm("转菜成功", {
+                        btn: ['确定', '取消'], //按钮
+                        title: '快点云Pos提示',
+                        shade: 'rgba(0,0,0,0)'
+                    }, function () {
+                        layer.closeAll();
+
+                    }, function () {
+                        layer.closeAll();
+                    });
+                }
+                else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+</script>

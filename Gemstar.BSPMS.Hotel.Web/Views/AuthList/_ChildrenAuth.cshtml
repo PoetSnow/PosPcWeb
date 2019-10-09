@@ -1,0 +1,13 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.Entities.AuthList>
+@{
+    foreach (var auth in Model)
+    {
+        var url = Url.Action(auth.Action, auth.Controller, new { area = auth.Area,id=auth.AuthCode });
+        if (auth.Action == "LookSignature")
+        {
+            var code = auth.AuthCode.Split('|');
+            url = Url.Action(auth.Action, auth.Controller, new { area = auth.Area, id = code[0], code = code[1] });
+        }
+        <a class="secondLevelAuth tab-switch" data-authurl="@url" href="javascript:selectAuth('@url','@auth.AuthName','@auth.AuthCode');">@auth.AuthName</a>
+    }
+}

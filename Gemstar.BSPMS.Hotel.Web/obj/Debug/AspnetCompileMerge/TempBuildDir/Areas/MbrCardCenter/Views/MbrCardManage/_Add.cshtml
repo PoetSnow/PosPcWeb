@@ -1,0 +1,296 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MbrCardCenter.Models.MbrCardManage.MbrCardAddViewModel
+@using (Html.BeginForm())
+{
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.MbrCardNo)</td>
+            <td>@Html.TextBoxFor(m => m.MbrCardNo, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.MbrCardNo, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.MbrCardTypeId)</td>
+            <td>@Html.Kendo().DropDownListFor(m => m.MbrCardTypeId).BindTo(ViewBag.MbrCardTypeSelectList as SelectList).HtmlAttributes(new { style = "width:89%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.MbrCardTypeId, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Sales)</td>
+            <td>
+                @*<script>function onAdditionalData() { return { nameOrMobile: $("#Sales").val() }; }</script>
+                    @Html.Kendo().AutoCompleteFor(m => m.Sales).DataSource(e => e.Read(r => { r.Action("GetSalesSelectList", "MbrCardManage", new { rnd = new Random().NextDouble() }).Data("onAdditionalData"); }).ServerFiltering(true)).HtmlAttributes(new { style = "width:100%;" })*@
+                @Html.Kendo().DropDownListFor(e => e.Sales).HtmlAttributes(new { style = " width:100%;" }).OptionLabel("--请选择--").DataTextField("Text").DataValueField("Value").Value(ViewBag.Username as string).DataSource(e => e.Read(r => { r.Action("GetSalesnameSelectLists", "MbrCardManage", new { rnd = new Random().NextDouble() }); }))
+            </td>
+            <td><span class="red-color">*</span></td>
+
+            <td class="textright">@Html.LabelFor(m => m.InductionCar)</td>
+            <td>
+                @Html.TextBoxFor(m => m.InductionCar, new { @class = "k-textbox", style = "width:89%;" })
+                <img class="res-icon-img" src="~/images/auth/mk.png" title="读卡" id="scanIdButton"><input type="hidden" id="MbrCardScan" value="mbrCard" />
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.InductionCar, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Mobile)</td>
+            <td>@Html.TextBoxFor(m => m.Mobile, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@*<span class="red-color">*</span>*@</td>
+
+            <td class="textright">@Html.LabelFor(m => m.CerType)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(m => m.CerType).BindTo(ViewBag.CerTypeSelectList as SelectList).HtmlAttributes(new { style = "width:89%;" })
+                <img class="res-icon-img" src="/images/saomiao.png" title="扫描" id="mbrScanIdButton"><input type="hidden" id="certificatesScan" value="mbrIDFunc" />
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.CerType, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.GuestName)</td>
+            <td>@Html.TextBoxFor(m => m.GuestName, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td><span class="red-color">*</span></td>
+
+            <td class="textright">@Html.LabelFor(m => m.CerId)</td>
+            <td>@Html.TextBoxFor(m => m.CerId, new { @class = "k-textbox", style = "width:89%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.CerId, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Gender)</td>
+            <td>@Html.Kendo().DropDownListFor(m => m.Gender).BindTo(ViewBag.GenderSelectList as List<SelectListItem>).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Gender, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.City)</td>
+            <td>@Html.TextBoxFor(m => m.City, new { @class = "k-textbox", style = "width:89%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.City, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.BirthDay)</td>
+            <td>@Html.Kendo().DatePickerFor(m => m.BirthDay).HtmlAttributes(new { style = " width:100%" })</td>
+            <td>@Html.ValidationMessageFor(m => m.BirthDay, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.Address)</td>
+            <td>@Html.TextBoxFor(m => m.Address, new { @class = "k-textbox", style = "width:89%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Address, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.QQ)</td>
+            <td>@Html.TextBoxFor(m => m.QQ, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.QQ, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.WeiXin)</td>
+            <td>@Html.TextBoxFor(m => m.WeiXin, new { @class = "k-textbox", style = "width:89%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.WeiXin, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Email)</td>
+            <td>@Html.TextBoxFor(m => m.Email, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Email, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.CarNo)</td>
+            <td>@Html.TextBoxFor(m => m.CarNo, new { @class = "k-textbox", style = "width:89%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.CarNo, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Interest)</td>
+            <td colspan="4">@Html.TextAreaFor(m => m.Interest, new { @class = "k-textbox", style = "width:95.5%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Interest, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td colspan="4">@Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:95.5%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.IsAdvertisementMsg)</td>
+            <td>@Html.CheckBoxFor(m => m.IsAdvertisementMsg)</td>
+            <td>@Html.ValidationMessageFor(m => m.IsAdvertisementMsg, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.ValidDate)</td>
+            <td>
+                @(Html.Kendo().DatePickerFor(m => m.ValidDate).HtmlAttributes(new { style = " width:89%;" }))
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.ValidDate, "*")@Html.ValidationMessageFor(m => m.ValidDate, "*")</td>
+
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.IsTransactionMsg)</td>
+            <td style="line-height:32px;">@Html.CheckBoxFor(m => m.IsTransactionMsg)</td>
+            <td>@Html.ValidationMessageFor(m => m.IsTransactionMsg, "*")</td>
+
+
+
+            <td class="textright">是否立即充值</td>
+            <td colspan="1" style="line-height:32px;"><input type="checkbox" name="IsRecharge" /></td>
+            <td>@Html.TextBoxFor(m => m.IsNeedPhone, new { type = "hidden", id = "isNeedPhone" })</td>
+        </tr>
+        @if (ViewBag.isallowOwner)
+        {
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.IsOwner)</td>
+                <td style="line-height:32px;">@Html.CheckBoxFor(m => m.IsOwner)</td>
+                <td>@Html.ValidationMessageFor(m => m.IsOwner, "*")</td>
+            </tr>
+        }
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+
+}
+
+<script type="text/javascript">
+    $(function () {
+        ValidDateChange($("#MbrCardTypeId").val());
+        $("#MbrCardTypeId").change(function () {
+            var act = "" + $("#MbrCardTypeId").val();
+            ValidDateChange(act);
+        });
+        $.validator.unobtrusive.parse(document);
+        //保存
+        $("#saveEditFormButton").click(function (e) {
+            $(".validation-summary-errors ul").html("<li style='display:none'></li>");//清除提示信息
+            var isRecharge = $("[name=IsRecharge]").prop("checked");
+            var mbrNo = $("#MbrCardNo").val();
+            if (mbrNo == "" || mbrNo == undefined)
+                mbrNo = $("#Mobile").val();
+            //if (mbrNo == "" || mbrNo == undefined)
+            //{ jAlert("会员卡号和手机号至少填写一个"); return; }
+
+            e.preventDefault();
+            if ($("#Mobile").val().trim() == "" && $("#isNeedPhone").val().trim() == "1")
+                jConfirm("手机号未输入是否保存？", "是", "否", function (flag) {
+                    if (flag) {
+                        postData(isRecharge, mbrNo);
+                    } else $("#isNeedPhone").val("0");
+                });
+            else postData(isRecharge, mbrNo);
+        });
+        //提交数据
+        function postData(isRecharge, mbrNo) {
+            var btn = $("#saveEditFormButton");
+            var f = $(btn)[0].form;
+            var validator = $(f).validate();
+            if (validator.form()) {
+                $.post(
+                    $(f).attr("action"),
+                    $(f).serialize(),
+                    function (data) {
+                        if (data.Success) {
+                            if (data.Data == "1") {
+                                $("#isNeedPhone").val("1");
+                                $("#saveEditFormButton").click();
+                            }
+                            else {
+                                closeEditFormWindow();
+                                //检查是否要收取卡费
+                                if (data.Data.CardFeeAmount > 0) {
+                                    //如果要收取卡费，则先收取卡费，并且将是否充值的标志位传到卡费收取界面，收取成功后，再判断是否充值
+                                    top.openKendoWindow("会员卡费收取", '@Url.Action("CardFee")', { id: data.Data.ProfileId, amount: data.Data.CardFeeAmount, isRecharge: isRecharge?1:0 });
+                                } else {
+                                    //如果不收取卡费，则判断是否需要充值
+                                    $(document).find("iframe")[0].contentWindow.refreshGrid();
+                                    if (isRecharge) {
+                                        top.openKendoWindow("会员充值", '@Url.Action("Recharge")', { id: data.Data.ProfileId });
+                                    }
+                                }
+                            }
+                            closeSecondEditFormWindow();
+                        } else {
+                            //jAlert(data.Data);
+                            ajaxErrorHandle(data);
+                        }
+                    },
+                    "json");
+            }
+            else {
+                if ($(f).find("#Sales").val() == "")
+                    $(".validation-summary-errors ul").append("<li>请选择业务员</li>");
+                if ($(f).find("#MbrCardNo").val().trim() == "" && $(f).find("#Mobile").val().trim() == "")
+                    $(".validation-summary-errors ul").append("<li>会员卡号和手机号至少填一个</li>");
+                //jAlert($(f).find("#Sales").val());
+            }
+            //saveSecondFormData($("#saveEditFormButton"), function () {
+            @*closeEditFormWindow();
+                $(document).find("iframe")[0].contentWindow.refreshGrid();
+                //用会员卡号得到会员id
+                if (isRecharge) {
+                    $.post('@Url.Action("GetMbrCardId")', { mbrNo: mbrNo }, function (data) {
+                        if (data.Success) {
+                            top.openKendoWindow("会员充值", '@Url.Action("Recharge")', { id: data.Data });
+                        }
+                        else {
+                            ajaxErrorHandle(data);
+                        }
+                    }, 'json')
+                }*@
+            //});
+        }
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        //证件号改变事件
+        $("#CerId").change(function () {
+            var cerType = $("#CerType").data("kendoDropDownList").text();
+            if (cerType == "居民身份证") {
+                var cerId = $("#CerId").val();
+                getCity(cerId, $("#City"));
+                $("#BirthDay").data("kendoDatePicker").value(getBirthDay(cerId));
+                $("#Gender").data("kendoDropDownList").value(getGender(cerId));
+            }
+        });
+        //证件扫描
+        $("#mbrScanIdButton").click(function (e) { scanIdButton_clicked(e); });
+        //会员卡扫描
+        $("#scanIdButton").click(function (e) { MbrCardButton_clicked(e); });
+        
+    });
+    //证件类型改变事件
+
+    //‘有效期至’同步为证件类型对应的有效期月份
+    function ValidDateChange(act) {
+        $.post('@Url.Action("GetValidDate")', { id: act }, function (data) {
+            if (data.Success) {
+                var daycount = data.Data;
+                if (daycount > 0) {
+                    var now = new Date();
+                    var year = now.getFullYear();
+                    var month = parseInt(now.getMonth()) + parseInt(daycount) + 1;
+                    if (month > 12) {
+                        var mt = month / 12;
+                        year = year + parseInt(mt);
+                        month = parseInt(month % 12);
+                    }
+                    $("#ValidDate").val(year + "/" + month + "/" + now.getDate())
+                } else {
+                    var now = new Date();
+                    var year = now.getFullYear();
+                    $("#ValidDate").val(year + "/" + parseInt(parseInt(now.getMonth()) + 1) + "/" + now.getDate())
+                }
+            }
+            else {
+                ajaxErrorHandle(data);
+            }
+        }, 'json')
+    }
+    //ajax方法
+    function jsonajax(urls) {
+        var events = {};
+        var Rand = Math.random();
+        $.ajax({
+            url: urls + "&rand=" + Rand,
+            success: function (data) {
+                events = data;
+            },
+            async: false
+        });
+        return events;
+    }
+</script>
+<script type="text/javascript">
+    var CustomerCommonValues = {
+        idType: '@ViewBag.idType',
+        idCode: '@ViewBag.idCode',
+        idEditionName: '@ViewBag.idEditionName',
+        mbrType: '@ViewBag.mbrType',
+        mbrCode: '@ViewBag.mbrCode',
+        mbrEditionName: '@ViewBag.mbrEditionName',
+    };
+</script>
+<script type="text/javascript" src="~/Scripts/idCard.js"></script>

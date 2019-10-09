@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "更换业务员";
+}
+<div style="text-align:center;width:90%;margin-left:auto;margin-right:auto;">
+    <table class="editFormTable" style="width:100%;">
+       
+        <tr>
+            <td class="textright" style="width:75px;">新业务员：</td>
+            <td>
+                @Html.Kendo().DropDownList().Name("Sales").HtmlAttributes(new { style = " width:100%; text-align: left;" }).DataTextField("Text").DataValueField("Value").DataSource(e => e.Read(r => { r.Action("GetSalesnameSelectLists", "CompanyManage", new { rnd = new Random().NextDouble() }); }))
+            </td>
+            <td></td>
+        </tr>        
+        <tr>
+            <td></td>
+            <td>
+                <button class="k-primary k-button" id="save" role="button" onclick="aa()" data-role="button">保存</button>&nbsp;&nbsp;
+                <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<input type="text" value="@ViewBag.ids" style="display:none" id="idstr" />
+<script type="text/javascript">
+    $(function () {
+        $("#commonKendoWindow").parent().css("width", "600px");
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+
+        });
+    });
+    function aa() {
+        var saleman = $("#Sales").val();
+        var ids = $("#idstr").val();
+        if (!saleman) {
+            jAlert("请指定新业务员");
+            return;
+        }
+        $.post("@Url.Action("UpdateSalees")", { id: ids, sales: saleman}, function (data) {
+            if (data.Success) {
+                jAlert("更换成功！");
+                var iframe = top.getContentIfrmae();
+                if (iframe.contentWindow.refreshGrid) {
+                    iframe.contentWindow.refreshGrid();
+                }
+                closeEditFormWindow();
+            } else {
+                //jAlert("修改失败！");
+                ajaxErrorHandle(data);
+            }
+        }, 'json');
+    }
+</script>

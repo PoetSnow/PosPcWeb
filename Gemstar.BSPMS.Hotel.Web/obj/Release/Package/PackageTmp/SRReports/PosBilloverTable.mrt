@@ -1,0 +1,889 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StiSerializer version="1.02" type="Net" application="StiReport">
+  <Dictionary Ref="1" type="Dictionary" isKey="true">
+    <BusinessObjects isList="true" count="0" />
+    <Databases isList="true" count="1">
+      <pos Ref="2" type="Stimulsoft.Report.Dictionary.StiSqlDatabase" isKey="true">
+        <Alias>pos</Alias>
+        <ConnectionStringEncrypted>1HD168ZoMZzjaaXcaoQkTtFS2StOXMOJYUWl3GIN40vkbGWD50DzyOJB/eBhhGhO1cJzwsUFMZnCE13g5ARlbsJsT8vEXbvtQxD18WENoC/RYFPPxExpmWFJGYDqJbduxXjJKU8FsqTCFb306kwpP8PuyyvNTTFN6UQh7OsYsWvcavWIxU8=</ConnectionStringEncrypted>
+        <Name>pos</Name>
+      </pos>
+    </Databases>
+    <DataSources isList="true" count="1">
+      <up_pos_rpt_overTable Ref="3" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
+        <Alias>up_pos_rpt_overTable</Alias>
+        <Columns isList="true" count="14">
+          <value>营业点ID,System.String</value>
+          <value>营业点名称,System.String</value>
+          <value>餐台ID,System.String</value>
+          <value>餐台编号,System.String</value>
+          <value>餐台名称,System.String</value>
+          <value>人数,System.Int32</value>
+          <value>次数,System.Int32</value>
+          <value>付款金额,System.Decimal</value>
+          <value>台均金额,System.Decimal</value>
+          <value>台均人数,System.Int32</value>
+          <value>人均消费,System.Decimal</value>
+          <value>就坐时间,System.Int32</value>
+          <value>平均就坐时间,System.Decimal</value>
+          <value>可容人数,System.Int32</value>
+        </Columns>
+        <CommandTimeout>30</CommandTimeout>
+        <Dictionary isRef="1" />
+        <IsCloud>False</IsCloud>
+        <Name>up_pos_rpt_overTable</Name>
+        <NameInSource>pos</NameInSource>
+        <Parameters isList="true" count="0" />
+        <SqlCommand>exec up_pos_rpt_overTable
+	@h99hid ='000388'
+	,@d11_统计方式='2'
+	,@p0101_开始营业日 ='2018-8-31'
+	,@p0101_结束营业日  ='2018-8-31'	
+</SqlCommand>
+      </up_pos_rpt_overTable>
+    </DataSources>
+    <Relations isList="true" count="0" />
+    <Report isRef="0" />
+    <Variables isList="true" count="10">
+      <value>,QueryCondition,查询条件,System.String,,False,False</value>
+      <value>,HotelId,HotelId,System.String,_x0030_00629,False,False</value>
+      <value>,HotelName,HotelName,System.String,云POS酒店,False,False</value>
+      <value>,UserCode,UserCode,System.String,admin,False,False</value>
+      <value>,UserName,UserName,System.String,系统管理员,False,False</value>
+      <value>,LogoUrl,LogoUrl,System.Object,,False,False</value>
+      <value>,WeiXinQRCodeUrl,WeiXinQRCodeUrl,System.String,,False,False</value>
+      <value>,ReportCode,ReportCode,System.String,pms203,False,False</value>
+      <value>,HotelPhone,HotelPhone,System.String,_x0031_3725559082,False,False</value>
+      <value>,HotelAddress,HotelAddress,System.String,,False,False</value>
+    </Variables>
+  </Dictionary>
+  <EngineVersion>EngineV2</EngineVersion>
+  <GlobalizationStrings isList="true" count="0" />
+  <MetaTags isList="true" count="0" />
+  <Pages isList="true" count="1">
+    <Page1 Ref="4" type="Page" isKey="true">
+      <Border>None;Black;2;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <Components isList="true" count="6">
+        <PageHeaderBand1 Ref="5" type="PageHeaderBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,0.4,25,2.8</ClientRectangle>
+          <Components isList="true" count="7">
+            <rptTitle Ref="6" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>8.4,0.8,6.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,14,Bold</Font>
+              <Guid>e5ea2ace4897408e9c223194da47a457</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>rptTitle</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{ReportName}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>SystemVariables</Type>
+              <VertAlignment>Center</VertAlignment>
+            </rptTitle>
+            <Text1 Ref="7" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0,2.2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,12</Font>
+              <Guid>76ef4f3cb5594416845792a0a1c456b9</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text1</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{ReportCode}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text1>
+            <Text49 Ref="8" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>5.6,0,11.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,12</Font>
+              <Guid>241634655bbf47e3a18ebe630e4acc7c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text49</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{HotelName}</Text>
+              <TextBrush>Black</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Text49>
+            <Text50 Ref="9" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0.8,3.8,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>f82fb9ca35014cb6a251b29dc59f1e8c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text50</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>打印人：{UserName}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text50>
+            <Text51 Ref="10" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>0,1.8,25,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>8adb30ed1dc64aa8a51869195c20ccbd</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text51</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{QueryCondition}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <VertAlignment>Center</VertAlignment>
+            </Text51>
+            <Text3 Ref="11" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>21.8,0,3.2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>d53815e7369a421ea5e40c98cd23558c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text3</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{PageNofM}</Text>
+              <TextBrush>Black</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Text3>
+            <Text52 Ref="12" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>20,0.8,5,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>7b076d24d456430d968920a1b7690b1c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text52</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>打印时间：{Format("{0:yyyy-MM-dd HH:mm}", Time)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text52>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Guid>7be5f959a97e4e8ebf559560ae5ec25b</Guid>
+          <Name>PageHeaderBand1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </PageHeaderBand1>
+        <GroupHeaderBand1 Ref="13" type="GroupHeaderBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,4,25,0.8</ClientRectangle>
+          <Components isList="true" count="1">
+            <Text5 Ref="14" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0,3.6,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>88db5ac8a3014e9893e37af954d451cb</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text5</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Text>{up_pos_rpt_overTable.营业点名称}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text5>
+          </Components>
+          <Condition>{up_pos_rpt_overTable.营业点ID}</Condition>
+          <Conditions isList="true" count="0" />
+          <Name>GroupHeaderBand1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </GroupHeaderBand1>
+        <HeaderBand1 Ref="15" type="HeaderBand" isKey="true">
+          <Border>Top, Bottom;Black;2;Solid;False;4;Black</Border>
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,5.6,25,0.6</ClientRectangle>
+          <Components isList="true" count="14">
+            <Text9 Ref="16" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2.4,0,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>3deb7858752c4e72a071871ad4ebbb4c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text9</Name>
+              <Page isRef="4" />
+              <Parent isRef="15" />
+              <Text>台号</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text9>
+            <Text14 Ref="17" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6,0,1.6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>c6be8f9f32474c46b5bc5d3f148f502b</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text14</Name>
+              <Page isRef="4" />
+              <Parent isRef="15" />
+              <Text>就座人数</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text14>
+            <Text15 Ref="18" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4.4,0,1.6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>b7f6f4e3d6374b679eb7457ec1bdd7c5</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text15</Name>
+              <Page isRef="4" />
+              <Parent isRef="15" />
+              <Text>可容人数</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text15>
+            <Text6 Ref="19" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0,2.4,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>ac6b134f8d8f4765b659f3d5fc232019</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text6</Name>
+              <Page isRef="4" />
+              <Parent isRef="15" />
+              <Text>营业点名称</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text6>
+            <Text2 Ref="20" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>7.6,0,1.8,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>a33eb2843357443cb07fd54f6ea1984c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text2</Name>
+              <Page isRef="4" />
+              <Parent isRef="15" />
+              <Text>就座总时间</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text2>
+            <Text7 Ref="21" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>9.4,0,2.2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>35e09560af1943eaa27b401a3098e997</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text7</Name>
+              <Page isRef="4" />
+              <Parent isRef="15" />
+              <Text>平均就座时间</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text7>
+            <Text8 Ref="22" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>11.6,0,1.4,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>062e916aafc24b59843aed55d7097f5a</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text8</Name>
+              <Page isRef="4" />
+              <Parent isRef="15" />
+              <Text>翻台次数</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text8>
+            <Text10 Ref="23" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>13,0,1.6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>5194fe2e473347b4bfb60142787d70df</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text10</Name>
+              <Page isRef="4" />
+              <Parent isRef="15" />
+              <Text>付款金额</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text10>
+            <Text11 Ref="24" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>14.6,0,1.6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>7a3ddb474ee749ddbc3bd1fc36b5dce1</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text11</Name>
+              <Page isRef="4" />
+              <Parent isRef="15" />
+              <Text>台均人数</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text11>
+            <Text12 Ref="25" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>16.2,0,1.8,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>68769b14e9114d7ebea7d36b3b868940</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text12</Name>
+              <Page isRef="4" />
+              <Parent isRef="15" />
+              <Text>台均金额</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text12>
+            <Text13 Ref="26" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>18,0,1.6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>8bb112d0153e45f394da468f15327be9</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text13</Name>
+              <Page isRef="4" />
+              <Parent isRef="15" />
+              <Text>人均消费</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text13>
+            <Text25 Ref="27" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>19.6,0,1.8,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>32cd14933e2547f6b1e2b9681f9eb0f2</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text25</Name>
+              <Page isRef="4" />
+              <Parent isRef="15" />
+              <Text>人数(%)</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text25>
+            <Text26 Ref="28" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>21.4,0,1.6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>4f6d2a478e7449ccb7b8f4e3a2514ef2</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text26</Name>
+              <Page isRef="4" />
+              <Parent isRef="15" />
+              <Text>次数(%)</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text26>
+            <Text27 Ref="29" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>23,0,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>974d4d56492b465bba293d85661f311c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text27</Name>
+              <Page isRef="4" />
+              <Parent isRef="15" />
+              <Text>金额(%)</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text27>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Guid>3e4fc25c8a4c41e9883249ae305246cc</Guid>
+          <Name>HeaderBand1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </HeaderBand1>
+        <DataBand1 Ref="30" type="DataBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <BusinessObjectGuid isNull="true" />
+          <ClientRectangle>0,7,25,1</ClientRectangle>
+          <Components isList="true" count="13">
+            <Text17 Ref="31" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2.4,0,2,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>1bbad488bb7148ee95e04866bbfadf53</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text17</Name>
+              <Page isRef="4" />
+              <Parent isRef="30" />
+              <Text>{up_pos_rpt_overTable.餐台名称}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text17>
+            <Text4 Ref="32" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4.4,0,1.6,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>1dd82d491c3040b3bc2fcca54ab856e0</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text4</Name>
+              <Page isRef="4" />
+              <Parent isRef="30" />
+              <Text>{up_pos_rpt_overTable.可容人数}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text4>
+            <Text16 Ref="33" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6,0,1.6,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>21bc641d48054390bdfa8adb2b071a8e</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text16</Name>
+              <Page isRef="4" />
+              <Parent isRef="30" />
+              <Text>{up_pos_rpt_overTable.人数}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text16>
+            <Text18 Ref="34" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>7.6,0,1.8,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>66e030710a94440a827c3d9b1ced08bf</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text18</Name>
+              <Page isRef="4" />
+              <Parent isRef="30" />
+              <Text>{up_pos_rpt_overTable.就坐时间}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text18>
+            <Text19 Ref="35" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>9.4,0,2.2,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>d627381674d54d3eac5709a36d8d3b31</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text19</Name>
+              <Page isRef="4" />
+              <Parent isRef="30" />
+              <Text>{up_pos_rpt_overTable.平均就坐时间}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text19>
+            <Text20 Ref="36" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>11.6,0,1.4,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>c101eaedd5d6450781b9b3604e887617</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text20</Name>
+              <Page isRef="4" />
+              <Parent isRef="30" />
+              <Text>{up_pos_rpt_overTable.次数}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text20>
+            <Text21 Ref="37" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>13,0,1.6,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>dfb263c524d24a3b96a7fde53901f15f</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text21</Name>
+              <Page isRef="4" />
+              <Parent isRef="30" />
+              <Text>{up_pos_rpt_overTable.付款金额}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text21>
+            <Text22 Ref="38" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>14.6,0,1.6,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>eb2dab22bddf47519519c8901f0aeb52</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text22</Name>
+              <Page isRef="4" />
+              <Parent isRef="30" />
+              <Text>{up_pos_rpt_overTable.台均人数}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text22>
+            <Text23 Ref="39" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>16.2,0,1.8,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>ae681117a06447b98dc140099ebf8d4e</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text23</Name>
+              <Page isRef="4" />
+              <Parent isRef="30" />
+              <Text>{up_pos_rpt_overTable.台均金额}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text23>
+            <Text24 Ref="40" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>18,0,1.6,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>709d3fa5861b4d4780c0c6d103ee38d4</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text24</Name>
+              <Page isRef="4" />
+              <Parent isRef="30" />
+              <Text>{up_pos_rpt_overTable.人均消费}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text24>
+            <Text28 Ref="41" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>19.6,0,1.8,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>85cc52b6047540c983fdf5c0c5050190</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text28</Name>
+              <Page isRef="4" />
+              <Parent isRef="30" />
+              <Text>{Format("{0:P2}", up_pos_rpt_overTable.人数/Sum(GroupHeaderBand1,up_pos_rpt_overTable.人数))}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text28>
+            <Text29 Ref="42" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>21.4,0,1.6,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>98373c387d814a21a44f7def602f40d7</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text29</Name>
+              <Page isRef="4" />
+              <Parent isRef="30" />
+              <Text>{Format("{0:P2}", up_pos_rpt_overTable.次数/Sum(GroupHeaderBand1,up_pos_rpt_overTable.次数))}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text29>
+            <Text30 Ref="43" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>23,0,2,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>76546582eb31486ca7941050353a8bcb</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text30</Name>
+              <Page isRef="4" />
+              <Parent isRef="30" />
+              <Text>{Format("{0:P2}", up_pos_rpt_overTable.付款金额/Sum(GroupHeaderBand1,up_pos_rpt_overTable.付款金额))}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text30>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <DataRelationName isNull="true" />
+          <DataSourceName>up_pos_rpt_overTable</DataSourceName>
+          <Filters isList="true" count="0" />
+          <Name>DataBand1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+          <Sort isList="true" count="0" />
+        </DataBand1>
+        <GroupFooterBand1 Ref="44" type="GroupFooterBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,8.8,25,0.8</ClientRectangle>
+          <Components isList="true" count="6">
+            <Text31 Ref="45" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0,2.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>2defd3d13d70417bb150db98886f9cc9</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text31</Name>
+              <Page isRef="4" />
+              <Parent isRef="44" />
+              <Text>小计</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text31>
+            <Text32 Ref="46" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6,0,1.6,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>d77a1b8544304b8dadf3b72513582188</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text32</Name>
+              <Page isRef="4" />
+              <Parent isRef="44" />
+              <Text>{Sum(GroupHeaderBand1,up_pos_rpt_overTable.人数)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text32>
+            <Text33 Ref="47" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>7.6,0,1.8,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>5c1c33c481f64b9bbd1363da7bb7077b</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text33</Name>
+              <Page isRef="4" />
+              <Parent isRef="44" />
+              <Text>{Sum(GroupHeaderBand1,up_pos_rpt_overTable.就坐时间)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text33>
+            <Text35 Ref="48" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>11.6,0,1.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>3001871f92c64682aeb3daf5082d552d</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text35</Name>
+              <Page isRef="4" />
+              <Parent isRef="44" />
+              <Text>{Sum(GroupHeaderBand1,up_pos_rpt_overTable.次数)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text35>
+            <Text36 Ref="49" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>13,0,1.6,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>2d0d221bee0f450eb39a8fe8684eb6f8</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text36</Name>
+              <Page isRef="4" />
+              <Parent isRef="44" />
+              <Text>{Sum(GroupHeaderBand1,up_pos_rpt_overTable.付款金额)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text36>
+            <HorizontalLinePrimitive1 Ref="50" type="HorizontalLinePrimitive" isKey="true">
+              <ClientRectangle>0,0.8,25,0.0254</ClientRectangle>
+              <Color>Black</Color>
+              <EndCap Ref="51" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </EndCap>
+              <Name>HorizontalLinePrimitive1</Name>
+              <Page isRef="4" />
+              <Parent isRef="44" />
+              <StartCap Ref="52" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </StartCap>
+            </HorizontalLinePrimitive1>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Name>GroupFooterBand1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </GroupFooterBand1>
+        <FooterBand1 Ref="53" type="FooterBand" isKey="true">
+          <Border>Top;Black;1;Solid;False;4;Black</Border>
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,10.4,25,1</ClientRectangle>
+          <Components isList="true" count="1">
+            <Text34 Ref="54" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0,25,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>7ab2b9a322904d5eb40a056821cbfccf</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text34</Name>
+              <Page isRef="4" />
+              <Parent isRef="53" />
+              <Text>========== 报表结束 ==========</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text34>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Guid>e1b1404f2cd542a88ed0370447401d48</Guid>
+          <Name>FooterBand1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </FooterBand1>
+      </Components>
+      <Conditions isList="true" count="0" />
+      <Guid>5a71a3331abf4965b1d3080032e7eb0d</Guid>
+      <Margins>1,1,1,1</Margins>
+      <Name>Page1</Name>
+      <Orientation>Landscape</Orientation>
+      <PageHeight>21</PageHeight>
+      <PageWidth>27</PageWidth>
+      <Report isRef="0" />
+      <Watermark Ref="55" type="Stimulsoft.Report.Components.StiWatermark" isKey="true">
+        <Font>Arial,100</Font>
+        <TextBrush>[50:0:0:0]</TextBrush>
+      </Watermark>
+    </Page1>
+  </Pages>
+  <PrinterSettings Ref="56" type="Stimulsoft.Report.Print.StiPrinterSettings" isKey="true" />
+  <ReferencedAssemblies isList="true" count="8">
+    <value>System.Dll</value>
+    <value>System.Drawing.Dll</value>
+    <value>System.Windows.Forms.Dll</value>
+    <value>System.Data.Dll</value>
+    <value>System.Xml.Dll</value>
+    <value>Stimulsoft.Controls.Dll</value>
+    <value>Stimulsoft.Base.Dll</value>
+    <value>Stimulsoft.Report.Dll</value>
+  </ReferencedAssemblies>
+  <ReportAlias>翻台统计报表</ReportAlias>
+  <ReportChanged>9/1/2018 3:03:41 PM</ReportChanged>
+  <ReportCreated>12/28/2017 2:57:33 PM</ReportCreated>
+  <ReportDescription>up_pos_rpt_overTable</ReportDescription>
+  <ReportFile>D:\work\捷信达项目\Gemstar.BSPMS.Hotel.Web\SRReports\PosBilloverTable.mrt</ReportFile>
+  <ReportGuid>cfecc9366baf48ddb030454879e480d1</ReportGuid>
+  <ReportName>翻台统计报表</ReportName>
+  <ReportUnit>Centimeters</ReportUnit>
+  <ReportVersion>2014.2.2000</ReportVersion>
+  <Script>
+    using System;
+    using System.Drawing;
+    using System.Windows.Forms;
+    using System.Data;
+    using Stimulsoft.Controls;
+    using Stimulsoft.Base.Drawing;
+    using Stimulsoft.Report;
+    using Stimulsoft.Report.Dialogs;
+    using Stimulsoft.Report.Components;
+
+    namespace Reports
+    {
+    public class Report : Stimulsoft.Report.StiReport
+    {
+    public Report()        {
+    this.InitializeComponent();
+    }
+
+    #region StiReport Designer generated code - do not modify
+		#endregion StiReport Designer generated code - do not modify
+    }
+    }
+  </Script>
+  <ScriptLanguage>CSharp</ScriptLanguage>
+  <Styles isList="true" count="0" />
+</StiSerializer>

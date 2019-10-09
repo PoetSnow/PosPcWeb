@@ -1,0 +1,49 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosActionType.ActionTypeAddViewModel
+@using (Html.BeginForm())
+{
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Code)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Code).HtmlAttributes(new { style = "width:100%;", placeholder = "请输入代码", onkeyup = "checkCode(this)" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Cname)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Cname).HtmlAttributes(new { style = "width:100%;", placeholder = "请输入中文名称" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Cname, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Ename)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Ename).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+            <td>@Html.Kendo().IntegerTextBoxFor(m => m.Seqid).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Module)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Module).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosModules", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); })</td>
+            <td>@Html.ValidationMessageFor(m => m.Module, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+
+</script>

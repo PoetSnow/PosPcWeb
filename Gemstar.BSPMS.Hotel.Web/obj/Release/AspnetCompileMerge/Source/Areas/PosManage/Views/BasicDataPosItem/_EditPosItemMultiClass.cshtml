@@ -1,0 +1,42 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItemMultiClass.PosItemMultiClassEditViewModel
+@using (Html.BeginForm("Edit", "BasicDataPosItemMultiClass", new { rnd = new Random().NextDouble() }))
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.IsSubClass)
+    @Html.HiddenFor(m => m.Modified)
+    @Html.HiddenFor(m => m.Itemid)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.ItemClassid)</td>
+            <td>@(Html.Kendo().DropDownListFor(e => e.ItemClassid).HtmlAttributes(new { style = "width:150px" }).DataTextField("Cname").DataValueField("Id").Filter("contains").DataSource(e => { e.Read(r => r.Action("ListItemsForPosItemAndSubClass", "BasicDataPosItemClass", new { rnd = new Random().NextDouble() })); e.Custom().Group(g => g.Add("ItemClassName", typeof(string))); }))</td>
+            <td>@Html.ValidationMessageFor(m => m.ItemClassid, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton5" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton5" role="button" data-role="button">取消</button>
+       
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton5").click(function (e) {
+            e.preventDefault();
+            //itemOtherSaveFormData($("#saveEditFormButton5"), 'gridItemMultiClass');
+            saveFormDataForPosItem($("#closeEditFormButton5"), "gridItemMultiClass");
+        });
+        $("#closeEditFormButton5").click(function (e) {
+            e.preventDefault();
+            //hideItemOther('itemMultiClass');
+            $("#posMaskWindow").html("");
+            closeGeneralWindow();
+        });
+    });
+ 
+</script>

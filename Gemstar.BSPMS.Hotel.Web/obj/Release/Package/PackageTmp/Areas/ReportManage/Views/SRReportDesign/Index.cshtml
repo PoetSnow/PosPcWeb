@@ -1,0 +1,70 @@
+﻿﻿@using System.Web.UI.WebControls
+@using Stimulsoft.Report.Mvc
+@using Gemstar.BSPMS.Common.Extensions
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>自定义报表</title>
+    <script type="text/javascript" src="~/Scripts/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var obj = $("#flashContent").parent();
+            if (obj != null && obj != undefined) {
+                obj.width("100%");
+                obj.height($(window).height() - 23);
+            }
+        });
+    </script>
+    @Html.Stimulsoft().RenderMvcDesignerScripts()
+</head>
+<body>
+    <div>
+        @{var htmlStr = Html.Stimulsoft().StiMvcDesigner(new StiMvcDesignerOptions()
+            {
+                ActionGetReportTemplate = Url.Encode(string.Format("GetReportTemplate?reportCode={0}&styleName={1}", ViewBag.ReportCode,ViewBag.styleName)),
+                ActionSaveReportTemplate = Url.Encode(string.Format("SaveReportTemplate?reportCode={0}&styleName={1}", ViewBag.ReportCode,ViewBag.styleName)),
+                ActionGetReportSnapshot = Url.Encode(string.Format("GetReportSnapshot?reportCode={0}&styleName={1}", ViewBag.ReportCode,ViewBag.styleName)),
+                ActionGetLocalization = "GetLocalization",
+                ActionExitDesigner = Url.Encode(string.Format("ExitDesigner?reportCode={0}&returnUrl={1}&styleName={2}" ,ViewBag.ReportCode, ViewBag.returnUrl,ViewBag.styleName)),
+                LocalizationDirectory = Server.MapPath("~/SRReports/Localizations/"),
+                Localization = "zh-CHS.xml",
+                //Width = Unit.Percentage(100),
+                //Height = Unit.Pixel(800),
+                AboutDialogTextLine1 = "捷信达GSHIS捷云酒店管理软件V1.0",
+                AboutDialogTextLine2 = "深圳捷信达电子有限公司",
+                AboutDialogUrl = "www.gshis.com",
+                AboutDialogUrlText = "捷信达网站",
+                DateFormat = "yyyy-MM-dd",
+                ShowSaveFileDialog = false,
+                MainMenuShowClose = false,
+                MainMenuShowExitButton = true,
+                MainMenuShowPreview = false,
+                MainMenuShowDeletePage = true,
+                MainMenuShowNew = false,
+                MainMenuShowNewPage = true,
+                MainMenuShowNewReport = false,
+                MainMenuShowNewReportWithWizard = false,
+                MainMenuShowOpenReport = true,
+                MainMenuShowOpenReportFromGoogleDocs = false,
+                MainMenuShowSaveAsToGoogleDocs = false,
+                ShowCodeTab = false,
+                ViewerShowButtonBookmarks = false,
+                ViewerShowButtonOpen = false,
+                ViewerShowButtonPrint = false,
+                ViewerShowButtonSave = false,
+                ViewerShowButtonParameters = false,
+                ViewerShowButtonSendEMail = false
+            });
+            Output.Write(Url.ChangeReportDesingUrl(htmlStr));
+        }
+
+    </div>
+</body>
+</html>

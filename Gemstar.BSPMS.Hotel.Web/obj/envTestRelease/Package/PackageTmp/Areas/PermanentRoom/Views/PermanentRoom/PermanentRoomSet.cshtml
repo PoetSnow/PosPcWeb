@@ -1,0 +1,400 @@
+﻿@using Kendo.Mvc.UI;
+@{
+    ViewBag.Title = "长包房设置";
+}
+<link href="~/Content/Pos/posPublic.css" rel="stylesheet" />
+<style type="text/css">
+    .wrap {margin: 0px 0px 0px 0px;}
+    .k-module{padding-top:4px;padding-bottom:4px;}
+    table.editFormTable{padding-top:10px;padding-left:10px;}
+    table.editFormTable .textright {width:auto;}
+    .k-header-td{width:152px;}
+</style>
+<div>
+    <input type="hidden" id="id" />
+    <input type="hidden" id="hid" value="@ViewBag.Hid" />
+    <input type="hidden" id="regid" value="@ViewBag.Regid" />
+
+    <table class="editFormTable">
+        <tr>
+            <td class="textright"><label>账单</label></td>
+            <td style="padding-left:10px;"><label id="regidLabel"></label></td>
+        </tr>
+        <tr style="display:none;">
+            <td class="textright"><label for="rentType">过租方式</label></td>
+            <td class="k-module" style="padding-top:0px;">
+                @(Html.Kendo().RadioButton().Name("rentType").Value(1).Label("每天过租"))
+                @(Html.Kendo().RadioButton().Name("rentType").Value(2).Label("满一个月过租"))
+                @(Html.Kendo().RadioButton().Name("rentType").Value(3).Label("月底过租"))
+            </td>
+        </tr>
+        <tr>
+            <td class="textright"><label>初始读数</label></td>
+            <td class="k-module">
+                <div class="k-widget k-grid">
+                    <table class="k-selectable">
+                        <thead class="k-grid-header">
+                            <tr><th class="k-header k-header-td">固定项目</th><th class="k-header">初始读数</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>水表</td>
+                                <td>@(Html.Kendo().NumericTextBox().Min(0).Spinners(false).Decimals(0).Format("n0").Name("WaterMeter").HtmlAttributes(new { style = "width:128px" }))@(ViewBag.Water == null ? "" : "　旧值：" + ViewBag.Water)</td>
+                            </tr>
+                            <tr>
+                                <td>电表</td>
+                                <td>@(Html.Kendo().NumericTextBox().Min(0).Spinners(false).Decimals(0).Format("n0").Name("WattMeter").HtmlAttributes(new { style = "width:128px" }))@(ViewBag.Watt == null ? "" : "　旧值：" + ViewBag.Watt)</td>
+                            </tr>
+                            <tr>
+                                <td>燃气</td>
+                                <td>@(Html.Kendo().NumericTextBox().Min(0).Spinners(false).Decimals(0).Format("n0").Name("NaturalGas").HtmlAttributes(new { style = "width:128px" }))@(ViewBag.Gas == null ? "" : "　旧值：" + ViewBag.Gas)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="textright"><label>固定费用</label></td>
+            <td class="k-module">
+                <div class="k-widget k-grid">
+                    <table class="k-selectable">
+                        <thead class="k-grid-header">
+                            <tr><th class="k-header k-header-td">消费项目</th><th class="k-header" style="width:128px;">每月价格</th><th class="k-header" style="width:80px;">类型</th><th class="k-header" style="width:80px;">操作</th></tr>
+                        </thead>
+                        <tbody id="fixedCostTbody"></tbody>
+                        <tfoot class="k-grid-header">
+                            <tr><th class="k-header">合计</th><th class="k-header" id="txtAmountSum" style="padding-left:17px;"></th><th class="k-header" id=""></th><th class="k-header" id=""></th></tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="formButtons">
+        <a class="k-button k-button-icontext k-grid-add" href="javascript:;" id="addFixedCostButton"><span class="k-icon k-add"></span>增加固定费用</a>
+        <button class="k-primary k-button k-button-icontext k-grid-save-changes" id="saveFormButton" onclick=""><span class="k-icon k-update"></span>保存</button>
+    </div>
+</div>
+<script type="text/javascript">
+    var PermanentRoom = {
+        //值
+        Values: {
+            //获取长包房设置数据URL
+            GetPermanentRoomSet: "@Url.Action("GetPermanentRoomSet")",
+            //获取消费项目数据URL
+            GetItems: "@Url.Action("GetItems")",
+            //消费项目数据存放地
+            ItemList: [],
+            //保存数据URL
+            SavePermanentRoomSet: "@Url.Action("SavePermanentRoomSet")",
+            //类型数据存放地
+            TypeDataList: [{ Name: "请选择" , Id: "0" }, { Name: "加收", Id: "1" }, { Name: "包费", Id: "2" }]
+        },
+
+        //POST
+        Post: function (url, data, onSuccess, onComplete) {
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                dataType: "json",
+                error: function (xhr, msg, ex) {
+                    jAlert(msg, "知道了");
+                },
+                success: onSuccess,
+                complete: onComplete
+            });
+        },
+
+        //检查账号
+        CheckRegid: function () {
+            var hid = $("#hid").val();
+            var regid = $("#regid").val();
+            if ($.trim(hid) == "" || $.trim(regid) == "") {
+                document.write("参数错误！"); return false;
+            }
+            var shortRegid = replaceHid(regid, hid);
+            if ($.trim(shortRegid) == "") {
+                document.write("参数错误！"); return false;
+            }
+
+            var text = "账号:" + shortRegid + "　";
+            var text_RoomNo = "@ViewBag.RoomNo";
+            if ($.trim(text_RoomNo).length > 0) {
+                text += "房号:" + text_RoomNo + "　";
+            }
+            var text_Guestname = "@ViewBag.Guestname";
+            if ($.trim(text_Guestname).length > 0) {
+                text += "客人名:" + text_Guestname + "　";
+            }
+
+            $("#regidLabel").text(text);
+            return true;
+        },
+
+        //初始化数
+        OnLoad: function () {
+
+            var isRegid = PermanentRoom.CheckRegid();
+            if (isRegid == false) { return;}
+
+            PermanentRoom.Post(
+                PermanentRoom.Values.GetPermanentRoomSet, { regid: $("#regid").val() }, function (result) {
+                    if (result.Success) {
+                        PermanentRoom.Set(result.Data);
+                    } else { jAlert(result.Data, "知道了"); }
+                },
+                function () { });
+
+        },
+
+        //设置
+        Set: function (data) {
+            if (data != null && data != undefined && $.trim(data.Id) != "") {
+                //有内容 修改
+                if (data.Hid != $("#hid").val() || data.Regid != $("#regid").val()) {
+                    document.write("参数错误！"); return;
+                }
+                $("#id").val(data.Id);
+                $("#hid").val(data.Hid);
+                $("#regid").val(data.Regid);
+
+                var isRegid = PermanentRoom.CheckRegid();
+                if (isRegid == false) { return; }
+
+                $("[name='rentType'][value='" + data.RentType + "']")[0].checked = true;
+                $("#WaterMeter").data("kendoNumericTextBox").value(data.WaterMeter);
+                $("#WattMeter").data("kendoNumericTextBox").value(data.WattMeter);
+                $("#NaturalGas").data("kendoNumericTextBox").value(data.NaturalGas);
+                PermanentRoom.FixedCost.Load(data.PermanentRoomFixedCostSets);
+            }
+            else {
+                //没内容 添加
+                if ($.trim($("#hid").val()) == "" || $.trim($("#regid").val()) == "") {
+                    document.write("参数错误！"); return;
+                }
+
+                $("#id").val("");
+
+                var isRegid = PermanentRoom.CheckRegid();
+                if (isRegid == false) { return; }
+
+                $("[name='rentType'][value='1']")[0].checked = false;
+                $("[name='rentType'][value='2']")[0].checked = false;
+                $("[name='rentType'][value='3']")[0].checked = false;
+                $("#WaterMeter").data("kendoNumericTextBox").value("");
+                $("#WattMeter").data("kendoNumericTextBox").value("");
+                $("#NaturalGas").data("kendoNumericTextBox").value("");
+                PermanentRoom.FixedCost.Load(null);
+            }
+        },
+
+        //固定费用
+        FixedCost: {
+            //初始化
+            Load: function (data) {
+                $("#fixedCostTbody").empty();
+                if (data != null && data != undefined && data.length > 0) {
+                    $.each(data, function (index, item) {
+                        PermanentRoom.FixedCost.Add(item.Itemid, item.Amount, item.Type);
+                    });
+                }
+                PermanentRoom.FixedCost.Statistics();
+            },
+            //增加
+            Add: function (itemId, amount, type) {
+                var selectId = PermanentRoom.FixedCost.GetTdSelectId();
+                var td1 = PermanentRoom.FixedCost.GetTdSelectHtml(selectId, itemId);
+                var td2 = "<td><input name=\"amount\" value=\"" + (amount == null || amount == undefined ? "" : amount) + "\" style=\"width:128px;\" /></td>";
+                var selectTypeId = PermanentRoom.FixedCost.GetTypeSelectId();
+                var td3 = PermanentRoom.FixedCost.GetTypeSelectHtml(selectTypeId, type);;
+                var td4 = "<td><a class=\"k-button k-button-icontext k-grid-delete\" href=\"javascript:;\" onclick=\"PermanentRoom.FixedCost.Del(this)\"><span class=\"k-icon k-i-unpin\"></span>删除</a></td>";
+                $("#fixedCostTbody").append("<tr>" + td1 + td2 + td3 + td4 + "</tr>");
+                $("#" + selectId).kendoDropDownList({ filter: "contains" });
+                $("[name='amount']:last").kendoNumericTextBox({ spinners: false, min: 0, change: PermanentRoom.FixedCost.Statistics });
+                $("#" + selectTypeId).kendoDropDownList();
+            },
+            //删除
+            Del: function (thisObj) {
+                $(thisObj).parent().parent().remove();
+                PermanentRoom.FixedCost.Statistics();
+            },
+            //从服务器获取消费项目数据
+            GetItems: function (onComplete) {
+                PermanentRoom.Values.ItemList = [];
+                PermanentRoom.Post(PermanentRoom.Values.GetItems, {}, function (result) {
+                    if (result != null && result != undefined && result.length > 0) {
+                        PermanentRoom.Values.ItemList = result;
+                        onComplete();
+                    } else {
+                        document.write("没有消费项目，请在【资料设置】-【消费项目】中添加！");
+                    }
+                }, function () { });
+            },
+            //获取下拉框ID
+            GetTdSelectId: function () {
+                return "selectItem_" + Math.floor(Math.random() * 10000000 + 1);
+            },
+            //获取下拉框HTML值
+            GetTdSelectHtml: function (id, selectedValue) {
+                if (PermanentRoom.Values.ItemList.length <= 0) { return "<td></td>"; }
+                var optionHtml = [];
+                for (index in PermanentRoom.Values.ItemList) {
+                    var attr = "";
+                    if (selectedValue == PermanentRoom.Values.ItemList[index].Id) { attr = "selected=\"selected\""; }
+                    optionHtml.push("<option value=\"" + PermanentRoom.Values.ItemList[index].Id + "\" " + attr + ">" + PermanentRoom.Values.ItemList[index].Name + "</option>");
+                }
+                return "<td><select id=\"" + id + "\" name=\"selectItem\" style=\"width:150px;\">" + optionHtml.join("") + "</select></td>";
+            },
+            //统计汇总
+            Statistics: function () {
+                var txtAmountList = $("#fixedCostTbody [name='amount']");
+                var txtAmountSum = 0;
+                for (var i = 0; i < txtAmountList.length; i++) {
+                    if (!isNaN(txtAmountList[i].value) && txtAmountList[i].value.length > 0) {
+                        txtAmountSum += parseFloat(txtAmountList[i].value);
+                    }
+                }
+                $("#txtAmountSum").text(txtAmountSum.toFixed(2));
+            },
+            //获取
+            Get: function () {
+                var rentType = $("[name='rentType']:checked").val();
+                var result = [];
+                var trList = $("#fixedCostTbody tr");
+                for (var i = 0; i < trList.length; i++) {
+                    var entity = { ItemId: "", Amount: 0};
+                    var itemidObj = $(trList[i]).find("[name='selectItem']").data("kendoDropDownList");
+                    var amountObj = $(trList[i]).find("[name='amount']").data("kendoNumericTextBox");
+                    var typeidObj = $(trList[i]).find("[name='selectType']").data("kendoDropDownList");
+                    entity.ItemId = itemidObj.value();
+                    entity.Amount = amountObj.value();
+                    entity.Type = typeidObj.value();
+                    if ($.trim(entity.ItemId) != "" && entity.Amount > 0 && (entity.Type == 1 || entity.Type == 2)) {
+                        if (rentType == 1 && entity.Type == 2) {
+                            jAlert("每天过租不能使用包费！", "知道了"); return false;
+                        }
+                        result.push(entity);
+                    }
+                    else {
+                        if ($.trim(entity.ItemId) == "") {
+                            jAlert("请选择消费项目！", "知道了"); return false;
+                        }
+                        if (entity.Amount <= 0) {
+                            jAlert("请填写大于0的每月价格！", "知道了"); return false;
+                        }
+                        if (entity.Type != 1 && entity.Type != 2) {
+                            jAlert("请选择类型！", "知道了"); return false;
+                        }
+                    }
+                }
+                if (result == null || result == undefined || result.length <= 0) {
+                    //jAlert("请增加固定费用！", "知道了"); return false;
+                }
+                return result;
+            },
+            //获取类型下拉框ID
+            GetTypeSelectId: function () {
+                return "selectType_" + Math.floor(Math.random() * 10000000 + 1);
+            },
+            //获取类型下拉框HTML值
+            GetTypeSelectHtml: function (id, selectedValue) {
+                if ($.trim(selectedValue).length <= 0) { selectedValue = "1"; }
+                if (PermanentRoom.Values.TypeDataList.length <= 0) { return "<td></td>"; }
+                var optionHtml = [];
+                for (index in PermanentRoom.Values.TypeDataList) {
+                    var attr = "";
+                    if (selectedValue == PermanentRoom.Values.TypeDataList[index].Id) { attr = "selected=\"selected\""; }
+                    optionHtml.push("<option value=\"" + PermanentRoom.Values.TypeDataList[index].Id + "\" " + attr + ">" + PermanentRoom.Values.TypeDataList[index].Name + "</option>");
+                }
+                return "<td><select id=\"" + id + "\" name=\"selectType\" style=\"width:80px;\">" + optionHtml.join("") + "</select></td>";
+            }
+
+        },
+
+        //保存
+        Save: function () {
+            var isRegid = PermanentRoom.CheckRegid();
+            if (isRegid == false) { return; }
+
+            var id = $("#id").val();
+            var hid = $("#hid").val();
+            var regid = $("#regid").val();
+
+            //过租方式
+            var rentType = $("[name='rentType']:checked").val();
+            if (rentType != 1 && rentType != 2 && rentType != 3) {
+                jAlert("请选择过租方式！", "知道了"); return;
+            }
+            //固定费用
+            var fixedCostList = PermanentRoom.FixedCost.Get();
+            if (!(fixedCostList.length >= 0)) {
+                if (fixedCostList == false) {
+                    return;
+                }
+            }
+            //水表
+            var waterMeter = $("#WaterMeter").data("kendoNumericTextBox").value();
+            if (waterMeter < 0) {
+                jAlert("请填写大于0的水表初始读数！", "知道了"); return;
+            }
+            //电表
+            var wattMeter = $("#WattMeter").data("kendoNumericTextBox").value();
+            if (wattMeter < 0) {
+                jAlert("请填写大于0的电表初始读数！", "知道了"); return;
+            }
+            //燃气
+            var naturalGas = $("#NaturalGas").data("kendoNumericTextBox").value();
+            if (naturalGas < 0) {
+                jAlert("请填写大于0的燃气初始读数！", "知道了"); return;
+            }
+            //整理
+            var data = {
+                Id: id,
+                Hid: hid,
+                Regid: regid,
+                RentType: rentType,
+                WaterMeter: waterMeter,
+                WattMeter: wattMeter,
+                NaturalGas: naturalGas,
+                FixedCost: fixedCostList
+            };
+            //保存
+            PermanentRoom.Post(PermanentRoom.Values.SavePermanentRoomSet, data, function (result) {
+                if (result.Success) {
+                    PermanentRoom.OnLoad();
+                    jAlert("保存成功！", "知道了");
+                } else {
+                    jAlert(result.Data, "知道了");
+                }
+            }, function () {});
+        },
+    };
+    $(document).ready(function () {
+        //初始化 先加载消费项目，再加载长包房设置
+        PermanentRoom.FixedCost.GetItems(function () {
+            PermanentRoom.OnLoad();
+        });
+        //增加固定费用按钮事件
+        $("#addFixedCostButton").click(function () {
+            PermanentRoom.FixedCost.Add();
+        });
+        //保存按钮事件
+        $("#saveFormButton").click(function () {
+            PermanentRoom.Save();
+        });
+    });
+    //去除Hid
+    function replaceHid(value, hid) {
+        if (value != null && value != undefined && value.length > 0 && hid != null && hid != undefined && hid.length > 0) {
+            var index = value.indexOf(hid);
+            if (index == 0) {
+                return value.substring(hid.length);
+            }
+        }
+        if (value == null || value == undefined) { value = ""; }
+        return value;
+    }
+</script>

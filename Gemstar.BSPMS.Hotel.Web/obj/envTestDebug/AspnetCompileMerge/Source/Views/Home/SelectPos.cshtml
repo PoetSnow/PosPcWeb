@@ -1,0 +1,45 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Models.Home.SelectPosViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var product = ViewBag.product as Gemstar.BSPMS.Common.Services.Entities.M_v_products;
+}
+
+@Html.Partial("SelectPos.Css")
+
+<style>
+    
+</style>
+
+
+@section scripts{
+    @Html.Partial("SelectPos.JavaScript")
+}
+
+<div class="top">
+    <span><a href="javascript:logout();" style="margin-top:0.6rem;margin-left:0.5rem;display:block"><img src="~/images/selectPos/fh.png" /></a></span>
+    <span>当前酒店：</span><span>@ViewBag.HotelId</span>
+    <span>@ViewBag.Title</span>
+    <span>收银点：</span>
+    <span class="posposselect">
+        @Html.Kendo().DropDownListFor(e => e.CurrentPosId).HtmlAttributes(new { style = "width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosPosByHid", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); }).Events(e => e.DataBound("HotelModule")).Events(e => e.Change("posChange"))
+    </span>
+    <span>营业日：</span><span id="business"></span>
+    <span><img src="~/images/selectPos/kd.png" style="height:55px" /></span>
+</div>
+<div class="content" style="display:table;width:100%;">
+</div>
+<!--底部内容开始-->
+<div class="footer">
+    <div class="footer-inner">
+        <span class="wx-a" style="padding-top: inherit"><img src="~/images/wx1.jpg" style="width:100px;" /><br /><span style="margin-left: 25px;display: inherit;">官方公众号</span></span><span class="wx-b" style="padding-top: inherit"><img src="~/images/wx2.jpg" style="width:100px;" /><br /><span style="margin-left: 18px;display: inherit;">微信预订系统</span></span>
+        <div class="company-info">
+            <p>深圳市捷信达电子有限公司</p>
+            <p>深圳市福田区深南大道6025号英龙展业大厦25楼</p>
+            <p>TEL:0755-83664567(总机) FAX:0755-83663702</p>
+            <p>7 * 24小时服务与支持：400-7755-123</p>
+            <p>深圳市捷信达电子有限公司版权所有( 粤ICP备09046004号 )</p>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/layer-v3.1.1/layer.js"></script>

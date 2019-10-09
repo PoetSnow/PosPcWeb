@@ -1,0 +1,10 @@
+D:\work\Pos\Gemstar.BSPMS.Common.Services\bin\Release\Gemstar.BSPMS.Common.Services.dll
+D:\work\Pos\Gemstar.BSPMS.Common.Services\bin\Release\Gemstar.BSPMS.Common.Services.pdb
+D:\work\Pos\Gemstar.BSPMS.Common.Services\bin\Release\System.Web.Mvc.dll
+D:\work\Pos\Gemstar.BSPMS.Common.Services\bin\Release\System.Web.Mvc.xml
+D:\work\Pos\Gemstar.BSPMS.Common.Services\bin\Release\zh-Hans\System.Web.Mvc.resources.dll
+D:\work\Pos\Gemstar.BSPMS.Common.Services\obj\Release\Gemstar.BSPMS.Common.Services.csproj.CoreCompileInputs.cache
+D:\work\Pos\Gemstar.BSPMS.Common.Services\obj\Release\Gemstar.BSPMS.Common.Services.csproj.CopyComplete
+D:\work\Pos\Gemstar.BSPMS.Common.Services\obj\Release\Gemstar.BSPMS.Common.Services.dll
+D:\work\Pos\Gemstar.BSPMS.Common.Services\obj\Release\Gemstar.BSPMS.Common.Services.pdb
+D:\work\Pos\Gemstar.BSPMS.Common.Services\obj\Release\Gemstar.BSPMS.Common.Services.csprojAssemblyReference.cache

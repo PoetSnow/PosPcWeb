@@ -1,0 +1,421 @@
+﻿@using System.Data;
+@using Gemstar.BSPMS.Common.Extensions;
+@{
+    ViewBag.Title = "合约单位账务";
+    var GridControlId_Left = "gridLeft";
+    var GridControlId_Right = "gridRight";
+}
+
+    <div style="height:520px;max-height:520px;overflow:hidden;padding-left:5px;padding-right:5px;">
+
+
+        <style type="text/css">
+            .k-grid-footer td {
+                font-weight: normal;
+            }
+        </style>
+        <script type="text/javascript">
+
+            $(function () {
+                // $("#dttime").kendoDatePicker({ culture: "zh-CN", format: "yyyy-MM-dd" });
+                $("#commonKendoWindow_wnd_title").text("应收账往来");
+                //$("#divListCa").kendoSplitter({
+                //    panes: [
+                //        { collapsible: true},
+                //        { collapsible: true}
+                //    ]
+                //});
+                $("#gridRight").mousemove(function (e) {
+                    var offset = $(this).offset();//DIV在页面的位置
+                    var x = e.pageX - offset.left;//获得鼠标指针离DIV元素左边界的距离
+                    if (x < 3)
+                    {
+                        $("#gridRight").css("cursor", "w-resize");
+                    }
+                    else
+                    {
+                        $("#gridRight").css("cursor", "default");
+                    }
+                });
+                $("#gridRight").mousedown(function (e) {
+                    var isMove = true;
+                    var offset = $(this).offset();//DIV在页面的位置
+                    var x = e.pageX - offset.left;//获得鼠标指针离DIV元素左边界的距离 
+                    var leftwidth = $('#gridLeft').width();
+                    $(document).mousemove(function (event) {
+                        if (isMove) {
+                            var width = event.pageX - offset.left + leftwidth;
+                            if (x <3)
+                            {
+                                var obj = $('#gridLeft');
+                                obj.css({ 'width': width });
+                                var obj = $('#gridRight');
+                                obj.css({ 'width': 1216 - width, 'left': width -                608 });
+                            }
+                        }
+                    }).mouseup(function () {
+                    isMove = false;});
+                });
+            });
+            var exchangeDetail = {
+                //---改为弹窗后不用这些了---
+                switchDiv: function (name) {
+                    var display = "display";
+                    var block = "block";
+                    var none = "none";
+                    $("#divListCa").css(display, (name == "list" ? block : none));
+                    $("#divAddCa").css(display, (name == "addca" || name == "addmoney" ? block : none));
+                    $("#divToCa").css(display, (name == "to" ? block : none));
+                    $("#divSplitCa").css(display, (name == "split" ? block : none));
+                    if (name == "addca" || name == "addmoney" || name == "to" || name == "split") {
+                        var title = "";
+                        switch (name) {
+                            case "addca":
+                                title = "入账/冲账";
+                                break;
+                            case "addmoney":
+                                title = "收款";
+                                break;
+                            case "to":
+                                title = "转账";
+                                break;
+                            case "split":
+                                title = "拆账";
+                                break;
+                        }
+                        $("#commonKendoWindow_wnd_title").text(title);
+                        $(".k-window-actions").css(display, none);
+                        $("#selectdiv").css(display, none);
+                        $("#btnList").css(display, none);
+                    }
+                    if (name == "list") {
+                        $("#commonKendoWindow_wnd_title").text("查看详情");
+                        $(".k-window-actions").css(display, block);
+                        $("#btnList").css(display, block);
+                    }
+                },
+                addCa: function () {
+                    @*exchangeDetail.switchDiv("addca");
+                    $('#divAddCa').load("/CRM/ExchangesManage/Add/@ViewBag.CompanyId" + "?type=D");*@
+                    top.openSecondKendoWindow("入账/冲账", "/CRM/ExchangesManage/Add/@ViewBag.CompanyId" + "?type=D");
+                },
+                addMoney: function () {
+                    @*exchangeDetail.switchDiv("addmoney");
+                    $('#divAddCa').load("/CRM/ExchangesManage/Add/@ViewBag.CompanyId" + "?type=C");*@
+                    top.openSecondKendoWindow("收款", "/CRM/ExchangesManage/Add/@ViewBag.CompanyId" + "?type=C");
+                },
+                toCa: function () {
+                    var checkedObj = $("[name='leftids']:checked");
+                    if (checkedObj.length <= 0) {
+                        jAlert("请选择要转账的记录。", "知道了");
+                        return;
+                    }
+                    var arr = [];
+                    for (var i = 0; i < checkedObj.length; i++) {
+                        var cheked = checkedObj[i];
+                        arr.push($(cheked).val());
+                    }
+                    var ids = arr.join(",");
+                    if (ids.length <= 0) {
+                        jAlert("请选择要转账的记录。", "知道了");
+                        return;
+                    }
+                    top.openSecondKendoWindow("转账","/CRM/ExchangesManage/TransferAccounts/" + ids);
+                },
+                toRecord:function(){
+                    top.openSecondKendoWindow("核销记录", "/CRM/ExchangesManage/CancelRecord/" + '@ViewBag.CompanyId');
+                },
+                splitCa: function () {
+                    var checkedObj = $("[name='leftids']:checked");
+                    if (checkedObj.length <= 0) {
+                        jAlert("请选择要拆账的记录。", "知道了");
+                        return;
+                    }
+                    if (checkedObj.length > 1) {
+                        jAlert("只能选择一项。", "知道了");
+                        return;
+                    }
+                    var id = checkedObj.get(0).value;
+                    if (id == null || id == undefined) {
+                        jAlert("请选择要拆账的记录。", "知道了");
+                        return;
+                    }
+                    @*$.get("@Url.Action("SplitAccounts")", { id: id }, function (data) {
+                        debugger;
+                        if (data == "错误信息，请关闭后重试") {
+                            jAlert("付款方式为空", "知道了");
+                            return;
+                        }
+                        exchangeDetail.switchDiv("split");
+                        $('#divSplitCa').load("/CRM/ExchangesManage/SplitAccounts/" + id);
+                    });*@
+                    top.openSecondKendoWindow("拆账","/CRM/ExchangesManage/SplitAccounts/" + id);
+                },
+                cancelCa: function () {
+                    var checkedObj = $("[name='leftids']:checked");
+                    if (checkedObj.length <= 0) {
+                        jAlert("请选择要核销的记录。", "知道了");
+                        return;
+                    }
+                    /*left*/
+                    var leftSum = 0;
+                    var leftCheckedObj = $("#grid2 [name='leftids']:checked");
+                    for (var i = 0; i < leftCheckedObj.length; i++) {
+                        leftSum += exchangeDetail.getAmount("@GridControlId_Left", leftCheckedObj.get(i).value);
+                    }
+                    leftSum = leftSum.toFixed(2);
+                    /*right*/
+                    var rightSum = 0;
+                    var rightCheckedObj = $("#grid1 [name='leftids']:checked");
+                    for (var i = 0; i < rightCheckedObj.length; i++) {
+                        rightSum += exchangeDetail.getAmount("@GridControlId_Right", rightCheckedObj.get(i).value);
+                    }
+                    rightSum = rightSum.toFixed(2);
+                    if (leftSum != rightSum) {
+                        jAlert("挂账金额（" + leftSum + "）和付款金额（" + rightSum + "）不相等，请修改。", "知道了");
+                        return false;
+                    }
+                    jConfirm("挂账金额（" + leftSum + "）和付款金额（" + rightSum + "）。确认核销？", "确认", "返回修改", function (confirmed) {
+                        if (confirmed) {
+                            var arr = new Array();
+                            for (var i = 0; i < checkedObj.length; i++) {
+                                arr[i] = checkedObj.get(i).value;
+                            }
+                            $.post("/CRM/ExchangesManage/CancelAfterVerification/", { ids: arr.join(',') }, function (data) {
+                                if (data.Success) {
+                                    jAlert("核销成功！", "知道了");
+                                    $("#@GridControlId_Left").data("kendoGrid").dataSource.read();
+                                    $("#@GridControlId_Right").data("kendoGrid").dataSource.read();
+                                } else {
+                                    //jAlert(data.Data, "知道了");
+                                    ajaxErrorHandle(data);
+                                }
+                            }, "json");
+                        }
+                    });
+                },
+                getAmount: function (grid, checkboxValue) {
+
+                    var leftGrid = $("#" + grid).data("kendoGrid");
+                    var leftData = leftGrid.dataItem($("[name='leftids'][value='" + checkboxValue + "']").parent().parent());
+                    return parseFloat(leftData["amount"]);
+                },
+                getQueryLeftParas: function () {
+                    var outletCode = $("#txtCode").val();
+                    var dateBegin = $("#dateBegin").val();
+                    var dateEnd = $("#dateEnd").val();
+                    return {
+                        GridControlId: "@GridControlId_Left",
+                        QueryProcedureName: "up_list_companyCa",
+                        QueryParameterValues: "@@99companyid=@ViewBag.CompanyId" + "&@@99dcflag=D&@@99ischeck=0&@@99dateBegin=" + dateBegin + "&@@99dateEnd=" + dateEnd + "&@@99outletCode=" + outletCode
+                    }
+                },
+                getQueryRightParas: function () {
+                    var outletCode = $("#txtCode").val();
+                    var dateBegin = $("#dateBegin").val();
+                    var dateEnd = $("#dateEnd").val();
+                    return {
+                        GridControlId: "@GridControlId_Right",
+                        QueryProcedureName: "up_list_companyCa",
+                        QueryParameterValues: "@@99companyid=@ViewBag.CompanyId" + "&@@99dcflag=C&@@99ischeck=0&@@99dateBegin=" + dateBegin + "&@@99dateEnd=" + dateEnd + "&@@99outletCode=" + outletCode
+                    };
+                },
+                init: function () {
+                   // exchangeDetail.switchDiv("list");
+                    $("#@GridControlId_Left").data("kendoGrid").dataSource.read();
+                    $("#@GridControlId_Right").data("kendoGrid").dataSource.read();
+                },
+                leftCheckClick: function () {
+                    var leftSum = 0;
+                    var leftCheckedObj = $("#grid2 [name='leftids']:checked");
+                    for (var i = 0; i < leftCheckedObj.length; i++) {
+                        leftSum += exchangeDetail.getAmount("@GridControlId_Left", leftCheckedObj.get(i).value);
+                    }
+                    leftSum = leftSum.toFixed(2);
+                    $("#leftSelectCount").text(leftCheckedObj.length);
+                    $("#leftSelectSum").text(leftSum);
+                },
+                rightCheckClick: function () {
+                    var rightSum = 0;
+                    var rightCheckedObj = $("#grid1 [name='leftids']:checked");
+                    for (var i = 0; i < rightCheckedObj.length; i++) {
+                        rightSum += exchangeDetail.getAmount("@GridControlId_Right", rightCheckedObj.get(i).value);
+                    }
+                    rightSum = rightSum.toFixed(2);
+                    $("#rightSelectCount").text(rightCheckedObj.length);
+                    $("#rightSelectSum").text(rightSum);
+                }
+            };
+            $.validator.unobtrusive.parse(document);
+            $("#switchButtonAddCa").click(function () { exchangeDetail.addCa(); });
+            $("#switchButtonAddMoney").click(function () { exchangeDetail.addMoney(); });
+            $("#switchButtonTo").click(function () { exchangeDetail.toCa(); });
+            $("#switchButtonSplit").click(function () { exchangeDetail.splitCa(); });
+            $("#switchButtonCancel").click(function () { exchangeDetail.cancelCa(); });
+            $("#switchButtonCancelRecord").click(function () { exchangeDetail.toRecord ()})
+        </script>
+
+        <div id="btnList" class="formButtons" style="clear: both;padding-bottom: 12px;">
+            <span style="display:inline-block;text-align:left;width:380px;">合约单位： <span class="color">@ViewBag.CompanyCode</span> <span style="padding-left:4px;" class="color">@ViewBag.CompanyName</span></span>
+            <span style="float:right;color:red">双击左侧挂账信息进入客账</span>
+        </div>
+        <div id="selectdiv" style="margin-bottom:5px;">
+            <span style="margin-right:5px;">日期从</span>@(Html.Kendo().DatePicker().Name("dateBegin").Format(DateTimeExtension.DateFormatStr))
+            <span style="margin-right:5px;">至</span>@(Html.Kendo().DatePicker().Name("dateEnd").Format(DateTimeExtension.DateFormatStr))
+            <span style="margin-right:5px;">营业点</span><input type="text" class="k-textbox" id="txtCode" style="width:141px;" />
+            <span><input type="radio" name="moneyCode" value="0" checked="checked" />挂账 <input type="radio" name="moneyCode" value="1" />付款 </span>
+            <button style="margin-left:10px;" class="k-button" id="queryButton" role="button" data-role="button">查询</button>
+            <button style="margin-left:70px;" class="k-primary k-button" id="switchButtonAddCa" role="button" data-role="button">入账/冲账</button>
+            <button class="k-primary k-button" id="switchButtonAddMoney" role="button" data-role="button">收款</button>
+            <button class="k-primary k-button" id="switchButtonTo" role="button" data-role="button">转账</button>
+            <button class="k-primary k-button" id="switchButtonSplit" role="button" data-role="button">拆账</button>
+            <button class="k-primary k-button" id="switchButtonCancel" role="button" data-role="button">核销</button>
+            <button class="k-primary k-button" id="switchButtonCancelRecord" role="button" data-role="button">核销记录</button>
+        </div>
+        <div id="divListCa">
+            <div id="grid2" style="width:608px;float:left;">
+                @(Html.Kendo().Grid<DataRowView>()
+                .Name(GridControlId_Left)
+                .Columns(columns =>
+                {
+                    columns.Bound("id").ClientTemplate("<input type=\"checkbox\" name=\"leftids\" onclick=\"exchangeDetail.leftCheckClick()\" value=\"#:id#\" />").Title("<input type=\"checkbox\" id=\"selall\" onclick=\"selallleft();exchangeDetail.leftCheckClick()\" /><label for='selall'>全选</label>").ClientFooterTemplate("<span style=\"float:right;\">选中<span>").Sortable(false).Width(57);
+                    columns.Bound("transDate").Title("发生时间").ClientFooterTemplate("笔数：<span id=\"leftSelectCount\">0.00</span><br/>挂账：<span id=\"leftSelectSum\">0.00</span>").Width(120);
+                    columns.Bound("outletCode").Title("营业点").Width(60);
+                    columns.Bound("itemName").Title("消费项目").ClientFooterTemplate("<span style=\"float:right;\">合计</span>").Width(80);
+                    columns.Bound("amount").ClientTemplate("<span style=\"float:right;\">#:     amount.toFixed(2) #<span>").HeaderTemplate("<span style='float:right'>挂账金额</span>").ClientFooterTemplate("笔数：#=count#<br/>挂账：#=sum.toFixed(2)#").Width(85);
+                    columns.Bound("hname").Title("分店").Column.Visible = ViewBag.IsGroup;
+                    columns.Bound("invno").Title("单号").Width(90);
+                    columns.Bound("remark").Title("备注").Width(125);
+                    columns.Bound("roomNo").Title("房号").Width(90);
+                    columns.Bound("guestname").Title("客人名").Width(90);
+                    columns.Bound("regid").Title("账号").ClientTemplate("#:regid==null?'':regid.replace(hid,'')#").Width(90);
+                    columns.Bound("sign").Title("签单人").Width(90);
+                    columns.Bound("resNoExt").Title("外部订单号").Width(90);
+                })
+                .Reorderable(c => c.Columns(true))
+                .Resizable(c => c.Columns(true))
+                .Scrollable(c => c.Height("362px"))
+                .Sortable()
+                .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+                .Pageable(pageable => pageable.Enabled(false))
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("AjaxQuery", "Query", new { area = "" }).Data("exchangeDetail.getQueryLeftParas"))
+                    .ServerOperation(false)
+                    .Aggregates(aggregates =>
+                    {
+                        aggregates.Add("amount", typeof(string)).Count();
+                        aggregates.Add("amount", typeof(decimal)).Sum();
+                    })
+                )
+                )
+            </div>
+            <div id="grid1" style="width:608px;float:left;">
+                @(Html.Kendo().Grid<DataRowView>()
+                .Name(GridControlId_Right)
+                .Columns(columns =>
+                {
+                    columns.Bound("id").ClientTemplate("<input type=\"checkbox\" name=\"leftids\" onclick=\"exchangeDetail.rightCheckClick()\" value=\"#:id#\" />").Title("<input type=\"checkbox\" id=\"selall1\" onclick=\"selallright();exchangeDetail.rightCheckClick()\" /><label for='selall1'>全选</label>").ClientFooterTemplate("<span style=\"float:right;\">选中</span>").Sortable(false).Width(57);
+                    columns.Bound("transDate").Title("发生时间").ClientFooterTemplate("笔数：<span id=\"rightSelectCount\">0.00</span><br/>付款：<span id=\"rightSelectSum\">0.00</span>").Width(120);
+                    columns.Bound("outletCode").Title("营业点").Width(60);
+                    columns.Bound("itemName").Title("付款方式").ClientFooterTemplate("<span style=\"float:right;\">合计</span>").Width(80);
+                    columns.Bound("amount").ClientTemplate("<span style=\"float:right;\">#: amount.toFixed(2) #<span>").HeaderTemplate("<span style='float:right'>付款金额</span>").ClientFooterTemplate("笔数：#=count#<br/>付款：#=sum.toFixed(2)#").Width(85);
+                    columns.Bound("hname").Title("分店").Column.Visible = ViewBag.IsGroup;
+                    columns.Bound("invno").Title("单号").Width(90);
+                    columns.Bound("remark").Title("备注").Width(125);
+                    columns.Bound("refno").Title("摘要").Width(200);
+                })
+                .Reorderable(c => c.Columns(true))
+                .Resizable(c => c.Columns(true))
+                .Scrollable(c => c.Height("362px"))
+                .Sortable()
+                .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+                .Pageable(pageable => pageable.Enabled(false))
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("AjaxQuery", "Query", new { area = "" }).Data("exchangeDetail.getQueryRightParas"))
+                    .ServerOperation(false)
+                    .Aggregates(aggregates =>
+                    {
+                        aggregates.Add("amount", typeof(string)).Count();
+                        aggregates.Add("amount", typeof(decimal)).Sum();
+                    })
+                )
+                )
+            </div>
+        </div>
+        @*<div id="divAddCa"></div>
+            <div id="divToCa"></div>
+            <div id="divSplitCa"></div>*@
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#grid2").on("dblclick", "tr.k-state-selected", function (e) {
+                    e.preventDefault();
+                    OpenGridItem(this);
+                });
+            //$(".k-window-action.k-link").click(function () {
+            //    $("#exchangeDetailDiv").css("display", "none");
+            //});
+            //setTimeout(function () {
+            //    $("#exchangeDetailDiv").css("display", "block");
+            //    $(".k-widget.k-window").css("width", "1024px");
+            //    $("#commonKendoWindow").data("kendoWindow").center();
+            //}, 100);
+            $("#commonKendoWindow").parent(".k-widget.k-window").css("width", "1250px");
+            $("#queryButton").click(function () {
+                var moneyCode = $("input[name=moneyCode]:checked").val();
+                if (moneyCode == 0) {
+                    exchangeDetail.getQueryLeftParas();
+                    var grid = $("#gridLeft").data("kendoGrid");
+                    grid.dataSource.page(1);
+                    grid.dataSource.read();
+                }
+                if (moneyCode == 1) {
+                    exchangeDetail.getQueryRightParas();
+                    var grid = $("#gridRight").data("kendoGrid");
+                    grid.dataSource.page(1);
+                    grid.dataSource.read();
+                }
+            })
+        });
+        function selallleft() {
+            $('#grid2 [name=leftids]:checkbox').each(function (e) {
+                if ($('#selall').is(':checked')) {
+                    this.checked = true;
+                } else {
+                    this.checked = false;
+                }
+            });
+        }
+        function selallright() {
+            $('#grid1 [name=leftids]:checkbox').each(function (e) {
+                if ($('#selall1').is(':checked')) {
+                    this.checked = true;
+                } else {
+                    this.checked = false;
+                }
+            });
+        }
+        function OpenGridItem(item)
+        {
+            var grid = $("#gridLeft").data("kendoGrid");
+            var data = grid.dataItem(item);
+            var regid = data.regid;
+            if(regid == null || regid == "")
+            {
+                jAlert("没有客账信息", "知道了");
+            }
+            else
+            {
+                ToOrderInfo(regid);
+            }
+        }
+        //双击打开客单
+        function ToOrderInfo(regid) {
+            var url = "@Url.Action("Index","ResOrderAdd", new { area = "ResManage" })" + "?type=I"  + "&id=" + regid + "&IsRoomStatus=4";
+            top.openResKendoWindow("客单", url, null, "20020", "新预订/入住");
+           
+        }
+        </script>
+    </div>
+

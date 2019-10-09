@@ -1,0 +1,1031 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StiSerializer version="1.02" type="Net" application="StiReport">
+  <Dictionary Ref="1" type="Dictionary" isKey="true">
+    <BusinessObjects isList="true" count="0" />
+    <Databases isList="true" count="1">
+      <pos Ref="2" type="Stimulsoft.Report.Dictionary.StiSqlDatabase" isKey="true">
+        <Alias>pos</Alias>
+        <ConnectionStringEncrypted>49jzCUYF091sTKHMxGC3Xot2cy7jS/OA53ihqeFxJQONOmXrVU9RjMBcsYnoBGVei3D/Ke9cUYBHGf2NSyjgY8PEYWBPXUtt6U3dhA==</ConnectionStringEncrypted>
+        <Name>pos</Name>
+      </pos>
+    </Databases>
+    <DataSources isList="true" count="2">
+      <up_pos_rpt_CashierShift Ref="3" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
+        <Alias>up_pos_rpt_CashierShift</Alias>
+        <Columns isList="true" count="169">
+          <value>序号,System.Int64</value>
+          <value>账单id,System.String</value>
+          <value>业务单id,System.String</value>
+          <value>项目id,System.String</value>
+          <value>项目代码,System.String</value>
+          <value>项目名称,System.String</value>
+          <value>付款方式,System.String</value>
+          <value>单位id,System.String</value>
+          <value>单位代码,System.String</value>
+          <value>单位名称,System.String</value>
+          <value>数量,System.Decimal</value>
+          <value>称重条只,System.Decimal</value>
+          <value>扣钝倍数,System.Decimal</value>
+          <value>单价,System.Decimal</value>
+          <value>作法加价,System.Decimal</value>
+          <value>折前金额,System.Decimal</value>
+          <value>金额,System.Decimal</value>
+          <value>服务费,System.Decimal</value>
+          <value>税额,System.Decimal</value>
+          <value>客位,System.String</value>
+          <value>作法,System.String</value>
+          <value>要求,System.String</value>
+          <value>消费还是付款,System.String</value>
+          <value>结账状态,System.Boolean</value>
+          <value>自动标志,System.Byte</value>
+          <value>计费状态,System.Byte</value>
+          <value>出品状态,System.Byte</value>
+          <value>求和套餐,System.Boolean</value>
+          <value>求和套餐明细,System.Boolean</value>
+          <value>所属套餐,System.Guid</value>
+          <value>套餐分摊金额,System.Decimal</value>
+          <value>餐台id,System.String</value>
+          <value>锁牌号,System.String</value>
+          <value>单道折扣,System.Decimal</value>
+          <value>是否单道折扣,System.Boolean</value>
+          <value>单道金额折,System.Decimal</value>
+          <value>批次,System.String</value>
+          <value>业务员,System.String</value>
+          <value>消费营业日,System.DateTime</value>
+          <value>消费市别,System.String</value>
+          <value>消费班次,System.String</value>
+          <value>入账操作员,System.String</value>
+          <value>消费时间,System.DateTime</value>
+          <value>修改操作员,System.String</value>
+          <value>修改时间,System.DateTime</value>
+          <value>结账id,System.Guid</value>
+          <value>结账交易号,System.String</value>
+          <value>结账交易名称,System.String</value>
+          <value>结账营业日,System.DateTime</value>
+          <value>结账市别,System.String</value>
+          <value>结账班次,System.String</value>
+          <value>结账操作员,System.String</value>
+          <value>结账时间,System.DateTime</value>
+          <value>原价,System.Decimal</value>
+          <value>会员价,System.Decimal</value>
+          <value>会员折扣,System.Decimal</value>
+          <value>批准人,System.String</value>
+          <value>取消原因,System.String</value>
+          <value>备注,System.String</value>
+          <value>客账号,System.String</value>
+          <value>客人姓名,System.String</value>
+          <value>手机号码,System.String</value>
+          <value>人数,System.Int32</value>
+          <value>登记营业日,System.DateTime</value>
+          <value>登记操作员,System.String</value>
+          <value>登记时间,System.DateTime</value>
+          <value>离店营业日,System.DateTime</value>
+          <value>离店操作员,System.String</value>
+          <value>离店时间,System.DateTime</value>
+          <value>营业点id,System.String</value>
+          <value>当前餐台id,System.String</value>
+          <value>餐台号,System.String</value>
+          <value>当前锁牌id,System.String</value>
+          <value>开台卡号,System.String</value>
+          <value>关联号,System.String</value>
+          <value>会员id,System.String</value>
+          <value>会员卡号,System.String</value>
+          <value>合约单位id,System.String</value>
+          <value>合约单位名称,System.String</value>
+          <value>消费人,System.String</value>
+          <value>折扣批准人,System.String</value>
+          <value>折扣类型,System.Byte</value>
+          <value>全单折扣,System.Decimal</value>
+          <value>金额折类型,System.Byte</value>
+          <value>金额折,System.Decimal</value>
+          <value>状态,System.Byte</value>
+          <value>是否预订单,System.Boolean</value>
+          <value>是否迟付,System.Boolean</value>
+          <value>客人类型id,System.String</value>
+          <value>是否收服务费,System.Boolean</value>
+          <value>服务费率,System.Decimal</value>
+          <value>是否计最低消费,System.Boolean</value>
+          <value>最低消费,System.Decimal</value>
+          <value>最低消费是否按人计,System.Boolean</value>
+          <value>最低消费时长,System.Int32</value>
+          <value>开台班次,System.String</value>
+          <value>开台市别,System.String</value>
+          <value>账单打单次数,System.Int32</value>
+          <value>埋脚单打单次数,System.Int32</value>
+          <value>KTV开台类型,System.Byte</value>
+          <value>开台备注,System.String</value>
+          <value>收银备注,System.String</value>
+          <value>代码,System.String</value>
+          <value>名称,System.String</value>
+          <value>英文名,System.String</value>
+          <value>所属收银点,System.String</value>
+          <value>当前市别,System.String</value>
+          <value>当前营业日,System.DateTime</value>
+          <value>开台录入信息内容,System.String</value>
+          <value>开台属性,System.Byte</value>
+          <value>模块,System.String</value>
+          <value>二级仓库,System.String</value>
+          <value>是否录入锁牌,System.Boolean</value>
+          <value>是否需要显示作法,System.Boolean</value>
+          <value>是否需要显示要求,System.Boolean</value>
+          <value>是否出品,System.Boolean</value>
+          <value>是否即开即买单,System.Boolean</value>
+          <value>PDA打印机,System.String</value>
+          <value>可选打印机,System.String</value>
+          <value>尾数处理方式,System.Byte</value>
+          <value>小数点保留位数,System.Byte</value>
+          <value>买单未打单,System.Byte</value>
+          <value>落单后报警时间,System.Byte</value>
+          <value>打单后报警时间,System.Byte</value>
+          <value>就座台预订时间,System.Byte</value>
+          <value>预订提示时间,System.Byte</value>
+          <value>预订保留时间,System.Byte</value>
+          <value>是否打印点菜单,System.Byte</value>
+          <value>是否可调整价格,System.Boolean</value>
+          <value>清机时全部买单,System.Boolean</value>
+          <value>套餐是否联单打印,System.Boolean</value>
+          <value>酒席是否连单打印,System.Boolean</value>
+          <value>账单上是否打印取消项目,System.Boolean</value>
+          <value>是否启用会员预付功能,System.Boolean</value>
+          <value>免最低消费照收服务费,System.Boolean</value>
+          <value>消费余额是否收服务费,System.Byte</value>
+          <value>服务费是否可折,System.Byte</value>
+          <value>最低消费是否可折,System.Byte</value>
+          <value>食品价格包价服务费,System.Boolean</value>
+          <value>转台通知单是否出品,System.Byte</value>
+          <value>转台通知单指定打印机,System.String</value>
+          <value>零价项目打单处理,System.Byte</value>
+          <value>买单零价项目处理,System.Byte</value>
+          <value>打单后是否可修改,System.Boolean</value>
+          <value>买单后埋脚方式,System.Byte</value>
+          <value>赠送是否出品,System.Boolean</value>
+          <value>服务费政策时间,System.Byte</value>
+          <value>买单后清台,System.Boolean</value>
+          <value>是否有外卖台,System.Boolean</value>
+          <value>开外卖台是否打印外卖单,System.Boolean</value>
+          <value>输入时价菜价格,System.Boolean</value>
+          <value>输入自选菜价格,System.Boolean</value>
+          <value>账单续打,System.Boolean</value>
+          <value>埋脚续打,System.Boolean</value>
+          <value>周末定义,System.String</value>
+          <value>周末开始时间,System.String</value>
+          <value>周末结束时间,System.String</value>
+          <value>显示编码,System.Boolean</value>
+          <value>显示价格,System.Boolean</value>
+          <value>显示作法加价,System.Boolean</value>
+          <value>结转设置,System.Byte</value>
+          <value>最早结转时间,System.String</value>
+          <value>特价菜时间,System.Byte</value>
+          <value>点同项目处理,System.Byte</value>
+          <value>排列序号,System.Int32</value>
+          <value>营业点备注,System.String</value>
+          <value>收银点,System.String</value>
+          <value>可视单号,System.String</value>
+          <value>消费班次名称,System.String</value>
+        </Columns>
+        <CommandTimeout>30</CommandTimeout>
+        <Dictionary isRef="1" />
+        <IsCloud>False</IsCloud>
+        <Name>up_pos_rpt_CashierShift</Name>
+        <NameInSource>pos</NameInSource>
+        <Parameters isList="true" count="0" />
+        <SqlCommand>exec up_pos_rpt_CashierShift
+	@h99hid = '000388'
+	,@m01收银点 = '00038801'
+	,@m02营业点 = ''
+	,@m03班次 = ''
+	,@p0101_营业日 = ''</SqlCommand>
+      </up_pos_rpt_CashierShift>
+      <PosCashierShiftGroup Ref="4" type="Stimulsoft.Report.Dictionary.StiVirtualSource" isKey="true">
+        <Alias>PosCashierShiftGroup</Alias>
+        <Columns isList="true" count="4">
+          <value>项目名称,System.String</value>
+          <value>账单id.Count,System.Int64</value>
+          <value>金额.Sum,System.Decimal</value>
+          <value>折前金额.Sum,System.Decimal</value>
+        </Columns>
+        <Dictionary isRef="1" />
+        <Filters isList="true" count="2">
+          <value>消费还是付款,EqualTo,C,,String</value>
+          <value>计费状态,NotEqualTo,_x0035_5,,String</value>
+        </Filters>
+        <GroupColumns isList="true" count="1">
+          <value>项目名称</value>
+        </GroupColumns>
+        <IsCloud>False</IsCloud>
+        <Name>PosCashierShiftGroup</Name>
+        <NameInSource>up_pos_rpt_CashierShift</NameInSource>
+        <Results isList="true" count="9">
+          <value>账单id</value>
+          <value>Count</value>
+          <value>账单id.Count</value>
+          <value>金额</value>
+          <value>Sum</value>
+          <value>金额.Sum</value>
+          <value>折前金额</value>
+          <value>Sum</value>
+          <value>折前金额.Sum</value>
+        </Results>
+        <Sort isList="true" count="0" />
+      </PosCashierShiftGroup>
+    </DataSources>
+    <Relations isList="true" count="0" />
+    <Report isRef="0" />
+    <Variables isList="true" count="5">
+      <value>,HotelName,酒店名称,System.String,,False,False,True</value>
+      <value>,UserName,操作员,System.String,,False,False,True</value>
+      <value>,QueryCondition,查询条件,System.String,,False,False,True</value>
+      <value>,HotelId,酒店代码,System.String,,False,False,True</value>
+      <value>,ReportCode,报表编号,System.String,,False,False,True</value>
+    </Variables>
+  </Dictionary>
+  <EngineVersion>EngineV2</EngineVersion>
+  <GlobalizationStrings isList="true" count="0" />
+  <MetaTags isList="true" count="0" />
+  <Pages isList="true" count="1">
+    <Page1 Ref="5" type="Page" isKey="true">
+      <Border>None;Black;2;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <Components isList="true" count="6">
+        <PageHeaderBand1 Ref="6" type="PageHeaderBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,0.4,19,2.8</ClientRectangle>
+          <Components isList="true" count="7">
+            <rptTitle Ref="7" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>5.6,0.8,6.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,14,Bold</Font>
+              <Guid>e5ea2ace4897408e9c223194da47a457</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>rptTitle</Name>
+              <Page isRef="5" />
+              <Parent isRef="6" />
+              <Text>{ReportName}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>SystemVariables</Type>
+              <VertAlignment>Center</VertAlignment>
+            </rptTitle>
+            <Text1 Ref="8" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0,2.2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,12</Font>
+              <Guid>76ef4f3cb5594416845792a0a1c456b9</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text1</Name>
+              <Page isRef="5" />
+              <Parent isRef="6" />
+              <Text>{ReportCode}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text1>
+            <Text49 Ref="9" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>3.2,0,11.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,12</Font>
+              <Guid>241634655bbf47e3a18ebe630e4acc7c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text49</Name>
+              <Page isRef="5" />
+              <Parent isRef="6" />
+              <Text>{HotelName}</Text>
+              <TextBrush>Black</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Text49>
+            <Text50 Ref="10" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0.8,3.8,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>f82fb9ca35014cb6a251b29dc59f1e8c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text50</Name>
+              <Page isRef="5" />
+              <Parent isRef="6" />
+              <Text>打印人：{UserName}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text50>
+            <Text51 Ref="11" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,1.8,17.2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>8adb30ed1dc64aa8a51869195c20ccbd</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text51</Name>
+              <Page isRef="5" />
+              <Parent isRef="6" />
+              <Text>{QueryCondition}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <VertAlignment>Center</VertAlignment>
+            </Text51>
+            <Text3 Ref="12" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>15.8,0,3.2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>d53815e7369a421ea5e40c98cd23558c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text3</Name>
+              <Page isRef="5" />
+              <Parent isRef="6" />
+              <Text>{PageNofM}</Text>
+              <TextBrush>Black</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Text3>
+            <Text52 Ref="13" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>14,0.8,5,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>7b076d24d456430d968920a1b7690b1c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text52</Name>
+              <Page isRef="5" />
+              <Parent isRef="6" />
+              <Text>打印时间：{Format("{0:yyyy-MM-dd HH:mm}", Time)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text52>
+          </Components>
+          <ComponentStyle>蓝色 50%_报表标题区</ComponentStyle>
+          <Conditions isList="true" count="0" />
+          <Guid>7be5f959a97e4e8ebf559560ae5ec25b</Guid>
+          <Name>PageHeaderBand1</Name>
+          <Page isRef="5" />
+          <Parent isRef="5" />
+        </PageHeaderBand1>
+        <Text26 Ref="14" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,10,19,1</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>微软雅黑,9</Font>
+          <GrowToHeight>True</GrowToHeight>
+          <Guid>85ee0076df6e44fab9ce03f3e8c75a71</Guid>
+          <HorAlignment>Center</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text26</Name>
+          <Page isRef="5" />
+          <Parent isRef="5" />
+          <Text>========== 报表结束 ==========</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text26>
+        <DataBand1 Ref="15" type="DataBand" isKey="true">
+          <Border>Bottom;Black;2;Solid;False;4;Black</Border>
+          <Brush>Transparent</Brush>
+          <BusinessObjectGuid isNull="true" />
+          <ClientRectangle>0,4,19,0.6</ClientRectangle>
+          <Components isList="true" count="4">
+            <Text2 Ref="16" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.4,0,4.4,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text2</Name>
+              <Page isRef="5" />
+              <Parent isRef="15" />
+              <Text>营业日：{up_pos_rpt_CashierShift.消费营业日}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text2>
+            <Text4 Ref="17" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>5.2,0,4.4,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>89e893b91c124fc5b3c4c483b5220f61</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text4</Name>
+              <Page isRef="5" />
+              <Parent isRef="15" />
+              <Text>收银点：{up_pos_rpt_CashierShift.收银点}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text4>
+            <Text5 Ref="18" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>10,0,4.4,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>54a4ac031c3f4dfa8c2d52f2cd34cc1d</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text5</Name>
+              <Page isRef="5" />
+              <Parent isRef="15" />
+              <Text>{up_pos_rpt_CashierShift.消费班次名称}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text5>
+            <Text6 Ref="19" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>14.8,0,3.8,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>115756a94d0a42bda488ae465a7d58d5</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text6</Name>
+              <Page isRef="5" />
+              <Parent isRef="15" />
+              <Text>收银员：{up_pos_rpt_CashierShift.入账操作员}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text6>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <DataRelationName isNull="true" />
+          <DataSourceName>up_pos_rpt_CashierShift</DataSourceName>
+          <Filters isList="true" count="1">
+            <value>序号,EqualTo,_x0031_,,Numeric</value>
+          </Filters>
+          <Name>DataBand1</Name>
+          <Page isRef="5" />
+          <Parent isRef="5" />
+          <Sort isList="true" count="0" />
+        </DataBand1>
+        <HeaderBand1 Ref="20" type="HeaderBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,5.4,19,0.6</ClientRectangle>
+          <Components isList="true" count="9">
+            <Text7 Ref="21" type="Text" isKey="true">
+              <Border>Bottom;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0,2.2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>39712cb048c34e31a5936340a665d667</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text7</Name>
+              <Page isRef="5" />
+              <Parent isRef="20" />
+              <Text>付款方式</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text7>
+            <Text11 Ref="22" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>8.8,0,2.2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>f891da2f4eb54eef9f552f8d4849304d</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text11</Name>
+              <Page isRef="5" />
+              <Parent isRef="20" />
+              <Text>订金</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text11>
+            <Text14 Ref="23" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6.6,0,2.2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>048aa0bc6ac84b83ad2f8c7e015625d9</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text14</Name>
+              <Page isRef="5" />
+              <Parent isRef="20" />
+              <Text>营业额</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text14>
+            <Text12 Ref="24" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>11,0,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>28c1264e0439478dbc6b21b775ebdf18</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text12</Name>
+              <Page isRef="5" />
+              <Parent isRef="20" />
+              <Text>支出</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text12>
+            <Text15 Ref="25" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4.4,0,2.2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>d4039e9407724dc59aef476f21459ee4</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text15</Name>
+              <Page isRef="5" />
+              <Parent isRef="20" />
+              <Text>备用金</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text15>
+            <Text16 Ref="26" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2.2,0,2.2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>5d326e9df13541bfa061091a7fd4af44</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text16</Name>
+              <Page isRef="5" />
+              <Parent isRef="20" />
+              <Text>单数</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text16>
+            <Text13 Ref="27" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>13,0,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>1e8f4272a62147f6b3c5c48cdcffd839</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text13</Name>
+              <Page isRef="5" />
+              <Parent isRef="20" />
+              <Text>充账</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text13>
+            <Text10 Ref="28" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>15,0,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>13f945f541a148dd8c2be300d33571b6</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text10</Name>
+              <Page isRef="5" />
+              <Parent isRef="20" />
+              <Text>原币合计</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text10>
+            <Text8 Ref="29" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>17,0,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>ebc58ca8d44449719fe452e42a1a7047</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text8</Name>
+              <Page isRef="5" />
+              <Parent isRef="20" />
+              <Text>本位币合计</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text8>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Name>HeaderBand1</Name>
+          <Page isRef="5" />
+          <Parent isRef="5" />
+        </HeaderBand1>
+        <Table1 Ref="30" type="Stimulsoft.Report.Components.Table.StiTable" isKey="true">
+          <Border>Bottom;[0:0:0:0];1;None;False;4;[0:0:0:0]</Border>
+          <Brush>Transparent</Brush>
+          <BusinessObjectGuid isNull="true" />
+          <ClientRectangle>0,6.8,19,0.6</ClientRectangle>
+          <ColumnCount>9</ColumnCount>
+          <Components isList="true" count="9">
+            <Table1_Cell1 Ref="31" type="TableCell" isKey="true">
+              <Border>Bottom;[0:0:0:0];1;None;False;4;[0:0:0:0]</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0,2.2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,9</Font>
+              <HorAlignment>Center</HorAlignment>
+              <ID>0</ID>
+              <JoinCells isList="true" count="0" />
+              <Margins>0,0,0,0</Margins>
+              <Name>Table1_Cell1</Name>
+              <Page isRef="5" />
+              <Parent isRef="30" />
+              <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+              <Text>{PosCashierShiftGroup.项目名称}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Table1_Cell1>
+            <Table1_Cell2 Ref="32" type="TableCell" isKey="true">
+              <Border>Bottom;[0:0:0:0];1;None;False;4;[0:0:0:0]</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2.2,0,2.2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,9</Font>
+              <HorAlignment>Center</HorAlignment>
+              <ID>1</ID>
+              <JoinCells isList="true" count="0" />
+              <Margins>0,0,0,0</Margins>
+              <Name>Table1_Cell2</Name>
+              <Page isRef="5" />
+              <Parent isRef="30" />
+              <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+              <Text>{PosCashierShiftGroup.账单id_Count}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Table1_Cell2>
+            <Table1_Cell3 Ref="33" type="TableCell" isKey="true">
+              <Border>Bottom;[0:0:0:0];1;None;False;4;[0:0:0:0]</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4.4,0,2.2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,9</Font>
+              <HorAlignment>Right</HorAlignment>
+              <ID>2</ID>
+              <JoinCells isList="true" count="0" />
+              <Margins>0,0,0,0</Margins>
+              <Name>Table1_Cell3</Name>
+              <Page isRef="5" />
+              <Parent isRef="30" />
+              <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+              <TextBrush>Black</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Table1_Cell3>
+            <Table1_Cell4 Ref="34" type="TableCell" isKey="true">
+              <Border>Bottom;[0:0:0:0];1;None;False;4;[0:0:0:0]</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6.6,0,2.2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,9</Font>
+              <HorAlignment>Right</HorAlignment>
+              <ID>3</ID>
+              <JoinCells isList="true" count="0" />
+              <Margins>0,0,0,0</Margins>
+              <Name>Table1_Cell4</Name>
+              <Page isRef="5" />
+              <Parent isRef="30" />
+              <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+              <Text>{PosCashierShiftGroup.金额_Sum}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Table1_Cell4>
+            <Table1_Cell5 Ref="35" type="TableCell" isKey="true">
+              <Border>Bottom;[0:0:0:0];1;None;False;4;[0:0:0:0]</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>8.8,0,2.2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,9</Font>
+              <HorAlignment>Right</HorAlignment>
+              <ID>4</ID>
+              <JoinCells isList="true" count="0" />
+              <Margins>0,0,0,0</Margins>
+              <Name>Table1_Cell5</Name>
+              <Page isRef="5" />
+              <Parent isRef="30" />
+              <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+              <TextBrush>Black</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Table1_Cell5>
+            <Table1_Cell6 Ref="36" type="TableCell" isKey="true">
+              <Border>Bottom;[0:0:0:0];1;None;False;4;[0:0:0:0]</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>11,0,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,9</Font>
+              <HorAlignment>Right</HorAlignment>
+              <ID>25</ID>
+              <JoinCells isList="true" count="0" />
+              <Margins>0,0,0,0</Margins>
+              <Name>Table1_Cell6</Name>
+              <Page isRef="5" />
+              <Parent isRef="30" />
+              <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+              <TextBrush>Black</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Table1_Cell6>
+            <Table1_Cell7 Ref="37" type="TableCell" isKey="true">
+              <Border>Bottom;[0:0:0:0];1;None;False;4;[0:0:0:0]</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>13,0,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,9</Font>
+              <HorAlignment>Right</HorAlignment>
+              <ID>30</ID>
+              <JoinCells isList="true" count="0" />
+              <Margins>0,0,0,0</Margins>
+              <Name>Table1_Cell7</Name>
+              <Page isRef="5" />
+              <Parent isRef="30" />
+              <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+              <TextBrush>Black</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Table1_Cell7>
+            <Table1_Cell8 Ref="38" type="TableCell" isKey="true">
+              <Border>Bottom;[0:0:0:0];1;None;False;4;[0:0:0:0]</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>15,0,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,9</Font>
+              <HorAlignment>Right</HorAlignment>
+              <ID>35</ID>
+              <JoinCells isList="true" count="0" />
+              <Margins>0,0,0,0</Margins>
+              <Name>Table1_Cell8</Name>
+              <Page isRef="5" />
+              <Parent isRef="30" />
+              <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+              <Text>{PosCashierShiftGroup.折前金额_Sum}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Table1_Cell8>
+            <Table1_Cell9 Ref="39" type="TableCell" isKey="true">
+              <Border>Bottom;[0:0:0:0];1;None;False;4;[0:0:0:0]</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>17,0,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,9</Font>
+              <HorAlignment>Right</HorAlignment>
+              <ID>40</ID>
+              <JoinCells isList="true" count="0" />
+              <Margins>0,0,0,0</Margins>
+              <Name>Table1_Cell9</Name>
+              <Page isRef="5" />
+              <Parent isRef="30" />
+              <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+              <Text>{PosCashierShiftGroup.金额_Sum}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Table1_Cell9>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <DataRelationName isNull="true" />
+          <DataSourceName>PosCashierShiftGroup</DataSourceName>
+          <Filters isList="true" count="0" />
+          <Name>Table1</Name>
+          <NumberID>54</NumberID>
+          <Page isRef="5" />
+          <Parent isRef="5" />
+          <RowCount>1</RowCount>
+          <Sort isList="true" count="0" />
+        </Table1>
+        <FooterBand1 Ref="40" type="FooterBand" isKey="true">
+          <Border>Top;Black;1;Solid;False;4;Black</Border>
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,8.2,19,1.6</ClientRectangle>
+          <Components isList="true" count="10">
+            <Text9 Ref="41" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0,2.2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>e1add3dc06594ab29bcd47a5bc5fee64</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text9</Name>
+              <Page isRef="5" />
+              <Parent isRef="40" />
+              <Text>合计：</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text9>
+            <Text17 Ref="42" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>8.8,0,2.2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>94d1eb9bed8642d8a7abc00ebeec9e6f</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text17</Name>
+              <Page isRef="5" />
+              <Parent isRef="40" />
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text17>
+            <Text18 Ref="43" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6.6,0,2.2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>bc335315a21147b99fcc3fc21320af33</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text18</Name>
+              <Page isRef="5" />
+              <Parent isRef="40" />
+              <Text>{SumRunning(Table1,PosCashierShiftGroup.金额_Sum)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text18>
+            <Text19 Ref="44" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>11,0,2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>99c0d757c7e34a7e80a7939e1c69ad10</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text19</Name>
+              <Page isRef="5" />
+              <Parent isRef="40" />
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text19>
+            <Text20 Ref="45" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4.4,0,2.2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>f15bfd7c854f4bbf838e0f50fbeea8f4</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text20</Name>
+              <Page isRef="5" />
+              <Parent isRef="40" />
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text20>
+            <Text21 Ref="46" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2.2,0,2.2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>873d9dff975d4e748477c2d2b89450d6</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text21</Name>
+              <Page isRef="5" />
+              <Parent isRef="40" />
+              <Text>{SumRunning(Table1,PosCashierShiftGroup.账单id_Count)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text21>
+            <Text22 Ref="47" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>13,0,2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>f9404206e9c5464a86efd0ba7e9f6b9d</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text22</Name>
+              <Page isRef="5" />
+              <Parent isRef="40" />
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text22>
+            <Text23 Ref="48" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>15,0,2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>a22d968fb5eb4ea8b782bc56b1d4bfc1</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text23</Name>
+              <Page isRef="5" />
+              <Parent isRef="40" />
+              <Text>{Sum(Table1,PosCashierShiftGroup.折前金额_Sum)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text23>
+            <Text24 Ref="49" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>17,0,2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>7378b70576e04945a03f78003d30a05b</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text24</Name>
+              <Page isRef="5" />
+              <Parent isRef="40" />
+              <Text>{Sum(Table1,PosCashierShiftGroup.金额_Sum)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Totals</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text24>
+            <Text25 Ref="50" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4.4,0.8,7,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,9</Font>
+              <Guid>b1b7d80f620c43f699165365c07b7d84</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text25</Name>
+              <Page isRef="5" />
+              <Parent isRef="40" />
+              <Text>开发票金额：{PosCashierShiftGroup.金额_Sum}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text25>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Name>FooterBand1</Name>
+          <Page isRef="5" />
+          <Parent isRef="5" />
+        </FooterBand1>
+      </Components>
+      <Conditions isList="true" count="0" />
+      <Guid>5a71a3331abf4965b1d3080032e7eb0d</Guid>
+      <Margins>1,1,1,1</Margins>
+      <Name>Page1</Name>
+      <PageHeight>29.7</PageHeight>
+      <PageWidth>21</PageWidth>
+      <Report isRef="0" />
+      <Watermark Ref="51" type="Stimulsoft.Report.Components.StiWatermark" isKey="true">
+        <Font>Arial,100</Font>
+        <TextBrush>[50:0:0:0]</TextBrush>
+      </Watermark>
+    </Page1>
+  </Pages>
+  <PrinterSettings Ref="52" type="Stimulsoft.Report.Print.StiPrinterSettings" isKey="true" />
+  <ReferencedAssemblies isList="true" count="8">
+    <value>System.Dll</value>
+    <value>System.Drawing.Dll</value>
+    <value>System.Windows.Forms.Dll</value>
+    <value>System.Data.Dll</value>
+    <value>System.Xml.Dll</value>
+    <value>Stimulsoft.Controls.Dll</value>
+    <value>Stimulsoft.Base.Dll</value>
+    <value>Stimulsoft.Report.Dll</value>
+  </ReferencedAssemblies>
+  <ReportAlias>Report</ReportAlias>
+  <ReportChanged>6/15/2018 4:29:18 PM</ReportChanged>
+  <ReportCreated>12/28/2017 2:57:33 PM</ReportCreated>
+  <ReportDescription>up_pos_rpt_CashierShift</ReportDescription>
+  <ReportFile>D:\work\捷信达项目\Gemstar.BSPMS.Hotel.Web\SRReports\PosCashierShift.mrt</ReportFile>
+  <ReportGuid>30f7e8c215a14075962a4681008f567f</ReportGuid>
+  <ReportName>Report</ReportName>
+  <ReportUnit>Centimeters</ReportUnit>
+  <ReportVersion>2014.2.2000</ReportVersion>
+  <Script>using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Data;
+using Stimulsoft.Controls;
+using Stimulsoft.Base.Drawing;
+using Stimulsoft.Report;
+using Stimulsoft.Report.Dialogs;
+using Stimulsoft.Report.Components;
+
+namespace Reports
+{
+    public class Report : Stimulsoft.Report.StiReport
+    {
+        public Report()        {
+            this.InitializeComponent();
+        }
+
+        #region StiReport Designer generated code - do not modify
+		#endregion StiReport Designer generated code - do not modify
+    }
+}
+</Script>
+  <ScriptLanguage>CSharp</ScriptLanguage>
+  <Styles isList="true" count="0" />
+</StiSerializer>

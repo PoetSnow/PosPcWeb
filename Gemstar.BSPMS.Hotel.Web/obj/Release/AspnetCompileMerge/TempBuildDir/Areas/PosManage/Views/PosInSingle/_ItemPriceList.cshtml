@@ -1,0 +1,37 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_ItemPriceByItemidResult>
+<ul>
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                if (item.SelloutStatus == "0") //沽清状态
+                {
+                    <li class="content-list-unit" style="background:#93006f;">
+                        <a href="javascript:void(0)" onclick="selectUnit(this)" data-id="@item.Unitid" data-code="@item.UnitCode" data-name="@item.Unit" data-price="@item.Price" data-default='@(item.IsDefault == "是" ? true : false)' data-SelloutStatus="@item.SelloutStatus">
+                            <span style="color:#FFFFFF">@item.UnitCode</span>
+                            <span style="color:#FFFFFF">@item.Unit</span>
+                            <span><i class="fa fa-check"></i></span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="content-list-unit">
+                        <a href="javascript:void(0)" onclick="selectUnit(this)" data-id="@item.Unitid" data-code="@item.UnitCode" data-name="@item.Unit" data-price="@item.Price" data-default='@(item.IsDefault == "是" ? true : false)' data-SelloutStatus="@item.SelloutStatus">
+                            <span>@item.UnitCode</span>
+                            <span>@item.Unit</span>
+                            <span><i class="fa fa-check"></i></span>
+                        </a>
+                    </li>
+                }
+
+            }
+        }
+    }
+    <li class="content-list-unit">
+        <a href="javascript:void(0)" onclick="pricePage()">
+            <img src="~/Images/posInSingle/fany.png" /><span>翻页</span>
+        </a>
+    </li>
+</ul>

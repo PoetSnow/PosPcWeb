@@ -1,0 +1,33 @@
+﻿@using Gemstar.BSPMS.Common.Extensions;
+@using Gemstar.BSPMS.Hotel.Services.Enums;
+@model Gemstar.BSPMS.Hotel.Services.ResManage.ResMainInfo
+
+<div id="orderMain">
+    @Html.HiddenFor(m=>m.Resid)
+    @Html.HiddenFor(m => m.SaveContinue)
+    @Html.HiddenFor(m => m.OriginResMainInfoJsonData)
+    <table>
+        <tr>
+            <td class="textright">@Html.LabelFor(m=>m.ResCustName,"预订人")</td>
+            <td>@(Html.Kendo().TextBoxFor(m=>m.ResCustName))</td>
+            <td class="textright">@Html.LabelFor(m=>m.ResCustMobile,"手机号")</td>
+            <td>@(Html.Kendo().TextBoxFor(m=>m.ResCustMobile).HtmlAttributes(new { style = "width:166px;" }))</td>
+            <td class="textright">@Html.LabelFor(m=>m.Cttid,"合约单位")</td>
+            <td style="width:182px;">@(Html.Kendo().DropDownListFor(m=>m.Cttid).OptionLabel("请选择合约单位").Filter(FilterType.Contains).DataTextField("Text").DataValueField("Value").DataSource(s=>s.Read(r=>r.Url(Url.Action("ListItemsForCompanys")))))</td>
+            <td class="textright">@Html.LabelFor(m => m.Name, "主单名称")</td>
+            <td>@(Html.Kendo().TextBoxFor(m => m.Name))</td>
+            <td>@(Html.Kendo().CheckBoxFor(w => w.IsGroup).Label("团体").HtmlAttributes(new { style="padding-left:0px;" }))</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m=>m.ResTime,"登记时间")</td>
+            <td>@(Html.Kendo().TextBox().Name("ResTime").Value(Model.ResTime).Enable(false))</td>
+            <td class="textright">@Html.LabelFor(m=>m.Resno, "主单号")</td>
+            <td>@(Html.Kendo().TextBoxFor(m=>m.Resno).Enable(false).HtmlAttributes(new { style = "width:166px;" }))</td>
+            <td class="textright">@Html.LabelFor(m => m.ExtType, "主单类型")</td>
+            <td>@(Html.Kendo().TextBoxFor(w => w.ExtType).Enable(false))</td>
+            <td class="textright">@Html.LabelFor(m => m.ResNoExt, "外部订单号")</td>
+            <td>@(Html.Kendo().TextBoxFor(m => m.ResNoExt).Enable(false))</td>
+            <td>@(Html.Kendo().Button().Name("btnInvoiceInfo").Content("发票").Events(e => e.Click("btnInvoiceInfo_clicked")))</td>
+        </tr>
+    </table>
+</div>

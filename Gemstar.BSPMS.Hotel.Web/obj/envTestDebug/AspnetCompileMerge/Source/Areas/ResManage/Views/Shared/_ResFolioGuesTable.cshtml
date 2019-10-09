@@ -1,0 +1,29 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.ResFolioManage
+@model ResFolioMainInfo
+<style type="text/css">
+    .columsAlign{text-align: right;}
+    .footAmount{text-align:right;color:#0E4995;}
+    #balance{text-align:right;color:red;}
+</style>
+@(
+Html.Kendo().Grid<ResFolioDetailInfo>()
+.Name("gridFolioGuest")
+.Columns(c =>
+{
+    c.Bound(w => w.RegId).ClientTemplate("<input type='checkbox' class='k-checkbox folioGuestRowCheck' value='#: RegId #' checked='checked' id='folioGuestRowCheck_#: RegId #' style=\"padding-left:0px;\" /><label class=\"k-checkbox-label\" for='folioGuestRowCheck_#: RegId #'></label>").HeaderTemplate(" <input type='checkbox' class='k-checkbox folioGuestAllCheck' checked='checked' id='folioGuestAllCheck' style=\"padding-left:0px;\" /><label class=\"k-checkbox-label\" for='folioGuestAllCheck'></label>").Sortable(false).ClientFooterTemplate("合计：房数#=data.AllRoomQty.sum#　住#=data.IRoomQty.sum#　退#=data.ORoomQty.sum#").FooterHtmlAttributes(new { colspan = "3" }).Width(37);
+    c.Bound(w => w.RoomNo).Title("房号").FooterHtmlAttributes(new { style = "display:none;" }).Width(50);
+    c.Bound(w => w.GuestName).Title("客人名").HtmlAttributes(new { style = "white-space: nowrap" }).FooterHtmlAttributes(new { style = "display:none;" }).Width(80);
+    c.Bound(w => w.Days).Title("天数").ClientFooterTemplate("#=data.Days.sum#天").Width(45);
+    c.Bound(w => w.DebitAmount).Title("消费金额").Format("{0:0.00}").HtmlAttributes(new { @class = "columsAlign" }).ClientFooterTemplate("<div class='footAmount'>#=sum.toFixed(2)#</div>").Width(70);
+    c.Bound(w => w.CreditAmount).Title("支付金额").Format("{0:0.00}").HtmlAttributes(new { @class = "columsAlign" }).ClientFooterTemplate("<div class='footAmount'>#=sum.toFixed(2)#</div>").Width(70);
+    c.Bound(w => w.RegId).Title("账号").ClientTemplate("#=RegId.replace('" + ViewBag.HotelId + "','')#").ClientFooterTemplate("余额：<span id='balance'>#=(data.CreditAmount.sum - data.DebitAmount.sum).toFixed(2)#</span>").FooterHtmlAttributes(new { colspan = "2" }).Width(55);
+    c.Bound(w => w.StatuName).Title("状态").FooterHtmlAttributes(new { style = "display:none;" }).Width(70);
+})
+.Sortable()
+.Scrollable()
+.Selectable(c=>c.Enabled(true).Mode(GridSelectionMode.Single))
+.DataSource(c => c.Ajax().Read(r => r.Action("AjaxFolioGuest", "ResOrderFolio").Data("setQueryFolioGuestPara")).Aggregates(a=> { a.Add(w => w.CreditAmount).Sum();a.Add(w => w.DebitAmount).Sum();a.Add(w => w.AllRoomQty).Sum();a.Add(w => w.IRoomQty).Sum();a.Add(w => w.ORoomQty).Sum();a.Add(w=>w.Days).Sum(); }).Model(m => m.Id("RegId")))
+.Events(e=>e.DataBound("folioGuestTable_dataBound"))
+.HtmlAttributes(new { style = "height:487px;max-height:487px;" })
+.AutoBind(false)
+)

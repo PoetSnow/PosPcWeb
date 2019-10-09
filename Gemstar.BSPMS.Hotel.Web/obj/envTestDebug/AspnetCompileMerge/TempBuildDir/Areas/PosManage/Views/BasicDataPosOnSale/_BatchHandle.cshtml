@@ -1,0 +1,499 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosOnSale.PosOnSaleAddViewModel
+
+
+<style>
+    .tab1 {
+        border-bottom: #cccccc solid 1px;
+        float: left;
+        width: 52%;
+    }
+
+    .menu {
+        height: 28px;
+        border-right: #ccc solid 1px;
+        font-size: 14px;
+        border-top: #ccc solid 1px;
+    }
+
+        .menu li {
+            float: left;
+            width: 100%;
+            text-align: center;
+            line-height: 28px;
+            height: 28px;
+            cursor: pointer;
+            border-left: #ccc solid 1px;
+            border-bottom: #ccc solid 1px;
+            color: #666;
+            overflow: hidden;
+            background: #E0E2EB;
+        }
+
+            .menu li.off {
+                background: #fff;
+                color: #336699;
+                font-weight: bold;
+                border-bottom: none;
+            }
+
+    .menudiv {
+        border-left: #cccccc solid 1px;
+        border-right: #cccccc solid 1px;
+        border-top: 0;
+        background: #fefefe;
+        height: 477px;
+    }
+
+        .menudiv div {
+            line-height: 28px;
+        }
+
+    .editFormTable tr td {
+        width: 50%;
+        display: inline-block;
+    }
+
+    .editFormTable .sale_textright {
+        width: 30%;
+        text-align: right;
+        display: inline-block;
+    }
+</style>
+<script type="text/javascript">
+    var btypevalue = 1;
+    var isfirst = 1;
+    var gridurl = "_PosItemGrid";
+    var queryurl = "_PosItemQuery";
+
+    function QueryText() {
+        if (btypevalue == 1) {
+            return {
+                CodeAndName: $("#q_CodeAndName").val(),
+                ItemClassid: $("#q_ItemClassid").val(),
+                SubClassid: $("#q_SubClassid").val(),
+                DeptId: $("#q_DeptId").val(),
+                startcode: $("#q_startcode").val(),
+                endcode: $("#q_endcode").val(),
+                isfirst: isfirst
+            };
+        }
+        else {
+            return {
+                itemname: $("#q_itemname").val(),
+                unitid: $("#q_unitid").val(),
+                refeid: $("#q_refeid").val(),
+                tabid: $("#q_tabid").val(),
+                customerid: $("#q_customerid").val(),
+                starttime: $("#q_StartTime").val(),
+                endtime: $("#q_Endtime").val(),
+                iTagperiod: $("#q_iTagperiod").val(),
+                CmpType: $("#q_CmpType").val(),
+
+            };
+        }
+    }
+    //全选以及反选
+    function checkedRowAll(obj) {
+        var ids = "";
+        $("#selIds").val("");
+        var grid = $("#gridItem").data("kendoGrid");
+        if ($(obj).is(":checked")) {
+            grid.tbody.find(">tr:not(.k-grouping-row) input[type='checkbox']").prop("checked", true);
+
+            var dataRows = grid.items();
+            for (var i = 0; i < dataRows.length; i++) {
+                var row = grid.tbody.find(">tr:not(.k-grouping-row)").eq(i);
+                var data = grid.dataItem(dataRows[i]);
+                ids += "|" + data["Id"];
+            }
+            $("#selIds").val(ids);
+        }
+        else {
+            grid.tbody.find(">tr:not(.k-grouping-row) input[type='checkbox']").prop("checked", false);
+        }
+    }
+    //单选
+    function checkedRow(obj) {
+        var ids = $("#selIds").val();
+        var grid = $("#gridItem").data("kendoGrid");
+
+        if ($(obj).is(":checked")) {
+            $("#selIds").val(ids + "|" + $(obj).val());
+
+            var dataRows = grid.items();
+            for (var i = 0; i < dataRows.length; i++) {
+                var row = grid.tbody.find(">tr:not(.k-grouping-row)").eq(i);
+                var data = grid.dataItem(dataRows[i]);
+            }
+        }
+        else {
+            //  ids = "";
+            var arr = $.grep(ids.split('|'), function (value) {
+                return value !== $(obj).val();
+            });
+            dataRows = grid.items();
+            ids = "";
+            for (i = 0; i < dataRows.length; i++) {
+
+                row = grid.tbody.find(">tr:not(.k-grouping-row)").eq(i);
+                data = grid.dataItem(dataRows[i]);
+                for (var j = 0; j < arr.length; j++) {
+                    if (data["Id"] === arr[j]) {
+                        ids += "|" + data["Id"];
+                    }
+                }
+            }
+            $("#selIds").val(ids);
+        }
+    }
+
+</script>
+
+<div style="float:left;width:48%;height:520px">
+    <ul id="panelbar">
+
+
+        <li class="k-state-active">
+
+            <div class="k-header k-grid-toolbar k-grid-top">
+                <p style="height:30px">
+                    @Html.Kendo().RadioButton().Name("btype1").Label("增加").Checked(true).Value(1).HtmlAttributes(new { @name = "btype", @class = "btype" })
+                    @Html.Kendo().RadioButton().Name("btype2").Label("修改").Checked(false).Value(2).HtmlAttributes(new { @name = "btype", @class = "btype" })
+                    @Html.Kendo().RadioButton().Name("btype3").Label("删除").Checked(false).Value(3).HtmlAttributes(new { @name = "btype", @class = "btype" })
+                </p>
+
+                <a class="k-button k-button-icontext k-grid-commonQuery" href="javascript:void(0);" onclick="query()"><span class="k-icon k-i-search"></span>查询</a>
+            </div>
+
+            <div style="padding: 10px;height:414px" class="grid_div">
+                @{Html.RenderPartial("_PosItemGrid");}
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="tab1" id="tab1">
+    <div class="menu">
+        <ul>
+            <li id="one1" onclick="setTab('one',1)">设置</li>
+
+        </ul>
+    </div>
+    <div class="menudiv">
+        <div id="con_one_1" style="padding:15px;">
+            @using (Html.BeginForm("", "", FormMethod.Post, new { id = "addfrom" }))
+            {
+                <table class="editFormTable">
+                    <tr>
+                        <td>
+                            <label class='sale_textright'>单位：</label>
+                            @Html.Kendo().DropDownListFor(u => u.Unitid).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosUnitByModules", "BasicDataPosUnit", new { rnd = new Random().NextDouble() })); }).HtmlAttributes(new { style = "width:65%;" }).OptionLabel("请选择单位")
+                        </td>
+                        <td>
+
+                            <label class='sale_textright'>营业点：</label>
+                            @Html.Kendo().DropDownListFor(e => e.Refeid).HtmlAttributes(new { style = " width:65%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosRefe", "BasicDataPosRefe", new { rnd = new Random().NextDouble() })); }).OptionLabel("请选择营业点类型")
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label class='sale_textright'>价格：</label>@Html.Kendo().NumericTextBoxFor(u => u.Price).HtmlAttributes(new { style = " width:65%" }).Min(0)
+                        </td>
+
+                        <td>
+                            <label class='sale_textright'>差价：</label>@Html.Kendo().NumericTextBox().Name("diff_price").HtmlAttributes(new { style = " width:65%" })
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="width:100%;">
+                            <label style="width:20%;" class='sale_textright'>百分比差价：</label>@Html.Kendo().PercentTextBox().Name("percent_price").HtmlAttributes(new { style = " width:65%" })
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+                        <td>
+                            <label class='sale_textright'>餐台类型：</label>@Html.Kendo().DropDownListFor(e => e.TabTypeid).HtmlAttributes(new { style = " width:65%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosTabtype", "BasicDataPosTabtype", new { rnd = new Random().NextDouble() })); }).OptionLabel("请选择餐台类型")
+                        </td>
+                        <td>
+                            <label class='sale_textright'>日期类型：</label>@Html.Kendo().DropDownListFor(e => e.ITagperiod).HtmlAttributes(new { style = " width:65%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListiTagperiod", "BasicDataPosOnSale", new { rnd = new Random().NextDouble() })); })
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label class='sale_textright'>开始时间：</label>@Html.Kendo().MaskedTextBoxFor(m => m.StartTime).Mask("00:00").HtmlAttributes(new { style = "width:65%;", placeholder = "请输入开始时间" })
+                        </td>
+                        <td>
+                            <label class='sale_textright'>结束时间：</label>@Html.Kendo().MaskedTextBoxFor(m => m.EndTime).Mask("00:00").HtmlAttributes(new { style = "width:65%;", placeholder = "请输入结束时间" })
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>
+                            <label class='sale_textright'>模块：</label>@Html.Kendo().DropDownListFor(e => e.Module).HtmlAttributes(new { style = " width:65%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosModules", "BasicDataPosOnSale", new { rnd = new Random().NextDouble() })); })
+                        </td>
+                        <td>
+                            <label class='sale_textright'>计算类型：</label>@Html.Kendo().DropDownListFor(e => e.ICmpType).HtmlAttributes(new { style = " width:65%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListICmpType", "BasicDataPosOnSale", new { rnd = new Random().NextDouble() })); })
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label class='sale_textright'>客人类型：</label>@Html.Kendo().DropDownListFor(e => e.CustomerTypeid).HtmlAttributes(new { style = " width:65%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("CustomerTypeList", "BasicDataPosOnSale", new { rnd = new Random().NextDouble() })); }).OptionLabel("请选择客人类型")
+                        </td>
+
+
+                        <td>
+                            <label class='sale_textright'>折扣率：</label>@Html.Kendo().NumericTextBoxFor(u => u.Discount).HtmlAttributes(new { style = " width:65%" })
+                        </td>
+
+
+
+                    </tr>
+
+                    <tr>
+                        <td>
+
+                            <label class='sale_textright'></label>@Html.Kendo().CheckBoxFor(m => m.IsService).HtmlAttributes(new { style = "width:65%;" })
+                        </td>
+
+                        <td>
+
+                            <label class='sale_textright'></label>@Html.Kendo().CheckBoxFor(m => m.IsLimit).HtmlAttributes(new { style = "width:65%;" })
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>
+
+                            <label class='sale_textright'></label>@Html.Kendo().CheckBoxFor(m => m.IsDiscount).HtmlAttributes(new { style = "width:65%;" })
+                        </td>
+
+                        <td>
+
+                            <label class='sale_textright'></label>@Html.Kendo().CheckBoxFor(m => m.IsUsed).HtmlAttributes(new { style = "width:65%;" })
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="width:100%;">
+                            <label class="sale_textright" style="width:15%;">备注：</label>@Html.Kendo().TextBoxFor(u => u.Remark).HtmlAttributes(new { style = " width:83%" })
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="width:100%;text-align:center;">
+                            <div class="formButtons" style="width: 100%;text-align: center; padding-top: 22px;">
+                                <input type="button" class="k-primary k-button" onclick="tijiao()" value="确定" />&nbsp;&nbsp;
+
+                                <button class="k-primary k-button" onclick=" closeEditFormWindow()" role="button" data-role="button">取消</button>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                </table>
+                @Html.Hidden("selIds")
+            }
+        </div>
+
+    </div>
+</div>
+
+@Html.Hidden("q_itemname")
+@Html.Hidden("q_unitid")
+@Html.Hidden("q_refeid")
+@Html.Hidden("q_tabid")
+@Html.Hidden("q_customerid")
+@Html.Hidden("q_iTagperiod")
+@Html.Hidden("q_CmpType")
+@Html.Hidden("q_StartTime")
+@Html.Hidden("q_Endtime")
+
+@Html.Hidden("q_CodeAndName")
+@Html.Hidden("q_ItemClassid")
+@Html.Hidden("q_SubClassid")
+@Html.Hidden("q_DeptId")
+@Html.Hidden("q_startcode")
+@Html.Hidden("q_endcode")
+
+
+
+<script>
+
+    $(function () {
+        $('.btype').click(function () {
+            var _value = $("input[name='btype']:checked").val();
+            if (btypevalue != _value) {
+                btypevalue = _value;
+                if (_value == 1) {
+                    queryurl = "_PosItemQuery";
+                    gridurl = "_PosItemGrid";
+                }
+                else if (_value == 2 || _value == 3) {
+                    queryurl = "_PosOnSaleQuery";
+                    gridurl = "_PosOnSaleGrid";
+
+                }
+                else {
+                    jAlter("操作类型不存在");
+                    return false;
+                }
+                $.ajax({
+                    url: '/posmanage/BasicDataPosOnSale/' + gridurl,
+                    type: "post",
+                    data: {},
+                    dataType: "html",
+                    success: function (data) {
+                        $("#selIds").val("");//清空已选项目
+                        $('.grid_div').html(data);
+                    },
+                    error: function (data) {
+                        jAlert(data.responseText);
+                    }
+                });
+
+
+            }
+        });
+
+
+        //定时器更改查询状态
+        setTimeout(function () {
+            isfirst = 0;
+        },10000);
+
+    });
+
+    function tijiao() {
+
+        if (btypevalue == 1) {
+            $.ajax({
+                url: '/posmanage/BasicDataPosOnSale/BatchAdd',
+                type: "post",
+                data: $("#addfrom").serialize(),
+                dataType: "json",
+                success: function (result) {
+                    if (result.Success) {
+                        closeEditFormWindow();
+                        top.posonsalegrid.dataSource.read();
+
+                    }
+                    else {
+                        jAlert(result.Data);
+                    }
+                },
+                error: function (result) {
+                    jAlert(result.Data);
+                }
+            });
+        }
+        else if (btypevalue == 2) {
+            $.ajax({
+                url: '/posmanage/BasicDataPosOnSale/BatchUpdate',
+                type: "post",
+                data: $("#addfrom").serialize(),
+                dataType: "json",
+                success: function (result) {
+                    if (result.Success) {
+                        closeEditFormWindow();
+                        top.posonsalegrid.dataSource.read();
+
+                    }
+                    else {
+                        jAlert(result.Data);
+                    }
+                },
+                error: function (result) {
+                    jAlert(result.Data);
+                }
+            });
+        }
+        else if (btypevalue == 3) {
+            var ids = $("#selIds").val();
+            var idarray = ids.split('|');
+            var ids = "";
+            for (var i = 0; i < idarray.length; i++) {
+                if (idarray[i] != ',') {
+                    ids += idarray[i] + ",";
+                }
+            }
+
+            if (ids.length == 0) {
+                jAlert("请选择要删除的特价菜");
+            } else {
+                jConfirm("确认要删除所有选中的数据行?", "确认", "取消", function (confirmed) {
+                    if (confirmed) {
+                        $.post('@Url.Action("BatchDelete", "BasicDataPosOnSale")', { id: ids }, function (data) {
+                            if (data.Success) {
+                                jAlert("删除成功");
+                                closeEditFormWindow();
+                                top.posonsalegrid.dataSource.read();
+                            } else {
+                                jAlert(data.Data);
+                            }
+                            if (typeof (onSuccess) == "function") { onSuccess(data); }
+                        }, 'json');
+                    }
+                });
+            }
+        }
+    }
+
+    function query() {
+        $.ajax({
+            url: '/posmanage/BasicDataPosOnSale/' + queryurl,
+            type: "post",
+            data: QueryText(),
+            dataType: "html",
+            success: function (data) {
+                $("#posMaskWindow").html(data);
+                $("#posMaskWindow_wnd_title").text("请选择查询条件");
+                $(".k-i-close").click(function () {
+                    closeGeneralWindow();
+                });
+                openGeneralWindow();
+            },
+            error: function (data) {
+                jAlert(data.responseText);
+            }
+        });
+
+
+    }
+</script>
+
+<script>
+    //选项卡切换
+    var name_0 = 'one';
+    var cursel_0 = 1;
+    var links_len;
+    $(function () {
+        //选项卡
+        var links = document.getElementById("tab1").getElementsByTagName('li')
+        links_len = links.length;
+        setTab(name_0, cursel_0);
+    })
+    function setTab(name, cursel) {
+        cursel_0 = cursel;
+        for (var i = 1; i <= links_len; i++) {
+            if (i == cursel) {
+                $("#" + name + i).attr("class", "off");
+                $("#con_" + name + "_" + i).attr("style", "display:block;padding:15px");
+            }
+            else {
+
+                $("#" + name + i).removeClass("off");
+                $("#con_" + name + "_" + i).attr("style", "display:none");
+            }
+        }
+    }
+</script>

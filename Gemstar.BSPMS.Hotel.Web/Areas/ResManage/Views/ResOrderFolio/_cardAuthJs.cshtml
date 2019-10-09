@@ -1,0 +1,52 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.ResFolioManage
+@model ResFolioMainInfo
+@* 预授权的代码 *@
+<!--预授权窗口-->
+<div id="folioCardAuthWindow" style="display:none;">
+    <div id="folioCardAuthGrid"></div>
+    <input type="hidden" id="folioCardAuthAutoOpenObj" data-ids="" data-billAmount="" />
+    <input type="hidden" id="folioCardAuthIsCheckout" />
+    <table>
+        <tr>
+            <td>账单:</td>
+            <td colspan="3">@(Html.Kendo().DropDownList().Name("folioCardAuthRegId").DataSource(s=>s.Read(r=>r.Action("ListItemFoResDetailGuest", "ResOrderFolio").Data("folioResDetailGuestSetPara"))).DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style="width:100%;"}).AutoBind(false))</td>
+            <td>项目:</td>
+            <td>@(Html.Kendo().DropDownList().Name("folioCardAuthItem").DataSource(s => s.Read(r => r.Action("ListItemsForSpecialActionItem", "ResOrderFolio",new{type= "c", itemAction = "credit", returnAll = true, rnd=new Random().Next()}))).DataTextField("Text").DataValueField("Value").AutoBind(false))</td>
+            <td>&nbsp;&nbsp;<button id="folioCardAuthAdd" name="folioCardAuthAdd" class="k-button" type="button">增加</button></td>
+        </tr>
+        <tr>
+            <td>卡号:</td>
+            <td>@(Html.Kendo().TextBox().Name("folioCardAuthCardNo"))</td>
+            <td>有效期:</td>
+            <td>@(Html.Kendo().DatePicker().Name("folioCardAuthValidDate").Format("MM/yy"))</td>
+            <td>授权码:</td>
+            <td>@(Html.Kendo().TextBox().Name("folioCardAuthAuthNo"))</td>
+            <td>&nbsp;&nbsp;<button id="folioCardAuthSave" name="folioCardAuthSave" class="k-button" type="button">保存</button>@Html.Hidden("folioCardAuthId")</td>
+        </tr>
+        <tr>
+            <td>授权金额:</td>
+            <td>@(Html.Kendo().NumericTextBox().Name("folioCardAuthAuthAmount"))</td>
+            <td>授权时间:</td>
+            <td>@(Html.Kendo().TextBox().Name("folioCardAuthCreateDate").Enable(false))</td>
+            <td>授权人:</td>
+            <td>@(Html.Kendo().TextBox().Name("folioCardAuthCreateUser").Enable(false))</td>
+            <td>&nbsp;&nbsp;<button id="folioCardAuthComplete" name="folioCardAuthComplete" class="k-button" type="button">完成</button><input type="hidden" id="folioCardAuthCompleteStatus" /></td>
+        </tr>
+        <tr>
+            <td>扣款金额:</td>
+            <td>@(Html.Kendo().NumericTextBox().Name("folioCardAuthBillAmount"))</td>
+            <td>完成时间:</td>
+            <td>@(Html.Kendo().TextBox().Name("folioCardAuthCompleteDate").Enable(false))</td>
+            <td>完成人:</td>
+            <td>@(Html.Kendo().TextBox().Name("folioCardAuthCompleteUser").Enable(false))</td>
+            <td>&nbsp;&nbsp;<button id="folioCardAuthCancel" name="folioCardAuthCancel" class="k-button" type="button">取消</button></td>
+        </tr>
+        <tr>
+            <td>备注:</td>
+            <td colspan="3">@(Html.Kendo().TextBox().Name("folioCardAuthRemark").HtmlAttributes(new { style = "width:100%;" }))</td>
+            <td>状态:</td>
+            <td>@(Html.Kendo().TextBox().Name("folioCardAuthStatus").Enable(false))@Html.Hidden("folioCardAuthStatuValue")@Html.Hidden("folioCardAuthOriginJsonStr")</td>
+            <td>&nbsp;&nbsp;<button id="folioCardAuthClose" name="folioCardAuthClose" class="k-button" type="button">关闭</button></td>
+        </tr>
+    </table>
+</div>

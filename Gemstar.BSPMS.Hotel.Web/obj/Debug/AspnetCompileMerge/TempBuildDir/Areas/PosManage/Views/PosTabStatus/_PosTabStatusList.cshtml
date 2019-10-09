@@ -1,0 +1,210 @@
+﻿@{
+    Layout = null;
+}
+@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_TabStatusResult>
+
+<link href="~/Content/jquery.contextMenu.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.ui.position.js"></script>
+<script src="~/Scripts/jquery.contextMenu.js"></script>
+
+<input id="business" type="hidden" value="@(string.Format("{0:yyyy-MM-dd}", ViewBag.Business ?? ""))" />
+<ul class="tabstatus">
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            foreach (var tabStaus in Model)
+            {
+                <li data-staus="@tabStaus.TabStatus" >
+                    <a href="javascript:void(0);" onclick="isLockTab('@tabStaus.Tabid','@tabStaus.TabNo','@tabStaus.Billid','@tabStaus.TabStatus')" data-tabid="@tabStaus.Tabid" data-tabno="@tabStaus.TabNo" data-billid="@tabStaus.Billid" data-tabstatus="@tabStaus.TabStatus" data-lockTabId="@tabStaus.LockTabId">
+                        @if (!string.IsNullOrEmpty(tabStaus.FloorShowData))
+                        {
+                            foreach (var item in tabStaus.FloorShowData.Split(','))
+                            {
+                                if (item == "F")
+                                {
+                                    <span>@tabStaus.TabNo</span>
+                                }
+                            }
+                        }
+                       
+                        <span>@tabStaus.TabName</span>
+
+                        @if (!string.IsNullOrEmpty(tabStaus.FloorShowData))
+                        {
+                            foreach (var item in tabStaus.FloorShowData.Split(','))
+                            {
+                                if (item == "A")
+                                {
+                                    <span class="staus-empty-span">@tabStaus.OpenGuest</span>
+                                }
+                                else if (item == "B" && (tabStaus.TabStatus == 1 || tabStaus.TabStatus == 4 || tabStaus.TabStatus == 5))
+                                {
+                                    <span class="staus-empty-span">@tabStaus.GuestName</span>
+                                }
+                                else if (item == "C")
+                                {
+                                    <span class="staus-empty-span">@tabStaus.TabTypeName</span>
+                                }
+                                else if (item == "D")
+                                {
+                                    <span class="staus-empty-span">@(tabStaus.OpenRecord.HasValue ? tabStaus.OpenRecord.Value.ToString("dd HH:mm"):"") </span>
+                                }
+                                @*else if (item == "E")
+                                    {
+                                        <span class="staus-empty-span">@tabStaus.GuestName</span>
+                                    }*@
+                            }
+                        }
+                        @*@if (tabStaus.TabStatus == 4)
+                            {
+                                <span class="staus-empty-span">@tabStaus.IGuest</span>
+                            }*@
+                        @*@if (tabStaus.TabStatus == 7)
+                            {
+                                <span class="staus-empty-span">@tabStaus.IGuest</span>
+                            }
+                            else if (tabStaus.TabStatus == 5)
+                            {
+                                <span class="staus-reserve-span">@tabStaus.GuestName @tabStaus.ArrDate.Value.ToShortTimeString()</span>
+                                    <span class="staus-reserve-span"></span>
+                            }
+                            else if (tabStaus.TabStatus == 1)
+                            {
+                                <span class="staus-sit-span">@tabStaus.GuestName @tabStaus.OpenGuest</span>
+                                    <span class="staus-sit-span">@tabStaus.OpenRecord.Value.ToShortTimeString()</span>
+                            }
+                            else if (tabStaus.TabStatus == 6)
+                            {
+                                <span class="staus-repair-span">@tabStaus.IGuest</span>
+                            }*@
+                    </a>
+                </li>
+            }
+        }
+    }
+</ul>
+
+<script type="text/javascript">
+    //鼠标右键菜单
+    $.contextMenu({
+        selector: '.tabstatus .staus-sit,'+
+            '.tabstatus .staus-operation,'+
+            '.tabstatus .staus-clean,' +
+            '.tabstatus .staus-intimidate,' +
+            '.tabstatus .staus-beAlone,' +
+            '.tabstatus .staus-reserve',
+        callback: function (key, options) {
+            if (key == "smear") {
+                Smear($(this).find("a").first());
+            }
+        },
+        items: {
+            "smear": { name: "抹台" },
+        }
+    });
+
+    //抹台
+    function Smear(obj) {
+        $("#tabid").val($(obj).attr("data-tabid"));
+        $("#billid").val($(obj).attr("data-billid"));
+
+        var tabid = $(obj).attr("data-tabid");
+        var tabno = $(obj).attr("data-tabno");
+        var billid = $(obj).attr("data-billid");
+        var status = $(obj).attr("data-tabstatus");
+
+        var model = {
+            Tabid: $(obj).attr("data-tabid"),
+            TabNo: $(obj).attr("data-tabno"),
+            Billid: $(obj).attr("data-billid"),
+        };
+
+        if (Boolean($("#isOpenBrush").val()) == true) {
+            var cardModel = {
+                ReturnType: 1,
+                Message: "请刷卡...",
+                Callback: "$('#isAutoLogin').val('false');OpenSmearTab('" + tabid + "', '" + tabno + "', '" + billid + "','" + status + "','0');",
+                Flag:"B"
+            };
+
+            $.ajax({
+                url: '@Url.Action("_PayByCard", "Shared")',
+                type: "post",
+                data: cardModel,
+                dataType: "html",
+                success: function (cardData) {
+                    layer.open({
+                        type: 1,
+                        title: "刷卡",
+                        skin: 'layui-layer-demo', //样式类名
+                        closeBtn: 0, //不显示关闭按钮
+                        area: ['auto', 'auto'], //宽高
+                        content: cardData
+                    });
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+        else {
+            OpenSmearTab(tabid, tabno, billid, status, '2');
+        }
+    }
+
+    //开抹台
+    function OpenSmearTab(tabid, tabno, billid, status, returnType) {
+      
+        var model = {
+            Tabid: tabid,
+            TabNo: tabno,
+            ReturnType: returnType,
+            Refeid: $("#refeid").val(),
+            BillBsnsDate: $("#lblData").text()
+        };
+
+        //验证是否有开台属性
+        $.ajax({
+            url: '@Url.Action("CheckRefeOpenInfo", "PosTabStatus")',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (checkData) {
+                if (checkData.Success) {
+                    if (checkData.Data == "0") {
+                        //弹出开台界面
+                        $.ajax({
+                            url: '@Url.Action("_AddSmearTab", "PosTabStatus")',
+                            type: "post",
+                            data: model,
+                            dataType: "html",
+                            success: function (data) {
+                                layer.close(layer.index);
+                                layer.open({
+                                    type: 1,
+                                    title: "开台登记",
+                                    skin: 'layui-layer-demo', //样式类名
+                                    closeBtn: 0, //不显示关闭按钮
+                                    shadeClose: true, //开启遮罩关闭
+                                    area: ['auto', 'auto'], //宽高
+                                    content: data
+                                });
+                            },
+                            error: function (data) {
+                                layer.alert(data.responseText, { title: "快点云Pos提示" });
+                            }
+                        });
+                    }
+                    else {
+                        window.location.href = checkData.Data;
+                    }
+
+                }
+
+            },
+            error: function (checkData) {
+                layer.alert(checkData.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+</script>

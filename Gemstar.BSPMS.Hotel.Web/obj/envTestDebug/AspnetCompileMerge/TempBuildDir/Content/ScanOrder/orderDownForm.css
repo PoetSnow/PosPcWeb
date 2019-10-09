@@ -1,0 +1,184 @@
+﻿/* Index */
+.banner {
+    overflow: hidden;
+    position: relative;
+}
+
+    .banner img {
+        width: 100%;
+        height: 150px;
+    }
+
+.bursting {
+    height: 140px;
+    overflow: hidden;
+    position: relative;
+    padding: 5px 0 5px 0;
+}
+
+    .bursting .swiper-slide {
+        margin-right: 1px;
+    }
+
+    .bursting img {
+        width: 100%;
+        height: 100%;
+    }
+
+.tab {
+    clear: both;
+    position: relative;
+    height: calc(100%);
+}
+
+.settlement {
+    bottom: 0;
+    width: 100%;
+    position: fixed;
+    z-index: 99999999;
+}
+
+.container {
+    width: 100%;
+    padding: 10px;
+    overflow: auto;
+    position: relative;
+    height: calc(100% - 31px);
+}
+
+.shopCart {
+    background-color: #eaeaea;
+}
+
+    .shopCart .mui-table-view {
+        height: 300px;
+        overflow: auto;
+    }
+
+.shopCart-top {
+    width: 100%;
+    text-align: right;
+    padding: 10px 0;
+}
+
+    .shopCart-top a {
+        color: #666;
+        margin-right: 20px;
+    }
+
+.downOrder button {
+    border: 0;
+    float: left;
+    border-radius: 0;
+}
+
+.downOrder button {
+    width: 50%;
+    padding: 15px;
+}
+
+/*.downOrder button:nth-child(2) {
+        width: 100px;
+    }*/
+
+.mui-scroll {
+    height: 100%;
+}
+
+.mui-slider-group {
+    height: calc(100% - 52px);
+}
+
+/* 选项卡内容 */
+.mui-control-content {
+    background-color: white;
+    height: 100%;
+}
+
+    .mui-control-content .mui-loading {
+        margin-top: 50px;
+    }
+
+/* 左侧选项卡 */
+.mui-row.mui-fullscreen > [class*="mui-col-"] {
+    height: 100%;
+}
+
+.mui-col-xs-3,
+.mui-control-content {
+    overflow-y: auto;
+    height: 100%;
+}
+
+.mui-segmented-control .mui-control-item {
+    line-height: 50px;
+    width: 100%;
+}
+
+.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+    background-color: #fff;
+}
+
+/* 左侧选项卡列表 */
+.mui-control-content {
+    padding-top: 51px;
+    position: relative;
+}
+
+.title {
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    color: #6d6d72;
+    font-size: 15px;
+    position: fixed;
+    padding: 20px 15px 10px;
+    background-color: #efeff4;
+}
+
+.mui-table-view {
+    margin-top: 10px;
+}
+
+    .mui-table-view .mui-media-object {
+        line-height: 100px;
+        max-width: 100px;
+        height: 100px;
+    }
+
+.mui-ellipsis, .mui-media-body h4 {
+    float: left;
+    width: calc(100% - 125px);
+}
+
+.remark .mui-media-body label {
+    float: left;
+}
+
+.remark .mui-ellipsis {
+    float: right;
+    width: auto;
+}
+
+.remark .mui-input-row label {
+    width: 120px;
+}
+
+.remark .mui-input-row input {
+    width: calc(100% - 120px);
+}
+
+.mui-numbox {
+    float: right;
+    width: 120px;
+    height: 30px;
+}
+
+    .mui-numbox .mui-btn-numbox-minus, .mui-numbox .mui-btn-numbox-minus {
+        position: absolute !important;
+        z-index: 99 !important;
+    }
+
+.mui-btn-warning:enabled:active, .mui-btn-success:enabled:active {
+    border: 0;
+}

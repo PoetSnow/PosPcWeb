@@ -1,0 +1,427 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #fff;
+    font-family: "Microsoft YaHei",宋体, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 24px;
+    color: #555;
+    overflow-y: scroll;
+}
+
+a {
+    text-decoration: none;
+    color: #444;
+}
+
+input, select, textarea {
+    font-size: 14px;
+    color: #999;
+    padding-left: 10px;
+    border: 0 none;
+}
+
+li {
+    list-style: none;
+}
+
+.fleft {
+    float: left;
+}
+
+.fright {
+    float: right;
+}
+
+.font-b {
+    font-weight: bold;
+}
+
+.padd-top-15 {
+    padding-top: 15px;
+}
+
+.margin-top-10 {
+    margin-top: 10px;
+}
+/*头部开始*/
+.header {
+    padding: 30px 0;
+}
+
+.header-inner {
+    width: 1100px;
+    margin: 0 auto;
+}
+
+.logo {
+    float: left;
+}
+
+    .logo img {
+        float: left;
+        padding-right: 10px;
+    }
+
+.system-name {
+    font-size: 20px;
+    font-weight: bold;
+    font-style: normal;
+}
+
+.eng-system-name {
+    color: #c4c4c4;
+    display: block;
+    font-size: 11px;
+    font-style: normal;
+}
+
+.try {
+    float: right;
+}
+
+    .try .phone-icon {
+        background: url( ../images/all_icon.png) no-repeat;
+        width: 31px;
+        height: 37px;
+        display: inline-block;
+        vertical-align: middle;
+        background-position: 0px -38px;
+        margin-top: 6px;
+        float: left;
+    }
+
+    .try .number {
+        float: left;
+    }
+
+.font-lag {
+    font-size: 16px;
+}
+
+.sq-button {
+    float: left;
+    margin: 8px 0px 0px 25px;
+    border: 1px solid #999;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 16px;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.clearfix {
+    zoom: 1;
+}
+/*banner开始*/
+.banner {
+    background: #92d0e9 url(../images/banner1.jpg) center top no-repeat;
+    height: 484px;
+}
+
+.banner-inner {
+    position: relative;
+    width: 1100px;
+    margin: 0 auto;
+}
+
+.login {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 350px;
+    height: 380px;
+    background: #000;
+    filter: Alpha(opacity=10);
+    opacity: 0.1;
+}
+
+.login-box {
+    background: #fff;
+    width: 260px;
+    height: 320px;
+    padding: 20px 35px;
+    color: #004793;
+    position: absolute;
+    top: 60px;
+    right: 10px;
+}
+
+    .login-box .pms-login {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .login-box .lo-input-text {
+        width: 248px;
+        height: 38px;
+        border: 1px solid #e5e5e5;
+    }
+
+    .login-box .lo-input-yzm {
+        width: 125px;
+        height: 38px;
+        border: 1px solid #e5e5e5;
+    }
+
+    .login-box .login-i-t {
+        margin-top: 8px;
+    }
+
+    .login-box .login-i-b {
+        margin-top: 20px;
+    }
+
+    .login-box .login-i-t img {
+        float: right;
+    }
+
+    .login-box .lo-input-button {
+        cursor: pointer;
+        background: #004793;
+        width: 260px;
+        height: 40px;
+        border-radius: 6px;
+        color: #fff;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .login-box .re-password {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+        .login-box .re-password a {
+            padding-right: 20px;
+        }
+/*注册申请开始*/
+.wrapper {
+    width: 1100px;
+    margin: 20px auto 0;
+}
+
+.apply-banner {
+    background: #004793 url(../images/banner2.jpg) center top no-repeat;
+    height: 185px;
+}
+
+.apply-info h3 {
+    border-bottom: 1px solid #e5e5e5;
+    line-height: 45px;
+    font-size: 18px;
+}
+
+.apply-info .info-list {
+    padding: 30px 0 0 40px;
+}
+
+.info-list .apply-x {
+    margin-top: 10px;
+}
+
+    .info-list .apply-x label {
+        text-align: right;
+        width: 130px;
+        display: inline-block;
+        padding-right: 12px;
+    }
+
+.info-input-text {
+    width: 300px;
+    height: 45px;
+    border: 1px solid #e5e5e5;
+}
+
+.info-input-yzm {
+    width: 166px;
+    height: 45px;
+    border: 1px solid #e5e5e5;
+}
+
+.info-input-button {
+    cursor: pointer;
+    background: #fe8d51;
+    width: 312px;
+    height: 45px;
+    padding: 0;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.info-select {
+    width: 150px;
+    height: 45px;
+    border: 1px solid #e5e5e5;
+}
+
+.info-select-m {
+    width: 150px;
+    height: 45px;
+    border: 1px solid #e5e5e5;
+    margin-left: 8px;
+}
+
+.getcode {
+    background: #e5e5e5;
+    height: 45px;
+    line-height: 45px;
+    padding: 0 28px;
+    display: inline-block;
+    margin-left: 2px;
+}
+
+.info-list .register-b {
+    padding-left: 142px;
+    margin-top: 20px;
+}
+
+.info-list .apply-x .font-blue {
+    color: #004793;
+}
+/*找回密码开始*/
+.line {
+    height: 1px;
+    background: #e5e5e5;
+}
+
+.find-password {
+    padding: 40px 0 0;
+    min-height: 440px;
+}
+
+    .find-password h3 {
+        line-height: 30px;
+    }
+
+    .find-password .icon-careful {
+        background: url(../images/all_icon.png) no-repeat;
+        background-position: 0px 0px;
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        vertical-align: middle;
+        padding-left: 10px;
+    }
+
+.f-password-item {
+    width: 500px;
+    margin: 60px auto 100px;
+}
+
+    .f-password-item .f-password-tab {
+        height: 45px;
+    }
+
+        .f-password-item .f-password-tab a {
+            height: 45px;
+            line-height: 45px;
+            text-align: center;
+            width: 150px;
+            display: inline-block;
+        }
+
+.f-password-tab .active {
+    background: #f5f5f5;
+    border-style: solid;
+    border-color: #e5e5e5;
+    border-width: 1px 1px 0;
+}
+
+.f-password-tel {
+    background: #f5f5f5;
+    padding: 50px 50px 80px;
+    border: 1px solid #e5e5e5;
+}
+
+.f-password-button {
+    margin: 40px 50px;
+}
+/*注册成功开始*/
+.reg-success {
+    padding: 40px 0 0;
+    min-height: 440px;
+}
+
+    .reg-success h3 {
+        line-height: 30px;
+    }
+
+    .reg-success .icon-reg-success {
+        background: url(../images/all_icon.png) no-repeat;
+        background-position: 0px -79px;
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        vertical-align: middle;
+        padding-left: 10px;
+    }
+
+    .reg-success p {
+        line-height: 32px;
+    }
+
+.bg-color {
+    background: #f5f5f5;
+    padding: 50px 50px 80px;
+}
+
+.login-now {
+    margin-top: 20px;
+}
+
+.login-now-input-button {
+    cursor: pointer;
+    background: #fe8d51;
+    width: 180px;
+    height: 40px;
+    border-radius: 6px;
+    padding: 0;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+/*底部开始*/
+.footer {
+    margin-top: 60px;
+    height: 160px;
+    padding-top: 50px;
+    background: #f1f1f1;
+}
+
+.footer-inner {
+    width: 1100px;
+    margin: 0 auto;
+}
+
+.footer .wx-a {
+    float: left;
+    padding: 10px 0px 0px 200px;
+}
+
+    .footer .wx-a img, .footer .wx-b img {
+        padding-left: 6px;
+    }
+
+.footer .wx-b {
+    float: left;
+    padding: 10px 0px 0px 30px;
+}
+
+.footer .company-info {
+    float: left;
+    padding-left: 100px;
+}

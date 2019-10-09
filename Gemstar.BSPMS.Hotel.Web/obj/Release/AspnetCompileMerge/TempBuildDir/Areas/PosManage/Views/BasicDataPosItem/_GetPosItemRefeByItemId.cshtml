@@ -1,0 +1,41 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItem.PosItemEditViewModel
+
+@(Html.Kendo().Grid<Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItemRefe.PosItemRefeViewModel>()
+        .Name("gridItemRefe")
+        .Columns(columns =>
+        {
+            columns.Bound(m => m.Id).Hidden();
+            columns.Bound(m => m.itemName).Title("消费项目").Width(150);
+            columns.Bound(m => m.RefeName).Title("营业点名称").Width(150);
+            columns.Bound(m => m.ProdPrinter).Title("出品打印机").Width(200);
+            columns.Bound(m => m.SentPrtNo).Title("传菜打印机").Width(200);
+            columns.Bound(m => m.shuffleName).Title("所属市别").Width(150);
+            columns.Bound(m => m.IsDepartPrintStr).Title("合并出品部门").Width(100);
+            columns.Bound(m => m.IsTabPrintStr).Title("合并餐台").Width(100);
+            columns.Bound(m => m.Seqid).Title("排列序号");
+            columns.Bound(m => m.Remark).Title("备注").Width(200);
+            columns.Bound(m => m.ModifiedStr).Title("修改时间").Width(160);
+        })
+        .HtmlAttributes(new { ondblclick = "editGridItemOther('gridItemRefe', 'Id', '/PosManage/BasicDataPosItem/EditItemRefe', '修改消费项目对应营业点')" })
+        .Pageable()
+        .Sortable()
+        .Scrollable()
+        .Filterable()
+        .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(4)
+            .Read(read => read.Action("ListItemRefeByItemId", "BasicDataPosItem", new { id = ViewBag.id }))
+         )
+         .ToolBar(toolbar =>
+         {
+             toolbar.Template(
+                @<text>
+                    <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addGridItemOther('/PosManage/BasicDataPosItem/AddItemRefe','@ViewBag.id','添加消费项目对应营业点')"><span class="k-icon k-add"></span>增加</a>
+                    <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="editGridItemOther('gridItemRefe', 'Id', '/PosManage/BasicDataPosItem/EditItemRefe', '修改消费项目对应营业点')"><span class="k-icon k-add"></span>修改</a>
+                    <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="batchDelete('gridItemRefe', 'Id', '/PosManage/BasicDataPosItemRefe/BatchDelete')"><span class="k-icon k-i-unpin"></span>删除</a>
+                    @*<a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="hideItemOther('itemRefe')">隐藏编辑框</a>*@
+                </text>
+                    );
+                 })
+)

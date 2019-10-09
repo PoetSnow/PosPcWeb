@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StiSerializer version="1.02" type="Net" application="StiReport">
+  <Dictionary Ref="1" type="Dictionary" isKey="true">
+    <BusinessObjects isList="true" count="0" />
+    <Databases isList="true" count="0" />
+    <DataSources isList="true" count="1">
+      <ChangeTabTable Ref="2" type="DataTableSource" isKey="true">
+        <Alias>ChangeTabTable</Alias>
+        <Columns isList="true" count="12">
+          <value>数量,System.Nullable`1[System.Decimal]</value>
+          <value>原餐台,System.String</value>
+          <value>新餐台,System.String</value>
+          <value>项目名称,System.String</value>
+          <value>项目ID,System.String</value>
+          <value>单位名称,System.String</value>
+          <value>作法,System.String</value>
+          <value>要求,System.String</value>
+          <value>折前金额,System.Nullable`1[System.Decimal]</value>
+          <value>转台人,System.String</value>
+          <value>转台时间,System.Nullable`1[System.DateTime]</value>
+          <value>客位,System.String</value>
+        </Columns>
+        <Dictionary isRef="1" />
+        <IsCloud>False</IsCloud>
+        <Name>ChangeTabTable</Name>
+        <NameInSource>up_pos_ChangeTabBillDetailList</NameInSource>
+      </ChangeTabTable>
+    </DataSources>
+    <Relations isList="true" count="0" />
+    <Report isRef="0" />
+    <Variables isList="true" count="4">
+      <value>,原餐台,原餐台,System.String,,False,False</value>
+      <value>,新餐台,新餐台,System.String,,False,False</value>
+      <value>,转台人,转台人,System.String,,False,False</value>
+      <value>,转台时间,转台时间,System.Nullable`1[System.DateTime],_x0037__x002F_4_x002F_2018_x0020_4:46:25_x0020_PM,False,False</value>
+    </Variables>
+  </Dictionary>
+  <EngineVersion>EngineV2</EngineVersion>
+  <GlobalizationStrings isList="true" count="0" />
+  <MetaTags isList="true" count="0" />
+  <Pages isList="true" count="1">
+    <Page1 Ref="3" type="Page" isKey="true">
+      <Border>None;Black;2;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <Components isList="true" count="3">
+        <ReportTitleBand1 Ref="4" type="ReportTitleBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <CanShrink>True</CanShrink>
+          <ClientRectangle>0,0.4,6,2.4</ClientRectangle>
+          <Components isList="true" count="3">
+            <Text2 Ref="5" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,0.8,6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,14</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>8dd01622eb4242c49fde0a62c0a84ba4</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text2</Name>
+              <Page isRef="3" />
+              <Parent isRef="4" />
+              <Text>由：{原餐台}  转入：{新餐台}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text2>
+            <Text43 Ref="6" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,0,6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,14</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>22ee58c4c8634c1380ec6e5cceffa660</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text43</Name>
+              <Page isRef="3" />
+              <Parent isRef="4" />
+              <Text>转台通知单</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text43>
+            <Text1 Ref="7" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,1.4,2.6,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,14</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>1bb9eaf32a2e4773a04cd48da8ea70c3</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text1</Name>
+              <Page isRef="3" />
+              <Parent isRef="4" />
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text1>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Guid>6a4a8d074166455dbbd00718bedf9910</Guid>
+          <Name>ReportTitleBand1</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+        </ReportTitleBand1>
+        <DataBand1 Ref="8" type="DataBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <BusinessObjectGuid isNull="true" />
+          <CanShrink>True</CanShrink>
+          <ClientRectangle>0,3.6,6,2</ClientRectangle>
+          <Components isList="true" count="2">
+            <Text3 Ref="9" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,0.2,6,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,14</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>5ade60b6310b4beda91b3cfb85ba929f</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text3</Name>
+              <Page isRef="3" />
+              <Parent isRef="8" />
+              <Text>{ChangeTabTable.数量} {ChangeTabTable.单位名称} {ChangeTabTable.项目名称} {Format("{0:C2}", ChangeTabTable.折前金额)}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+            </Text3>
+            <Text22 Ref="10" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,1.2,6,0.7</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,14</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>504151f6d77647da9cb37578199caa1e</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text22</Name>
+              <Page isRef="3" />
+              <Parent isRef="8" />
+              <Text>{ChangeTabTable.作法}  {ChangeTabTable.要求}  {ChangeTabTable.客位}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <Type>Expression</Type>
+            </Text22>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <DataRelationName isNull="true" />
+          <DataSourceName>ChangeTabTable</DataSourceName>
+          <Filters isList="true" count="0" />
+          <Guid>5afbc0d417294cdbb62ed111bada7ea5</Guid>
+          <Name>DataBand1</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Sort isList="true" count="0" />
+        </DataBand1>
+        <FooterBand1 Ref="11" type="FooterBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,6.4,6,2.6</ClientRectangle>
+          <Components isList="true" count="3">
+            <Text12 Ref="12" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,1,6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,14</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>09ab2aa7cf5e4ffd874fe89591a1bac6</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text12</Name>
+              <Page isRef="3" />
+              <Parent isRef="11" />
+              <Text>转台时间：{Format("{0:MM-dd HH:mm:ss}", 转台时间)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text12>
+            <Text10 Ref="13" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,0.2,6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,14</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>8667163f2fc74b048f1fb070567544ad</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text10</Name>
+              <Page isRef="3" />
+              <Parent isRef="11" />
+              <Text>转台人：{转台人}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text10>
+            <HorizontalLinePrimitive3 Ref="14" type="HorizontalLinePrimitive" isKey="true">
+              <ClientRectangle>0,2,6,0.0254</ClientRectangle>
+              <Color>Black</Color>
+              <EndCap Ref="15" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </EndCap>
+              <Guid>8b00a32e7f4a4d519e85bd716e8cd15d</Guid>
+              <Name>HorizontalLinePrimitive3</Name>
+              <Page isRef="3" />
+              <Parent isRef="11" />
+              <StartCap Ref="16" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </StartCap>
+              <Style>Dash</Style>
+            </HorizontalLinePrimitive3>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Guid>42832ba90efa4bbc82967101b43bff36</Guid>
+          <Name>FooterBand1</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+        </FooterBand1>
+      </Components>
+      <Conditions isList="true" count="0" />
+      <Guid>4e55370e237f4230905924d6e55f5e41</Guid>
+      <Margins>0.5,0.5,0.5,0.5</Margins>
+      <Name>Page1</Name>
+      <PageHeight>30</PageHeight>
+      <PageWidth>7</PageWidth>
+      <Report isRef="0" />
+      <Watermark Ref="17" type="Stimulsoft.Report.Components.StiWatermark" isKey="true">
+        <Font>Arial,100</Font>
+        <TextBrush>[50:0:0:0]</TextBrush>
+      </Watermark>
+    </Page1>
+  </Pages>
+  <PrinterSettings Ref="18" type="Stimulsoft.Report.Print.StiPrinterSettings" isKey="true" />
+  <ReferencedAssemblies isList="true" count="8">
+    <value>System.Dll</value>
+    <value>System.Drawing.Dll</value>
+    <value>System.Windows.Forms.Dll</value>
+    <value>System.Data.Dll</value>
+    <value>System.Xml.Dll</value>
+    <value>Stimulsoft.Controls.Dll</value>
+    <value>Stimulsoft.Base.Dll</value>
+    <value>Stimulsoft.Report.Dll</value>
+  </ReferencedAssemblies>
+  <ReportAlias>Report</ReportAlias>
+  <ReportChanged>7/4/2018 4:47:42 PM</ReportChanged>
+  <ReportCreated>7/4/2018 2:10:59 PM</ReportCreated>
+  <ReportFile>D:\work\捷信达项目\GsBrowser\bin\x86\Debug\report\转台通知单.mrt</ReportFile>
+  <ReportGuid>52c9c8740a39440c8a481800f0778bf1</ReportGuid>
+  <ReportName>Report</ReportName>
+  <ReportUnit>Centimeters</ReportUnit>
+  <ReportVersion>2014.2.2000</ReportVersion>
+  <Script>using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Data;
+using Stimulsoft.Controls;
+using Stimulsoft.Base.Drawing;
+using Stimulsoft.Report;
+using Stimulsoft.Report.Dialogs;
+using Stimulsoft.Report.Components;
+
+namespace Reports
+{
+    public class Report : Stimulsoft.Report.StiReport
+    {
+        public Report()        {
+            this.InitializeComponent();
+        }
+
+        #region StiReport Designer generated code - do not modify
+		#endregion StiReport Designer generated code - do not modify
+    }
+}
+</Script>
+  <ScriptLanguage>CSharp</ScriptLanguage>
+  <Styles isList="true" count="0" />
+</StiSerializer>

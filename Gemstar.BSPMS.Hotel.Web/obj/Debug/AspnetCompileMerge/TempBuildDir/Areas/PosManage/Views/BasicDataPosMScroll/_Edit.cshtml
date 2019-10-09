@@ -1,0 +1,86 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosMScroll.PosMScrollEditViewModel
+@{
+    ViewBag.FileName = Model.FileName;
+}
+
+<style>
+    .k-panelbar > li.k-state-default > .k-link {
+        color: #333;
+    }
+</style>
+
+<link href="~/Content/ScanOrder/viewer.min.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    function posItem_paras() {
+        var item = $("#Itemid").data("kendoDropDownList");
+        var itemid = item.value();
+        return {
+            itemid: itemid
+        };
+    }
+
+    function itemChanged() {
+        var Unitid = $("#Unitid").data("kendoDropDownList");
+        Unitid.dataSource.read();
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.Hid)
+    @Html.HiddenFor(m => m.UnitName)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Itemid)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Itemid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").Filter("contains").DataSource(e => { e.Read(r => r.Action("ListItemsForPosItemByShowSets", "BasicDataPosMScroll", new { rnd = new Random().NextDouble() })); }).Events(e => e.Change("itemChanged")).OptionLabel("请选择消费项目")</td>
+            <td>@Html.ValidationMessageFor(m => m.Itemid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Unitid)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Unitid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForItemPriceByItemId", "BasicDataPosItemPrice", new { rnd = new Random().NextDouble() }).Data("posItem_paras")).ServerFiltering(true); }).OptionLabel("请选择单位")</td>
+            <td>@Html.ValidationMessageFor(m => m.Unitid, "*")</td>
+        </tr>
+        @Html.Partial("_QiniuPictureUploadSingle")
+        <tr style="display:none;">
+            <td class="textright">@Html.LabelFor(m => m.FileName)</td>
+            <td>@Html.Kendo().TextBoxFor(e => e.FileName).HtmlAttributes(new { style = " width:100%" })</td>
+            <td>@Html.ValidationMessageFor(m => m.FileName, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.OrderBy)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.OrderBy).HtmlAttributes(new { style = " width:100%" })</td>
+            <td>@Html.ValidationMessageFor(m => m.OrderBy, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = " width:100%" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+    </table>
+
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script src="~/Scripts/ScanOrder/viewer.min.js"></script>
+<script src="~/Scripts/ScanOrder/webuploader.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+
+        itemChanged();
+    });
+</script>

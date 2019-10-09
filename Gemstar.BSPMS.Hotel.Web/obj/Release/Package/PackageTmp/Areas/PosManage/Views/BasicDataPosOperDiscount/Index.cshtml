@@ -1,0 +1,41 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+
+@{
+    ViewBag.Title = "Pos操作员折扣设置";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var colsDefault = new List<GridColumnSetting>
+{
+new GridColumnSetting {Name = "userName", Title = "操作员", Hidden = false, Order = 1, Width = 0},
+new GridColumnSetting {Name = "refeName", Title = "中文名称", Hidden = false, Order = 2, Width = 0},
+new GridColumnSetting {Name = "Discount", Title = "最低折扣", Hidden = false, Order = 3, Width = 0},
+new GridColumnSetting {Name = "Orderlimit", Title = "点菜限额", Hidden = false, Order = 4, Width = 0},
+new GridColumnSetting {Name = "Presentlimit", Title = "赠送限额", Hidden = false, Order = 5, Width = 0},
+
+};
+    var gridViewModel = new KendoGridCustomDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,    
+        EnableScrollable = true,
+        Area = "PosManage",
+        Controller = "BasicDataPosOperDiscount",
+        Action = "Index",
+        DefaultColumnSettings = colsDefault,
+        CustomToolbar = c =>
+        {
+            c.Custom().Name("comfirmtextone").Text("双击可修改").HtmlAttributes(new { id = "comfirmtextone", href = "javascript:void(0);", style = "color:red;margin-top:9px;margin-left:10px;cursor:default;" });
+        }
+    };
+
+}
+
+@Html.Partial("_KendoGridCustomDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}

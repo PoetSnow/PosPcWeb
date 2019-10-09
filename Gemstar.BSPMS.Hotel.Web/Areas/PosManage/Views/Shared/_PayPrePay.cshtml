@@ -1,0 +1,89 @@
+﻿
+@{
+    Layout = null;
+}
+
+<tr class="folioAddPayment">
+    <td>押金单号：</td>
+    <td>
+        <script>           
+            function onSelect() {
+                ajaxData();
+            }
+            function onChange()
+            {
+                ajaxData();
+            }
+            function ajaxData() {
+                var PrePay = $("#PrePayId").data("kendoDropDownList");
+                var PrePayId = PrePay.value();
+                $.ajax({
+                    url: '@Url.Action("GetPrePay", "Shared")',
+                    type: "post",
+                    data: { Id: PrePayId},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.Success) {
+                            var jsonData = data.Data;
+
+                            $("#PrePayId").val(PrePayId);
+                            $("#txtGuestCName").val(jsonData.GuestName);
+                            $("#txtMobile").val(jsonData.Mobile);
+                            $("#lblBalance").text(jsonData.BalanceAmount);
+                            $("#lbldBusiness").text(jsonData.Business)
+
+                            $("#lblshift").text(jsonData.ShiftName)
+                            $("#lblhandBillno").text(jsonData.HandBillNo)
+                            $("#lblusedDate").text(jsonData.UsedDate)
+                            $("#lblusedDesc").text(jsonData.UseDesc)
+                            $("#lblRemark").text(jsonData.Remark)
+                        }
+                        else {
+                            layer.alert(data.Data, { title: "快点云Pos提示", skin: "err" });
+                        }
+                       
+                    },
+                    error: function (data) {
+                        layer.alert(data.responseText, { title: "快点云Pos提示", skin: "err" });
+                    }
+                });
+            }
+        </script>
+        @(Html.Kendo().DropDownList()
+                .Name("PrePayId")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .Filter("contains")
+                .DataSource(e => { e.Read(r => r.Url(Url.Action("ListItemsForPrePay", new { rnd = new Random().NextDouble() }))).ServerFiltering(true); })
+                .Events(e => e.Select("onSelect").Change("onChange")).AutoBind(false))
+    </td>
+</tr>
+<tr class="folioAddPayment">
+    <td>姓名：</td>
+    <td><input type="text" readonly style="width:100%;background-color:rgb(245, 245, 245);" class="k-textbox" id="txtGuestCName" /></td>
+    <td>电话：</td>
+    <td><input type="text" readonly style="width:100%;background-color:rgb(245, 245, 245);" class="k-textbox" id="txtMobile" /></td>
+</tr>
+<tr class="folioAddPayment">
+    <td>余额：</td>
+    <td><span id="lblBalance"></span></td>
+    <td>营业日：</td>
+    <td><span id="lbldBusiness"></span></td>
+</tr>
+<tr class="folioAddPayment">
+    <td>班次：</td>
+    <td><span id="lblshift"></span></td>
+    <td>收据号码：</td>
+    <td><span id="lblhandBillno"></span></td>
+</tr>
+<tr class="folioAddPayment">
+    <td>使用时间：</td>
+    <td><span id="lblusedDate"></span></td>
+    <td>使用说明：</td>
+    <td><span id="lblusedDesc"></span></td>
+</tr>
+<tr class="folioAddPayment">
+    <td>备注：</td>
+    <td><span id="lblRemark"></span></td>
+
+</tr>

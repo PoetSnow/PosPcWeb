@@ -1,0 +1,174 @@
+﻿@using System.Data;
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+@{
+    ViewBag.Title = "业主报表数据";
+}
+@(Html.Kendo().Grid<DataRowView>()
+        .Name("grid")
+        .Columns(c =>
+        {
+            c.AutoGenerate(false);
+        })
+        .ColumnMenu()
+        .Filterable()
+        .Reorderable(c => c.Columns(true))
+        .Resizable(c => c.Columns(true))
+        .Scrollable(c => c.Height("100%").Enabled(true))
+        .Sortable()
+        .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+        .Pageable(pageable => pageable.PageSizes(Gemstar.BSPMS.Common.Tools.CommonHelper.PageSizes))
+        .Pageable(pageable => pageable.Enabled(true))
+        .Pageable(pageable => pageable.Messages(c => c.ItemsPerPage("")))
+        .DataSource(dataSource => dataSource
+        .Custom()
+        .Transport(trans => trans.Read(read => read.Action("AjaxQuery", "RoomOwnerCalcResult").Data("getQueryPara").Type(HttpVerbs.Post)))
+        .PageSize(Gemstar.BSPMS.Common.Extensions.UrlHelperExtension.GetPageSizeForCookies(Request))
+        .Schema(schema => schema.Data("Data").Total("Total").Errors("Errors").Model(model => { model.ClearFields(); }))
+        )
+        .ToolBar(c =>
+        {
+            c.Template("  营业月  <input id='begintime'/>　   <input type='button' value='查询'  class='k-button' onclick = 'queryData()' />  <input type='button' value='重新生成'  class='k-button' onclick = 'Regenerateclick()' />  <input type='button' id='publishStatus' value='发布' disabled=disabled  class='pubcss' onclick = 'doPublish()' />    ");
+        })
+)
+<style type="text/css">
+    .pubcss {
+        vertical-align: middle;
+        box-shadow: none;
+        border-radius: 4px;
+        display: inline-block;
+        padding-left: 0px;
+        height: 32px;
+        width: 53px;
+    }
+</style>
+
+<script type="text/javascript">
+
+    $(function () {
+        window.onresize = onResize; onResize();
+        if("@ViewData["dtime"]"!="")
+        {
+            $("#begintime").kendoDatePicker({
+                culture: "zh-CN",
+                format: "yyyy-MM",
+                value:"@ViewData["dtime"]",
+                max:new Date(),
+                start:"year",
+                depth: "year",
+                dateInput: true});
+            queryData();
+        }else{
+            $("#begintime").kendoDatePicker({
+                culture: "zh-CN",
+                format: "yyyy-MM",
+                value:new Date(@DateTime.Today.Year,@DateTime.Today.AddMonths(-2).Month,1),
+                max:new Date(),
+                start:"year",
+                depth: "year",
+                dateInput: true});
+        }
+        getPubStatus( $("#begintime").val());
+        $("#begintime").change(function(){
+            getPubStatus( $("#begintime").val());
+        });
+
+    });
+    function getQueryPara() {
+        var calcDate = $("#begintime").val();
+        if("@ViewData["dtime"]"!="" && calcDate=="")
+        {
+            calcDate = "@ViewData["dtime"]";
+        }
+        if (calcDate) {
+            calcDate += "-01";
+        }else{
+            calcDate = "@DateTime.Today.AddMonths(-1).ToString("yyyy-MM-01")";
+        }
+        return {
+            calcDate: calcDate
+        }
+    }
+    function queryData() {
+        var bt = new Date($("#begintime").val());
+        var endtime = new Date();
+        if (bt > endtime) {
+            jAlert(" 日期不能大于当前日期！", "知道了");
+            return;
+        }
+        getPubStatus($("#begintime").val());
+        var grid = $("#grid").data("kendoGrid");
+        grid.dataSource.read();
+    }
+    function getPubStatus(dt){
+        $.post("@Url.Action("getPubStatus")", { dt: dt }, function (data) {
+            if (data.Success) {
+                $("#publishStatus").val(data.Data);
+                if($("#publishStatus").val()!="未生成")
+                {
+                    $("#publishStatus").attr("class","k-button");
+                    $("#publishStatus").removeAttr("disabled");
+                }else{
+                    $("#publishStatus").attr("class","pubcss");
+                    $("#publishStatus").attr("disabled","disabled");
+                    $("#publishStatus").val("发布");
+                }
+            } else {
+                ajaxErrorHandle("获取失败！");
+            }
+        }, 'json');
+    }
+    function Regenerateclick() {
+        var begintimes = new Date($("#begintime").val());
+        if ($("#begintime").val() == "")
+        {
+            jAlert(" 年月不能为空！", "知道了");
+            return;
+        }
+        var endtime = new Date();
+        if (begintimes > endtime) {
+            jAlert(" 月份不能大于当前日期！", "知道了");
+            return;
+        }
+        var beginval = $("#begintime").val();
+        jsonajax("@Url.Action("Regenerate")?dt=" + beginval);
+    }
+    //ajax方法
+    function jsonajax(urls) {
+
+        var Rand = Math.random();
+        $.ajax({
+            url: urls + "&rand=" + Rand,
+            success: function (data) {
+                jAlert(data.Data);
+                if(data.Success){
+                    window.location.href="@Url.Action("Index")"+"?dtime="+$("#begintime").val();
+                }
+            },
+            async: false
+        });
+    }
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#grid .k-grid-toolbar").height() + 195;
+        $("#grid .k-grid-content").height(allHeight - showHeight);
+    }
+    function doPublish(){
+        var ispublish=false;
+        if($("#publishStatus").val()=="发布")
+        {
+            ispublish=true;
+        }
+        $.post("@Url.Action("setPubStatus")", { ispublish: ispublish ,dt:$("#begintime").val()}, function (data) {
+            if (data.Success) {
+                jAlert(data.Data);
+                getPubStatus($("#begintime").val()) 
+            } else {
+                ajaxErrorHandle("操作失败！");
+            }
+        }, 'json');
+    }
+</script>

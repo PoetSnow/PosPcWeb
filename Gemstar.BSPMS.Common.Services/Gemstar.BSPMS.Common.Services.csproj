@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{00595ED1-611E-43B1-AC43-470B54830B9B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Gemstar.BSPMS.Common.Services</RootNamespace>
+    <AssemblyName>Gemstar.BSPMS.Common.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'envTestDebug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\envTestDebug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'envTestRelease|AnyCPU'">
+    <OutputPath>bin\envTestRelease\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BasicDataControls\BasicDataControl.cs" />
+    <Compile Include="BasicDataControls\BasicDataDataSource.cs" />
+    <Compile Include="BasicDataControls\BasicDataUpdateAttribute.cs" />
+    <Compile Include="BasicDataControls\DataControlType.cs" />
+    <Compile Include="BasicDataControls\IBasicDataCopyService.cs" />
+    <Compile Include="BasicDataControls\IBasicDataCopyEntity.cs" />
+    <Compile Include="BasicDataControls\M_V_BasicDataType.cs" />
+    <Compile Include="Entities\DataBaseList.cs" />
+    <Compile Include="Entities\HotelPos.cs" />
+    <Compile Include="Entities\HotelProducts.cs" />
+    <Compile Include="Entities\M_v_products.cs" />
+    <Compile Include="Entities\posSmMappingHid.cs" />
+    <Compile Include="Entities\ServicesOperator.cs" />
+    <Compile Include="Entities\Notice.cs" />
+    <Compile Include="Entities\WeixinOperatorHotelMapping.cs" />
+    <Compile Include="Entities\WeixinOwnerHotelMapping.cs" />
+    <Compile Include="Entities\WeixinQrcodeLogin.cs" />
+    <Compile Include="Entities\WeixinQrcodes.cs" />
+    <Compile Include="EntityProcedures\UpQueryOwnerHotelsByWxOpenIdResult.cs" />
+    <Compile Include="Entities\WeixinTemplateMessage.cs" />
+    <Compile Include="Enums\EntityKeyDataType.cs" />
+    <Compile Include="Enums\WeixinQrcodeLoginStatus.cs" />
+    <Compile Include="IEntityEnable.cs" />
+    <Compile Include="IHotelPosService.cs" />
+    <Compile Include="INoticeService.cs" />
+    <Compile Include="IProductService.cs" />
+    <Compile Include="LogAttributes\AdPosition.cs" />
+    <Compile Include="BusinessTypeAttribute.cs" />
+    <Compile Include="Entities\HelpFiles.cs" />
+    <Compile Include="Entities\HelpFilesImg.cs" />
+    <Compile Include="Entities\HotelFunctions.cs" />
+    <Compile Include="Entities\ServicesAuthorize.cs" />
+    <Compile Include="Entities\TryInfo.cs" />
+    <Compile Include="EntityProcedures\AccountInfo.cs" />
+    <Compile Include="IHelpFilesService.cs" />
+    <Compile Include="IServiceAuthorizeService.cs" />
+    <Compile Include="ITryInfoService.cs" />
+    <Compile Include="LogAttributes\LogAnywayWhenEditAttribute.cs" />
+    <Compile Include="LogAttributes\LogBoolAttribute.cs" />
+    <Compile Include="LogAttributes\LogCNameAttribute.cs" />
+    <Compile Include="Entities\AdSet.cs" />
+    <Compile Include="Entities\HotelChannel.cs" />
+    <Compile Include="Entities\M_v_payPara.cs" />
+    <Compile Include="Entities\M_v_channelPara.cs" />
+    <Compile Include="Entities\M_v_codeListPub.cs" />
+    <Compile Include="Entities\M_v_channelCode.cs" />
+    <Compile Include="Entities\PayLog.cs" />
+    <Compile Include="Entities\SmsLog.cs" />
+    <Compile Include="Entities\SysCheckCode.cs" />
+    <Compile Include="Entities\CityMaster.cs" />
+    <Compile Include="Entities\CenterHotel.cs" />
+    <Compile Include="Entities\Province.cs" />
+    <Compile Include="Entities\StarLevel.cs" />
+    <Compile Include="Entities\SysLog.cs" />
+    <Compile Include="Entities\SysPara.cs" />
+    <Compile Include="EntityProcedures\UpGetDropDownCodeAndNameResult.cs" />
+    <Compile Include="EntityProcedures\UpHardwareInterfacecs.cs" />
+    <Compile Include="EntityProcedures\UpQueryHotelInfoByIdResult.cs" />
+    <Compile Include="EntityProcedures\UpQueryHotelInterfaceByIdResult.cs" />
+    <Compile Include="EntityProcedures\UpQueryProcedureParametersResult.cs" />
+    <Compile Include="EntityStatus.cs" />
+    <Compile Include="Enums\OpLogType.cs" />
+    <Compile Include="IBeforeLoginService.cs" />
+    <Compile Include="ICommonQueryService.cs" />
+    <Compile Include="ICRUDService.cs" />
+    <Compile Include="IDataChangeLog.cs" />
+    <Compile Include="IHotelInfoService.cs" />
+    <Compile Include="IMasterService.cs" />
+    <Compile Include="ISmsLogService.cs" />
+    <Compile Include="ISysCheckCodeService.cs" />
+    <Compile Include="ISysLogService.cs" />
+    <Compile Include="ISysParaService.cs" />
+    <Compile Include="JsonResultData.cs" />
+    <Compile Include="LogAttributes\LogDatetimeFormatAttribute.cs" />
+    <Compile Include="LogAttributes\LogEnumAttribute.cs" />
+    <Compile Include="LogAttributes\LogIgnoreAttribute.cs" />
+    <Compile Include="LogAttributes\LogKeyAttribute.cs" />
+    <Compile Include="LogAttributes\LogRefrenceNameAttribute.cs" />
+    <Compile Include="LogAttributes\LogStartsWithHidAttribute.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

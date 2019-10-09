@@ -1,0 +1,66 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MarketingManage.Models.RoomOwnerFee.RoomOwnerFeeEditViewModel 
+@using (Html.BeginForm())
+{
+    <table class="editFormTable"> 
+        <tr>
+            <td class="textright" style="width:50px;">@Html.LabelFor(m => m.FeeDate)</td>
+            <td>@Html.Kendo().DatePickerFor(m => m.FeeDate).HtmlAttributes(new { style = " width:100%" }) </td>
+            <td>@Html.ValidationMessageFor(m => m.FeeDate, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright" style="width:50px;">@Html.LabelFor(m => m.itemId)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.itemId).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("getOwnerItem", "RoomOwnerFee", new { rnd = new Random().NextDouble() })); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.itemId, "*")</td>
+        </tr> 
+        <tr id="tra" style="margin-bottom:20px;">
+            <td class="textright" style="width:50px;">   </td>
+            <td colspan="2">  
+                @(Html.Kendo().Upload()
+            .Name("files")
+            .HtmlAttributes(new { aria_label = "files" })
+                )
+                <div class="demo-hint">只能上传<strong>EXCEL</strong>模板文件。</div>
+            </td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons" style="padding-bottom:50px;"> 
+        <div style="margin-bottom:10px;color:red;">   @ViewBag.message</div> 
+        <input type="submit" class="k-primary k-button" id="importData"   value="导入" />&nbsp;&nbsp;
+        <input type="button" class="k-primary k-button" id="closeEditFormButton"   value="返回"/> 
+    </div>
+}
+<style>
+    html,body{width:600px;}
+    .demo-hint {
+    line-height: 22px;
+    color: #aaa;
+    font-style: italic;
+    font-size: .9em;
+    padding-top: 1em;
+}
+
+</style>
+<script type="text/javascript">
+    $(function () {
+     
+        $("#FeeDate").kendoDatePicker({ culture: "zh-CN", format: "yyyy-MM-dd" });
+        $("#FeeDate").val(new Date().Format("yyyy-MM-dd"));
+        $.validator.unobtrusive.parse(document);
+        $("#closeEditFormButton").click(function (e) {
+            var $mainIframe = $(parent.document).find("iframe");
+            if ($mainIframe.length > 0) {
+                var $ownerFeeIframe = $($mainIframe[0].contentWindow.document).find("iframe[src='/MarketingManage/RoomOwnerFee']");
+                if($ownerFeeIframe.length > 0){
+                    if ($ownerFeeIframe[0].contentWindow.refreshOwnerFeeGrid) {
+                        $ownerFeeIframe[0].contentWindow.refreshOwnerFeeGrid();
+                    }
+                }
+            }            
+            top.window.closeIframeKendoWindow(); 
+        });
+    });
+    
+</script> 

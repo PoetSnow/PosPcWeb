@@ -1,0 +1,219 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Common.Services;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+@{
+
+    var hotelItems = new List<SelectListItem>();
+    if (ViewBag.Hotels != null)
+    {
+        hotelItems.Add(new SelectListItem { Value = "", Text = "全部" });
+        foreach (var hotel in ViewBag.Hotels)
+        {
+            hotelItems.Add(new SelectListItem { Value = hotel.Hid, Text = (string.IsNullOrEmpty(hotel.Hotelshortname) ? hotel.Name : hotel.Hotelshortname) });
+        }
+    }
+
+    ViewBag.Title = "会员";
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForDelete = false,
+        DelayValidDate = true,
+        UpdateSales = true,
+        UpdateScores = true,
+        EnableScrollable = true,
+        ServerOperation = true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("hotelName").Title("分店名称").Hidden(!ViewBag.isGroup);
+            c.Bound("mbrCardName").Title("会员卡类型");
+            c.Bound("mbrCardNo").Title("会员卡号");
+            c.Bound("guestName").Title("会员姓名");
+            c.Bound("mbrstatus").Title("卡状态");
+            c.Bound("joinDate").Title("入会日期");
+            c.Bound("isAudit").Title("审核状态");
+            c.Bound("validDate").Title("有效期");
+            c.Bound("balance").Title("储值余额");
+            c.Bound("free").Title("增值余额");
+            c.Bound("score").Title("积分余额");
+            c.Bound("scoreOwner").Title("业主分余额");
+            c.Bound("cashTicket").Title("现金券余额");
+            c.Bound("sales").Title("业务员");
+            c.Bound("isOwner").Title("是否业主").Hidden(!ViewBag.isallowOwner);
+
+        },
+        RowTemplate = @"<tr style=#: status!=1?'text-decoration:line-through;color:red;':'' #>
+                         " + (ViewBag.isGroup ? " <td>#: hotelName #</td>" : "") + @"
+                          <td>#: mbrCardName #</td>
+                          <td>#: mbrCardNo #</td>
+                          <td>#: guestName #</td>
+                          <td>#: mbrstatus # </td>
+                          <td>#: joinDate #</td>
+                          <td>#: isAudit==true?'已审核':'未审核' #</td>
+                          <td>#: validDate #</td>
+                          <td>#:balance==null?0:balance#</td>
+                          <td>#:free==null?0:free#</td>
+                          <td>#:score==null?0:score#</td>
+                          <td>#:scoreOwner==null?0:scoreOwner#</td>
+                          <td>#:cashTicket==null?0:cashTicket#</td>
+                          <td>#: sales==null?'':sales #</td>
+                         " + (ViewBag.isallowOwner == true ? "<td>#: isOwner==true?'是':'否' #</td>" : "") + "</tr>",
+        CustomToolbar = c =>
+        {
+        c.Template(@<text>
+        <span id="showdrop">
+    分店
+    @(Html.Kendo().DropDownList().Name("Hotelname").DataTextField("Text").DataValueField("Value").BindTo(hotelItems))
+        </span>
+            <input class="k-textbox" id="txtCondition" type="text" placeholder="卡号/姓名/感应卡号" style="height:31px;">
+        <a class="select-icon" href="javascript:vagueSelect();"></a>&nbsp;&nbsp;
+        @{if (!string.IsNullOrWhiteSpace(ViewBag.mbrType))
+            {
+                <img class="res-icon-img" src="~/images/auth/mk.png" title="读卡" id="mbrScanIdButton" /><input type="hidden" id="MbrCardScan" value="mbrIndex" />
+            }
+        }
+        <a id="selectbnt" class='k-button k-button-icontext k-grid-commonQuery' href='javascript:void(0);' onclick="showCommonQueryWindow()"><span class='k-icon k-i-search'></span>综合查询</a>
+        <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addGridItem()"><span class="k-icon k-add"></span>增加</a>
+        <a class='k-button k-button-icontext k-grid-addGridItem' href='javascript:void(0);' onclick="MbrCardNew(this,'@Url.Action("CardFee")')">卡费</a>
+        <a class='k-button k-button-icontext k-grid-addGridItem' href='javascript:void(0);' onclick="MbrCardNew(this,'@Url.Action("Recharge")')">充值</a>
+        <a class='k-button k-button-icontext k-grid-addGridItem' href='javascript:void(0);' onclick="MbrCardNew(this,'@Url.Action("SubtractMoney")')">扣款</a>
+        <a class='k-button k-button-icontext k-grid-updateScore' href='javascript:void(0);' onclick="MarketSms('@Url.Action("Index", "MbrMartketSmsManage", new { area = "MbrCardCenter" })')" style='float:right;margin-right:10px;'><span></span>营销短信</a>
+        <a class='k-button k-button-icontext k-grid-updateScore' href='javascript:void(0);' onclick="giveCoupon('grid','id','@Url.Action("GiveCoupon")')" style='float:right;'><span></span>发放优惠券</a>
+        <a class='k-button k-button-icontext k-grid-updateScore' href='javascript:void(0);' onclick="updateScore('grid','id','@Url.Action("UpdateScore")')" style='float:right;'><span></span>批量积分调整</a>
+        <a class='k-button k-button-icontext k-grid-updatesales' href='javascript:void(0);' onclick="updateSale('grid','id','@Url.Action("UpdateSales")')" style='float:right;'><span></span>更换业务员</a>
+        <a class='k-button k-button-icontext k-grid-delay' href='javascript:void(0);' onclick="delayValidDate('grid','id','@Url.Action("Delay")')" style='float:right;'><span></span>批量延期</a>
+        <span style='display:inline-block;color:red;margin-left:10px;'>双击进入详情操作</span>
+        <span style='display:inline-block;' class="span-des">@ViewBag.balance</span>
+        <span class='right-span'>按[Ctrl]或者[Shift]多选</span>
+        </text>
+                );
+        }
+    };
+}
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+<div style="display:none;">
+   @section hardwareIframe{
+    @Html.Partial("_HardwareIframe")
+}
+</div>
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+    <script type="text/javascript">
+        var load = { num: 0 };
+        $(function () {
+            window.onresize = onResize; onResize();
+            $("#comfirmtext").removeClass("k-button");
+            $("#@gridId").unbind("dblclick");
+            $("#@gridId").on("dblclick", "tr.k-state-selected", function (e) {
+                e.preventDefault();
+                openGridItem(this);
+            });
+            $("#commonKendoWindow div:first").css("height", "400px");
+            if ("@ViewBag.IsFast" == 0) {
+                $("#showdrop").hide();
+                $("#selectbnt").hide();
+            }
+            if ("@ViewBag.Hotels" == "") { 
+                $("#showdrop").hide();
+            }
+            //会员卡扫描
+            $("#mbrScanIdButton").click(function (e) { MbrCardButton_clicked(e);});
+            $("#Hotelname").change(function () { 
+                var result = "@@h99分店=" + $("#Hotelname").val(); 
+                GetControl("#commonQueryParameterValues").val(result);
+                refreshGrid();
+            });
+        });
+        function openGridItem(row) {
+            var gridId = "@gridId";
+            var keyName = "@keyColumnName";
+            var grid = $("#" + gridId).data("kendoGrid");
+            var data = grid.dataItem($(row));
+            openDetail(data[keyName]);
+        }
+        function openDetail(id) {
+            var linkId = "mbrCardManage_Detail";
+            var url = "/MbrCardCenter/MbrCardManage/Detail/" + id;
+            if (window.parent.document.getElementById(linkId) == null) {
+                var link = "<a id=\"" + linkId + "\" class=\"secondLevelAuth tab-switch\" data-authurl=\"" + url + "\" href=\"javascript:selectAuth('" + url + "','会员详情','30001_64');\">会员详情</a>";
+                $("#secondLevelMenu", window.parent.document).append(link);
+            }
+            else {
+                var obj = $("#" + linkId, window.parent.document);
+                obj.attr("data-authurl", url);
+                obj.attr("href", "javascript:selectAuth('" + url + "','会员详情','30001_64');");
+            }
+            window.parent.document.getElementById(linkId).click();
+        }
+        function refreshGrid() {
+            var grid = $("#grid").data("kendoGrid");
+            grid.dataSource.page(1);
+            grid.dataSource.read();
+        }
+        //模糊查询
+        function vagueSelect() {
+            $("#txtCondition").focus();
+            var condition = $("#txtCondition").val();
+            var result = "@@h99condition=" + condition + "&@@h99IsFast=" + "@ViewBag.IsFast";
+            GetControl("#commonQueryParameterValues").val(result);
+            refreshGrid();
+        }
+        $("#txtCondition").keydown(function (e) {
+            if (e.keyCode == 13) {
+                vagueSelect();
+            }
+        })
+        function MbrCardNew(obj, url) {
+            var grid = $("#" + '@gridId').data("kendoGrid");
+            var selectedRows = grid.select();
+            if (selectedRows.length == 0) {
+                jAlert("请选择要" + $(obj).text() + "的数据行");
+                return;
+            }
+            var data = grid.dataItem(selectedRows[0]);
+            top.openKendoWindow($(obj).text(), url, { id: data.id });
+        }
+        function MarketSms(url)
+        {
+            var param = $("#commonQueryParameterValues").val();
+            //jAlert(para);
+            jConfirm("请确认：查询条件已筛选？", "回去选择", "已选好", function (flag) {
+                if (!flag) {
+                    top.openIframeKendoWindow("会员发送营销短信", url, { para: encodeURIComponent(param) });
+                }
+            });
+            
+        }
+        function onResize() {
+            var allHeight = $("#mainContent", window.top.document).height();
+            var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 41;
+            $("#grid .k-grid-content").height(allHeight - showHeight);
+        }
+        function grid_dataBoundEnded() {
+            var grid = $("#grid").data("kendoGrid");
+            console.log(load.num)
+            if ("@ViewBag.IsFast" == 0 && grid.dataSource._data.length <= 0 && load.num != 0) {
+                jAlert("你没有模糊查询的权限", "知道了");
+            }
+            load.num++;
+        }
+    </script>
+    <script type="text/javascript">
+        var CustomerCommonValues = {
+            mbrType: '@ViewBag.mbrType',
+            mbrCode: '@ViewBag.mbrCode',
+            mbrEditionName: '@ViewBag.mbrEditionName',
+        };
+    </script>
+}

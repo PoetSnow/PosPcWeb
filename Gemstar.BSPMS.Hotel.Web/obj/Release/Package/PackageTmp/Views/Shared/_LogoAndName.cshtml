@@ -1,0 +1,38 @@
+﻿@{
+    var product = ViewBag.product as Gemstar.BSPMS.Common.Services.Entities.M_v_products;
+    var hotelLogoAndNameInfo = ViewBag.hotelLogoAndNameInfo as Gemstar.BSPMS.Hotel.Services.SystemManage.HotelLogoAndNameInfo;
+}
+<div class="logo">
+    @if (!string.IsNullOrEmpty(hotelLogoAndNameInfo?.LogoUrl))
+    {
+        <img style="height:50px;padding-top:0px;" src="@(hotelLogoAndNameInfo?.LogoUrl)" />
+        if (hotelLogoAndNameInfo?.ShowGSLogo != "0")
+        {
+            <img src="~/images/logo.png" style="height:25px;" />
+        }
+        if (string.IsNullOrEmpty(hotelLogoAndNameInfo?.GSSysTitle))
+        {
+            <span class="fleft" style="line-height:20px;">
+                <i class="system-name" style="font-size:13px;">@(product?.SysName)</i>
+            </span>
+        } else
+        {
+            <span class="fleft">
+                <i class="system-name">@(hotelLogoAndNameInfo?.GSSysTitle)</i>
+            </span>
+        }
+    } else
+    {
+        if (hotelLogoAndNameInfo?.ShowGSLogo != "0")
+        {
+            <img src="~/images/logo.png" />
+        }
+        <span class="fleft">
+            <i class="system-name">@(string.IsNullOrEmpty(hotelLogoAndNameInfo?.GSSysTitle) ? product?.SysName : hotelLogoAndNameInfo?.GSSysTitle )</i>
+        </span>
+    }
+    @if (MvcApplication.IsTestEnv)
+    {
+        <b class="font-lag" style="color:red;">测试版本</b>
+    }
+</div>

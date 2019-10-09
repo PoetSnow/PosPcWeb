@@ -1,0 +1,144 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Html.Partial("_SystemNameInTitle")</title>
+    <link href="@Url.Content("~/Content/main.css")" rel="stylesheet" />
+    @Html.Partial("_HeaderCss")
+    @Html.Partial("_HeaderJs")
+    <script type="text/javascript">
+        var intv_sending;
+        function sendingAnimate(btn) {
+            $(btn).html("发送中......");
+            var total = 450;
+            var start = 0;
+            intv_sending = setInterval(function () {
+                if (intv_sending && start > total) {
+                    $(btn).html("发送超时");
+                    clearInterval(intv_sending);
+                    setTimeout(function () {
+                        $(btn).html("获取验证码");
+                        $(btn).removeAttr("disabled");
+                    }, 2000);
+                    return;
+                }
+                var loading = "";
+                switch (start % 7) {
+                    case 0: loading = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"; break;
+                    case 1: loading = ".&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"; break;
+                    case 2: loading = "..&nbsp;&nbsp;&nbsp;&nbsp;"; break;
+                    case 3: loading = "...&nbsp;&nbsp;&nbsp;"; break;
+                    case 4: loading = "....&nbsp;&nbsp;"; break;
+                    case 5: loading = ".....&nbsp;"; break;
+                    case 6: loading = "......"; break;
+                    default: break;
+                }
+                $(btn).html("发送中" + loading);
+                start = start + 1;
+            }, 200);
+        }
+        //找回密码
+        function sendCheckCode(hid,code, v, t, f, btn) {
+            $(btn).attr({ "disabled": "disabled" });  
+            sendingAnimate(btn); 
+            $.post('@Url.Action("SendCheckCode", "Account")', { hid: hid,code: code, value: v, type: t, func: f }, function (data) {
+                if (intv_sending) clearInterval(intv_sending);
+                if (data.Success) {
+                    var second = parseInt(data.Data);
+                    var intv = setInterval(function () {
+                        second = second - 1;
+                        $(btn).html(second + "s");
+                        if (second <= 0) {
+                            clearInterval(intv);
+                            $(btn).html("获取验证码");
+                            $(btn).removeAttr("disabled");
+                        }
+                    }, 1000);
+                } else {
+                    $(btn).html("获取验证码");
+                    $(btn).removeAttr("disabled");
+                    jAlert(data.Data);
+                }
+            }, 'json');
+        }
+        //注册
+        function sendCheckCodeReg(v, t, f, btn) {
+            $(btn).attr({ "disabled": "disabled" });
+            sendingAnimate(btn);
+            $.post('@Url.Action("SendCheckCodeReg", "Account")', { value: v, type: t, func: f }, function (data) {
+                if (intv_sending) clearInterval(intv_sending);
+                if (data.Success) {
+                    var second = parseInt(data.Data);
+                    var intv = setInterval(function () {
+                        second = second - 1;
+                        $(btn).html(second + "s");
+                        if (second <= 0) {
+                            clearInterval(intv);
+                            $(btn).html("获取验证码");
+                            $(btn).removeAttr("disabled");
+                        }
+                    }, 1000);
+                } else {
+                    $(btn).html("获取验证码");
+                    $(btn).removeAttr("disabled");
+                    //jAlert(data.Data);
+                    ajaxErrorHandle(data);
+                }
+            }, 'json');
+        }
+
+        function submit(f) {
+            var validator = $(f).validate();
+            if (validator.form()) {
+                $.post(
+                    $(f).attr("action"),
+                    $(f).serialize(),
+                    function (data) {
+                        if (data.Success) {
+                            location.href = data.Data;
+                        } else {
+                            //jAlert(data.Data);
+                            ajaxErrorHandle(data);
+                        }
+                    }, "json");
+            }
+        }
+    </script>
+</head>
+<body>
+    @{
+        var product = ViewBag.product as Gemstar.BSPMS.Common.Services.Entities.M_v_products;
+    }
+    <div class="header clearfix">
+        <div class="header-inner">
+            @Html.Partial("_LogoAndName")
+            <div class="try">
+                <span class="phone-icon"></span> <span class="number">
+                    服务热线<br />
+                    <b class="font-lag">400-7755-123</b>
+                </span>
+            </div>
+        </div>
+    </div>
+    <!--头部结束-->
+    <div id="bannerDiv" class="apply-banner"></div>
+    <div class="wrapper apply-info">
+        @RenderBody()
+    </div>
+    <!--底部内容开始-->
+    <div class="footer">
+        <div class="footer-inner">
+            <span class="wx-a" style="padding-top: inherit"><img src="~/images/wx1.jpg" style="width:100px;" /><br /><span style="margin-left: 25px;display: inherit;">官方公众号</span></span><span class="wx-b" style="padding-top: inherit"><img src="~/images/wx2.jpg" style="width:100px;" /><br /><span style="margin-left: 18px;display: inherit;">微信预订系统</span></span>
+            <div class="company-info">
+                <p>深圳市捷信达电子有限公司</p>
+                <p>深圳市福田区深南大道6025号英龙展业大厦25楼</p>
+                <p>TEL:0755-83664567(总机) FAX:0755-83663702</p>
+                <p>7 * 24小时服务与支持：400-7755-123</p>
+                <p>深圳市捷信达电子有限公司版权所有( 粤ICP备09046004号 )</p>
+            </div>
+        </div>
+    </div>
+    @RenderSection("scripts", false)
+</body>
+</html>

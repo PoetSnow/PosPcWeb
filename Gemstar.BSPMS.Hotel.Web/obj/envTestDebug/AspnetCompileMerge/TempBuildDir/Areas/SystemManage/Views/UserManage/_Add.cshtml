@@ -1,0 +1,76 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.UserManage.UserAddViewModel
+@using (Html.BeginForm())
+{
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Code)</td>
+            <td>@Html.TextBoxFor(m => m.Code, new { @class = "k-textbox", style = "width:100%;margin-left:0" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Name)</td>
+            <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;margin-left:0" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+        </tr> 
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Mobile)</td>
+            <td>@Html.TextBoxFor(m => m.Mobile, new { @class = "k-textbox", style = "width:100%;margin-left:0" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Mobile, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Email)</td>
+            <td>@Html.TextBoxFor(m => m.Email, new { @class = "k-textbox", style = "width:100%;margin-left:0" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Email, "*")</td>
+        </tr> 
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Qq)</td>
+            <td>@Html.TextBoxFor(m => m.Qq, new { @class = "k-textbox", style = "width:100%;margin-left:0" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Qq, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.RoleList)</td>
+            <td>@Html.Kendo().MultiSelectFor(m => m.RoleList).DataTextField("Text").DataValueField("Value").DataSource(soure => soure.Read("RoleList", "UserManage")).AutoClose(false)</td>
+            <td>@Html.ValidationMessageFor(m => m.RoleList, "*")</td>
+        </tr> 
+        @if (ViewBag.isOpenAnalysis)
+        {
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.AnalysisUserCode)</td>
+                <td> @Html.TextBoxFor(m => m.AnalysisUserCode, new { @class = "k-textbox", style = "width:100%;margin-left:0" })</td>
+                <td>@Html.ValidationMessageFor(m => m.AnalysisUserCode, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.CardId)</td>
+                <td> @Html.TextBoxFor(m => m.CardId, new { @class = "k-textbox", style = "width:100%;margin-left:0" })</td>
+                <td>@Html.ValidationMessageFor(m => m.CardId, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+                <td> @Html.TextBoxFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;margin-left:0" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.CardId)</td>
+                <td> @Html.TextBoxFor(m => m.CardId, new { @class = "k-textbox", style = "width:100%;margin-left:0" })</td>
+                <td>@Html.ValidationMessageFor(m => m.CardId, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+                <td> @Html.TextBoxFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;margin-left:0" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+            </tr>
+        }
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+
+</script>

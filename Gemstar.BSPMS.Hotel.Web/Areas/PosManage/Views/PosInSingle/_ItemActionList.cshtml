@@ -1,0 +1,49 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_ItemActionByItemidResult>
+<ul>
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            <li class="content-list-detail" style="background: #ffc800;">
+                <a href="javascript:void(0)" onclick="initItemAction('@ViewBag.Itemid')" data-id="@ViewBag.Itemid" data-name="菜式作法">
+                    <span>&nbsp;</span>
+                    <span>菜式作法</span>
+                    <span></span>
+                    <span></span>
+                </a>
+            </li>
+
+            foreach (var item in Model)
+            {
+                //消费项目对应的做法
+                if (ViewBag.Itype == "Item")
+                {
+                    <li class="content-list-detail">
+                        <a href="javascript:void(0)" data-id="@item.id" onclick="UpdateBillActionForItem(this)">
+                            <span>@item.ActionCode</span>
+                            <span>@item.ActionName</span>
+                            <span>&nbsp;</span>
+                            <span><i class="fa fa-check"></i></span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="content-list-detail">
+                        <a href="javascript:void(0)" data-id="@item.actionid" data-code="@item.ActionCode" data-name="@item.ActionName" onclick="updateBillDetailAction(this,'@(Url.Action("UpdateBillDetailAction", "PosInSingle"))')">
+                            <span>@item.ActionCode</span>
+                            <span>@item.ActionName</span>
+                            <span>&nbsp;</span>
+                            <span><i class="fa fa-check"></i></span>
+                        </a>
+                    </li>
+                }
+
+            }
+            <li class="content-list-paging">
+                <a href="javascript:void(0)" onclick="getListPageItemAction(this,'1','@(Url.Action("_ItemActionList", "PosInSingle"))','@(Url.Action("GetActionTotal", "PosInSingle"))')" data-id="@ViewBag.Itemid">上一页</a>
+                <a href="javascript:void(0)" onclick="getListPageItemAction(this,'2','@(Url.Action("_ItemActionList","PosInSingle"))','@(Url.Action("GetActionTotal","PosInSingle"))')" data-id="@ViewBag.Itemid">下一页</a>
+            </li>
+        }
+        <li class="content-list-return" style=""><a href="javascript:void(0)" onclick="returnParent()"><img src="~/Images/posInSingle/fanh.png" /><br />返回</a></li>
+    }
+</ul>

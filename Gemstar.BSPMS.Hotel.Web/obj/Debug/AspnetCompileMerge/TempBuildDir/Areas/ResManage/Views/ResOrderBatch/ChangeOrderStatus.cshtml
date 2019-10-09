@@ -1,0 +1,239 @@
+﻿@*批量更改订单状态*@
+
+@model Gemstar.BSPMS.Hotel.Services.ResManage.ResMainInfo
+@{
+    List<string> regids_CR = new List<string>();//取消预订
+    List<string> regids_CI = new List<string>();//取消入住
+
+    List<string> regids_RR = new List<string>();//恢复预订
+    List<string> regids_RI = new List<string>();//恢复入住
+
+    if (Model != null && Model.ResDetailInfos != null && Model.ResDetailInfos.Count > 0)
+    {
+        foreach(var item in Model.ResDetailInfos)
+        {
+            var status = string.IsNullOrWhiteSpace(item.Status) ? "" : item.Status.ToUpper();
+            var recStatus = string.IsNullOrWhiteSpace(item.RecStatus) ? "" : item.RecStatus.ToUpper();
+            var resStatus = string.IsNullOrWhiteSpace(item.ResStatus) ? "" : item.ResStatus.ToUpper();
+
+            if (status == "R")
+            {//预订状态
+                if (resStatus == "R" && string.IsNullOrWhiteSpace(recStatus))
+                {
+                    //直接预订，没有其他操作。最后结果是：预订状态
+                    regids_CR.Add(item.Regid);//取消预订
+                }
+                else if (resStatus == "R" && recStatus == "Z")
+                {
+                    //先预订，再入住，再取消入住。最后结果是：预订状态
+                    regids_CR.Add(item.Regid);//取消预订
+                    regids_RI.Add(item.Regid);//恢复入住
+                }
+            }
+            else if (status == "I")
+            {//在住状态
+                if (string.IsNullOrWhiteSpace(resStatus) && recStatus == "I")
+                {
+                    //直接入住，没有其他操作。最后结果是：在住状态
+                    regids_CI.Add(item.Regid);//取消入住
+                }
+                else if (resStatus == "R" && recStatus == "I")
+                {
+                    //先预订，在入住。最后结果是：在住状态
+                    regids_CI.Add(item.Regid);//取消入住
+                }
+            }
+            else if (status == "X")
+            {//取消状态
+                if (resStatus == "X" && string.IsNullOrWhiteSpace(recStatus))
+                {
+                    //直接预订，再取消预订。最后结果是：取消状态
+                    regids_RR.Add(item.Regid);//恢复预订
+                }
+                else if (resStatus == "X" && recStatus == "Z")
+                {
+                    //先预订，再入住，再取消入住，再取消预订。最后结果是：取消状态
+                    regids_RR.Add(item.Regid);//恢复预订
+                }
+                else if (string.IsNullOrWhiteSpace(resStatus) && recStatus == "X")
+                {
+                    //直接入住，再取消入住。最后结果是：取消状态
+                    regids_RI.Add(item.Regid);//恢复入住
+                }
+            }
+        }
+    }
+
+    <input type="hidden" id="resId" value="@Model.Resid" />
+    <input type="hidden" id="changeOrderStatusCategories_CancelR" value="@string.Join("|",regids_CR)" />
+    <input type="hidden" id="changeOrderStatusCategories_CancelI" value="@string.Join("|",regids_CI)" />
+    <input type="hidden" id="changeOrderStatusCategories_RecoveryR" value="@string.Join("|",regids_RR)" />
+    <input type="hidden" id="changeOrderStatusCategories_RecoveryI" value="@string.Join("|",regids_RI)" />
+}
+
+
+
+<style type="text/css">.wrap {margin: 7px 7px 0px 7px;}body {overflow-y: hidden;}</style>
+<div>
+@(
+Html.Kendo().Grid(Model.ResDetailInfos)
+.Name("changeOrderStatusGrid")
+.Columns(c =>
+{
+    c.Bound(w => w.Regid).Width(37).Sortable(false)
+    .ClientTemplate("<input type='checkbox' class='k-checkbox changeOrderStatusRowCheck' value='#: Regid #' id='changeOrderStatusRowCheck_#: Regid #' style=\"padding-left:0px;\" /><label class=\"k-checkbox-label\" for='changeOrderStatusRowCheck_#: Regid #'></label>")
+    .HeaderTemplate("<input type='checkbox' class='k-checkbox changeOrderStatusAllCheck' id='changeOrderStatusAllCheck' style=\"padding-left:0px;\" /><label class=\"k-checkbox-label\" for='changeOrderStatusAllCheck'></label>");
+    c.Bound(w => w.RoomTypeName).Title("房型").Width(97);
+    c.Bound(w => w.RoomQty).Title("房数").Width(56);
+    c.Bound(w => w.RoomNo).Title("房号").Width(60);
+    c.Bound(w => w.Guestname).Title("客人名").Width(97);
+    c.Bound(w => w.Regid).Title("账号").ClientTemplate("#=Regid.replace(Hid,'')#");
+    c.Bound(w => w.StatusName).Title("状态").Width(85);
+})
+.Scrollable()
+.Events(e => e.DataBound("changeOrderStatusGrid_DataBound"))
+.DataSource(c => c.Ajax().ServerOperation(false))
+.Selectable(s => { s.Mode(GridSelectionMode.Single); s.Type(GridSelectionType.Row); })
+.HtmlAttributes(new { style = "height:416px;max-height:416px;" })
+.ToolBar(toolbar =>
+{
+    toolbar.Template(@<text>
+        <div class="toolbar">
+            @(Html.Kendo().DropDownList()
+            .Name("changeOrderStatusCategories")
+            .Events(e => e.Change("changeOrderStatusCategoriesChange"))
+            .BindTo(new List<DropDownListItem> {
+                 new DropDownListItem { Text = "可【取消预订】列表", Value = "CancelR", Selected = true }
+                ,new DropDownListItem { Text = "可【取消入住】列表", Value = "CancelI", Selected = false }
+                ,new DropDownListItem { Text = "可【恢复预订】列表", Value = "RecoveryR", Selected = false }
+                ,new DropDownListItem { Text = "可【恢复入住】列表", Value = "RecoveryI", Selected = false }
+            })
+            )
+            <button class="k-button" id="btnSbumit">取消预订</button>
+        </div>
+    </text>);
+})
+)
+</div>
+
+
+
+<script type="text/javascript">
+    //grid绑定事件
+    function changeOrderStatusGrid_DataBound() {
+        $("#changeOrderStatusAllCheck")[0].checked = false;
+        changeOrderStatusAllCheck_changed();
+
+        $("#changeOrderStatusAllCheck").unbind("change").change(function (e) {
+            e.preventDefault();
+            changeOrderStatusAllCheck_changed();
+        });
+    }
+    //全选复选框的更改事件
+    function changeOrderStatusAllCheck_changed() {
+        var checked = $("#changeOrderStatusAllCheck")[0].checked;
+        $("input.changeOrderStatusRowCheck").each(function (index, obj) {
+            obj.checked = checked;
+        });
+    }
+    //类别改变事件
+    function changeOrderStatusCategoriesChange() {
+        $("#changeOrderStatusGrid").data("kendoGrid").dataSource.filter({
+            logic: "or",
+            filters: getFilters($("#changeOrderStatusCategories").data("kendoDropDownList").value())
+        });
+    }
+    //获取过滤器
+    function getFilters(categories) {
+        var obj = $("#btnSbumit");
+        if (categories == "CancelR") {
+            obj.text("取消预订");
+        } else if (categories == "CancelI") {
+            obj.text("取消入住");
+        } else if (categories == "RecoveryR") {
+            obj.text("恢复预订");
+        } else if (categories == "RecoveryI") {
+            obj.text("恢复入住");
+        } else {
+            obj.text("");
+        }
+        var regids = $("#changeOrderStatusCategories_" + categories).val();
+        if ($.trim(regids).length > 0) {
+            var list = regids.split("|");
+            if (list != null && list != undefined && list.length > 0) {
+                var result = [];
+                $.each(list, function (index, regid) {
+                    result.push({ field: "Regid", operator: "eq", value: regid });
+                });
+                return result;
+            }
+        }
+        return [{ field: "Regid", operator: "eq", value: "0" }];
+    }
+    //提交
+    function btnSbumit_clicked() {
+        var btn = $("#btnSbumit");
+
+        var selectedRegIds = [];
+        $("input.changeOrderStatusRowCheck:checked").each(function (index, obj) {
+            selectedRegIds.push($(obj).val());
+        });
+
+        if (selectedRegIds == null || selectedRegIds == undefined || selectedRegIds.length <= 0) {
+            jAlert("请勾选要【" + btn.text() + "】的订单！", "", function () { btn.removeAttr("disabled"); }); return;
+        }
+
+        var url = "@Url.Action("ChangeOrderStatus", "ResOrderBatch")";
+        var resId = $("#resId").val();
+        var type = $("#changeOrderStatusCategories").data("kendoDropDownList").value();
+        if ($.trim(url).length <= 0 || $.trim(resId).length <= 0 || $.trim(type).length <= 0) {
+            jAlert("参数错误！", "", function () { btn.removeAttr("disabled"); }); return;
+        }
+
+        jAlert("正在处理，请稍作等待。。。");
+
+        $.post(url, { resId: resId, type: type, regIds: selectedRegIds }, function (result) {
+            if (result.Success) {
+                var msg = "";
+                if (result.Data != null && result.Data != undefined && result.Data.length > 0) {
+                    $.each(result.Data, function (index, item) {
+                        msg += ("账号：{0}，{1}{2}\n").replace("{0}", item.Key).replace("{1}", item.Value).replace("{2}", getErrorTable(item));
+                    });
+                }
+                jAlert("执行成功！\n" + msg, "知道了", function () { try { window.top.batchChangeOrderStatusButton_clicked(); } catch (e) { } });
+            } else {
+                jAlert("执行失败！\n" + result.Data, "知道了", function () { try { window.top.batchChangeOrderStatusButton_clicked(); } catch (e) { } });
+            }
+            btn.removeAttr("disabled");
+        }, "json");
+    }
+    function getErrorTable(result) {
+        //判断是出错信息还是对象，如果是对象，则可能是房间有冲突，需要提示后询问是否继续
+        if ($.type(result.Data) == "array" && result.Data[0]["CanSave"] != undefined) {
+            var msg = '<p>房间冲突信息如下:</p><div class="k-widget k-grid"><table class="k-selectable"><thead class="k-grid-header"><tr><th class="k-header">房型</th><th class="k-header">房号</th><th class="k-header">冲突日期</th><th class="k-header">冲突原因</th></tr></thead>';
+            var canContinue = true;
+            for (var i = 0; i < result.Data.length; i++) {
+                var info = result.Data[i];
+                if (info["CanSave"] == 0) {
+                    canContinue = false;
+                }
+                msg += '<tr><td>' + (info["RoomTypeName"] == null ? "" : info["RoomTypeName"]) + '</td><td>' + (info["RoomNo"] == null ? "" : info["RoomNo"]) + '</td><td>' + (info["Usedate"] == null ? "" : info["Usedate"]) + '</td><td>' + (info["Remark"] == null ? "" : info["Remark"]) + '</td></tr>';
+            }
+            msg += '</table></div>';
+            return msg;
+        }
+        if (result.Data != null && result.Data != undefined && $.trim(result.Data).length > 0) {
+            return "，" + result.Data;
+        }
+        return "";
+    }
+    //初始化
+    $(document).ready(function () {
+        changeOrderStatusCategoriesChange();
+        $("#btnSbumit").unbind("click").click(function (e) {
+            $("#btnSbumit").attr("disabled", "disabled");
+            e.preventDefault();
+            btnSbumit_clicked();
+        });
+    });
+</script>

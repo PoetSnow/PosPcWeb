@@ -1,0 +1,100 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EnumsPos;
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosCashier.CashierViewModel
+
+<script type="text/javascript">
+    //选择行
+    function selDetailRow() {
+        var grid = $("#gridBillDetail").data("kendoGrid");
+        var dataRows = grid.items();
+        for (var i = 0; i < dataRows.length; i++) {
+            var row = grid.tbody.find(">tr:not(.k-grouping-row)").eq(i);
+            var dataRow = grid.dataItem(dataRows[i]);
+            row.removeClass();
+            //根据状态修改背景色
+            if (Number(dataRow["Status"]) === 0) {
+                row.addClass("normal-state");
+            }
+            else if (Number(dataRow["Status"]) === 1) {
+                row.addClass("case-state");
+            }
+            else if (Number(dataRow["Status"]) === 2) {
+                row.addClass("give-state");
+            }
+            else if (Number(dataRow["Status"]) === 4) {
+                row.addClass("neworder-state");
+            }
+            else if (Number(dataRow["Status"]) === 51 || Number(dataRow["Status"]) === 52) {
+                row.addClass("cancel-state");
+            }
+            if (Number(dataRow["Isauto"]) === 2) {
+                row.addClass("original-state");
+            }
+            if (Number(dataRow["sentStatus"]) === 1) {
+                row.addClass("dish-state");
+            }
+            //是否套餐明细
+            if (dataRow["SD"] == true) {
+                row.removeClass();
+                row.addClass("package-state");
+            }
+        }
+    }
+</script>
+
+@{
+    @(Html.Kendo().Grid<up_pos_list_BillDetailByCashierResult>()
+            .Name("gridBillDetail")
+            .Columns(columns =>
+            {
+                columns.Bound(m => m.Id).Hidden();
+                columns.Bound(m => m.BatchTime).Hidden();
+                columns.Bound(m => m.Status).Hidden();
+                columns.Bound(m => m.Isauto).Hidden();
+                columns.Bound(m => m.Billid).Hidden();
+                columns.Bound(m => m.MBillid).Hidden();
+                columns.Bound(m => m.Row).Title("序号").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                columns.Bound(m => m.ItemName).Title("食品").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(120);
+                columns.Bound(m => m.Quantity).Title("数量").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                columns.Bound(m => m.UnitName).Title("单位").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                columns.Bound(m => m.PriceOri).Title("价格").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                columns.Bound(m => m.PriceClub).Title("会员价").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+                columns.Bound(m => m.Multiple).Title("倍数").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                columns.Bound(m => m.AddPrice).Title("作法加价").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(65);
+                columns.Bound(m => m.Dueamount).Title("折前金额").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(105).Format("{0:C}")
+                    .ClientFooterTemplate("<div style='color: red'>#= sum #</div>");
+                columns.Bound(m => m.Discount).Title("折扣").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                columns.Bound(m => m.DiscAmount).Title("金额折").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+                columns.Bound(m => m.Amount).Title("折后金额").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(105).Format("{0:C}")
+                    .ClientFooterTemplate("<div style='color: red'>#= sum #</div>");
+                columns.Bound(m => m.Service).Title("服务费").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60)
+                    .ClientFooterTemplate("<div style='color: red'>#= sum #</div>");
+                columns.Bound(m => m.isCheckString).Title("付款").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50).Hidden();
+                columns.Bound(m => m.statusString).Title("状态").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                columns.Bound(m => m.isIsDiscountStringForItem).Title("可折否").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(80);
+                columns.Bound(m => m.BatchTime).Title("批次").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                columns.Bound(m => m.isautoString).Title("自动标志").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(65);
+                columns.Bound(m => m.TransUser).Title("点菜员").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(70);
+                columns.Bound(m => m.TransDate).Title("点餐时间").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50).Format("{0:yyyy-MM-dd HH:mm:ss}").Width(135);
+                columns.Bound(m => m.isHandWriteString).Title("手写单").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                columns.Bound(m => m.DeptClassName).Title("部门类别").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(65);
+                columns.Bound(m => m.Place).Title("客位").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                columns.Bound(m => m.Memo).Title("备注").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+            })
+            .Sortable()
+            .Scrollable()
+            .Resizable(r => r.Columns(true))
+            .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Read(read => read.Action("ListUpBillDetailByBillid", "PosCashier", new { rnd = new Random().NextDouble(), billid = Model.Billid }))
+                .Aggregates(aggregates =>
+                {
+                    aggregates.Add(p => p.Dueamount).Sum();
+                    aggregates.Add(p => p.Amount).Sum();
+                    aggregates.Add(p => p.Service).Sum();
+                })
+            )
+            .Events(e => e.DataBound("selDetailRow"))
+    )
+}

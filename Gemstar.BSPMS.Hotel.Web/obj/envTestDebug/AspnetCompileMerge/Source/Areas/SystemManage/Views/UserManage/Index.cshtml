@@ -1,0 +1,104 @@
+﻿
+
+@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+@{
+    ViewBag.Title = "操作员";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var colsDefault = new List<GridColumnSetting>
+    {
+        new GridColumnSetting {Name = "Code", Title = "登录名", Hidden = false, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "Name", Title = "操作员", Hidden = false, Order = 2, Width = 0},
+        new GridColumnSetting {Name = "mobile", Title = "手机号", Hidden = false, Order = 3, Width = 0},
+        new GridColumnSetting {Name = "email", Title = "邮箱", Hidden = false,Order = 4, Width = 0},
+        new GridColumnSetting {Name = "qq", Title = "QQ号", Hidden = false,Order = 5, Width = 0},
+        new GridColumnSetting {Name = "roleName", Title = "所属角色", Hidden = false,Order = 6, Width = 0},
+        new GridColumnSetting {Name = "remark", Title = "备注", Hidden = false,Order = 7, Width = 0},
+        new GridColumnSetting {Name = "wxopenid", Title = "微信", Hidden = false,Order = 8, Width = 0},
+        new GridColumnSetting {Name = "cardId", Title = "卡号", Hidden = false,Order = 10, Width = 0},
+        new GridColumnSetting {Name = "analysisUserCode", Title = "总裁驾驶舱账号", Hidden = ViewBag.isOpenAnalysis != true ? true : false,Order = 9, Width = 0},
+        new GridColumnSetting {Name = "status", Title = "状态", Hidden = true,Order = 10, Width = 0},
+    };
+    var gridViewModel = new KendoGridCustomDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        StatusColumnName = "status",
+        EnableFunctionForEnable = true,
+        EnableFunctionForDisable = true,
+        EnableScrollable = true,
+        Area = "SystemManage",
+        Controller = "UserManage",
+        Action = "Index",
+        DefaultColumnSettings = colsDefault,
+        CustomToolbar = c =>
+        {
+            c.Custom().Name("comfirmtextone").Text("双击可修改").HtmlAttributes(new { id = "comfirmtextone", href = "javascript:void(0);", style = "color:red;margin-top:9px;margin-left:10px;cursor:default;" });
+            c.Custom().Name("resetpwd").Text("重置密码").HtmlAttributes(new { id = "resetpwds", onclick = "resetpwd()", href = "javascript:void(0);", style = "float:right;margin-right:40px;" });
+            c.Custom().Name("comfirmtext").Text("<font style='color:rgb(0,71,147);'>操作员初始密码为手机号</font>").HtmlAttributes(new { id = "comfirmtext", href = "javascript:void(0);", style = "float:right;cursor:default;margin-left:10px;margin-right:20px;margin-top:9px;" });
+        }
+    };
+
+}
+
+@Html.Partial("_KendoGridCustomDataRowView", gridViewModel)
+
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+    function isOpenAnalysis() {
+        return "@ViewBag.isOpenAnalysis" != "True" ? "display:none" : "";
+    }
+    $(function () {
+        window.onresize = onResize; onResize();
+        $("#comfirmtext").removeClass("k-button");
+        $("#comfirmtextone").removeClass("k-button");
+    });
+    function gridread() {
+        $("#grid").data("kendoGrid").dataSource.read();
+    }
+    function resetpwd() {
+        var grid = $("#grid").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要重置的操作员");
+        } else {
+
+            jConfirm("确认要重置所选中的操作员密码吗?", "确认", "取消", function (confirmed) {
+                if (confirmed) {
+                    var ids = [];
+                    for (var i = 0; i < selectedRows.length; i++) {
+                        var row = selectedRows[i];
+                        var data = grid.dataItem(row);
+                        ids.push(data["id"]);
+                    }
+                    $.post("@Url.Action("ResetPwd")", { id: ids }, function (data) {
+                        if (data.Success) {
+                            grid.dataSource.read();
+                            jAlert("重置成功！");
+                        } else {
+                            ajaxErrorHandle(data);
+                        }
+                    }, 'json');
+                }
+            });
+        }
+    }
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 145;
+        $("#grid .k-grid-content").height(allHeight - showHeight);
+    }
+</script>

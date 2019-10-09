@@ -1,0 +1,97 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "业务员";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var gridModel = new KendoGridCommonViewModel()
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForEnable = true,
+        EnableFunctionForDisable = true,
+        EnableFunctionForAdd = !ViewBag.isHotelInGroup,
+        EnableFunctionForDelete= !ViewBag.isHotelInGroup,
+        EnableFunctionForSave= !ViewBag.isHotelInGroup,
+        EnableFunctionForEdit= !ViewBag.isHotelInGroup
+
+    };
+    var gridHelper = new KendoGridEditInCellHtmlHelper<Sales>(
+        Html,
+        Url,
+        gridModel,
+        c =>
+        {
+            c.Bound("Name").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: Name    #</div>").Title("业务员名称");
+            c.Bound("Mobile").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: Mobile==null?'':Mobile    #</div>").Title("手机号");
+            c.Bound("Email").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: Email==null?'':Email    #</div>").Title("邮箱");
+            if (ViewBag.isgroupingroup)
+            {
+                c.Bound("Belonghotel").Title("所属分店").EditorTemplateName("GridMultiSelect").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: ShowBelonghotel(Belonghotel)    #</div>");
+            }
+        },
+    c => c.Id(w => w.Id)
+    );
+}
+@(gridHelper.KendoGridEditInCell())
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridModel)
+}
+
+<script type="text/javascript">
+
+    //显示销售平台名称
+    function ShowBelonghotel(value) {
+        var text = "";
+        if (value == "")
+        {
+            return "";
+        }
+        $.ajax({
+            type: "get",
+            url: "@Url.Action("getBelonghotel")" + "?values=" + value,
+            success: function (data) {
+                text = data.Data;
+            },
+            failure: function (data) {
+                text = data.Data;
+            },
+            async: false
+        });
+        return text;
+    }
+    function featureClose() {
+        var items = $("#Belonghotel").val()
+        if (items == null)
+            return;
+        var id = $($("#Belonghotel").parents("tr").find("td")[0]).text().trim();
+        SelectEvent(id, items, 1, this);
+    }
+    function featureOpen() {
+        console.log(this);
+        var id = $($("#Belonghotel").parents("tr").find("td")[0]).text().trim();
+        var datas = $("#grid").data("kendoGrid").dataItems();
+        SelectEvent(id, this, 2)
+    }
+    function SelectEvent(id, items, type, bl) {
+        var datas = $("#grid").data("kendoGrid").dataItems();
+        for (var i = 0; i < datas.length; i++) {
+            var data = datas[i];
+            if (id == "" || data.Name == id) {
+                if (type == 2 && data.Belonghotel != null) {
+                    var arr = data.Belonghotel.split(',')
+                    if (arr.length > 0) {
+                        items.value(arr);
+                    }
+                }
+                else if (type == 1) {
+                    data.Belonghotel = items.join(',');
+                }
+            }
+        }
+    }
+
+</script>

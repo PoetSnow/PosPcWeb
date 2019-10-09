@@ -1,0 +1,179 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MarketingManage.Models.RoomOwnerCalcDispPara.RoomOwnerCalcDispParaAddViewModel
+
+@using (Html.BeginForm())
+{
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.TypeName)</td>
+            <td>@Html.TextBoxFor(m => m.TypeName, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.TypeName, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.TypeDesc)</td>
+            <td>@Html.TextBoxFor(m => m.TypeDesc, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.TypeDesc, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.SeqId)</td>
+            <td>@Html.TextBoxFor(m => m.SeqId, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.SeqId, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.CalcFormula)</td>
+            <td>@Html.TextAreaFor(m => m.CalcFormula, new { @class = "k-textbox", style = "width:100%;height:200px;" }) <input type="hidden" id="textfocusindex" /></td>
+            <td>@Html.ValidationMessageFor(m => m.CalcFormula, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.isHidden)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.isHidden).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetIsSelectList", "RoomTypeManage", new { area = "SystemManage" })); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.isHidden, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.isNeedSum)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.isNeedSum).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetIsSelectList", "RoomTypeManage", new { area = "SystemManage" })); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.isNeedSum, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.dataType)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.dataType).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetdataTypeList", "RoomOwnerCalcDispPara")); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.dataType, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright" style="margin-top:4px;"> </td>
+            <td colspan="2" style="padding-bottom:3px;">可以双击下方的参数来将参数名称加入到计算公式中后再手工调整</td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <table>
+                    <tr id="tit">
+                        <td>固定参数</td>
+                        <td>业主房间参数</td>
+                        <td>业主房间类型参数</td>
+                        <td>业主费用</td>
+                        <td>计算函数</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select multiple="multiple">
+                                @foreach (var u in ViewBag.roomownerFixed)
+                                {
+                                    <option value="@u.ParaName" style="padding-top:7px;" ondblclick="filltext(this)">@u.ParaName</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <select multiple="multiple">
+                                @foreach (var u in ViewBag.roomownerRoom)
+                                {
+                                    <option value="@u.ParaName" style="padding-top:7px;" ondblclick="filltext(this)">@u.ParaName</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <select multiple="multiple">
+                                @foreach (var u in ViewBag.roomownerRoomtype)
+                                {
+                                    <option value="@u.ParaName" style="padding-top:7px;" ondblclick="filltext(this)">@u.ParaName</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <select multiple="multiple">
+                                @foreach (var u in ViewBag.OwnerfeeItem)
+                                {
+                                    <option value="@u.Name" style="padding-top:7px;" ondblclick="filltext(this)">@u.Name</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <select multiple="multiple" id="roomOwnerCalcFunctionsSelect">
+                                @foreach (var u in ViewBag.roomOwnerCalcFunctions)
+                                {
+                                    <option value="@u" style="padding-top:7px;" ondblclick="filltext(this)">@u</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="textright" style="margin-top:4px;">计算范围:</td>
+            <td colspan="2" style="padding-bottom:3px;">可取值：本房间，本房型业主房，所有业主房，所有房间</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<style type="text/css">
+    select {
+        width: 120px;
+        min-height: 100px;
+        margin-left: 3px;
+        outline: none;
+        border: 1px solid #808080;
+    }
+
+    #roomOwnerCalcFunctionsSelect {
+        width: 200px;
+    }
+
+    #tit td {
+        text-align: center;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        $("#CalcFormula").mouseleave(function (e) {
+            $("#textfocusindex").val(getCursortPosition(this));
+        });
+        $("#CalcFormula").change(function (e) {
+            $("#textfocusindex").val(getCursortPosition(this));
+        });
+
+    });
+
+    function filltext(obj) {
+        var textindex = $("#textfocusindex").val();
+        if (textindex != "" && textindex >= 0) {
+            $("#CalcFormula").val($("#CalcFormula").val().substr(0, textindex) + $(obj).val() + $("#CalcFormula").val().substr(textindex, $("#CalcFormula").val().length));
+            $("#textfocusindex").val(parseInt(textindex) + parseInt($(obj).val().length));
+        } else {
+            $("#CalcFormula").val($("#CalcFormula").val() + $(obj).val());
+            $("#textfocusindex").val(parseInt($("#CalcFormula").val().length) + parseInt($(obj).val().length));
+        }
+
+    }
+    function getCursortPosition(element) {
+        var CaretPos = 0;
+        if (document.selection) {//支持IE
+            element.focus();
+            var Sel = document.selection.createRange();
+            Sel.moveStart('character', -element.value.length);
+            CaretPos = Sel.text.length;
+        }
+        else if (element.selectionStart || element.selectionStart == '0')//支持firefox
+            CaretPos = element.selectionStart;
+        return (CaretPos);
+    }
+
+</script>

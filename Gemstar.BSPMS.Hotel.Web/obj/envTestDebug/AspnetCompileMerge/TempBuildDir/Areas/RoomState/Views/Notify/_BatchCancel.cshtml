@@ -1,0 +1,53 @@
+﻿
+
+<div style="text-align:center;width:100%;">
+    <table class="editFormTable" style="width:100%;">
+        <tr>
+      
+            <td class="textright">作废原因</td>
+            <td>@Html.TextBox("reson","", new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td></td>
+        </tr>
+        <tr> 
+            <td colspan="4" stype="margin-top:20px;text-align:center;">
+                <button class="k-primary k-button" id="save" role="button" onclick="saveOp()" data-role="button">保存</button>&nbsp;&nbsp;
+                <button class="k-primary k-button" id="closeCancelFormButton" role="button" data-role="button">返回</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<input type="text" value="@ViewBag.ids" style="display:none" id="idstr" />
+<script type="text/javascript">
+    $(function () {
+        $("#newCommonKendoWindow").parent().css("width", "500px");
+        $("#closeCancelFormButton").click(function (e) {
+            e.preventDefault();
+            closeSecondEditFormWindow();
+            refreshDetail();
+        });
+    });
+    function saveOp() {
+        var remarks = $("#reson").val();
+        var ids = $("#idstr").val();
+        $.post("@Url.Action("BatchCancels")", { id: ids, remarks: remarks}, function (data) {
+            if (data.Success) {
+                jAlert("作废成功！");
+                closeSecondEditFormWindow();
+                window.top.getNotify();
+                refreshDetail();
+                $(document).find("iframe[src*='Notify']")[0].contentWindow.gridRead();
+            } else {
+                refreshDetail();
+                ajaxErrorHandle(data);
+            }
+        }, 'json');
+    }
+    //刷新详情
+    function refreshDetail() {
+        var detail = $("#commonKendoWindow");
+        var id = $("#Id").val();
+        $.get('@Url.Action("Detail")', { id: id }, function (data) {
+            detail.html(data);
+        }, 'html')
+    }
+</script>

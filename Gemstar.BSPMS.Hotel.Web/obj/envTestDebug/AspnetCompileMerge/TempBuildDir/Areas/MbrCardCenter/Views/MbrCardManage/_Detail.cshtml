@@ -1,0 +1,199 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MbrCardCenter.Models.MbrCardManage.MbrCardDetailViewModel
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.id)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.mbrCardNo)：</td>
+            <td>@Html.DisplayTextFor(m => m.mbrCardNo)</td>
+            <td>
+                <button class="k-button" id="changeCard" role="button" data-role="button">换卡</button>
+                <script type="text/javascript">
+                    changeCard.addEventListener("click", function (ev) {
+                        ev.preventDefault();
+                        top.openSecondKendoWindow("换卡", "@Url.Action("ChangeCard",new { id = Model.id})");
+                    }, false);
+
+                </script>
+            </td>
+
+            <td class="textright">@Html.LabelFor(m => m.mbrCardTypeName)：</td>
+            <td>@Html.DisplayTextFor(m => m.mbrCardTypeName)</td>
+            <td>
+                <button class="k-button" id="levelUp" role="button" data-role="button">升级</button>
+                <script type="text/javascript">
+                    levelUp.addEventListener("click", function (ev) {
+                        ev.preventDefault();
+                        top.openSecondKendoWindow("升级", "@Url.Action("ChangeLevel",new { id = Model.id})");
+                    }, false);
+                </script>
+            </td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.guestName)：</td>
+            <td>@Html.DisplayTextFor(m => m.guestName)</td>
+            <td></td>
+
+            <td class="textright">@Html.LabelFor(m => m.sales)：</td>
+            <td>@Html.DisplayTextFor(m => m.sales)</td>
+            <td>
+                <button class="k-button" id="salesChange" role="button" data-role="button">更换</button>
+                <script type="text/javascript">
+                    salesChange.addEventListener("click", function (ev) {
+                        ev.preventDefault();
+                        top.openSecondKendoWindow("更换业务员", "@Url.Action("ChangeSales",new { id = Model.id})");
+                    }, false);
+                </script>
+            </td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.validDate)：</td>
+            <td>@Html.DisplayTextFor(m => m.validDate)</td>
+            <td>
+                <button class="k-button" id="ValidDateChange" role="button" data-role="button">延期</button>
+                <script type="text/javascript">
+                    ValidDateChange.addEventListener("click", function (ev) {
+                        ev.preventDefault();
+                        top.openSecondKendoWindow("会员卡延期", "@Url.Action("ChangeValidDate",new { id=Model.id})");
+                    }, false);
+                </script>
+            </td>
+
+            <td class="textright"></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                <button class="k-button" id="showMore" role="button" data-role="button">显示更多</button>
+                <script type="text/javascript">
+                    $(more).hide();
+                    showMore.addEventListener("click", function (ev) {
+                        ev.preventDefault();
+                        $(more).show();
+                        $(ev.currentTarget).parent().parent().hide();
+                    }, false);
+                </script>
+            </td>
+            <td colspan="5"></td>
+        </tr>
+        <tbody id="more">
+            <tr id="more0">
+                <td class="textright">@Html.LabelFor(m => m.cerType)：</td>
+                <td>@Html.DisplayTextFor(m => m.cerType)</td>
+                <td></td>
+
+                <td class="textright">@Html.LabelFor(m => m.cerid)：</td>
+                <td>@Html.DisplayTextFor(m => m.cerid)</td>
+                <td></td>
+            </tr>
+            <tr id="more1">
+                <td class="textright">@Html.LabelFor(m => m.gender)：</td>
+                <td>@Html.DisplayTextFor(m => m.gender)</td>
+                <td></td>
+
+                <td class="textright">@Html.LabelFor(m => m.city)：</td>
+                <td>@Html.DisplayTextFor(m => m.city)</td>
+                <td></td>
+            </tr>
+            <tr id="more2">
+                <td class="textright">@Html.LabelFor(m => m.mobile)：</td>
+                <td>@Html.DisplayTextFor(m => m.mobile)</td>
+                <td></td>
+
+                <td class="textright">@Html.LabelFor(m => m.email)：</td>
+                <td>@Html.DisplayTextFor(m => m.email)</td>
+                <td></td>
+            </tr>
+            <tr id="more3">
+                <td class="textright">@Html.LabelFor(m => m.lastIn)：</td>
+                <td>@Html.DisplayTextFor(m => m.lastIn)</td>
+                <td></td>
+
+                <td class="textright">@Html.LabelFor(m => m.status)：</td>
+                <td>@Html.DisplayTextFor(m => m.statusName)</td>
+                <td></td>
+            </tr>
+            <tr id="more4">
+                <td class="textright">@Html.LabelFor(m => m.interest)：</td>
+                <td colspan="4">@Html.DisplayTextFor(m => m.interest)</td>
+                <td></td>
+
+            </tr>
+            <tr id="more5">
+                <td class="textright">@Html.LabelFor(m => m.remark)：</td>
+                <td colspan="4">@Html.DisplayTextFor(m => m.remark)</td>
+                <td></td>
+
+            </tr>
+        </tbody>
+        <tr>
+            <td>
+                <button class="k-button" id="showOther" role="button" data-role="button">隐藏</button>
+                <script type="text/javascript">
+                    showOther.addEventListener("click", function (ev) {
+                        ev.preventDefault();
+                        if (ev.currentTarget.innerHTML == "隐藏") {
+                            $(moreOther).hide();
+                            ev.currentTarget.innerHTML = "显示";
+                        }
+                        else {
+                            $(moreOther).show();
+                            ev.currentTarget.innerHTML = "隐藏";
+                        }
+
+                    }, false);
+                </script>
+            </td>
+            <td colspan="5"></td>
+        </tr>
+        <tr id="moreOther">
+            <td colspan="5">
+                <table class="k-selectable">
+                    <tr><th class="textright">账务信息</th><th class="textright">项目</th><th>单位</th><th>累计充值/获得</th><th>累计使用</th><th>可用余额/数量</th></tr>
+                    <tr><th rowspan="6"></th><th class="textright">储值金额</th><td>元</td><td>@Html.DisplayTextFor(m => m.balanceGet)</td><td>@Html.DisplayTextFor(m => m.balanceUse)</td><td>@Html.DisplayTextFor(m => m.balance)</td></tr>
+                    <tr><th class="textright">赠送金额</th><td>元</td><td>@Html.DisplayTextFor(m => m.freeGet)</td><td>@Html.DisplayTextFor(m => m.freeUse)</td><td>@Html.DisplayTextFor(m => m.free)</td></tr>
+                    <tr><th class="textright">积分</th><td>分</td><td>@Html.DisplayTextFor(m => m.scoreGet)</td><td>@Html.DisplayTextFor(m => m.scoreUse)</td><td>@Html.DisplayTextFor(m => m.score)</td></tr>
+                    <tr><th class="textright">现金券</th><td>元</td><td>@Html.DisplayTextFor(m => m.cashTicketGet)</td><td>@Html.DisplayTextFor(m => m.cashTicketUse)</td><td>@Html.DisplayTextFor(m => m.cashTicket)</td></tr>
+                    <tr><th class="textright">项目券（张）</th><td>张</td><td>@Html.DisplayTextFor(m => m.itemTicketGet)</td><td>@Html.DisplayTextFor(m => m.itemTicketUse)</td><td>@Html.DisplayTextFor(m => m.itemTicket)</td></tr>
+                    <tr><th class="textright">业主分</th><td>分</td><td></td><td></td><td></td></tr>
+                </table>
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    <div class="formButtons">
+        <button class="k-primary k-button" id="ChangeScore" role="button" data-role="button">积分调整</button>
+        <button class="k-primary k-button" id="Charge" role="button" data-role="button">会员充值</button>
+        <button class="k-primary k-button" id="hykk" role="button" data-role="button">会员扣款</button>
+        <button class="k-primary k-button" id="bgzht" role="button" data-role="button">变更状态</button>
+        <button class="k-primary k-button" id="jfdh" role="button" data-role="button">积分兑换</button>
+        <button class="k-primary k-button" id="sh" role="button" data-role="button">审核</button>
+    </div>
+    <div class="formButtons">
+        <button class="k-primary k-button" id="bgjl" role="button" data-role="button">变更记录</button>
+        <button class="k-primary k-button" id="jylsh" role="button" data-role="button">交易流水</button>
+        <button class="k-primary k-button" id="xfjl" role="button" data-role="button">消费记录</button>
+        <button class="k-primary k-button" id="jfdhjl" role="button" data-role="button">积分兑换记录</button>
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $("#closeEditFormButton").click(function (e) {
+                e.preventDefault();
+                closeEditFormWindow();
+            });
+            ChangeScore.addEventListener("click", function (ev) {
+                ev.preventDefault();
+                top.openSecondKendoWindow("积分调整", "@Url.Action("ChangeScore",new { id=Model.id})");
+            }, false);
+            Charge.addEventListener("click", function (ev) {
+                ev.preventDefault();
+                top.openSecondKendoWindow("会员充值", "@Url.Action("Charge",new { id=Model.id})");
+            }, false);
+        });
+    </script>
+}

@@ -1,0 +1,213 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosInSingle.PosBillDetailHandAddViewModel
+
+<style type="text/css">
+    table.editFormTable .textright {
+        width: 10rem;
+        padding-right: 5px;
+        font-size: 1.6rem;
+        padding: 1rem;
+    }
+</style>
+<script>
+    //打开手写板
+    function openHandwrite(obj) {
+        if ("undefined" != typeof jsObject && jsObject.IsHandwrite) //如果是封装程序
+        {
+            var x = parseInt($(".editFormTable").first().offset().left);
+            var y = parseInt($(obj).offset().top + $(obj).outerHeight(true));
+            jsObject.OpenHandwrite($(obj).attr("id"), x, y);
+        }
+    }
+
+    //获取手写词
+    function GetHandwrittenValue(id, value) {
+        if ("undefined" != typeof jsObject && jsObject.IsHandwrite) //如果是封装程序
+        {
+            $("#" + id).val($("#" + id).val() + value);
+        }
+    }
+</script>
+<div id="handContent">
+    @using (Html.BeginForm("AddHandWrite", "PosInSingle"))
+    {
+        @Html.HiddenFor(m => m.Tabid)
+
+        @Html.HiddenFor(m => m.Billid)
+        @Html.HiddenFor(m => m.MBillid)
+
+        @Html.HiddenFor(m => m.Itemid)
+        @Html.HiddenFor(m => m.ItemCode)
+
+        @Html.HiddenFor(m => m.Unitid)
+        @Html.HiddenFor(m => m.UnitCode)
+        @Html.HiddenFor(m => m.UnitName)
+
+        @*@Html.HiddenFor(m => m.Quantity)*@
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.ItemName)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.ItemName).HtmlAttributes(new { onclick = "openHandwrite(this)" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ItemName, "*")</td>
+        </tr>
+        <tr  class="otbQuantity">
+            <td class="textright">@Html.LabelFor(m => m.Quantity)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.Quantity)<i class="fa fa-keyboard-o fa-3x" style="float:right;" onclick="numberInput(this,'Quantity')" data-keyboardShow="1" aria-hidden="true"></i></td>
+            <td>@Html.ValidationMessageFor(m => m.Quantity, "*")</td>
+        </tr>
+        <tr class="otbPrice">
+            <td class="textright">@Html.LabelFor(m => m.Price)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.Price)<i class="fa fa-keyboard-o fa-3x" style="float:right;" onclick="numberInput(this,'Price')" data-keyboardShow="1" aria-hidden="true"></i></td>
+            <td>@Html.ValidationMessageFor(m => m.Price, "*")</td>
+        </tr>
+    </table>
+        @Html.ValidationSummary()
+        <div class="formButtons">
+            <button id="btnAddHandWrite" role="button" data-role="button">确定</button>
+            <button id="btnHandWriteClose" role="button" data-role="button">关闭</button>
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#btnAddHandWrite").click(function (e) {
+            e.preventDefault();
+
+            if ($("#ItemName").val() == "") {
+                layer.tips('请输入手写名称', '#ItemName');
+                return false;
+            }
+            if ($("#Price").val() == "") {
+                layer.tips('请输入价格', '#Price');
+                return false;
+            }
+
+            var f = $("#btnAddHandWrite")[0].form;
+            var validator = $(f).validate();
+            if (validator.form()) {
+                $.post(
+                    $(f).attr("action"),
+                    $(f).serialize(),
+                    function (data) {
+                        if (data.Success) {
+                            if (data.Data != "") {
+                                layer.closeAll();
+                                var entity = data.Data;
+                                $("#mBillid").val(entity.MBillid);
+                                $("#billid").val(entity.Billid);
+                                $("#tabid").val(entity.Tabid);
+                                $("#iGuest").val(entity.IGuest);
+                                getBillInfo();
+
+                            }
+                            $("#grid").data("kendoGrid").dataSource.read();
+                            getStatistics(1);
+                        } else {
+                            layer.alert(data.Data, { title: "快点云Pos提示" });
+                        }
+                    },
+                    "json");
+            }
+        });
+
+        $("#btnHandWriteClose").click(function (e) {
+            e.preventDefault();
+            layer.closeAll();
+        });
+    });
+    
+    //function quantityChange(obj) {
+    //    var model = {
+    //        Title: "数量：",
+    //        Message: "请输入数量",
+    //        ID: $(obj).attr("id"),
+    //        Value: $(obj).attr("id"),
+    //        Callback: "GetHandwrittenValue(" + $(obj).attr("id") + ", $('#txtNumberValue').val());",
+    //    };
+
+    //    $.ajax({
+    //        url: 'PosInSingle/_NumberInput',
+    //        type: "post",
+    //        data: model,
+    //        dataType: "html",
+    //        success: function (data) {
+    //            var boolJson = isJson(data);    //判断是否为json 格式
+    //            if (!boolJson) {
+    //                layer.open({
+    //                    type: 4,
+    //                    title: false,
+    //                    closeBtn: 0,
+    //                    scrollbar: false,
+    //                    shadeClose: true,
+    //                    tips: [2, '#00000000'],
+    //                    content: [data, $(obj)]
+    //                });
+    //                $('#txtNumberValue').focus();
+    //                $(".wrap").css({ "margin": 0 });
+    //                $(".layui-layer-tips .layui-layer-content").css({ "overflow": "hidden", "margin": "0", "padding": "0", "background": "rgba(150, 150, 150, 0.9)" });
+    //            }
+    //            else {
+    //                var jsonData = JSON.parse(data);
+    //                if (jsonData.Success == false) {
+    //                    layer.alert(jsonData.Data, { title: "快点云Pos提示" });
+    //                    return false;
+    //                }
+    //            }
+    //        },
+    //        error: function (data) {
+    //            layer.alert(data.responseText, { title: "快点云Pos提示" });
+    //        }
+    //    });
+    //}
+
+    //数字键盘
+    @*function numberInput(obj, tag) {
+        if ($(obj).attr("data-keyboardShow") == 1) {
+            var model = {
+                Tag: "#" + $(tag).parents(".otbPrice").find("input").last().attr("id")
+                , Display: "none;"
+                , Callback: "closeTips();"
+                , InputCallback: "inputIGuest();"
+            };
+            $.ajax({
+                url: '@Url.Action("_NumberInput", "PosInSingle")',
+                type: "post",
+                data: model,
+                dataType: "html",
+                success: function (data) {
+                    layer.open({
+                        type: 4
+                        , title: false
+                        , closeBtn: 0
+                        , shade: false
+                        , scrollbar: false
+                        , shadeClose: true
+                        , tips: [3]
+                        , content: [data, tag]
+                    });
+
+                    $(".wrap").css({ "margin": 0 });
+                    $(".layui-layer-tips .layui-layer-content").css({ "overflow": "hidden", "margin": "0", "padding": "0", "background": "rgba(150, 150, 150, 0.9)" });
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+            $(obj).attr("data-keyboardShow", 0);
+        }
+        else {
+            layer.closeAll("tips");
+            $(obj).attr("data-keyboardShow", 1);
+        }
+    }
+
+    //输入人数时
+    function inputIGuest() {
+        $(".otbPrice input").val($(".otbPrice input").last().val());
+    }
+
+    //关闭数字键盘
+    function closeTips() {
+        layer.closeAll("tips");
+    }*@
+</script>

@@ -1,0 +1,38 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItem.PosItemEditViewModel
+
+@(Html.Kendo().Grid<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_itemSuitByItemIdResult>()
+    .Name("gridPosItemSuit")
+    .Columns(columns =>
+    {
+        columns.Bound(m => m.Id).Hidden();
+        columns.Bound(m => m.IGrade).Title("级数").Width(70);
+        columns.Bound(m => m.ItemName).Title("套餐明细名称").Width(90);
+        columns.Bound(m => m.UnitName).Title("单位").Width(80);
+        columns.Bound(m => m.Price).Title("单价").Width(90);
+        columns.Bound(m => m.Quantity).Title("数量").Width(90);
+        columns.Bound(m => m.Amount).Title("金额").Width(120);
+    })
+    .HtmlAttributes(new { ondblclick = "editGridItemOther('gridPosItemSuit', 'Id', '/PosManage/BasicDataPosItem/_EditPosItemSuit', '修改套餐明细')" })
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .Filterable()
+    .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(7)
+        .Read(read => read.Action("ListPosItemSuitByItemId", "BasicDataPosItem", new { id = ViewBag.id }))
+     )
+     .ToolBar(toolbar =>
+     {
+         toolbar.Template(
+            @<text>
+                <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addGridItemOther('/PosManage/BasicDataPosItem/_AddPosItemSuit','@ViewBag.id','增加套餐明细')"><span class="k-icon k-add"></span>增加</a>
+                <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="editGridItemOther('gridPosItemSuit', 'Id', '/PosManage/BasicDataPosItem/_EditPosItemSuit', '修改套餐明细')"><span class="k-icon k-add"></span>修改</a>
+                <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="batchDelete('gridPosItemSuit', 'Id', '/PosManage/BasicDataPosItem/BatchDeleteItemSuit')"><span class="k-icon k-i-unpin"></span>删除</a>
+                @*<a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="hideItemOther('itemMultiClass')">隐藏编辑框</a>*@
+            </text>
+        );
+     })
+)
+

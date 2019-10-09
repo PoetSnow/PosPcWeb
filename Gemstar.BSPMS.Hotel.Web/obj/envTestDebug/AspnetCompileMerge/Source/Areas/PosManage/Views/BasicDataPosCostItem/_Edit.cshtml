@@ -1,0 +1,428 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItem.PosItemEditViewModel
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    a, img {
+        border: 0;
+    }
+
+    body {
+        font: 12px/180% Arial, Helvetica, sans-serif, "新宋体";
+    }
+
+    .tab1 {
+        border-top: #ccc solid 1px;
+        border-bottom: #cccccc solid 1px;
+        float: left;
+        width: 52%;
+    }
+
+    .menu {
+        height: 28px;
+        border-right: #ccc solid 1px;
+        font-size: 14px;
+    }
+
+        .menu li {
+            float: left;
+            width: auto;
+            padding:0 10px;
+            text-align: center;
+            line-height: 28px;
+            height: 28px;
+            cursor: pointer;
+            border-left: #ccc solid 1px;
+            border-bottom: #ccc solid 1px;
+            color: #666;
+            overflow: hidden;
+            background: #E0E2EB;
+        }
+
+            .menu li.off {
+                background: #fff;
+                color: #336699;
+                font-weight: bold;
+                border-bottom: none;
+            }
+
+    .menudiv {
+        border-left: #cccccc solid 1px;
+        border-right: #cccccc solid 1px;
+        border-top: 0;
+        background: #fefefe;
+        height: 418px;
+    }
+
+        .menudiv div {
+            line-height: 28px;
+        }
+
+    .formButtons {
+        padding-top: 10px;
+    }
+
+    .k-overflow-container .k-button.k-state-active:hover, .k-panelbar > li > .k-link.k-state-selected, .k-split-container .k-button.k-state-active:hover, .k-toolbar .k-button.k-state-active:hover {
+        color: #333;
+    }
+</style>
+<script type="text/javascript">
+    function moduleChanged() {
+        var ItemClassid = $("#ItemClassid").data("kendoDropDownList");
+        ItemClassid.dataSource.read();
+
+        var DeptClassid = $("#DeptClassid").data("kendoDropDownList");
+        DeptClassid.dataSource.read();
+
+        var Unitid = $("#Unitid").data("kendoDropDownList");
+        Unitid.dataSource.read();
+
+        //var Requestid = $("#Requestid").data("kendoDropDownList");
+        //Requestid.dataSource.read();
+    }
+
+    function itemChanged() {
+        var SubClassid = $("#SubClassid").data("kendoDropDownList");
+        SubClassid.dataSource.read();
+
+        var item = $("#ItemClassid").data("kendoDropDownList");
+        var itemClassid = item.value();
+
+        //AutoCode(itemClassid, "");
+    }
+
+    function subClassChanged() {
+        var item = $("#ItemClassid").data("kendoDropDownList");
+        var itemClassid = item.value();
+
+        var sub = $("#SubClassid").data("kendoDropDownList");
+        var subClassid = sub.value();
+
+        //AutoCode(itemClassid, subClassid);
+    }
+
+    function posCode_paras() {
+        var module = $("#Module").data("kendoDropDownList");
+        var moduleCode = module.value();
+        return {
+            moduleCode: moduleCode
+        };
+    }
+
+    function posItem_paras() {
+        var item = $("#ItemClassid").data("kendoDropDownList");
+        var itemClassid = item.value();
+        return {
+            itemClassid: itemClassid,
+            isSubClass: true
+        };
+    }
+
+    function AutoCode(classid, subclassid) {
+        $.ajax({
+            url: '@Url.Action("ItemCodeForPosItemByClassid", "BasicDataPosCostItem")',
+            data: { itemClassid: classid, subClassid: subclassid },
+            type: "post",
+            dataType: "html",
+            success: function (result) {
+                $("#Code").val(result);
+            },
+            error: function (result) {
+                alert(result.responseText);
+            }
+        });
+    }
+    //消费项目大类操作
+    function DeleteItemMultiClass(obj) {
+        var grid = $("#gridItemMultiClass").data("kendoGrid");
+        var data = grid.dataItem($(obj).parent().parent());
+        var id = data["id"];
+        $.ajax({
+            url: '@Url.Action("MultiClass_Delete", "BasicDataPosCostItem")',
+            data: { id: id },
+            type: "post",
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    grid.dataSource.read();
+                }
+            },
+            error: function (result) {
+                alert(result.responseText);
+            }
+        });
+    }
+    function AddItemMultiClass(obj) {
+        var grid = $("#gridItemMultiClass").data("kendoGrid");
+        var data = grid.dataItem($(obj).parent().parent());
+        var id = data["id"] == "" ? "-1" : data["id"];
+        var model = {
+            Id: id,
+            ItemId: '@ViewBag.id',
+            ItemClassidForEdit: data["ItemClassidForEdit"],
+            Remark: data["Remark"]
+        };
+        $.ajax({
+            url: '@Url.Action("MultiClass_Update", "BasicDataPosCostItem")',
+            data: model,
+            type: "post",
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                  //  grid.dataSource.read();
+                }
+                else {
+                    alert(data.Data);
+                   // layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+            },
+            error: function (result) {
+                //alert(result.responseText);
+                layer.alert(result.responseText, { title: "快点云Pos提示" });
+            }
+        });
+        grid.dataSource.read();
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    <div >
+        @Html.HiddenFor(m => m.OriginJsonData)
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.OperName)
+        @Html.HiddenFor(m => m.ModifiedDate)
+        <ul id="panelbar">
+            <li class="k-state-active">
+                <span class="k-link k-state-selected">基本信息</span>
+                <div style="padding: 10px;">
+                    <table class="editFormTable">
+                        <tr>
+                            <td class="textright">@Html.LabelFor(m => m.Module)</td>
+                            <td>@Html.Kendo().DropDownListFor(e => e.Module).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosModules", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); }).Events(e => e.Change("moduleChanged"))</td>
+                            <td>@Html.ValidationMessageFor(m => m.Module, "*")</td>
+                            <td class="textright">@Html.LabelFor(m => m.DeptClassid)</td>
+                            <td>@Html.Kendo().DropDownListFor(e => e.DeptClassid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosDeptClassByModules", "BasicDataPosDeptClass", new { rnd = new Random().NextDouble() }).Data("posCode_paras")).ServerFiltering(true); })</td>
+                            <td>@Html.ValidationMessageFor(m => m.DeptClassid, "*")</td>
+                        </tr>
+                        <tr>
+                            <td class="textright">@Html.LabelFor(m => m.ItemClassid)</td>
+                            <td>@Html.Kendo().DropDownListFor(e => e.ItemClassid).HtmlAttributes(new { style = " width:100%", @readonly = "readonly" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosItemClassByModules", "BasicDataPosItemClass", new { rnd = new Random().NextDouble() }).Data("posCode_paras")).ServerFiltering(true); }).Events(e => e.Change("itemChanged"))</td>
+                            <td>@Html.ValidationMessageFor(m => m.ItemClassid, "*")</td>
+                            <td class="textright">@Html.LabelFor(m => m.SubClassid)</td>
+                            <td>@Html.Kendo().DropDownListFor(e => e.SubClassid).HtmlAttributes(new { style = " width:100%", @readonly = "readonly" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosItemByIsSubClass", "BasicDataPosCostItem", new { rnd = new Random().NextDouble() }).Data("posItem_paras")).ServerFiltering(true); }).OptionLabel("请选择分类").Events(e => e.Change("subClassChanged"))</td>
+                            <td>@Html.ValidationMessageFor(m => m.SubClassid, "*")</td>
+                        </tr>
+                        <tr>
+                            <td class="textright"><label for="Code">物品代码</label></td>
+                            <td>@Html.Kendo().TextBoxFor(m => m.Code).HtmlAttributes(new { style = "width:100%;", @readonly = "readonly" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+                            <td class="textright">@Html.LabelFor(m => m.Cname)</td>
+                            <td>@Html.Kendo().TextBoxFor(m => m.Cname).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.Cname, "*")</td>
+                        </tr>
+                        <tr>
+                            <td class="textright">@Html.LabelFor(m => m.Ename)</td>
+                            <td>@Html.Kendo().TextBoxFor(m => m.Ename).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.Ename, "*")</td>
+                            <td class="textright">@Html.LabelFor(m => m.Oname)</td>
+                            <td>@Html.Kendo().TextBoxFor(m => m.Oname).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.Oname, "*")</td>
+                        </tr>
+                        <tr>
+                            <td class="textright"><label for="Unitid">物品单位</label></td>
+                            <td>@Html.Kendo().DropDownListFor(e => e.Unitid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosUnitByModules", "BasicDataPosUnit", new { rnd = new Random().NextDouble() }).Data("posCode_paras")).ServerFiltering(true); }).OptionLabel("请选择单位")</td>
+                            <td>@Html.ValidationMessageFor(m => m.Unitid, "*")</td>
+                            <td class="textright">@Html.LabelFor(m => m.Price)</td>
+                            <td>@Html.Kendo().NumericTextBoxFor(m => m.Price).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.Price, "*")</td>
+                        </tr>
+                        <tr>
+                            <td class="textright">@Html.LabelFor(m => m.Status)</td>
+                            <td>@Html.Kendo().DropDownListFor(e => e.Status).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosStatus", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); })</td>
+                            <td>@Html.ValidationMessageFor(m => m.Status, "*")</td>
+                            <td class="textright">
+                                @Html.LabelFor(x => x.OutCodeNo)
+                            </td>
+                            <td>
+                                @Html.Kendo().TextBoxFor(x => x.OutCodeNo).HtmlAttributes(new { style = "width:100%" })
+                            </td>
+                            <td>@Html.ValidationMessageFor(x => x.OutCodeNo)</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="textright">@Html.LabelFor(m => m.Barcode)</td>
+                            <td>@Html.Kendo().TextBoxFor(m => m.Barcode).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.Barcode, "*")</td>
+                            <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+                            <td>@Html.Kendo().TextBoxFor(m => m.Seqid).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+                        </tr>
+                        <tr>
+                            <td class="textright">@Html.LabelFor(m => m.ItemTaxid)</td>
+                            <td>@Html.Kendo().TextBoxFor(m => m.ItemTaxid).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.ItemTaxid, "*")</td>
+                            <td class="textright">@Html.LabelFor(m => m.TaxRate)</td>
+                            <td>@Html.Kendo().NumericTextBoxFor(m => m.TaxRate).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.TaxRate, "*")</td>
+                        </tr>
+                        <tr>
+                            <td class="textright">@Html.LabelFor(m => m.IsStock)</td>
+                            <td>@Html.Kendo().DropDownListFor(e => e.IsStock).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosIsStock", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); }).OptionLabel("请选择是否减库存")</td>
+                            <td>@Html.ValidationMessageFor(m => m.IsStock, "*")</td>
+                            <td class="textright">@Html.LabelFor(m => m.OutCodeNo)</td>
+                            <td>@Html.Kendo().TextBoxFor(m => m.OutCodeNo).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.OutCodeNo, "*")</td>
+                        </tr>
+                        <tr>                           
+                            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+                            <td>@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+                        </tr>
+                    </table>
+                </div>
+            </li>
+        </ul>
+    </div>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <input type="button" class="k-primary k-button" id="closeEditFormButton"  value="返回" />
+        @*<button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>*@
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+            $("#posMaskWindow").html("");
+            closeGeneralWindow();
+        });
+        $("#panelbar").kendoPanelBar({
+            expandMode: "single"
+        });
+        moduleChanged();
+    });
+    function addGridItemOther(url, id, title) {
+        $.ajax({
+            url: url + "?id=" + id,
+            type: "get",
+            dataType: "html",
+            success: function (result) {
+                $("#posMaskWindow").html(result);
+                $("#posMaskWindow_wnd_title").text(title);
+                $(".k-i-close").click(function () {
+                    closeGeneralWindow();
+                });
+                openGeneralWindow();
+
+            },
+            error: function (result) {
+                alert(result.responseText);
+            }
+        });
+    }
+    function hideItemOther(divid) {
+        $("#" + divid).hide();
+    }
+    //批量 删除
+    function batchDelete(gridId, keyName, url) {
+
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要删除的数据行");
+        } else {
+            jConfirm("确认要删除所有选中的数据行?", "确认", "取消", function (confirmed) {
+                if (confirmed) {
+                    var ids = [];
+                    for (var i = 0; i < selectedRows.length; i++) {
+                        var row = selectedRows[i];
+                        var data = grid.dataItem(row);
+                        ids.push(data[keyName]);
+                    }
+                    $.post(url, { id: ids.join(",") }, function (data) {
+                        if (data.Success) {
+                            grid.dataSource.read();
+                        } else {
+                            //layer.alert(data.Data);
+                            ajaxErrorHandle(data);
+                        }
+                    }, 'json');
+                }
+            });
+        }
+    }
+
+    //编辑
+    function editGridItemOther(gridId, keyName, url, title) {
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要修改的数据行");
+        } else if (selectedRows.length == 1) {
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+
+            $.ajax({
+                url: url + "?id=" + data[keyName],
+                type: "get",
+                dataType: "html",
+                success: function (result) {
+                    $("#posMaskWindow").html(result);
+                    $("#posMaskWindow_wnd_title").text(title);
+                    $(".k-i-close").click(function () {
+                        $("#posMaskWindow").html("");
+                        closeGeneralWindow();
+                    });
+                    openGeneralWindow();
+                },
+                error: function (result) {
+                    alert(result.responseText);
+                }
+            });
+
+        }
+        else {
+            jAlert("请选择一行数据行");
+        }
+    }
+    function saveFormDataForPosItem(btn, grid) {
+        var f = $(btn)[0].form;
+        var validator = $(f).validate();
+        if (validator.form()) {
+            $.post(
+                $(f).attr("action"),
+                $(f).serialize(),
+                function (data) {
+                    if (data.Success) {
+                        $("#" + grid).data("kendoGrid").dataSource.read();
+                        $("#" + grid).data("kendoGrid").refresh();
+                        $("#posMaskWindow").html("");
+                        closeGeneralWindow();
+                    } else {
+                        jAlert(data.Data);
+                    }
+                },
+                "json");
+        }
+    }
+</script>

@@ -1,0 +1,282 @@
+﻿@using Gemstar.BSPMS.Common.Extensions;
+@using Gemstar.BSPMS.Hotel.Web.Areas.ResManage.Models.ResOrderBatch;
+@using Gemstar.BSPMS.Hotel.Services.EntityProcedures;
+@{
+    ViewBag.Title = "Index";
+    ViewBag.customName = ViewBag.isCheckIn == 1 ? "新入住客人" : "新预订客人";
+}
+@section headerContent{
+    <style type="text/css">
+        .house-state-list .house-state-bg{width:60px;height:60px;border:1px solid #000;margin:2px;}
+        .house-state-bg .icon-all{padding-top:10px;}
+        .house-state-list .house-state-default{background-color:white;}
+        .house-state-list .house-state-selected{background-color:cornflowerblue;}
+        .house-state-list .house-state-bg .default {
+    padding-left: 6px;
+    float: left;
+    color: black;
+    font-weight: bold;
+}
+        body{width:1200px;height:492px;overflow:hidden;}.red-color{vertical-align:middle}
+    .k-widget.k-tooltip {
+        border: 1px solid #e5e5e5;
+        background: #fff;
+        color: #000;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        text-align: left;
+    }
+
+    .k-callout-n {
+        border-bottom-color:#fafafa;
+    }
+
+    .red-color {
+        vertical-align: middle;
+    }
+    </style>
+    }
+<div style="padding-right:36px;padding-top:9px;padding-bottom:9px;">
+    <table id="resCustomerTable" style="width:100%;">
+        <tr>
+            <td class="textright" style="min-width:60px;"></td>
+            <td>@(Html.Kendo().RadioButton().Name("IsGroup").Label("散客").Value("0").Checked(true).HtmlAttributes(new Dictionary<string, object> { { "data-controltype", "editcontrol-main" } }))&nbsp;&nbsp;@(Html.Kendo().RadioButton().Name("IsGroup").Label("团体").Value("1").HtmlAttributes(new Dictionary<string, object> { { "data-controltype", "editcontrol-main" } }))</td>
+            <td class="textright" style="min-width:48px;"><label for="ResCustName">联系人</label></td>
+            <td><input class="k-textbox" id="ResCustName" name="ResCustName" data-controltype="editcontrol-main" value="@ViewBag.customName" /><span class="red-color">*</span></td>
+            <td class="textright" style="min-width:48px;"><label for="ResCustMobile">手机号</label></td>
+            <td><input class="k-textbox" id="ResCustMobile" name="ResCustMobile" data-controltype="editcontrol-main" value="" /></td>
+            <td class="control-label" style="min-width:48px;"><label for="profileComboBox" data-id="0" style="color:#428bca;">会员</label></td>
+            <td>
+                <script>
+                    function onAdditionalData() {
+                        return { nameOrMobile: $("#profileComboBox").data("kendoComboBox").text() };
+                    }
+                </script>
+                @(Html.Kendo().ComboBox()
+                .Name("profileComboBox")
+                .Placeholder("卡号/姓名/手机号")
+                .DataTextField("GuestName")
+                .DataValueField("Id")
+                .Template("#= MbrCardNo # | #= GuestName # #= Mobile == null ? '' : ',' + Mobile #").Filter("contains")
+                .AutoBind(false)
+                .MinLength(2)
+                .DataSource(e => { e.Read(r => r.Url(Url.Action("ListItemsForProfiles", new { rnd = new Random().NextDouble() })).Data("onAdditionalData")).ServerFiltering(true); })
+                .Events(e => e.Change("editControl_changed").Select("profileComboBox_selected")).AutoBind(false))
+            </td>
+        </tr>
+        <tr>
+            <td class="textright"><label for="ResNoExt">外部订单号</label></td>
+            <td><input class="k-textbox bg-disabled"  disabled="disabled" id="ResNoExt" name="ResNoExt" value="" /></td>
+            <td class="textright"><label for="Resno">主单号</label></td>
+            <td><input class="k-textbox bg-disabled"  disabled="disabled" id="Resno" name="Resno" value="" /></td>
+            <td class="textright"><label for="Name">主单名称</label></td>
+            <td><input class="k-textbox" id="Name" name="Name" data-controltype="editcontrol-main" value="@ViewBag.customName" /></td>
+            <td class="textright"><label for="Cttid" data-id="0" style="color:#428bca;">合约单位</label></td>
+            <td>
+                @(Html.Kendo().DropDownList().Name("Cttid").OptionLabel(" ").Filter(FilterType.Contains).MinLength(2).Template("#:Data# <br/> #:Key#").DataTextField("Key").DataValueField("Value").DataSource(s => s.Read(r => r.Url(Url.Action("ResListItemsForCompanys", "ResOrderCustomer", new { rnd = new Random().NextDouble() }))).ServerFiltering(true)).AutoBind(false).Events(e => e.Change("editControl_main_changed").Select("cttid_selected")))
+            </td>
+        </tr>
+        <tr>
+            <td colspan="8" style="height:2px;border-bottom:1px dashed #ccc;" class="separate"></td>
+        </tr>
+        <tr>
+            <td class="control-label"><label for="arriveDate">抵店时间</label></td>
+            <td>
+                @(Html.Kendo().DateTimePicker()
+                .Name("arriveDate")
+                .Format(DateTimeExtension.DateTimeWithoutSecondFormatStr)
+                .Events(e => e.Change("editControl_changed"))
+                .Value(DateTime.Now)
+                .HtmlAttributes(new { onclick = "openKendoDatetimePicker(this)", style = "width:170px;" }))<span class="red-color">*</span>
+            </td>
+            <td class="control-label"><label for="holdTime">保留时间</label></td>
+            <td>
+                @(Html.Kendo().DateTimePicker()
+                .Name("holdDate")
+                .Format(DateTimeExtension.DateTimeWithoutSecondFormatStr)
+                .Events(e => e.Change("editControl_changed"))
+                .HtmlAttributes(new { onclick = "openKendoDatetimePicker(this)", style = "width:170px;" }))<span class="red-color">*</span>
+            </td>
+            <td class="control-label"><label for="marketType">市场分类</label></td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                .Name("marketType")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .DataSource(s => { s.Read(r => r.Url(Url.Action("ListItemsForMarketCategory", new { rnd = new Random().NextDouble() }))); })
+                .Events(e => e.Change("editControl_changed")).AutoBind(false))<span class="red-color">*</span>
+            </td>     
+            <td class="control-label"><label for="special">特殊要求</label></td>
+            <td><input class="k-textbox" id="special" name="special" data-controltype="editcontrol" value="" /></td>             
+        </tr>
+        <tr>
+            <td class="control-label"><label for="depDate">离店时间</label></td>
+            <td style="min-width:240px;">
+                @(Html.Kendo().DateTimePicker()
+                .Name("depDate")
+                .Value(DateTime.Now.AddDays(1))
+                .Format(DateTimeExtension.DateTimeWithoutSecondFormatStr)
+                .Events(e => e.Change("editControl_changed"))
+                .HtmlAttributes(new { onclick = "openKendoDatetimePicker(this)", style = "width:170px;" }))<span class="red-color">*</span>
+                <span style="position:relative;top:-19px;">
+                    @(Html.Kendo().NumericTextBox<UInt32>()
+                    .Name("days")
+                    .Min(1)
+                    .Step(1)
+                    .Format("n0")
+                    .Decimals(0)
+                    .Placeholder("天数")
+                    .HtmlAttributes(new { style = "width: 70px;" }))
+                </span>
+            </td>
+            <td class="control-label"><label for="rateCode">价格代码</label></td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                .Name("rateCode")
+                //.OptionLabel("请选择")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .DataSource(s => { s.Read(r => r.Url(Url.Action("ListItemsForRates", new { rnd = new Random().NextDouble() }))); })
+                .Events(e => e.Change("editControl_changed").DataBound("rateCode_dataBound")).AutoBind(false))
+                @(Html.Hidden("rateCodeChangedBbf"))
+                <input type="hidden" id="rateCodeChangedIsDayRoom" value="false" data-dayroomtime="" />
+                <input type="hidden" id="rateCodeChangedIsHou" value="false" data-baseminute="" />
+                <input type="hidden" id="rateCodeChangedHalfTime" value="false" data-halftime="" />
+                <input type="hidden" id="rateCodeChangedRoomTypeids" /><span class="red-color">*</span>
+                <input type="hidden" id="rateCodeNoPrintProfile" />
+                <input type="hidden" id="rateCodeNoPrintCompany" />
+                <input type="hidden" id="rateCodeIsUseScore" />
+            </td>
+            <td class="control-label"><label for="customerSource">客人来源</label></td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                .Name("customerSource")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .DataSource(s => { s.Read(r => r.Url(Url.Action("ListItemsForCustomerSource", new { rnd = new Random().NextDouble() }))); })
+                .Events(e => e.Change("editControl_changed")).AutoBind(false))<span class="red-color">*</span>
+            </td>      
+            <td class="control-label"><label for="remark">备注</label></td>
+            <td><input class="k-textbox" id="remark" name="remark" data-controltype="editcontrol" value="" /></td>
+            
+        </tr>
+        <tr>
+            <td colspan="8" style="height:2px;border-bottom:1px dashed #ccc;" class="separate"></td>
+        </tr>
+        <tr>
+            <td colspan="4" style="vertical-align:top;">
+                <div style="width:550px;height:260px;overflow:hidden;">
+                    @(
+                    Html.Kendo().Grid<ResOrderBatchGridModel>()
+                    .Name("grid")
+                    .Columns(c =>
+                    {
+                        c.Bound(w => w.name).Title("房型").Width(100).HtmlAttributes(new { roomtypeid = "#=id#" });
+                        c.Bound(w => w.roomqty).Title("可用数").Width(70);
+                        c.Bound(w => w.selectedQty).Title("已选数").Width(70).ClientTemplate("<input type='text' value='#=selectedQty#' class='k-textbox' style='width:60px;'/>");
+                        c.Bound(w => w.rate).Title("房价").Width(200).ClientTemplate("<span class='batchRoomTypeRate'>#=rate#</span>");
+                        c.Bound(w => w.bbf).Title("早餐数").Width(70);
+                    })
+                    .Sortable(c => c.Enabled(false))
+                    .Scrollable()
+                    .DataSource(c => c.Ajax().ServerOperation(true).Read(r=>r.Action("AjaxQueryRoomTypes", "ResOrderBatch").Data("AjaxQueryRoomTypes_setPara")))
+                    .Selectable(s => { s.Mode(GridSelectionMode.Single); s.Type(GridSelectionType.Row); })
+                    .HtmlAttributes(new { style = "height:250px;max-height:250px;" })
+                    .Events(e=> { e.Change("grid_rowChaned"); e.DataBound("grid_dataBound"); })
+                    )
+                </div>
+            </td>
+            <td colspan="4" style="vertical-align:top;">
+                <div style="width:550px;height:240px;overflow:hidden;">
+                    <div>
+                        <label for="selectedRoomNos">已选房号</label>
+                        <input type="text" class="k-textbox bg-disabled" id="selectedRoomNos" readonly="readonly" style="width:475px;" /><span class="red-color">*</span>
+                    </div>
+                    <div style="width:100%;height:210px;overflow:auto;">
+                        @(Html.Kendo().ListView<UpQueryRoomAutoChooseResult>()
+        .Name("batchListView")
+        .DataSource(d => d.Read(c => c.Action("AjaxQueryRooms", "ResOrderBatch", new { area = "ResManage" }).Data("AjaxQueryRooms_setPara")))
+        .ClientTemplateId("roomsContentTemplate")
+        .TagName("div")
+        .Events(e => e.DataBound("roomsListView_dataBound"))
+        .HtmlAttributes(new { @class = "house-state-list",style="border:0 none;" })
+                        )
+                        
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">@Html.Kendo().Button().Name("changeRatePrice").Content("调整选中房型价格").Events(e=>e.Click("changeRatePrice_clicked"))</td>
+            <td colspan="3">@Html.Hidden("saveContinue","0")<input id="authorizationSaveContinue" name="authorizationSaveContinue" type="hidden" value="" /><input id="UseScoreSaveContinue" name="UseScoreSaveContinue" type="hidden" value="" /></td>
+            <td>@Html.Kendo().Button().Name("save").Content("保存").Events(e=>e.Click("save_clicked"))</td>
+        </tr>
+    </table>
+</div>
+
+<div style="display:none;">
+    @Html.Partial("_RatePlanTemplate")
+    @Html.Partial("AuthorizationTemplates/Authorization")
+    @Html.Partial("_ResUseScoreToCheckin")
+</div>
+@section scripts{
+<script type="text/javascript">
+    var hasChangedMain = false;
+    var hasChanged = false;
+    var CustomerCommonValues = {
+        selectedRooms:{},
+        defaultArrTime: "@ViewBag.defaultArrTime",
+        defaultHoldTime: "@ViewBag.defaultHoldTime",
+        isCheckIn: "@ViewBag.isCheckIn",
+        originCustomName:"@ViewBag.customName",
+        GetRate: "@Url.Action("GetRate")",
+        saveUrl: "@Url.Action("Save")",
+        businessDate: "@ViewBag.BusinessDate",
+        GetMbrCardInfo: "@Url.Action("GetMbrCardInfo", "ResOrderCustomer")",
+        GetCompanyInfo: "@Url.Action("GetCompanyInfo", "ResOrderCustomer")",
+        roomTypeId: "@ViewBag.roomTypeId",
+        roomId: "@ViewBag.roomId",
+        hotelId: "@ViewBag.HotelId",
+        GetMbrCardBlance: "@Url.Action("GetMbrCardBlance", "ResOrderCustomer")",
+        GetCommpanyBlance: "@Url.Action("GetCommpanyBlance", "ResOrderCustomer")",
+        CompanyManageDetail: "@Url.Action("Detail", "CompanyManage", new { area = "CRM" })",
+        ProfileTransDetail: "@Url.Action("Index", "MbrCardTransManage", new { area = "MbrCardCenter" })",
+        GroupDefaultRateCode: "@ViewBag.GroupDefaultRateCode",
+    };
+    $(function () {
+        batchInit();
+        batchChangeRatePlanWindow.Initialization();
+    });
+</script>
+    @System.Web.Optimization.Scripts.Render(BundleConfig.BundleResBatchScripts)
+<script type="text/x-kendo-tmpl" id="roomsContentTemplate">
+    #
+    var bgClass = "house-state-default";
+        var roomTypeId = getSelectedRoomTypeId();
+    if (CustomerCommonValues.selectedRooms[roomTypeId]) {
+        var count = CustomerCommonValues.selectedRooms[roomTypeId].rooms.length;
+        for (var i = 0; i < count; i++) {
+            var roomInfo = CustomerCommonValues.selectedRooms[roomTypeId].rooms[i];
+            if (roomInfo["roomId"] == Roomid) {
+                bgClass = "house-state-selected";
+            }
+        }
+    }
+   
+    #
+    <dl class="house-state-bg #:bgClass#" data-Roomid="#:Roomid#" data-roomno="#:roomno#">
+        <dt class="default">#:preFix##:roomno#</dt>       
+        <dd class="icon-all">
+            # if(isStop==1){ #
+            <span class="new-service-room-bg-small"></span>
+            # } else if(isService==1){ #
+            <span class="new-maint-room-bg-small"></span>
+            # } else if(isDirty==1){ #
+            <span class="new-dirty-room-bg-small"></span>
+            # } #
+            # if(isReg == 1){ #
+            <span class="new-pre-room-bg-small"></span>
+            # } #
+        </dd>
+    </dl>
+</script>
+    }

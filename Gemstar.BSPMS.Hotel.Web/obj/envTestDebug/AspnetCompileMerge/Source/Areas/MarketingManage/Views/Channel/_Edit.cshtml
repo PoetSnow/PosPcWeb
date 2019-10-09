@@ -1,0 +1,181 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MarketingManage.Models.Channel.ChannelEditViewModel
+@using Kendo.Mvc.UI
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.Hid)
+    @Html.HiddenFor(m => m.Code)
+    Model.Isshareroom = (Model.Isshareroom != true ? false : true);
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Code)</td>
+
+            <td>@Html.TextBoxFor(m => m.Code, new { @class = "k-textbox", style = "width:100%;", disabled = "disabled" })</td>
+
+
+            <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.Name)</td>
+            <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Marketid)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.Marketid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForMarketid", "Channel")); })
+            </td>
+
+            <td>@Html.ValidationMessageFor(m => m.Marketid, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.Refno)</td>
+            <td>@Html.TextBoxFor(m => m.Refno, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Refno, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.PayItemid)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.PayItemid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForPayItemid", "Channel")); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.PayItemid, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.GuaranteeItemid)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.GuaranteeItemid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForPayItemid", "Channel")); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.GuaranteeItemid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Isshareroom)</td>
+            <td>
+
+                @Html.Kendo().DropDownListFor(e => e.Isshareroom).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetIsSelectList", "RoomTypeManage", new { area = "SystemManage", rnd = new Random().NextDouble() })); })
+
+            </td>
+
+            <td>@Html.ValidationMessageFor(m => m.ItfVersion, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.ItfVersion)</td>
+            <td>
+
+                @Html.Kendo().DropDownListFor(m => m.ItfVersion).HtmlAttributes(new { style = " width:100%" }).BindTo(new List<DropDownListItem>() { new DropDownListItem { Text = "直连", Value = "direct" }, new DropDownListItem { Text = "EBooking", Value = "ebooking" } })
+
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.ItfVersion, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Roomtypeid)</td>
+            <td colspan="4">
+                @Html.HiddenFor(m => m.Roomtypeid)
+                @Html.Kendo().MultiSelect().Name("RoomtypeidMultiSelect").HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForRoomType", "Channel")); }).Value(ViewBag.SelectRoomtypeid)
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.Roomtypeid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright"> </td>
+            <td style="padding-top:10px;">
+                @Html.Kendo().CheckBoxFor(e => e.isSmsToGuest).HtmlAttributes(new { id = "isSmsToGuest" })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.isSmsToGuest, "*")</td>
+            <td rowspan="3" name="cusserv" class="textright">@Html.LabelFor(m => m.Customerservice)</td>
+            <td rowspan="3" name="cusserv" style="width:38%;">
+                @Html.HiddenFor(m => m.Customerservice)
+                @Html.Kendo().MultiSelect().Name("CustomerserviceMultiSelect").HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForCustomerservice", "Channel")); }).Value(ViewBag.SelectCustomerservice).AutoClose(false)
+            </td>
+            <td rowspan="3" name="cusserv">@Html.ValidationMessageFor(m => m.Customerservice, "*")</td>
+        <tr>
+            <td class="textright"> </td>
+            <td style="padding-top:10px;">
+                @Html.Kendo().CheckBoxFor(e => e.isSmsToCustomerservice).HtmlAttributes(new { id = "isSmsToCustomerservice" })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.isSmsToCustomerservice, "*")</td>
+
+        <tr>
+            <td class="textright"> </td>
+            <td style="padding-top:10px;">
+                @Html.Kendo().CheckBoxFor(e => e.isWeChatToCustomerservice).HtmlAttributes(new { id = "isWeChatToCustomerservice" })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.isWeChatToCustomerservice, "*")</td>
+
+        </tr>
+
+        @*<tr>
+                <td rowspan="3" name="cusserv" class="textright">@Html.LabelFor(m => m.Customerservice)</td>
+                <td rowspan="3"  name="cusserv">
+                    @Html.HiddenFor(m => m.Customerservice)
+                    @Html.Kendo().MultiSelect().Name("CustomerserviceMultiSelect").HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForCustomerservice", "Channel")); }).Value(ViewBag.SelectCustomerservice)
+                </td>
+                <td rowspan="3"  name="cusserv">@Html.ValidationMessageFor(m => m.Customerservice, "*")</td>
+
+            </tr>*@
+        @*<tr>
+                <td class="textright"> </td>
+                <td style="padding-top:10px;">
+                    @Html.Kendo().CheckBoxFor(e => e.isSmsToCustomerservice).HtmlAttributes(new { id = "isSmsToCustomerservice" })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.isSmsToCustomerservice, "*")</td>
+
+            <tr>
+                <td class="textright"> </td>
+                <td>
+                    @Html.Kendo().CheckBoxFor(e => e.isWeChatToCustomerservice).HtmlAttributes(new { id = "isWeChatToCustomerservice" })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.isWeChatToCustomerservice, "*")</td>
+
+            </tr>*@
+        @{
+            var channelUrl = ViewBag.channelUrl as string;
+            if (!string.IsNullOrWhiteSpace(channelUrl))
+            {
+                <tr>
+                    <td>&nbsp;</td>
+                    <td colspan="5">
+                        <br /><a style="color:blue;text-decoration:underline" href="@Html.Raw(channelUrl)" target="_blank">渠道产品绑定管理</a>
+                        <span style="color:red;float:right">直连接口数据在捷云系统中设置；eBooking价格在eBooking上设置</span>
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+    @Html.ValidationSummary()
+            <div class="formButtons">
+                <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+                <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+            </div>
+            }
+
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            $("#Roomtypeid").val($("#RoomtypeidMultiSelect").data("kendoMultiSelect").value());
+            $("#Customerservice").val($("#CustomerserviceMultiSelect").data("kendoMultiSelect").value());
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        }); Changeclick();
+        $("#isSmsToCustomerservice").click(function () {
+            Changeclick();
+        });
+        $("#isWeChatToCustomerservice").click(function () {
+            Changeclick();
+        });
+    });
+    function Changeclick() {
+        if ($("#isSmsToCustomerservice").get(0).checked || $("#isWeChatToCustomerservice").get(0).checked) {
+            $("td[name='cusserv']").css("display", "");
+        } else {
+            $("td[name='cusserv']").css("display", "none");
+        }
+    }
+</script>
+
+
+<style type="text/css">
+    .k-textbox .k-icon {
+        margin: -8px -7px 0 -7px;
+    }
+</style>

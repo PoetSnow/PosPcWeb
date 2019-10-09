@@ -1,0 +1,75 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "系统参数列表";
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "Id";
+    var gridModel = new KendoGridCommonViewModel()
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForQuery = false,
+        EnableFunctionForSave = true,
+        EnableScrollable = true,
+    };
+    var gridHelper = new KendoGridEditInCellHtmlHelper<PmsPara>(
+        Html,
+        Url,
+        gridModel,
+        c =>
+        {
+            c.Bound("Seqid").Title("排序号").Width(100);
+            c.Bound("Code").Title("参数代码").Width(250);
+            c.Bound("Name").Title("参数名称").Width(200);
+            c.Bound("Value").Title("参数值").HtmlAttributes(new { @style = "white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" });
+            c.Bound("Remark").Title("参数说明");
+            c.Bound("DefaultValue").Title("默认值").Width(200).HtmlAttributes(new { style = "color:rgb(169,169,169);" });
+        },
+    c =>
+    {
+        c.Id(w => w.Id);
+        c.Field(w => w.Code).Editable(false);
+        c.Field(w => w.Hid).Editable(false);
+        c.Field(w => w.Name).Editable(false);
+        c.Field(w => w.Seqid).Editable(false);
+        c.Field(w => w.Remark).Editable(false);
+        c.Field(w => w.DefaultValue).Editable(false);
+        c.Field(w => w.IsVisible).Editable(false);
+    }
+    ,
+    c =>
+    {
+        c.Template("模糊查询：<input id='name' style='height:25px;border:1px solid #ccc;'  placeholder=\"代码/名称/说明\" />   <input type='button' value='查询'  class='k-button k-button-icontext k-grid-commonQuery' onclick = 'queryData()' /> <span style='margin-left:10px;'> <a class=\"k-button k-button- icontext k-grid-save-changes\" href=\"javascript: void(0)\"><span class=\"k-icon k-update\"> </span> 保存修改</a> <a class=\"k-button k-button-icontext k-grid-cancel-changes\" href=\"javascript: void(0)\"><span class=\"k-icon k-cancel\"></span>取消修改</a></span>");
+    }, null, null, false
+    );
+}
+@(gridHelper.KendoGridEditInCell())
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridModel)
+}
+
+<script type="text/javascript">
+    function queryData() { 
+        var name = $("#name").val();
+        var result = "@@t00参数名称=" + name;
+        GetControl("#commonQueryParameterValues").val(result);
+        var grid = $("#" + "@gridId").data("kendoGrid");
+        grid.dataSource.read();
+    }
+
+    $(function () {
+        window.onresize = onResize; onResize();
+        $("#grid .k-grid-header th:eq(0) .k-link").click();
+       
+    });
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 70;
+        $("#grid .k-grid-content").height(allHeight - showHeight);
+    }
+</script>
+

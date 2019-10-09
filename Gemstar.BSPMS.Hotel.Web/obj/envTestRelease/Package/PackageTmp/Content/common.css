@@ -1,0 +1,583 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #fff;
+    font-family: "Microsoft YaHei",宋体, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 24px;
+    color: #555;
+    overflow-y: scroll;
+}
+
+a {
+    text-decoration: none;
+    color: #444;
+}
+
+input, select, textarea {
+    font-size: 12px;
+    color: #999;
+    border: 0 none;
+}
+
+button {
+    border: 0 none;
+    background-color: #ffffff;
+}
+
+.btnSelect {
+    width: 60px;
+    height: 36px;
+    border-radius: 4px;
+    font-size: 20px;
+    background-color: #428BCA;
+    color: #fff;
+}
+
+li {
+    list-style: none;
+}
+
+i {
+    font-style: normal;
+}
+
+.fleft {
+    float: left;
+}
+
+.fright {
+    float: right;
+}
+
+.font-b {
+    font-weight: bold;
+}
+
+.padd-top-15 {
+    padding-top: 15px;
+}
+
+.margin-top-10 {
+    margin-top: 10px;
+}
+
+.clearfix:before, .clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.clearfix {
+    zoom: 1;
+}
+
+.top {
+    height: 30px;
+    line-height: 30px;
+    border-bottom: 1px solid #e5e5e5;
+    background: #f5f5f5;
+    clear: both;
+    overflow: hidden;
+}
+
+.hotel-n-b {
+    width: 70%;
+    float: left;
+}
+
+.hotel-n-f {
+    width: 30%;
+    float: right;
+    text-align: right;
+}
+
+.top .hotel-name {
+    padding-left: 10px;
+}
+
+.top .user-name {
+    padding-right: 5%;
+}
+
+.top .exit {
+    padding-right: 5%;
+    color: #428bca;
+}
+
+.header {
+    padding: 5px 2%;
+    width: 96%;
+    margin: 0 auto;
+    padding-bottom: 0px;
+}
+
+.logo {
+    float: left;
+    margin-top: 10px;
+}
+
+    .logo img {
+        float: left;
+        padding: 4px 10px 0 0;
+    }
+
+.system-name {
+    font-size: 20px;
+    font-weight: bold;
+    font-style: normal;
+}
+
+.eng-system-name {
+    color: #c4c4c4;
+    display: block;
+    font-size: 11px;
+    font-style: normal;
+}
+
+.nav {
+    float: right;
+}
+
+.nav-list li {
+    float: left;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.icon-room-status, .icon-auth-10, .icon-book, .icon-auth-20, .icon-auth-40, .icon-reception, .icon-customer, .icon-auth-60, .icon-auth-61, .icon-member, .icon-auth-30, .icon-report, .icon-group-m, .icon-setup, .icon-auth-99, .icon-exit {
+    background: url(../images/all_icon.png) no-repeat;
+    width: 38px;
+    height: 38px;
+    display: inline-block;
+}
+
+.icon-room-status, .icon-auth-10 {
+    background-position: 0 -212px;
+}
+
+.icon-auth-40 {
+    background-position: -103px -256px;
+}
+
+.icon-book, .icon-auth-20 {
+    background-position: 0 -256px;
+}
+
+.icon-reception {
+    background-position: 0 -299px;
+}
+
+.icon-customer, .icon-auth-60, .icon-auth-61 {
+    background-position: -103px -212px;
+}
+
+.icon-report {
+    background-position: -103px -256px;
+}
+
+.icon-member, .icon-auth-30 {
+    background-position: 0 -342px;
+}
+
+.icon-group-m {
+    background-position: 0 -386px;
+}
+
+.icon-setup, .icon-auth-99 {
+    background-position: -103px -299px;
+}
+
+.icon-exit {
+    background-position: -103px -342px;
+}
+
+.nav-list .active .icon-room-status, .nav-list .active .icon-auth-10 {
+    background-position: -46px -212px;
+}
+
+.nav-list .active .icon-book, .nav-list .active .icon-auth-20 {
+    background-position: -46px -256px;
+}
+
+.nav-list .active .icon-reception {
+    background-position: -46px -299px;
+}
+
+.nav-list .active .icon-auth-40 {
+    background-position: -155px -256px;
+}
+
+.nav-list .active .icon-customer, .nav-list .active .icon-auth-60, .nav-list .active .icon-auth-61 {
+    background-position: -155px -212px;
+}
+
+.nav-list .active .icon-report {
+    background-position: -155px -256px;
+}
+
+.nav-list .active .icon-member, .nav-list .active .icon-auth-30 {
+    background-position: -46px -342px;
+}
+
+.nav-list .active .icon-group-m {
+    background-position: -46px -386px;
+}
+
+.nav-list .active .icon-setup, .nav-list .active .icon-auth-99 {
+    background-position: -155px -299px;
+}
+
+.nav-list .active .icon-exit {
+    background-position: -155px -342px;
+}
+
+/*二级菜单开始*/
+.tab {
+    height: 30px;
+    width: 96%;
+    padding: 0 2%;
+    margin: 0 auto;
+    background-color: #004793;
+}
+
+    .tab .tab-switch {
+    }
+
+    .tab a {
+        color: #fff;
+        line-height: 30px;
+        padding: 0 25px;
+        display: inline-block;
+        float: left;
+        margin-right: 1px;
+    }
+
+        .tab a:hover, .tab .active {
+            background: #336ca9;
+        }
+/*一级导航按钮点击后文字变成蓝色， 中间不加空格不加逗号*/
+.firstLevelAuth.active {
+    color: #e62722;
+}
+
+/*新预订页面给按钮一个颜色*/
+#btnAddROrderDetail, #btnAddIOrderDetail, #btnCancelOrderDetail, #btnRecoveryOrderDetail, #btnBatchChangeOrderDetailStatus {
+    margin-top: 4px;
+}
+
+#btnCancelOrderDetail, #btnRecoveryOrderDetail {
+    display: none;
+}
+
+#btnSave, #btnSetRoom, #btnResReoprt, #btnLock, #btnChangeRoom, #btnDelay, #btnRelation, #btnResRCReoprt, #permanentRoom_btnCostSet, #permanentRoom_btnGoodsSet, #permanentRoom_btnCustomerMore {
+    margin-top: 4px;
+    border-color: #e62722;
+    color: #e62722;
+    width: 90px;
+    display: none;
+}
+
+    #btnSave:hover, #btnSetRoom:hover, #btnResReoprt:hover, #btnLock:hover, #btnChangeRoom:hover, #btnDelay:hover, #btnRelation:hover, #btnResRCReoprt:hover, #permanentRoom_btnCostSet:hover, #permanentRoom_btnGoodsSet:hover, #permanentRoom_btnCustomerMore:hover {
+        background-color: #e62722;
+        border-color: #e62722;
+        color: #ffffff;
+    }
+
+#btnAddOrderDetailRegInfo, #btnCancelOrderDetailRegInfo {
+    margin-top: 4px;
+}
+
+.res-icon-img {
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.toolbar-right {
+    width: 90px;
+    padding-left: 10px;
+}
+
+.folioButtons {
+    text-align: center;
+    vertical-align: top;
+}
+
+    .folioButtons input, .folioButtons button {
+        margin-top: 4px;
+        width: 90px;
+    }
+
+    .folioButtons .split {
+        display: block;
+        margin-top: 10px;
+    }
+
+#orderDetailCustomersListView .k-state-selected {
+    background-color: #99caff;
+    color: #333;
+}
+
+#resCustomerTable td:not([role='gridcell']) {
+    padding: 3px 0px 3px 0px;
+}
+
+#resCustomerTable td.separate {
+    padding: 1px 0px 1px 0px;
+}
+
+#btnInvoiceInfo, #btnRatePlan, #btnCustomersEditInfo, #btnResBillSetting {
+    width: 90px;
+}
+
+#btnCustomersEditInfo {
+    visibility: hidden;
+}
+
+#changeRoomWindow td {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+    #changeRoomWindow td.textright {
+        width: 55px;
+    }
+
+.k-grid-toolbar .k-button, .k-button.k-prominent {
+    background-color: #F7E20A;
+    border-color: #004793;
+    color: #004793;
+}
+
+    .k-grid-toolbar .k-button[disabled], .k-button.k-prominent[disabled] {
+        color: #a1a1a1;
+        border-color: #ccc;
+        background-color: #fff;
+        background-image: none;
+    }
+
+    .k-grid-toolbar .k-button, .k-button.k-prominent:hover {
+        background-color: #004793;
+        border-color: #004793;
+        color: #ffffff;
+    }
+/*---------------------------------------------新版本的样式-------------------------------------------------*/
+/* 一级菜单 */
+.icon-newauth-10, .icon-newauth-p10 { /* 房态中心*/
+    background: url(../images/auth/ftzx.png);
+}
+
+.icon-newauth-10-1, .icon-newauth-p10-1 {
+    background: url(../images/auth/ftzx-1.png);
+}
+
+.icon-newauth-20, .icon-newauth-p40 { /* 预订接待*/
+    background: url(../images/auth/ydjd.png);
+}
+
+.icon-newauth-20-1, .icon-newauth-p40-1 {
+    background: url(../images/auth/ydjd-1.png);
+}
+
+.icon-newauth-p20 {
+    background: url(../images/auth/ftfy.png);
+}
+
+.icon-newauth-p20-1 {
+    background: url(../images/auth/ftfy-1.png);
+}
+
+.icon-newauth-21 { /* 长租管理*/
+    background: url(../images/auth/czgl.png);
+}
+
+.icon-newauth-21-1 {
+    background: url(../images/auth/czgl-1.png);
+}
+
+.icon-newauth-30, .icon-newauth-m30, .icon-newauth-p45 { /* 会员中心*/
+    background: url(../images/auth/hyzx.png);
+}
+
+.icon-newauth-30-1, .icon-newauth-m30-1, .icon-newauth-p45-1 {
+    background: url(../images/auth/hyzx-1.png);
+}
+
+.icon-newauth-40, .icon-newauth-m40, .icon-newauth-p50 { /* 报表*/
+    background: url(../images/auth/bb.png);
+}
+
+.icon-newauth-40-1, .icon-newauth-m40-1, .icon-newauth-p50-1 {
+    background: url(../images/auth/bb-1.png);
+}
+
+.icon-newauth-60 { /* 客户关系*/
+    background: url(../images/auth/khgx.png);
+}
+
+.icon-newauth-60-1 {
+    background: url(../images/auth/khgx-1.png);
+}
+
+.icon-newauth-61, .icon-newauth-m61, .icon-newauth-p30 { /* 营销管理*/
+    background: url(../images/auth/yxgl.png);
+}
+
+.icon-newauth-61-1, .icon-newauth-m61-1, .icon-newauth-p30-1 {
+    background: url(../images/auth/yxgl-1.png);
+}
+
+.icon-newauth-99, .icon-newauth-m99, .icon-newauth-p99 { /* 资料设置*/
+    background: url(../images/auth/sz.png);
+}
+
+.icon-newauth-99-1, .icon-newauth-m99-1, .icon-newauth-p99-1 {
+    background: url(../images/auth/sz-1.png);
+}
+
+.newys {
+    width: 38px;
+    height: 38px;
+    display: block;
+    margin-left: 3px;
+    margin-bottom: 3px;
+}
+
+.divred {
+    margin-top: 3px;
+    height: 5px;
+    background-color: #e62722;
+}
+
+.bnt-refresh {
+    display: block;
+    width: 100px;
+    border: 1px solid #9bb8d6;
+    border-radius: 3px;
+    color: #004793;
+}
+
+.div-refresh {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+    .div-refresh a:hover {
+        background-color: #EBEBEB;
+    }
+
+.i-refresh {
+    background: url("../images/auth/sx.png") no-repeat;
+    width: 19px;
+    height: 14px;
+    display: inline-block;
+    margin-left: 20px;
+    vertical-align: sub;
+}
+
+/*新表格样式*/
+.k-alt {
+    background-color: #eef6ff;
+}
+
+th.k-header, th.k-header a, th.k-header span, .k-grid-header th.k-header {
+    font-weight: bold;
+}
+
+.k-grid-toolbar, .k-grouping-header {
+    background-color: #ffffff;
+}
+
+.k-grid tr td{
+    border-color:transparent;
+    border-bottom:1px solid #aaa;
+}
+
+.k-grid tr:hover {
+    box-shadow: #999 -1px -2px 0px 1px inset;
+}
+
+.k-grid tr.k-state-selected:hover {
+    box-shadow: #999 -1px -2px 0px 1px inset;
+}
+
+tr.k-state-selected, tr.k-state-selected:link, tr.k-state-selected:visited {
+    box-shadow: #999 -1px -2px 0px 1px inset;
+    color: #333;
+}
+
+.k-grid-toolbar .k-button, .k-button {
+    background-color: #ffffff;
+    border-color: #004793;
+    color: #004793;
+}
+
+.k-grid-toolbar li.k-button, li.k-button {
+    background-color: #428bca;
+    border-color: #004793;
+    color: #ffffff;
+}
+
+.k-button:hover {
+    background-color: #004793;
+    border-color: #004793;
+    color: #ffffff;
+}
+
+.k-button:focus:not(.k-state-disabled):not([disabled]):hover {
+    color: #ffffff;
+    background-color: #004793;
+    border-color: #004793;
+}
+
+.k-button:focus:not(.k-state-disabled):not([disabled]) {
+    -webkit-box-shadow: 0 0 7px 0 #004793;
+    box-shadow: 0 0 7px 0 #004793;
+    color: #004793;
+}
+
+.k-button:focus:active:not(.k-state-disabled):not([disabled]) {
+    -webkit-box-shadow: inset 0 0 5px 3px #004793;
+    box-shadow: inset 0 0 5px 3px #004793;
+}
+
+.k-grid-footer, .k-footer-template td {
+    background-color: #ffffff;
+}
+
+    .k-grid-footer tr:hover td, .k-footer-template tr:hover td {
+        background-color: #ffffff;
+    }
+
+.k-picker-wrap .k-state-default .k-select {
+    background-color: #ffffff;
+}
+
+div.k-window-content {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.k-window-titlebar {
+    background-color: #004793;
+    border-bottom-color: #FB1A2C;
+    color: #ffffff;
+}
+
+.k-window, .k-window.k-state-focused {
+    border-color: #004793;
+    background-color: #004793;
+}
+
+.k-state-hover:hover {
+    background-color: inherit;
+}
+
+.k-list .k-state-hover { /*下拉框鼠标移动时背景颜色 */
+    background-color: #ccc !important;
+}

@@ -1,0 +1,22 @@
+﻿@using Gemstar.BSPMS.Common.Extensions;
+@model Gemstar.BSPMS.Hotel.Services.ResManage.ResMainInfo
+
+@(
+Html.Kendo().Grid(Model.ResDetailInfos)
+.Name("grid")
+.Columns(c =>
+{
+    c.Bound(w => w.Regid).Title("账号").ClientTemplate("#=Regid.replace(Hid,'')#").HtmlAttributes(new { regid = "#=Regid#" });
+    c.Bound(w => w.RoomTypeName).Title("房型").Width(87);
+    c.Bound(w => w.Guestname).Title("客人名").Width(87);
+    c.Bound(w => w.RoomNo).Title("房号").Width(50);
+    c.Bound(w => w.RoomQty).Title("房数").Width(46);
+    c.Bound(w => w.StatusName).Title("状态").Width(75);
+})
+.Sortable(c => c.Enabled(false))
+.Scrollable()
+.DataSource(c => c.Ajax().ServerOperation(false))
+.Events(e=> { e.DataBound("grid_databound"); })
+.Selectable(s => { s.Mode(GridSelectionMode.Single); s.Type(GridSelectionType.Row); })
+.HtmlAttributes(new { style = "height:509px;max-height:509px;" })
+)

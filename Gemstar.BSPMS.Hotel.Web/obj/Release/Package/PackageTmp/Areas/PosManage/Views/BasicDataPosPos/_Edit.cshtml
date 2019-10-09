@@ -1,0 +1,77 @@
+﻿@using Gemstar.BSPMS.Common.Extensions
+@using Gemstar.BSPMS.Hotel.Services.EnumsPos
+@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosPos.PosEditViewModel
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+<table class="editFormTable">
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Code)</td>
+        <td>@Html.Kendo().TextBoxFor(m => m.Code).HtmlAttributes(new { style = "width:100%;" , @readonly = "readonly", placeholder = "请输入代码" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+        <td class="textright">@Html.LabelFor(m => m.CodeIn)</td>
+        <td title="在挂房账、合约单位以及会员账务使用，必须与捷云对应的营业点代码相同">@Html.Kendo().TextBoxFor(m => m.CodeIn).HtmlAttributes(new { style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.CodeIn, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Name)</td>
+        <td>@Html.Kendo().TextBoxFor(m => m.Name).HtmlAttributes(new { style = "width:100%;", placeholder = "请输入中文名称" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+        <td class="textright">@Html.LabelFor(m => m.Ename)</td>
+        <td>@Html.Kendo().TextBoxFor(m => m.Ename).HtmlAttributes(new { style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Ename, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+        <td>@Html.Kendo().IntegerTextBoxFor(m => m.Seqid).HtmlAttributes(new { style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+        <td class="textright">@Html.LabelFor(m => m.Module)</td>
+        <td>@Html.Kendo().DropDownListFor(e => e.Module).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosModules", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); })</td>
+        <td>@Html.ValidationMessageFor(m => m.Module, "*")</td>
+
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+        <td> @Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        <td class="textright">@Html.LabelFor(m => m.Business)</td>
+        <td>@Html.Kendo().DatePickerFor(e => e.Business).HtmlAttributes(new { style = " width:100%", placeholder = "请输入营业日" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Business, "*")</td>
+
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.PosMode)</td>
+        <td>@Html.Kendo().DropDownListFor(e => e.PosMode).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosMode", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); })</td>
+        <td>@Html.ValidationMessageFor(m => m.PosMode, "*")</td>
+        <td class="textright">@Html.LabelFor(m => m.IsBusinessend)</td>
+        <td> @(Html.Kendo().DropDownListFor(m => m.IsBusinessend).BindTo(EnumExtension.ToSelectList(typeof(PosBusinessEnd))).HtmlAttributes(new { style = "width:100%;" }).Value(((byte)Model.IsBusinessend.Value).ToString()))</td>
+        <td>@Html.ValidationMessageFor(m => m.IsBusinessend, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.BusinessTime)</td>
+        <td>@Html.Kendo().MaskedTextBoxFor(m => m.BusinessTime).Mask("00:00").HtmlAttributes(new { style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.BusinessTime, "*")</td>
+    </tr>
+</table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+
+</script>
+

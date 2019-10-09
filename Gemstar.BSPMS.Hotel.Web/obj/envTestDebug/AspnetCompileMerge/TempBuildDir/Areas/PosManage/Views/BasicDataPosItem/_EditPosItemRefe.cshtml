@@ -1,0 +1,79 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItemRefe.PosItemRefeEditViewModel
+<script type="text/javascript">
+        function refeId__paras() {
+            var item = $("#Refeid").data("kendoDropDownList");
+            var Refeid = item.value();
+            return {
+                Refeid: Refeid,
+
+            };
+        }
+        function refeChanged() {
+            var Shuffleid = $("#Shuffleid").data("kendoMultiSelect");
+            Shuffleid.dataSource.read();
+        }
+</script>
+@using (Html.BeginForm("Edit", "BasicDataPosItemRefe", new { rnd = new Random().NextDouble() }))
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.Modified)
+    @Html.HiddenFor(m => m.Itemid)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Refeid)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Refeid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").Filter("contains").DataSource(e => { e.Read(r => r.Action("ListItemsForPosRefe", "BasicDataPosRefe", new { rnd = new Random().NextDouble() })); }).OptionLabel("请选择营业点").Events(e => e.Change("refeChanged"))</td>
+            <td>@Html.ValidationMessageFor(m => m.Refeid, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.ProdPrinter)</td>
+            <td>@Html.Kendo().MultiSelectFor(m => m.ProdPrinter).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForProdPrinterByModules", "BasicDataPosProdPrinter", new { moduleCode = "CY", rnd = new Random().NextDouble() })); }).AutoClose(false).Placeholder("请选择出品打印机").Value(Model.ProdPrinters)</td>
+            <td>@Html.ValidationMessageFor(m => m.ProdPrinter, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Shuffleid)</td>
+            <td>@Html.Kendo().MultiSelectFor(e => e.Shuffleid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosShuffle", "BasicDataPosShuffle", new { rnd = new Random().NextDouble() }).Data("refeId__paras")); }).AutoClose(false).Placeholder("请选择市别").Value(Model.Shuffleids)</td>
+            <td>@Html.ValidationMessageFor(m => m.Shuffleid, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.SentPrtNo)</td>
+            <td>@Html.Kendo().MultiSelectFor(m => m.SentPrtNo).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForProdPrinterByModules", "BasicDataPosProdPrinter", new { moduleCode = "CY", rnd = new Random().NextDouble() })); }).AutoClose(false).Placeholder("请选择传菜打印机").Value(Model.SentPrtNos)</td>
+            <td>@Html.ValidationMessageFor(m => m.SentPrtNo, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.IsTabPrint)</td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsTabPrint).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsTabPrint, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.IsDepartPrint)</td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsDepartPrint).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsDepartPrint, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.Seqid).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton6" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton6" role="button" data-role="button">取消</button>
+  
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton6").click(function (e) {
+            e.preventDefault();
+            //itemOtherSaveFormData($("#saveEditFormButton6"), 'gridItemRefe');
+            saveFormDataForPosItem($("#closeEditFormButton6"), "gridItemRefe");
+        });
+        $("#closeEditFormButton6").click(function (e) {
+            e.preventDefault();
+            //hideItemOther('itemRefe');
+            $("#posMaskWindow").html("");
+            closeGeneralWindow()
+        });
+    });
+  
+</script>

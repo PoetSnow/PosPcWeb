@@ -1,0 +1,134 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "通用代码";
+
+    //上级列表
+    var gridFatherId = "gridCodeType";
+    var gridFatherKey = "code";
+    var gridFatherName = "name";
+    var gridFatherModel = new KendoGridCommonViewModel()
+    {
+        GridControlId = gridFatherId,
+        KeyColumnName = gridFatherKey,
+        JsFuncForGetAjaxQueryPara = "getFatherQueryParas",
+        EnableFunctionForQuery = false,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForEnable = false,
+        EnableFunctionForDisable = false,
+        EnableFunctionForSave = false,
+        EnableFunctionForEdit = false
+    };
+    var gridFatherHelper = new KendoGridEditInCellHtmlHelper<CodeType>(
+        Html,
+        Url,
+        gridFatherModel,
+        c =>
+        {
+            c.Bound(w => w.name).Title("代码类型");
+            c.Command(e => e.Custom("下级列表").HtmlAttributes(new { onclick = "selectFatherRow(this)", Href = "javascript:void(0);" }))
+            .Width("110px")
+            .Title("操作");
+        },
+        c => c.Id(w => w.code),
+        c =>
+        {
+            c.Custom().Name("Title").Text("通用代码设置").HtmlAttributes(new { style = "visibility:hidden;" });
+        },
+        pageable => pageable.Enabled(false),
+        "CodeType"
+        );
+
+    //下级列表
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "pk";
+    var columnName = "@h99typeCode";
+    var btnShowId = "TitleMemberId";
+    var btnShowName = "代码类型：";
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForPage = false,
+        EnableFunctionForDelete = true,
+        EnableFunctionForQuery = false,
+        EnableFunctionForAdd = false,//!ViewBag.isgrouphotel
+        EnableCustomToolbarForFirst = true,
+        EnableFunctionForEnable = true,
+        EnableFunctionForDisable = true,
+        EnableFunctionForEdit = true,//!ViewBag.isgrouphotel
+        ColumnConfigurator = c =>
+        {
+            c.Bound("code").Title("代码");
+            c.Bound("name").Title("名称");
+            c.Bound("seqid").Title("排序号");
+        },
+        RowTemplate = @"<tr style=#: status!=1?'text-decoration:line-through;color:red;':'' #>
+                                        <td>#: code #</td>
+                                        <td>#: name #</td>
+                                        <td>#: seqid==null?'':seqid #</td>
+                                   </tr>",
+        CustomToolbar = c =>
+        {
+            c.Custom().Name("comcode").Text("　代码类型：").HtmlAttributes(new { id = @btnShowId, href = "javascript:void(0);", style = "cursor:default" });
+            c.Custom().Name("comfirmtext").Text("<font style='color:red'>双击可修改</font>").HtmlAttributes(new { id = "comfirmtext", href = "javascript:void(0);", style = "cursor:default;cursor:default;margin-right:30px;" });//margin-
+            c.Custom().Name("addGridItem").Text("增加").HtmlAttributes(new { onclick = "addGridItemNew()", href = "javascript:void(0);" });
+        }    
+    };
+}
+<div style="width:30%; float:left;">
+    @(gridFatherHelper.KendoGridEditInCell())
+</div>
+<div style="width:68%; float:right;">
+    @Html.Partial("_KendoGridDataRowView", gridViewModel)
+</div>
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#" + "@btnShowId").removeClass("k-button");
+        $("#comfirmtext").removeClass("k-button");
+        var c = $("#grid").width() - 540;
+        $("#comfirmtext").css("margin-left", c);
+        $("#comfirmtxt").removeClass("k-button");
+    });
+    function getFatherQueryParas() {
+        return {
+            QueryProcedureName: "up_list_pmsCodeType",
+            QueryParameterValues: "@@isDirtyLog=" + "@ViewBag.isDirtyLog" + "&@@isPermanentRoom=" + "@ViewBag.isPermanentRoom"
+        };
+    }
+    function gridCodeType_dataBoundEnded() {
+        var firstBtn = $("[onclick='selectFatherRow(this)']:first");
+        firstBtn.click();
+    }
+    function selectFatherRow(column) {
+        var grid = $("#" + "@gridFatherId").data("kendoGrid");
+        var data = grid.dataItem($(column).parent().parent());
+        selectDoCommonQuery(data["@gridFatherKey"], data["@gridFatherName"]);
+    }
+    function selectDoCommonQuery(id, name) { 
+       if ((id == "04" || id == "05")) { 
+           $(".k-grid-batchDelete").css("display", "");
+        } else {
+           $(".k-grid-batchDelete").css("display", "none");
+        } 
+        document.getElementById('commonQueryParameterValues').value = ("@columnName" + "=" + id);
+        $("#" + "@btnShowId").html("<span></span>" + "@btnShowName" + name);
+        var grid = $("#" + $("#commonQueryGridId").val()).data("kendoGrid");
+        grid.dataSource.read();
+    }
+    function addGridItemNew() {
+        var value = document.getElementById('commonQueryParameterValues').value;
+        value = value.replace(("@columnName" + "="), "");
+        top.openKendoWindow("增加" + "@ViewBag.Title", "/SystemManage/CommonCodeManage/Add?typeCode=" + value);
+    }
+</script>

@@ -1,0 +1,42 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "合约单位类别";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "pk";
+
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForQuery = false,
+        EnableFunctionForDisable = true,
+        EnableFunctionForEnable = true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("code").Title("代码");
+            c.Bound("name").Title("名称");
+        },
+        RowTemplate = @"<tr style=#: status==51?'text-decoration:line-through;color:red;':'' #>
+                                <td>#: code #</td>
+                                <td>#: name #</td>
+                            </tr>"
+    };
+}
+
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+    function gridread() {
+        var grid = $("#" + "@gridId").data("kendoGrid");
+        grid.dataSource.page(1);
+        grid.dataSource.read();
+    }
+</script>

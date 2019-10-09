@@ -1,0 +1,53 @@
+﻿
+<div>
+    <div id="ct">
+        @if (ViewBag.roomnos != null)
+        {
+
+            foreach (var b in ViewBag.roomnos)
+            {
+                var typedesc = "";
+                <div class='divroom' style="text-align:left;margin-left:10px;"> @ViewBag.dtime.ToString("yyyy年MM月")  房号：@b　</div>
+                <table style="margin:0 auto">
+                    @foreach (var a in ViewBag.monthcalc.Rows)
+                    {
+
+                        if (a["roomno"] == b)
+                        {
+                            if (a["valueName"] != "分成类型说明")
+                            {
+                                <tr>
+                                    <td>@a["valuename"]</td>
+                                    <td>@a["value"]</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                typedesc = a["value"].ToString();
+                            }
+                        }
+                    }
+                </table>
+                <div style="text-align:left;margin-left:10px;padding-bottom: 10px;margin-top: 10px;width:97%"><lable style="color:rgb(0,128,0)">分成说明：</lable>@typedesc　</div>
+            }
+        }
+
+    </div>
+</div>
+<style type="text/css">
+    #ct table {
+        margin-top: 10px;
+        border-collapse: collapse;
+        border: none;
+    }
+
+    #ct td {
+        border: solid rgb(204,204,204) 1px;
+        padding: 0 0 2px 2px;
+        height: 30px;
+        width: 200px;
+    }
+</style>
+
+
+

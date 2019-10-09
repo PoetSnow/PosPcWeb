@@ -1,0 +1,61 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "会员卡类型";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("code").Title("会员卡类型代码");
+            c.Bound("name").Title("会员卡类型名称");
+            c.Bound("rateCodeid").Title("价格代码");
+            c.Bound("nights").Title("升级间夜数");
+            c.Bound("amount").Title("升级消费金额");
+            c.Bound("score").Title("升级积分数");
+            c.Bound("seqid").Title("会员类型等级顺序");
+            c.Bound("isAutoUp").Title("是否自动升级");
+            c.Bound("scoreRate").Title("积分比值");
+            c.Bound("validdate").Title("会员有效时长(月份)");
+            c.Bound("ScoreVdate").Title("积分有效时长(月份)");
+            c.Bound("cardFee").Title("卡费");
+        },
+        RowTemplate = @"<tr>
+                                        <td>#: code #</td>
+                                        <td>#: name #</td>
+                                        <td>#: rateCodeid==null?'':rateCodeid #</td>
+                                        <td>#: nights==null?'':nights #</td>
+                                        <td>#: amount==null?'':amount #</td>
+                                        <td>#: score==null?'':score #</td>
+                                        <td>#: seqid #</td>
+                                        <td>#: isAutoUp == true ? '是':'否' #</td>
+                                        <td>#: scoreRate == null? '' : scoreRate #</td>
+                                        <td>#: validdate == null? '' : validdate  #</td>
+                                        <td>#: ScoreVdate == null? '' : ScoreVdate  #</td>
+                                        <td>#: cardFee == null? '' : cardFee  #</td>
+                                   </tr>",
+        CustomToolbar = c =>
+        {
+            c.Custom().Name("comfirmtext").Text("<span style='float:right;display:inline-block;color:red;margin-right:50px;padding-top:8px;'>双击可修改</span>").HtmlAttributes(new { id = "comfirmtext", href = "javascript:void(0);", style = "cursor:default;" });
+
+        }
+    };
+}
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+    $(function () {
+        $("#comfirmtext").removeClass("k-button");
+    });
+</script>

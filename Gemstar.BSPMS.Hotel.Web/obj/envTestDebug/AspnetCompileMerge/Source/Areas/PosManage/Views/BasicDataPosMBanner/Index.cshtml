@@ -1,0 +1,112 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPos;
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+<link href="~/Content/Pos/posPublic.css?version=@ViewBag.Version" rel="stylesheet" />
+@{
+    ViewBag.Title = "Pos扫码点餐Banner";
+}
+
+@(Html.Kendo().Grid<PosMBanner>()
+                        .Name("grid")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(m => m.Id).Hidden();
+                            columns.Bound(m => m.Hid).Hidden();
+                            columns.Bound(m => m.FileName).Title("Banner").ClientTemplate("<img alt='' src='#= FileName #' style='height:100px;'/>");
+                            columns.Bound(m => m.Remark).Title("备注");
+                            columns.Bound(m => m.OrderBy).Title("排列序号");
+                            columns.Bound(m => m.Creator).Title("创建人");
+                            columns.Bound(m => m.Createdate).Title("创建时间").Format("{0:yyyy-MM-dd HH:mm:ss}");
+                        })
+                        .Sortable()
+                        .Scrollable()
+                        .Resizable(r => r.Columns(true))
+                        .Selectable(s => s.Mode(GridSelectionMode.Single))
+                        .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Read(read => read.Action("ListMBannerByHid", "BasicDataPosMBanner", new { rnd = new Random().NextDouble() })))
+                        .HtmlAttributes(new { @style = "height:100%", ondblclick = "editBanner()" })
+                        .ToolBar(toolbar =>
+                        {
+                            toolbar.Template(
+                        @<text>
+                            <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addBanner()"><span class="k-icon k-add"></span>增加</a>
+                            <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="delBanner()"><span class="k-icon k-i-unpin"></span>删除</a>
+                            <a class="k-button-icontext k-grid-comfirmtextone" href="javascript:void(0);" id="comfirmtextone" style="color:red;margin-top:9px;margin-left:10px;cursor:default;"><span></span>双击可修改</a>
+                        </text>
+                                                    );
+                                })
+)
+<script src="~/Scripts/layer-v3.1.1/layer.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        window.onresize = onResize; onResize();
+    });
+
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 145;
+        $("#grid .k-grid-content").height(allHeight - showHeight);
+    }
+
+    //这里是添加后的回调
+    function saveFormData(e) {
+        top.saveKendoWindowFormData(e, function () {
+            $("#grid").data("kendoGrid").dataSource.read();
+        });
+    }
+
+    function addBanner() {
+        top.openKendoWindow("增加Banner", '@Url.Action("Add", "BasicDataPosMBanner")');
+    }
+
+    function delBanner() {
+        var grid = $("#grid").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要删除的数据行");
+        } else {
+            jConfirm("确认要删除所有选中的数据行?", "确认", "取消", function (confirmed) {
+                if (confirmed) {
+                    var ids = [];
+                    for (var i = 0; i < selectedRows.length; i++) {
+                        var row = selectedRows[i];
+                        var data = grid.dataItem(row);
+                        ids.push(data["Id"]);
+                        QiniuImgDelete(data["FileName"]);
+                    }
+                    $.post('@Url.Action("BatchDelete", "BasicDataPosMBanner")', { id: ids.join(",") }, function (data) {
+                        if (data.Success) {
+                            grid.dataSource.read();
+                        } else {
+                            ajaxErrorHandle(data);
+                        }
+                    }, 'json');
+                }
+            });
+        }
+    }
+
+    function editBanner() {
+        var grid = $("#grid").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0) {
+            var row = selectedRows[0];
+            var dataRow = grid.dataItem(row);
+            top.openKendoWindow("编辑Banner", '@Url.Action("Edit", "BasicDataPosMBanner")?id=' + dataRow["Id"]);
+        }
+        else {
+            layer.alert("请选择要操作的Banner", { title: "快点云Pos提示" });
+        }
+    }
+
+    function QiniuImgDelete(arg) {
+        $.post('@Url.Action("QiniuDelete","Qiniu", new { area = "" })', { path: arg }, function (data) {}, 'json');
+    }
+</script>

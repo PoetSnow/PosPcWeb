@@ -1,0 +1,96 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.MbrCardTypeManage.MbrCardTypeEditViewModel
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id) 
+    Model.ScoreRate = decimal.Parse(double.Parse(Model.ScoreRate.ToString() == "" ? "0" : Model.ScoreRate.ToString()).ToString());//积分比率后面无效的0
+    Model.scoreUnit = decimal.Parse(double.Parse(Model.scoreUnit.ToString() == "" ? "0" : Model.scoreUnit.ToString()).ToString());//积分比率后面无效的0
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Code)</td> 
+            <td>
+                <input id="dd" type="text"  disabled="disabled"  class="k-textbox" style="width:100%;margin-bottom:1px;background-color:rgb(245,245,245)" value="@Model.Code" />
+                @Html.TextBoxFor(m => m.Code, new { @class = "k-textbox", style = "width:100%;display:none;" })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.Name)</td>
+            <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.RateCodeid)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.RateCodeid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetRates", "MbrCardTypeManage")); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.RateCodeid, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.Nights)</td>
+            <td>@Html.TextBoxFor(m => m.Nights, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Nights, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+            <td>@Html.TextBoxFor(m => m.Seqid, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.Score)</td>
+            <td>@Html.TextBoxFor(m => m.Score, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Score, "*")</td>
+           
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.IsAutoUp)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.IsAutoUp).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetIsSelectList", "MbrCardTypeManage", new { rnd = new Random().NextDouble() })); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.IsAutoUp, "*")</td>
+           
+            <td class="textright">@Html.LabelFor(m => m.Amount)</td>
+            <td>@Html.TextBoxFor(m => m.Amount, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Amount, "*")</td>
+        </tr>
+
+        <tr>
+            <td class="textright">积分比值</td>
+            <td style="width:35%"><span>　</span><span>每消费 @Html.TextBoxFor(m => m.ScoreRate, new { @class = "k-textbox", style = "width:20%;" }) 元积 @Html.TextBoxFor(m => m.scoreUnit, new { @class = "k-textbox", style = "width:20%;" }) 分</span></td>
+            <td>@Html.ValidationMessageFor(m => m.ScoreRate, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.Validdate)</td>
+            <td>@Html.TextBoxFor(m => m.Validdate, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Validdate, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.CardFee)</td>
+            <td>@Html.TextBoxFor(m => m.CardFee, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.CardFee, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.ScoreVdate)</td>
+            <td>@Html.TextBoxFor(m => m.ScoreVdate, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ScoreVdate, "*")</td>
+
+            @*<td class="textright"></td>
+            <td></td>
+            <td></td>*@
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+
+</script>

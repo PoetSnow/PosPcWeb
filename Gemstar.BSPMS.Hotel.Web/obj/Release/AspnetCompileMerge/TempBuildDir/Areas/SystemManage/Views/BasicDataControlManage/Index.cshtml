@@ -1,0 +1,72 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@section headerContent{
+    <style type="text/css">
+        body {
+            overflow-y:hidden;
+        }
+    </style>
+    <script type="text/javascript">
+        var dataCopyTypeItems = [];
+        @{ 
+            var dataCopyTypeItemsList = ViewData["DataCopyType_Data"] as SelectList;
+            if(dataCopyTypeItemsList != null)
+            {
+                foreach(Gemstar.BSPMS.Common.Services.BasicDataControls.DataControlType item in dataCopyTypeItemsList.Items)
+                {
+                    Output.WriteLine("dataCopyTypeItems['"+item.Code+"'] = '"+item.Name+"';");
+                }
+            }
+        }
+    </script>
+}
+@{
+    ViewBag.Title = "资料分发设置";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "Id";
+    var gridModel = new KendoGridCommonViewModel() { GridControlId = gridId, KeyColumnName = keyColumnName, EnableScrollable=true,EnableFunctionForAdd = false,EnableFunctionForDelete = false };
+    var gridHelper = new KendoGridEditInCellHtmlHelper<BasicDataResortControl>(
+        Html,
+        Url,
+        gridModel,
+        c =>
+        {
+            c.Bound("BasicDataName").Title("资料名称");
+            c.Bound("ResortCanAdd").Title("分店可增加").ClientTemplate("#:ResortCanAdd?'可增加':''#");
+            c.Bound("ResortCanUpdate").Title("分店可修改").ClientTemplate("#:ResortCanUpdate?'可修改':''#");
+            c.Bound("ResortCanDisable").Title("分店可禁用").ClientTemplate("#:ResortCanDisable?'可禁用':''#");
+            c.Bound("DataCopyType").Title("分发类型").ClientTemplate("#:dataCopyTypeItems[DataCopyType]#").EditorTemplateName("GridForeignKey");
+        },
+c => {
+    c.Id(w => w.Id);
+    c.Field(w => w.BasicDataName).Editable(false);
+}
+
+);
+    }
+@(gridHelper.KendoGridEditInCell())
+@section scripts{
+        @Html.Partial("_KendoGridEvents", gridModel)
+    <style type="text/css">
+        .mt-10 {
+            margin-top: 20px;
+        }
+         
+    </style>
+    @*<script type="text/javascript">
+        $(function () {
+            window.onresize = onResize; onResize();
+            $("#@gridId .k-grid-header th:eq(1) .k-link").click();           
+            $("#@gridId .k-grid-header th:eq(2) .k-link").attr("href", "javascript:void()"); 
+          
+        });
+        function onResize() {
+            var allHeight = $("#mainContent", window.top.document).height();
+            var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 145;
+            $("#grid .k-grid-content").height(allHeight - showHeight);
+        }
+    </script>*@
+}

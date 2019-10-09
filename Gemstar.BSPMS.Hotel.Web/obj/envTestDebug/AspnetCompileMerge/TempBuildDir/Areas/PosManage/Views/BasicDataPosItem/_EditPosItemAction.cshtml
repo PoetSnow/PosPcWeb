@@ -1,0 +1,74 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItemAction.PosItemActionEditViewModel
+@using (Html.BeginForm("EditPosItemAction", "BasicDataPosItem", new { rnd = new Random().NextDouble() }))
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.Itemid)
+    @Html.HiddenFor(m => m.Modified)
+<table class="editFormTable">
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Actionid)</td>
+        <td>@(Html.Kendo().DropDownListFor(e => e.Actionid).HtmlAttributes(new { style = "width:150px" }).DataTextField("Text").DataValueField("Value").Filter("contains").DataSource(e => { e.Read(r => r.Action("ListItemsForPosActionTypeByModules", "BasicDataPosAction", new { rnd = new Random().NextDouble() })); }))</td>
+        <td>@Html.ValidationMessageFor(m => m.Actionid, "*")</td>
+        <td class="textright">@Html.LabelFor(m => m.IsByQuan)</td>
+        <td>@Html.Kendo().CheckBoxFor(m => m.IsByQuan).HtmlAttributes(new { style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.IsByQuan, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.LimitQuan)</td>
+        <td>@Html.Kendo().NumericTextBoxFor(m => m.LimitQuan).Min(0).HtmlAttributes(new { style = "width:100%;", placeholder = "请输入数量" })</td>
+        <td>@Html.ValidationMessageFor(m => m.LimitQuan, "*")</td>
+        <td class="textright">@Html.LabelFor(m => m.IsByGuest)</td>
+        <td>@Html.Kendo().CheckBoxFor(m => m.IsByGuest).HtmlAttributes(new { style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.IsByGuest, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.AddPrice)</td>
+        <td>@Html.Kendo().NumericTextBoxFor(m => m.AddPrice).Min(0).HtmlAttributes(new { style = "width:100%;", placeholder = "请输入金额" })</td>
+        <td>@Html.ValidationMessageFor(m => m.AddPrice, "*")</td>
+        <td class="textright">@Html.LabelFor(m => m.IsCommon)</td>
+        <td>@Html.Kendo().CheckBoxFor(m => m.IsCommon).HtmlAttributes(new { style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.IsCommon, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Multiple)</td>
+        <td>@Html.Kendo().NumericTextBoxFor(m => m.Multiple).Min(0).HtmlAttributes(new { style = "width:100%;", placeholder = "请输入倍数" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Multiple, "*")</td>
+        <td class="textright">@Html.LabelFor(m => m.IsNeed)</td>
+        <td>@Html.Kendo().CheckBoxFor(m => m.IsNeed).HtmlAttributes(new { style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.IsNeed, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.ProdPrinter)</td>
+        <td>@Html.Kendo().MultiSelectFor(e => e.ProdPrinter).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForProdPrinterByModules", "BasicDataPosProdPrinter", new { rnd = new Random().NextDouble() })); }).AutoClose(false).Placeholder("请选择出品打印机").Value(Model.ProdPrinters)</td>
+        <td>@Html.ValidationMessageFor(m => m.ProdPrinter, "*")</td>
+        <td class="textright">@Html.LabelFor(m => m.SeqID)</td>
+        <td>@Html.Kendo().NumericTextBoxFor(m => m.SeqID).HtmlAttributes(new { style = "width:100%;", placeholder = "请输入序号" })</td>
+        <td>@Html.ValidationMessageFor(m => m.SeqID, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+        <td>@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:100%;", placeholder = "请输入备注" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+    </tr>
+</table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButtonAction" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButtonAction" role="button" data-role="button">取消</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButtonAction").click(function (e) {
+            e.preventDefault();
+            saveFormDataForPosItem($("#closeEditFormButtonAction"), "gridItemPosItemAction");
+        });
+        $("#closeEditFormButtonAction").click(function (e) {
+            e.preventDefault();
+            $("#posMaskWindow").html("");
+            closeGeneralWindow();
+        });
+    });
+</script>

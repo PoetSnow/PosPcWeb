@@ -1,0 +1,32 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Models.Query.QueryViewModel
+    <tr>
+        <td class="textright">@Html.Label(string.Format("p{0}", Model.ParameterIndex), Model.ParameterName)</td>
+      @if (ViewBag.ishebid == 0)
+      {
+          <td>@Html.Kendo().DatePicker().Name(string.Format("p{0}", Model.ParameterIndex)).Value(Model.ParameterValue).Format(Model.CustomViewPara.ToString()).HtmlAttributes(new { style = "width:100%;height:auto; ", onclick = "openKendoDatePicker(this);", disabled = "disabled" })</td>
+      }
+      else if (Model.CustomViewPara.ToString() != "yyyy-MM")
+      {
+        <td>@Html.Kendo().DatePicker().Name(string.Format("p{0}", Model.ParameterIndex)).Value(Model.ParameterValue).Format(Model.CustomViewPara.ToString()).HtmlAttributes(new { style = "width:100%;height:auto; ", onclick = "openKendoDatePicker(this);" })</td>
+      }
+      else
+      {
+          <td><input id="@string.Format("p{0}", Model.ParameterIndex)" />　</td>
+      }
+
+    </tr>
+<script>
+    $(function () { 
+        if("@Model.CustomViewPara.ToString()"=="yyyy-MM")//年月格式只显示选择年
+        { 
+            $("#"+"@string.Format("p{0}", Model.ParameterIndex)").kendoDatePicker({
+                culture: "zh-CN",
+                format: "yyyy-MM",
+                value:"@Model.ParameterValue",
+                start:"year",
+                depth: "year",
+                dateInput: true}); 
+        }
+    });
+
+</script>

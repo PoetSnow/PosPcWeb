@@ -1,0 +1,75 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>捷信达软件注册信息维护</title>
+    <style type="text/css">
+        <!--
+        .title {
+            font-size: 16pt;
+            color: #00CC00;
+        }
+
+        .message {
+            font-size: 12pt;
+            color: #FF0000;
+        }
+        -->
+    </style>
+
+    <script type="text/javascript">
+            function gotoRegistPage() {
+                window.location.href = '@Url.Action("Register", "Register")';
+                return false;
+            }
+    </script>
+</head>
+<body>    
+    @{
+        Html.EnableClientValidation();
+        using (Html.BeginForm())
+        {
+    <table width="100%">
+        <tr>
+            <td style="width: 3px">
+                <div style="width: 0; height: 0; overflow: hidden">
+                    <input type="button" name="registe" value="注册" onclick="gotoRegistPage();" id="registe"
+                           accesskey="U" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 3px; height: 17px"></td>
+        </tr>
+        <tr>
+            <td align="center">
+                <table align="center" width="400" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td align="left" class="title">
+                            重要提示：
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="message" align="left">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span id="errorMessage" style="display:inline-block;width:400px;">@ViewData["errorMessage"]</span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+            }
+        }
+</body>
+</html>

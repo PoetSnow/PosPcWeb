@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "Pos迟付结账";
+}
+
+<style>
+    ul li {
+        line-height: 16px;
+    }
+</style>
+<link href="~/Content/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="~/Scripts/layer-v3.1.1/theme/default/layer.css" rel="stylesheet" />
+<link href="~/Content/Pos/posCashier.css?version=@ViewBag.Version" rel="stylesheet" />
+<link href="~/Content/Pos/posPublic.css?version=@ViewBag.Version" rel="stylesheet" />
+@using (Html.BeginForm())
+{
+
+    <input id="CurrUserName" type="hidden" value="@ViewBag.UserName" />
+    <input id="CurrHotelName" type="hidden" value="@ViewBag.HotelName" />
+
+    <input type="hidden" id="isPrintBill" value="0" />
+    <input id="tipsTime" type="hidden" value="@(Convert.ToInt32(ViewBag.TipsTime ?? 5) * 1000)" />
+    <ul class="mainLeft-button" style="margin:0.5rem 0;">
+        <li><a href="javascript:void(0);" onclick="refresh()">刷新</a></li>
+        <li><a href="javascript:void(0);" onclick="queryBillHtml()">查询</a></li>
+        <li><a href="javascript:void(0);" onclick="intimidate()">打单</a></li>
+        <li><a href="javascript:void(0);" onclick="CancelPrint()">取消打单</a></li>
+        <li><a href="javascript:void(0);" onclick="preview()">预览</a></li>
+        <li><a href="javascript:void(0);" onclick="payBillWindow()">买单</a></li>
+        <li><a href="javascript:void(0);" onclick="getPostBillList('C', '折扣')">折扣</a></li>
+        <li><a href="javascript:void(0);" onclick="CancelDiscount()">取消折扣</a></li>
+        <li><a href="javascript:void(0);" onclick="showHideDetail(this)">隐藏明细</a></li>
+    </ul>
+    <div class="mainLeft">
+        <div class="mainLeft-bg">
+            <div class="mainLeft-bg1">
+                <div class="mainLeft-query">
+                    台号：<input id="txtTabNo" type="text" class="k-textbox" />
+                    <a href="javascript:void(0);" class="k-button" onclick="queryBillList()">查询</a>
+                </div>
+                <div class="mainLeft-billList">
+                </div>
+                <img src="~/images/hxz.png" style="position: absolute; right: 0px; top: 0px;" />
+            </div>
+            <!-- 提示信息 -->
+            <div class="tips" data-id=".mainLeft-billList" data-position="2" data-msg="当前收银点未清台的账单明细，可以通过台号定位查询账单。" onmouseover="tipShow(this)" onmouseout="tipHide(this)" onclick="tipMsg(this)"><i class="fa fa-question-circle-o" aria-hidden="true"></i></div>
+        </div>
+    </div>
+    <div class="mainRight">
+        <div class="mainRight-details">
+            <ul>
+                <li style="width:100%;"></li>
+            </ul>
+        </div>
+        <div class="mainRight-table">
+        </div>
+        <!-- 提示信息 -->
+        <div class="tips" data-id=".mainRight-details" data-position="3" data-msg="当前账单的详细信息，可以通过上面的隐藏明细隐藏账单的部分详细信息内容显示。" onmouseover="tipShow(this)" onmouseout="tipHide(this)" onclick="tipMsg(this)"><i class="fa fa-question-circle-o" aria-hidden="true"></i></div>
+        <!-- 提示信息 -->
+        <div class="tips" data-id=".mainRight-table" data-position="1" data-msg="当前账单的消费明细，通过不同的背景颜色标识消费项目的状态，可以区别到计费、例送、赠送和取消等状态显示。" onmouseover="tipShow(this)" onmouseout="tipHide(this)" onclick="tipMsg(this)"><i class="fa fa-question-circle-o" aria-hidden="true"></i></div>
+    </div>
+    <iframe id="printFrame" style="visibility:hidden"></iframe>
+    <input type="hidden" id="billid" />
+}
+@Html.Partial("PosDelayedPayment.JavaScript")
+<script type="text/javascript">
+    var beginIndex = -1;
+    var endIndex = -1;  //弹出框grid 列表选中用
+    $(function () {
+        window.onresize = onResize; onResize();
+
+        queryBillList();
+
+        window.setInterval(function () {
+            queryBillList();
+        }, @(Convert.ToInt32(ViewBag.PosCashierRefreshInterval ?? 30) * 1000));
+    });
+
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#gridBill .k-grid-toolbar").height() + 20 + 30 + 145;
+        $("#gridBill .k-grid-content").height(allHeight - showHeight);
+
+        $(".mainLeft").height($(window).height() - $("#remValue").height());
+        $(".mainLeft-billList").height($(".mainLeft").height() - $(".mainLeft-button").outerHeight(true) - $(".mainLeft-query").outerHeight(true) - $("#remValue").height() * 2);
+        $(".mainRight").height($(".mainLeft").height());
+        $(".mainRight").width($(".wrap").width() - $(".mainLeft").outerWidth(true) - $("#remValue").height());
+    }
+
+    //客账查询窗体
+    function queryBillHtml() {
+        $.ajax({
+            url: '@Url.Action("_QueryBillHtml", "PosDelayedPayment", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: {},
+            dataType: "html",
+            success: function (data) {
+                $("#posMaskWindow").html(data);
+                $("#posMaskWindow_wnd_title").text("请选择查询条件");
+                $(".k-i-close").click(function () {
+                    closeGeneralWindow();
+                });
+                openGeneralWindow();
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+</script>
+<script src="~/Scripts/layer-v3.1.1/layer.js"></script>

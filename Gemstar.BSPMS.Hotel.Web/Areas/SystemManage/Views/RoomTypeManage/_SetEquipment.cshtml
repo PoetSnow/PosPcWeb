@@ -1,0 +1,118 @@
+﻿@using System.Data;
+@{
+    DataTable dt = (DataTable)ViewBag.commonQueryModel;
+    <table id="tb" align="center" cellspacing="0">
+        <tr id="trtile" style="background-color:rgb(245,245,245)">
+
+            <td style="width:10%">用品代码</td>
+            <td style="width:20%">用品名称</td>
+            <td style="width:30%">备注</td>
+            <td>续住数量</td>
+            <td>离店数量</td>
+        </tr>
+        @for (var i = 0; i < dt.Rows.Count; i++)
+        {
+            <tr> 
+                <td>@dt.Rows[i]["code"]</td>
+                <td>@dt.Rows[i]["name"]</td>
+                <td style="text-align:left;padding-left:20px;">@dt.Rows[i]["remark"]</td>
+                <td style="cursor:pointer;">
+                    <input data-b="xu" data-a="@dt.Rows[i]["xuQuality"].ToString()" name="@dt.Rows[i]["Goodsid"].ToString()" type="text" value="@(dt.Rows[i]["xuQuality"].ToString())" onblur="checkText(this)" />
+                </td>
+                <td style="cursor:pointer;">
+                    <input data-b="dep" data-a="@dt.Rows[i]["DepQuality"].ToString()" name="@dt.Rows[i]["Goodsid"].ToString()" type="text" value="@(dt.Rows[i]["DepQuality"].ToString())" onblur="checkText(this)" />
+                </td>
+            </tr>
+        }
+    </table>
+    <div style="text-align:center;margin-top:10px;">
+        <input type="button" value="保存" onclick="SaveChange(true)" class="k-button" />
+        <input type="button" value="返回" onclick="" id="closeEditFormButton" class="k-button" />
+    </div>
+}
+<script type="text/javascript">
+    function SaveChange() {
+        var inputs = $("#tb input[data-b='xu']");
+        var jsons = {}; var i = 0;
+        inputs.each(function () {
+            if ($(this).attr("data-a") != $(this).val()) {
+                jsons[i] = { "Goodsid": $(this).attr("name"), "name": $(this).val(), "xuQuality": 1 };
+                i++;
+            }
+        });
+        var inputs = $("#tb input[data-b='dep']");
+        inputs.each(function () {
+            if ($(this).attr("data-a") != $(this).val()) {
+                jsons[i] = { "Goodsid": $(this).attr("name"), "name": $(this).val(), "xuQuality": 2 };
+                i++;
+            }
+        });
+        $.post("@Url.Action("SetEquipment")", { para: jsons, id: "@ViewBag.roomtypeid" }, function (data) {
+            if (data.Success) {
+                closeEditFormWindow();
+            } else {
+                var message = data.Data;
+                alert(message);
+            }
+        });
+    }
+    $(function () {
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        $('table tr').click(function () {
+            if ($(this)[0].id != "trtile") {
+                $('table tr').removeClass('k-state-selected');
+                $(this).addClass('k-state-selected');
+            }
+        })
+    });
+    function checkText(obj) {
+        if (isNaN($(obj).val())) {
+            $(obj).val("");
+        }
+    }
+
+</script>
+
+
+<style type="text/css">
+    td {
+        width: auto;
+        border: 1px solid rgb(204,204,204);
+    }
+
+    .btn {
+        height: 30px;
+        border: 1px solid gray;
+        background-color: white;
+        border-radius: 2px;
+        text-align: center;
+        color: black;
+        cursor: pointer;
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+    #tb {
+        display: table;
+        border-collapse: collapse;
+        border-spacing: 2px;
+        border-color: grey;
+        margin-top: 10px;
+        text-align: center;
+        line-height: 30px;
+        width: 100%;
+        border: 1px solid rgb(204,204,204);
+    }
+
+    input[type="text"] { 
+        height: 80%;
+        padding: 0 5px 5px 15px;
+        margin-top: 4px;
+        margin-bottom: 4px;
+        border-radius: 3px;
+        color:black;
+    }
+</style>

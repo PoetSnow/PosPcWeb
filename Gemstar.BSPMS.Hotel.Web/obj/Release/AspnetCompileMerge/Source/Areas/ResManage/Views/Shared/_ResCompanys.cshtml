@@ -1,0 +1,14 @@
+﻿@model Gemstar.BSPMS.Hotel.Services.CRMManage.CommpanyBlanceInfo
+@if (Model != null)
+{
+    <p><span class="span-color">价格代码：</span><span class="black-color">@(!string.IsNullOrWhiteSpace(Model.RateName) ? Model.RateName : "")</span></p>
+    <p><span class="span-color">挂账限额：</span><span class="black-color">@Model.LimitAmount</span></p>
+    <p><span class="span-color">应收金额：</span><span class="black-color">@Model.Balance</span></p>
+    <p><span class="span-color">剩余限额：</span><span class="black-color">@(Model.LimitAmount - Model.Balance)</span></p>
+    <p><span class="span-color">有效期：</span><span class="black-color">@(Model.ValidDate != null && Model.ValidDate.HasValue ? Model.ValidDate.Value.ToString("yyy-MM-dd") : "")</span></p>
+    <p><span class="black-color">双击可查看详情</span></p>
+}
+else
+{
+    <p style="text-align:center;"><span class="black-color">暂无信息</span></p>
+}

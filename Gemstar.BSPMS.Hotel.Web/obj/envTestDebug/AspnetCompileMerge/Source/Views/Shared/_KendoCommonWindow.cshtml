@@ -1,0 +1,621 @@
+﻿<div id="kendoWindows">
+    <div id="commonKendoWindow"></div>
+    <div id="newCommonKendoWindow"></div>
+    <div id="commoniframeKendoWindow"></div>
+    <div id="newCommoniframeKendoWindow"></div>
+    <div id="resKendoWindow"></div>
+    <span id="notification"></span>
+</div>
+<script type="text/javascript">
+    $(function () {
+        initKendoWindow();
+        initIframeKendoWindow();
+        initKendoNotification();
+        initResKendoWindow();
+    });
+
+    function initKendoNotification() {
+    }
+    function showKendoNotification() {
+        $("#loadingDiv").remove();
+    }
+    function closeKendoNotification() {
+    }
+
+    function initKendoWindow() { 
+        $("#commonKendoWindow").kendoWindow({
+            width: 900,
+            title: "通用操作",
+            visible: false,
+            modal: true,
+            resizable: false,
+            close: function () {
+                var obj = $("#commonKendoWindow");
+                obj.empty();
+                var objWindow = obj.parent(".k-widget.k-window");
+                if (objWindow.css("width") != "900px") {
+                    objWindow.css("width", "900px"); 
+                }
+           
+                if ($("#dataDiv", $("#mainContent iframe")[0].contentWindow.document).html() != undefined) {
+                    //价格体系中出现的特殊情况，关闭窗口需要刷新页面
+                    $("#dataDiv", $("#mainContent iframe")[0].contentWindow.document).load($("#mainContent iframe")[0].src + "?viewType=false");
+                   
+                }
+                refreshCrmGrid();//合约单位往来管理的详情中没有返回按钮，所以关闭窗口在这里刷新页面
+            },
+            refresh: function () {
+                var commonWindow = $("#commonKendoWindow").data("kendoWindow");
+                if (commonWindow == null || commonWindow == undefined) { initKendoWindow(); }
+                if (commonWindow != null && commonWindow != undefined) { commonWindow.center().open(); }
+                closeKendoNotification();
+            }
+        });
+    }
+    function refreshCrmGrid() {
+        try {//关闭详情时，刷新合约单位往来管理列表
+            var iframe = getContentIfrmae();
+            if (typeof (iframe.contentWindow.exchangesGridread) == "function") {
+                iframe.contentWindow.exchangesGridread();
+            }
+        } catch (e) { }
+    }
+    function openKendoWindow(title, url, data, method) {
+        showKendoNotification();
+        var obj = $("#commonKendoWindow");
+        var win = obj.data("kendoWindow");
+        if (win == undefined) {
+            initKendoWindow();
+            win = obj.data("kendoWindow");
+        }
+        if (!data) {
+            data = { rnd: Math.random() };
+        }
+        if (!method) {
+            method = "GET";
+        }
+        win.title(title).refresh({
+            url: url,
+            data: data,
+            type: method,
+            iframe: false,
+            cache:false,
+        });
+    }
+
+    function initSecondKendoWindow() { 
+        $("#newCommonKendoWindow").kendoWindow({
+            width: 900,
+            title: "通用操作",
+            visible: false,
+            modal: true,
+            resizable: false,
+            close: function () {
+                var obj = $("#newCommonKendoWindow");
+                obj.empty();
+                var objWindow = obj.parent(".k-widget.k-window");
+                if (objWindow.css("width") != "800px") {
+                    objWindow.css("width", "800px");
+                }
+            },
+            refresh: function () {
+                var commonWindow = $("#newCommonKendoWindow").data("kendoWindow");
+                if (commonWindow == null || commonWindow == undefined) { initSecondKendoWindow(); }
+                if (commonWindow != null && commonWindow != undefined) { commonWindow.center().open(); }
+                closeKendoNotification();
+            }
+        });
+    }
+    function openSecondKendoWindow(title, url, data, method) {
+        showKendoNotification();
+        var obj = $("#newCommonKendoWindow");
+        var win = obj.data("kendoWindow");
+        if (win == undefined) {         
+            initSecondKendoWindow();
+            win = obj.data("kendoWindow");
+        }
+        if (!data) {
+            data = { rnd: Math.random() };
+        }
+        if (!method) {
+            method = "GET";
+        }       
+        win.title(title).refresh({
+            url: url,
+            data: data,
+            type: method,
+            iframe: false,
+            cache: false,
+        });
+    }
+
+    function initIframeKendoWindow() {
+        $("#commoniframeKendoWindow").kendoWindow({
+            width: 1300,
+            height:605,
+            title: "通用操作",
+            content: "",
+            iframe: true,
+            modal: true,
+            visible: false,
+            resizable: false,
+            scrollable: false,
+            close: function (e) {
+                var iframeContentWindow = $("#commoniframeKendoWindow iframe")[0].contentWindow;
+                var html = $(iframeContentWindow.document).find("#orderTabStripDiv");
+                if (html != null && html != undefined && html.length > 0) {
+                    if (iframeContentWindow.orderCustomerIsChanged()) {
+                        if (e) { e.preventDefault(); }
+                        jConfirm("当前数据已经修改，是否保存?", "  是  ", "  否  ", function (confirmed) {
+                            if (confirmed) {
+                                iframeContentWindow.OrderCustomer.Save();
+                            } else {
+                                iframeContentWindow.orderCustomerIsChangedSet(false);
+                                $("#commoniframeKendoWindow").data("kendoWindow").close();
+                            }
+                        }, null, "取消");
+                        return false;
+                    }
+                }
+                var obj = $("#commoniframeKendoWindow");
+                obj.empty();                
+                if ($("#dataDiv", $("#mainContent iframe")[0].contentWindow.document).html() != undefined) {
+                    //价格体系中出现的特殊情况，关闭窗口需要刷新页面
+                    $("#dataDiv", $("#mainContent iframe")[0].contentWindow.document).load($("#mainContent iframe")[0].src + "?viewType=false");
+
+                }
+            },
+            deactivate:function(){
+                var obj = $("#commoniframeKendoWindow");
+                obj.empty();
+                var objWindow = obj.parent(".k-widget.k-window");
+                if (objWindow.css("width") != "1297px") {
+                    objWindow.css("width", "1297px");
+                }
+            },
+            refresh: function () {
+                var obj = $("#commoniframeKendoWindow");
+                var commonWindow = obj.data("kendoWindow"); if (commonWindow == null || commonWindow == undefined) { initIframeKendoWindow(); }
+                var iframe = $("#commoniframeKendoWindow iframe");
+                var iframeDocument = $(iframe[0].contentWindow.document.body);
+                iframe.attr("scrolling", "no");
+                var html = iframeDocument.find("#orderTabStripDiv");
+                if (html == null || html == undefined || html.length <= 0) {
+                    html = iframeDocument;
+                }
+                //是否提示没有权限
+                if ($(iframeDocument).find("title").text() == "您没有权限访问此模块") {
+                    jAlert("你没有权限访问此模块，请与系统管理员联系!","确定");
+                    return;
+                }
+                var width = html.width();
+                //如果没有取到宽度或者宽度值小于100，认为是有异常了，直接赋值1200
+                if (!width || width < 100) {
+                    width = 1200;
+                }
+                var height = html.height();
+                var windowDiv = obj.parent();
+                windowDiv.css("width", width);
+                windowDiv.css("height", height);
+                commonWindow.center().open();               
+                closeKendoNotification();
+            },           
+        });
+    }
+    function openIframeKendoWindow(title, url, data,menuId,menuName, method,forceClose) {
+        showKendoNotification();
+        var obj = $("#commoniframeKendoWindow");
+        var win = obj.data("kendoWindow");
+        //if force close the old window
+        if (win != undefined && forceClose == 1) {
+            win.close();
+            win = undefined;
+        }
+        if (win == undefined) { 
+            initIframeKendoWindow();
+            win = obj.data("kendoWindow");
+        }
+        if (!method) {
+            method = "GET";
+        }
+        var para = "";
+        if (data != null && data != undefined) {
+            for (var item in data) {
+                para += item + "=" + (data[item]) + "&";
+            }
+        }
+        if (para.length > 0) {
+            para = "?" + para.substring(0, para.length - 1);
+        }
+        url = url + para;
+        var iframeWindow = win.title(title).refresh({
+            url: url,
+            data: data,
+            type: method,
+            iframe: true,
+            cache: false,
+        });
+        if (navigator.userAgent.toUpperCase().indexOf("FIREFOX") > 0) {
+            obj.parent().css("visibility", "hidden");
+            iframeWindow.open();
+        }
+        $(obj).attr("menuId", menuId);
+        $(obj).attr("menuName", menuName);
+    }
+    function initSecondIframeKendoWindow() {
+        $("#newCommoniframeKendoWindow").kendoWindow({
+            width: 1300,
+            height: 605,
+            title: "通用操作",
+            content: "",
+            iframe: true,
+            modal: true,
+            visible: false,
+            resizable: false,
+            scrollable: false,
+            close: function (e) {
+                var iframeContentWindow = $("#newCommoniframeKendoWindow iframe")[0].contentWindow;
+                var html = $(iframeContentWindow.document).find("#orderTabStripDiv");
+                if (html != null && html != undefined && html.length > 0) {
+                    if (iframeContentWindow.orderCustomerIsChanged()) {
+                        if (e) { e.preventDefault(); }
+                        jConfirm("当前数据已经修改，是否保存?", "  是  ", "  否  ", function (confirmed) {
+                            if (confirmed) {
+                                iframeContentWindow.OrderCustomer.Save();
+                            } else {
+                                iframeContentWindow.orderCustomerIsChangedSet(false);
+                                $("#newCommoniframeKendoWindow").data("kendoWindow").close();
+                            }
+                        }, null, "取消");
+                        return false;
+                    }
+                }               
+                if ($("#dataDiv", $("#mainContent iframe")[0].contentWindow.document).html() != undefined) {
+                    //价格体系中出现的特殊情况，关闭窗口需要刷新页面
+                    $("#dataDiv", $("#mainContent iframe")[0].contentWindow.document).load($("#mainContent iframe")[0].src + "?viewType=false");
+
+                }
+            },
+            deactivate: function () {
+                var obj = $("#newCommoniframeKendoWindow");
+                obj.empty();
+                var objWindow = obj.parent(".k-widget.k-window");
+                if (objWindow.css("width") != "1297px") {
+                    objWindow.css("width", "1297px");
+                }
+            },
+            refresh: function () {
+                var obj = $("#newCommoniframeKendoWindow");
+                var commonWindow = obj.data("kendoWindow"); if (commonWindow == null || commonWindow == undefined) { initSecondIframeKendoWindow(); }
+                var iframe = $("#newCommoniframeKendoWindow iframe");
+                var iframeDocument = $(iframe[0].contentWindow.document.body);
+                iframe.attr("scrolling", "no");
+                var html = iframeDocument.find("#orderTabStripDiv");
+                if (html == null || html == undefined || html.length <= 0) {
+                    html = iframeDocument;
+                }
+                //是否提示没有权限
+                if ($(iframeDocument).find("title").text() == "您没有权限访问此模块") {
+                    jAlert("你没有权限访问此模块，请与系统管理员联系!", "确定");
+                    return;
+                }
+                var width = html.width();
+                //如果没有取到宽度或者宽度值小于100，认为是有异常了，直接赋值1200
+                if (!width || width < 100) {
+                    width = 1200;
+                }
+                var height = html.height();
+                var windowDiv = obj.parent();
+                windowDiv.css("width", width);
+                windowDiv.css("height", height);
+                commonWindow.center().open();
+                closeKendoNotification();
+            },
+        });
+    }
+    function openSecondIframeKendoWindow(title, url, data, menuId, menuName, method, forceClose) {
+        showKendoNotification();
+        var obj = $("#newCommoniframeKendoWindow");
+        var win = obj.data("kendoWindow");
+        //if force close the old window
+        if (win != undefined && forceClose == 1) {
+            win.close();
+            win = undefined;
+        }
+        if (win == undefined) {
+            initSecondIframeKendoWindow();
+            win = obj.data("kendoWindow");
+        }
+        if (!method) {
+            method = "GET";
+        }
+        var para = "";
+        if (data != null && data != undefined) {
+            for (var item in data) {
+                para += item + "=" + (data[item]) + "&";
+            }
+        }
+        if (para.length > 0) {
+            para = "?" + para.substring(0, para.length - 1);
+        }
+        url = url + para;
+        var iframeWindow = win.title(title).refresh({
+            url: url,
+            data: data,
+            type: method,
+            iframe: true,
+            cache: false,
+        });
+        if (navigator.userAgent.toUpperCase().indexOf("FIREFOX") > 0) {
+            obj.parent().css("visibility", "hidden");
+            iframeWindow.open();
+        }
+        $(obj).attr("menuId", menuId);
+        $(obj).attr("menuName", menuName);
+    }
+
+    function initResKendoWindow() {
+        $("#resKendoWindow").kendoWindow({
+            width: 1300,
+            height: 605,
+            title: "客情客账操作",
+            content: "",
+            iframe: false,
+            modal: true,
+            visible: false,
+            resizable: false,
+            scrollable: false,
+            close: function (e) {
+                if ($("#PermanentRoomOrderAdd").length <= 0) {
+                    if (orderCustomerIsChanged()) {
+                        if (e) { e.preventDefault(); }
+                        jConfirm("当前数据已经修改，是否保存?", "  是  ", "  否  ", function (confirmed) {
+                            if (confirmed) {
+                                OrderCustomer.Save();
+                            } else {
+                                orderCustomerIsChangedSet(false);
+                                $("#resKendoWindow").data("kendoWindow").close();
+                            }
+                        }, null, "取消");
+                        return false;
+                    }
+                    try { resOrderWindowDestroy(); } catch (e) { }
+                }
+                else {
+                    if (permanentRoom_orderCustomerIsChanged()) {
+                        if (e) { e.preventDefault(); }
+                        jConfirm("当前数据已经修改，是否保存?", "  是  ", "  否  ", function (confirmed) {
+                            if (confirmed) {
+                                permanentRoom_OrderCustomer.Save();
+                            } else {
+                                permanentRoom_orderCustomerIsChangedSet(false);
+                                $("#resKendoWindow").data("kendoWindow").close();
+                            }
+                        }, null, "取消");
+                        return false;
+                    }
+                    try { resOrderWindowDestroy(); } catch (e) { }
+                }
+            },
+            deactivate: function () {
+                var obj = $("#resKendoWindow");
+                obj.empty();
+                var objWindow = obj.parent(".k-widget.k-window");
+                if (objWindow.css("width") != "1297px") {
+                    objWindow.css("width", "1297px");
+                }
+            },
+            refresh: function () {
+                var obj = $("#resKendoWindow");
+                var commonWindow = obj.data("kendoWindow");
+                if (commonWindow == null || commonWindow == undefined) {
+                    initResKendoWindow();
+                    commonWindow = $("#resKendoWindow").data("kendoWindow");
+                }
+                commonWindow.center().open();
+                if (navigator.userAgent.toUpperCase().indexOf("FIREFOX") > 0) {
+                    obj.parent().css("visibility", "visible");
+                    loadResOrderAddInitialization();
+                }
+                closeKendoNotification();
+            },
+            activate: function () {
+                loadResOrderAddInitialization();
+            },
+        });
+    }
+    function openResKendoWindow(title, url, data, menuId, menuName, method, forceClose) {
+        showKendoNotification();
+        var obj = $("#resKendoWindow");
+        var win = obj.data("kendoWindow");
+        //if force close the old window
+        if (win != undefined && forceClose == 1) {
+            win.close();
+            win = undefined;
+        }
+        if (win == undefined) {
+            initResKendoWindow();
+            win = obj.data("kendoWindow");
+        }
+        if (!method) {
+            method = "GET";
+        }
+        var para = "";
+        if (data != null && data != undefined) {
+            for (var item in data) {
+                para += item + "=" + (data[item]) + "&";
+            }
+        }
+        if (para.length > 0) {
+            para = "?" + para.substring(0, para.length - 1);
+        }
+        url = url + para;
+        var iframeWindow = win.title(title).refresh({
+            url: url,
+            data: data,
+            type: method,
+            iframe: false,
+            cache: false,
+        });
+        if (navigator.userAgent.toUpperCase().indexOf("FIREFOX") > 0) {
+            obj.parent().css("visibility", "hidden");
+            iframeWindow.open();
+        }
+        $(obj).attr("menuId", menuId);
+        $(obj).attr("menuName", menuName);
+    }
+    function loadResOrderAddInitialization() {
+        try{
+            var obj = $("#resKendoWindow");
+            if (obj.parent().css("visibility") == "visible") {
+                resOrderAddInitialization();
+            }
+            //加载帮助文档
+            $("#helpinfodiviframe").parent().remove();
+            $(obj).parent("div").append(helpFilesDiv);
+            var menuId = $(obj).attr("menuId");
+            var menuName = $(obj).attr("menuName");
+            LoadHelpFiles(menuId, menuName, 1);
+        }
+        catch(e){}
+    }
+
+    function saveKendoWindowFormData(btn, successCallback) {
+        var f = $(btn)[0].form;
+        var validator = $(f).validate();
+        if (validator.form()) { 
+            $.post(     
+                $(f).attr("action"),
+                $(f).serialize(),
+                function (data) { 
+                    if (data.Success) { 
+                        if (successCallback) {
+                            successCallback();
+                        }
+                        closeEditFormWindow();
+                    } else { 
+                        //jAlert(data.Data);
+                        ajaxErrorHandle(data);
+                    }
+                },
+                "json");
+        }
+    }
+    function saveSecondKendoWindowFormData(btn, successCallback) {
+        var f = $(btn)[0].form;
+        var validator = $(f).validate();
+        if (validator.form()) {
+            $.post(
+                $(f).attr("action"),
+                $(f).serialize(),
+                function (data) {
+                    if (data.Success) {
+                        if (successCallback) {
+                            successCallback();
+                        }
+                        closeSecondEditFormWindow();
+                    } else {
+                        //jAlert(data.Data);
+                        ajaxErrorHandle(data);
+                    }
+                },
+                "json");
+        }
+    }
+
+    function closeKendoWindow() {
+        var win = $("#commonKendoWindow").data("kendoWindow");
+        if (win == undefined) {
+            initKendoWindow();
+            win = $("#commonKendoWindow").data("kendoWindow"); 
+        } 
+        win.close();
+    }
+    function closeSecondKendoWindow() {
+        var win = $("#newCommonKendoWindow").data("kendoWindow");
+        if (win == undefined) {
+            initSecondKendoWindow();
+            win = $("#newCommonKendoWindow").data("kendoWindow");
+        }
+        win.close(); 
+    }
+    function closeIframeKendoWindow() {
+        var win = $("#commoniframeKendoWindow").data("kendoWindow");
+        if (win == undefined) {
+            initIframeKendoWindow();
+            win = $("#commoniframeKendoWindow").data("kendoWindow");
+        }
+        win.close();
+    }
+    function closeSecondIframeKendoWindow() {
+        var win = $("#newCommoniframeKendoWindow").data("kendoWindow");
+        if (win == undefined) {
+            initSecondIframeKendoWindow();
+            win = $("#newCommoniframeKendoWindow").data("kendoWindow");
+        }
+        win.close();
+    }
+
+
+    /*由于将通用窗口放到外层里面了，导致弹出窗口在调用iframe里面的方法时调用不到，所以此处增加一同名同参方法，然后转去调用iframe里面的方法。如果以后更改为直接在iframe里面打开窗口，则会直接调用里面的方法，不会调用此转调方法*/
+    function closeEditFormWindow() {
+        closeKendoWindow();
+    }
+    function closeSecondEditFormWindow() {
+        closeSecondKendoWindow();
+    }
+    function getContentIfrmae() {
+        var iframe = $('iframe[data-contenttype="thirdmenu"]')[0];      
+        //如果iframe里面还有iframe
+        if (iframe.contentWindow.$) {       
+            var $forthMenuFrames = iframe.contentWindow.$('div.k-state-active iframe[data-contenttype="forthmenu"]');
+            if ($forthMenuFrames.length > 0) {
+                iframe = $forthMenuFrames[0];
+            }
+        }
+        return iframe;  
+    }
+
+    function saveFormData(btn) { 
+        var iframe = getContentIfrmae();
+        if (iframe.contentWindow.saveFormData) {  
+            iframe.contentWindow.saveFormData(btn);
+        }
+        else
+        {
+            saveKendoWindowFormData(btn, null);
+        }
+    }
+
+    function saveFormData(btn, successCallback) { 
+        var iframe = getContentIfrmae();
+        if (iframe.contentWindow.saveFormData) {
+            iframe.contentWindow.saveFormData(btn, successCallback);
+        } else {
+            saveKendoWindowFormData(btn, successCallback);
+        }
+    }
+
+    function saveSecondFormData(btn, successCallback) {
+        var iframe = getContentIfrmae();
+        if (iframe.contentWindow.saveSecondFormData) {
+            iframe.contentWindow.saveSecondFormData(btn, successCallback);
+        } else {
+            saveSecondKendoWindowFormData(btn, successCallback);
+        }
+    }
+
+
+    function closeCommonQueryWindow() {
+        closeKendoWindow();
+    }
+    function doCommonQuery() {
+        var iframe = getContentIfrmae();
+        iframe.contentWindow.doCommonQuery();
+    }
+    //限制code 只能输入数字跟字母
+    function checkCode(obj) {
+        obj.value = obj.value.replace(/[^\w\.\/]/ig, '');
+
+    }
+</script>

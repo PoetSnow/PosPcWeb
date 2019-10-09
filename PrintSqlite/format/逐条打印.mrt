@@ -1,0 +1,356 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StiSerializer version="1.02" type="Net" application="StiReport">
+  <Dictionary Ref="1" type="Dictionary" isKey="true">
+    <BusinessObjects isList="true" count="0" />
+    <Databases isList="true" count="0" />
+    <DataSources isList="true" count="1">
+      <ProductRecord Ref="2" type="DataTableSource" isKey="true">
+        <Alias>出品记录</Alias>
+        <Columns isList="true" count="48">
+          <value>SerialNumber,序号,System.String</value>
+          <value>FlowNumber,流水号,System.String</value>
+          <value>HotelCode,酒店代码,System.String</value>
+          <value>OddNumbers,单号,System.String</value>
+          <value>ConsumptionID,消费ID,System.String</value>
+          <value>ConsumptionState,消费状态,System.String</value>
+          <value>BusinessPointCode,营业点代码,System.String</value>
+          <value>BusinessPointName,营业点名称,System.String</value>
+          <value>TableNumber,台号,System.String</value>
+          <value>TableName,台名,System.String</value>
+          <value>GuestName,客人姓名,System.String</value>
+          <value>NumberOfPeople,人数,System.String</value>
+          <value>OrderPeople,点菜人,System.String</value>
+          <value>OrderTime,点菜时间,System.String</value>
+          <value>BanquetCode,酒席编码,System.String</value>
+          <value>BanquetName,酒席名称,System.String</value>
+          <value>BanquetNumber,酒席数量,System.String</value>
+          <value>BanquetUnit,酒席单位,System.String</value>
+          <value>BanquetPrice,酒席单价,System.String</value>
+          <value>BanquetAmount,酒席金额,System.String</value>
+          <value>ProjectCode,项目编码,System.String</value>
+          <value>ProjectName,项目名称,System.String</value>
+          <value>ProjectEnglishName,项目英文名,System.String</value>
+          <value>ProjectOtherName,项目其它名,System.String</value>
+          <value>Unit,单位,System.String</value>
+          <value>UnitEnglishName,单位英文名,System.String</value>
+          <value>Number,数量,System.String</value>
+          <value>Only,条只,System.String</value>
+          <value>Price,单价,System.String</value>
+          <value>Amount,金额,System.String</value>
+          <value>ProduceBarcode,出品条码,System.String</value>
+          <value>ProduceStatus,出品状态,System.String</value>
+          <value>ProduceNumber,出品次数,System.String</value>
+          <value>ProducePort,出品端口,System.String</value>
+          <value>Printer,打印机,System.String</value>
+          <value>PrinterName,打印机名称,System.String</value>
+          <value>Practice,作法,System.String</value>
+          <value>Requirement,要求,System.String</value>
+          <value>GuestPosition,客位,System.String</value>
+          <value>Cook,厨师,System.String</value>
+          <value>Salesman,推销员,System.String</value>
+          <value>DepartmentCategory,部门类别,System.String</value>
+          <value>WineCardNumber,酒卡号,System.String</value>
+          <value>Remarks,备注,System.String</value>
+          <value>DocumentName,文档名称,System.String</value>
+          <value>SendingTime,发送时间,System.String</value>
+          <value>CompletionTime,完成时间,System.String</value>
+          <value>PrintState,打印状态,System.String</value>
+        </Columns>
+        <Dictionary isRef="1" />
+        <Name>ProductRecord</Name>
+        <NameInSource>DataTable</NameInSource>
+      </ProductRecord>
+    </DataSources>
+    <Relations isList="true" count="0" />
+    <Report isRef="0" />
+    <Variables isList="true" count="0" />
+  </Dictionary>
+  <EngineVersion>EngineV2</EngineVersion>
+  <GlobalizationStrings isList="true" count="0" />
+  <MetaTags isList="true" count="0" />
+  <Pages isList="true" count="1">
+    <Page1 Ref="3" type="Page" isKey="true">
+      <Border>None;Black;2;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <Components isList="true" count="3">
+        <ReportTitleBand1 Ref="4" type="ReportTitleBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <CanShrink>True</CanShrink>
+          <ClientRectangle>0,0.4,6.4,3.2</ClientRectangle>
+          <Components isList="true" count="4">
+            <Text2 Ref="5" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,0.8,6.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,18,Bold</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>e3a966b1b8d745e0b1e7522a9a7c0dea</Guid>
+              <HideZeros>True</HideZeros>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text2</Name>
+              <Page isRef="3" />
+              <Parent isRef="4" />
+              <Text>台号：{ProductRecord.TableNumber}-{ProductRecord.TableName}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+            </Text2>
+            <Text20 Ref="6" type="Text" isKey="true">
+              <Border>Bottom;[0:0:0:0];1;None;False;1;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,2.4,6.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,16,Bold</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>0bad9759383a47d3b2890b346be04832</Guid>
+              <HideZeros>True</HideZeros>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text20</Name>
+              <Page isRef="3" />
+              <Parent isRef="4" />
+              <Text>{ProductRecord.ProduceStatus=="新点"?"":ProductRecord.ProduceStatus}{ProductRecord.ConsumptionState}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+            </Text20>
+            <Text43 Ref="7" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,0,6.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,14,Bold</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>a166649e3e9c40118143320b02d2d15e</Guid>
+              <HideZeros>True</HideZeros>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text43</Name>
+              <Page isRef="3" />
+              <Parent isRef="4" />
+              <Text>{ProductRecord.PrinterName}(出品单)</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+            </Text43>
+            <Text8 Ref="8" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,1.6,6.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,14</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>e3f45c9f6aaa4032bf3d1dd17109d28b</Guid>
+              <HideZeros>True</HideZeros>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text8</Name>
+              <Page isRef="3" />
+              <Parent isRef="4" />
+              <Text>{ProductRecord.BanquetName}{ProductRecord.BanquetNumber}{ProductRecord.BanquetUnit}{ProductRecord.BanquetAmount}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+            </Text8>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Name>ReportTitleBand1</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+        </ReportTitleBand1>
+        <DataBand1 Ref="9" type="DataBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <BusinessObjectGuid isNull="true" />
+          <CanShrink>True</CanShrink>
+          <ClientRectangle>0,4.4,6.4,1.8</ClientRectangle>
+          <Components isList="true" count="2">
+            <Text3 Ref="10" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,0,6.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,16</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>c44efa39847c4359b5c9add31816eafa</Guid>
+              <HideZeros>True</HideZeros>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text3</Name>
+              <Page isRef="3" />
+              <Parent isRef="9" />
+              <Text>{ProductRecord.Number} {ProductRecord.Unit}  {ProductRecord.ProjectName}  {ProductRecord.BanquetName == "" ? Format("{0:C2}", ProductRecord.Amount):""}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+            </Text3>
+            <Text22 Ref="11" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,0.8,6.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,16</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>12770e99f20b424dbb2b35cd0450ad82</Guid>
+              <HideZeros>True</HideZeros>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text22</Name>
+              <Page isRef="3" />
+              <Parent isRef="9" />
+              <Text>{ProductRecord.Practice}{ProductRecord.Requirement}{ProductRecord.GuestPosition}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+            </Text22>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <DataRelationName isNull="true" />
+          <DataSourceName>ProductRecord</DataSourceName>
+          <Filters isList="true" count="0" />
+          <Guid>8163453e5740460d957fc5404d453053</Guid>
+          <Name>DataBand1</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Sort isList="true" count="0" />
+        </DataBand1>
+        <ReportSummaryBand1 Ref="12" type="ReportSummaryBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <CanShrink>True</CanShrink>
+          <ClientRectangle>0,7,6.4,2.6</ClientRectangle>
+          <Components isList="true" count="3">
+            <Text10 Ref="13" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,0,6.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,16</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>c098939ba5274c2c907c94910e876eeb</Guid>
+              <HideZeros>True</HideZeros>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text10</Name>
+              <Page isRef="3" />
+              <Parent isRef="12" />
+              <Text>点菜人：{ProductRecord.OrderPeople}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+            </Text10>
+            <Text12 Ref="14" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,0.8,6.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,16</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>057f780480d94fe88f4c0b22a695b8af</Guid>
+              <HideZeros>True</HideZeros>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text12</Name>
+              <Page isRef="3" />
+              <Parent isRef="12" />
+              <Text>点菜时间：{Format("{0:MM/dd HH:mm:ss}", ProductRecord.OrderTime)}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+            </Text12>
+            <Text1 Ref="15" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,1.6,6.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,16</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>21e005122520476980ad6bece48ebfe3</Guid>
+              <HideZeros>True</HideZeros>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text1</Name>
+              <Page isRef="3" />
+              <Parent isRef="12" />
+              <Text>台号：{ProductRecord.TableNumber}-{ProductRecord.TableName}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+            </Text1>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Name>ReportSummaryBand1</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+        </ReportSummaryBand1>
+      </Components>
+      <Conditions isList="true" count="0" />
+      <Guid>bcfbadad02de4fd395abbad0596d2082</Guid>
+      <Margins>0.3,0.3,0.3,0.3</Margins>
+      <Name>Page1</Name>
+      <PageHeight>27.9</PageHeight>
+      <PageWidth>7</PageWidth>
+      <PaperSize>Letter</PaperSize>
+      <Report isRef="0" />
+      <Watermark Ref="16" type="Stimulsoft.Report.Components.StiWatermark" isKey="true">
+        <Font>Arial,100</Font>
+        <TextBrush>[50:0:0:0]</TextBrush>
+      </Watermark>
+    </Page1>
+  </Pages>
+  <PreviewSettings>268435455</PreviewSettings>
+  <PrinterSettings Ref="17" type="Stimulsoft.Report.Print.StiPrinterSettings" isKey="true" />
+  <ReferencedAssemblies isList="true" count="8">
+    <value>System.Dll</value>
+    <value>System.Drawing.Dll</value>
+    <value>System.Windows.Forms.Dll</value>
+    <value>System.Data.Dll</value>
+    <value>System.Xml.Dll</value>
+    <value>Stimulsoft.Controls.Dll</value>
+    <value>Stimulsoft.Base.Dll</value>
+    <value>Stimulsoft.Report.Dll</value>
+  </ReferencedAssemblies>
+  <ReportAlias>Report</ReportAlias>
+  <ReportChanged>11/12/2018 4:50:34 PM</ReportChanged>
+  <ReportCreated>4/12/2018 4:16:35 PM</ReportCreated>
+  <ReportFile>D:\BSPMS\PrintSqlite\format\逐条打印.mrt</ReportFile>
+  <ReportGuid>803702a775a24609aa71c61e8ec130f5</ReportGuid>
+  <ReportName>Report</ReportName>
+  <ReportUnit>Centimeters</ReportUnit>
+  <ReportVersion>2016.1.0</ReportVersion>
+  <Script>using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Data;
+using Stimulsoft.Controls;
+using Stimulsoft.Base.Drawing;
+using Stimulsoft.Report;
+using Stimulsoft.Report.Dialogs;
+using Stimulsoft.Report.Components;
+
+namespace Reports
+{
+    public class Report : Stimulsoft.Report.StiReport
+    {
+        public Report()        {
+            this.InitializeComponent();
+        }
+
+        #region StiReport Designer generated code - do not modify
+		#endregion StiReport Designer generated code - do not modify
+    }
+}
+</Script>
+  <ScriptLanguage>CSharp</ScriptLanguage>
+  <Styles isList="true" count="0" />
+</StiSerializer>

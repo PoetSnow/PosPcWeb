@@ -1,0 +1,71 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.Weixin.Models.LoginModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>扫码登录</title>
+    <link rel="stylesheet" href="~/Content/weui.min.css" />
+</head>
+<body>
+    <div class="weui-msg">
+        @if (Model.Status != null)
+        {
+            <div class="weui-msg__icon-area"><i class="weui-icon-@Model.Status.Icon.ToString() weui-icon_msg"></i></div>
+            <div class="weui-msg__text-area">
+                <h2 class="weui-msg__title">@MvcHtmlString.Create(Model.Status.Title)</h2>
+                <p class="weui-msg__desc">@Model.Status.Descript</p>
+            </div>
+        }
+        else
+        {
+            <div class="weui-msg__icon-area"><i class="weui-icon-info weui-icon_msg"></i></div>
+            <div class="weui-msg__text-area">
+                <h2 class="weui-msg__title">扫码登录</h2>
+                <p class="weui-msg__desc">此操作将登录捷云酒店系统。</p>
+            </div>
+            <form method="post" id="loginform">
+                @Html.AntiForgeryToken()
+                @if (Model.HotelList != null && Model.HotelList.Count > 0)
+                {
+                    <div style="text-align:left;">
+                        <div class="weui-cells__title">酒店列表</div>
+                        <div class="weui-cells weui-cells_radio">
+                            @{ int index = 0; }
+                            @foreach (var hotel in Model.HotelList)
+                            { index++;
+                            <label class="weui-cell weui-check__label" for="para_hid_@index">
+                                <div class="weui-cell__bd">
+                                    <p>@hotel.Value</p>
+                                </div>
+                                <div class="weui-cell__ft">
+                                    <input type="radio" class="weui-check" name="para_hid" value="@hotel.Key" @(index == 1 ? "checked=\"checked\"" : "") id="para_hid_@index">
+                                    <span class="weui-icon-checked"></span>
+                                </div>
+                            </label>
+                            }
+                        </div>
+                    </div>
+                }
+                <div class="weui-msg__opr-area">
+                    <p class="weui-btn-area">
+                        <input type="hidden" name="para_id" value="@Model.Id" />
+                        <input type="hidden" name="para_keyid" value="@Model.KeyId" />
+                        <input type="hidden" name="para_openid" value="@Model.OpenId" />
+                        <button type="submit" class="weui-btn weui-btn_primary" name="para_loginSuccess" value="true">确认登录</button>
+                        <button type="submit" class="weui-btn weui-btn_default" name="para_loginSuccess" value="false">拒绝登录</button>
+                    </p>
+                </div>
+            </form>
+        }
+        <div class="weui-msg__extra-area">
+            <div class="weui-footer">
+                <p class="weui-footer__text">Copyright © 2016-2017 捷云PMS</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

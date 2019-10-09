@@ -1,0 +1,99 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "待支付列表";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "Id";
+
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForEnable = false,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForDisable = false,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("productTypeName").Title("类型");
+            c.Bound("payName").Title("付款方式");
+            c.Bound("cdate").Title("创建时间");
+            c.Bound("Amount").Title("待支付金额");
+            c.Bound("qrcodeUrl").Title("").ClientTemplate("<button class='k-button queryPayStatu'>查询支付状态</button>&nbsp;&nbsp;<button class='k-button print'>打印</button>");
+        }
+    };
+}
+
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    <script type="text/javascript">
+        //表格数据绑定事件，用于注册按钮点击
+        function grid_dataBoundEnded() {
+            $("#grid").find("button.queryPayStatu").click(function (e) {
+                e.preventDefault();
+                queryPayStatu_clicked(e);
+            });
+            $("#grid").find("button.print").click(function (e) {
+                e.preventDefault();
+                print_clicked(e);
+            });
+        }
+        //查询支付状态
+        function queryPayStatu_clicked(e) {
+            var target = e.target;
+            var $tr = $(target).parents("tr");
+            var grid = $("#grid").data("kendoGrid");
+            var dataItem = grid.dataItem($tr);
+            var queryid = dataItem.Id;
+
+            $.post("@Url.Action("QueryFolioPayStatu","Pay",new { area= "PayManage" })", { folioPayInfoId: queryid }, function (data) {
+                jAlert(data.Data);
+                if (data.Success) {
+                    grid.dataSource.read();
+                }
+                else {
+                    ajaxErrorHandle(data);
+                }
+            }, 'json');
+        }
+        //打印押金单
+        function print_clicked(e) {
+            var target = e.target;
+            var $tr = $(target).parents("tr");
+            var grid = $("#grid").data("kendoGrid");
+            var dataItem = grid.dataItem($tr);
+
+            var productType = dataItem.ProductType;
+            if (productType == "ResFolio") {
+                //押金单
+                var parameterValues = "@@transId={transids}";
+                parameterValues = parameterValues.replace("{transids}", dataItem.ProductTransId);
+                $.post("@Url.Action("AddQueryParaTemp", "SRBillReportView",new { area = "ReportManage" })", { ReportCode: "up_print_deposit", ParameterValues: parameterValues, ChineseName: "押金单" }, function (result) {
+                    if (result.Success) {
+                        window.open(result.Data);
+                    } else {
+                        //jAlert(data.Data, "知道了");
+                        ajaxErrorHandle(result);
+                    }
+                }, 'json');
+            } else if (productType == "MbrRecharge") {
+                //充值单
+                $.post("@Url.Action("AddWaitPayQueryParaTemp", "SRBillReportView",new { area = "ReportManage" })", { id: dataItem.Id, print: 1 }, function (result) {
+                    if (result.Success) {
+                        window.open(result.Data);
+                    } else {
+                        ajaxErrorHandle(result);
+                    }
+                }, 'json');
+            }
+            else {
+                jAlert("不支持的产品类型，无法打印");
+            }
+        }
+    </script>
+}

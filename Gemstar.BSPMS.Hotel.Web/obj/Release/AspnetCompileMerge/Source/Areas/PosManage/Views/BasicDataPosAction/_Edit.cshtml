@@ -1,0 +1,259 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosAction.ActionEditViewModel
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    a, img {
+        border: 0;
+    }
+
+    body {
+        font: 12px/180% Arial, Helvetica, sans-serif, "新宋体";
+    }
+
+    .tab1 {
+        border-top: #ccc solid 1px;
+        border-bottom: #cccccc solid 1px;
+        float: left;
+        width: 52%;
+    }
+
+    .menu {
+        height: 28px;
+        border-right: #ccc solid 1px;
+        font-size: 14px;
+    }
+
+        .menu li {
+            float: left;
+            width: auto;
+            padding: 0 10px;
+            text-align: center;
+            line-height: 28px;
+            height: 28px;
+            cursor: pointer;
+            border-left: #ccc solid 1px;
+            border-bottom: #ccc solid 1px;
+            color: #666;
+            overflow: hidden;
+            background: #E0E2EB;
+        }
+
+            .menu li.off {
+                background: #fff;
+                color: #336699;
+                font-weight: bold;
+                border-bottom: none;
+            }
+
+    .menudiv {
+        border-left: #cccccc solid 1px;
+        border-right: #cccccc solid 1px;
+        border-top: 0;
+        background: #fefefe;
+        height: 418px;
+    }
+
+        .menudiv div {
+            line-height: 28px;
+        }
+
+    .formButtons {
+        padding-top: 10px;
+    }
+
+    table.editFormTable .textright {
+        width: 60px;
+    }
+
+    .k-overflow-container .k-button.k-state-active:hover, .k-panelbar > li > .k-link.k-state-selected, .k-split-container .k-button.k-state-active:hover, .k-toolbar .k-button.k-state-active:hover {
+        color: #333;
+    }
+</style>
+<script type="text/javascript">
+    function moduleChanged() {
+        var ActionTypeID = $("#ActionTypeID").data("kendoDropDownList");
+        ActionTypeID.dataSource.read();
+    }
+
+    function posCode_paras() {
+        var module = $("#Module").data("kendoDropDownList");
+        var moduleCode = module.value();
+        return {
+            moduleCode: moduleCode
+        };
+    }
+</script>
+
+<script>
+    //选项卡切换
+    var name_0 = 'one';
+    var cursel_0 = 1;
+    var links_len;
+    $(function () {
+        //选项卡
+        var links = document.getElementById("tab1").getElementsByTagName('li');
+        links_len = links.length;
+        setTab(name_0, cursel_0);
+
+    });
+    function setTab(name, cursel) {
+        cursel_0 = cursel;
+        for (var i = 1; i <= links_len; i++) {
+            if (i == cursel) {
+                $("#" + name + i).attr("class", "off");
+                $("#con_" + name + "_" + i).attr("style", "display:block;padding:15px");
+            }
+            else {
+
+                $("#" + name + i).removeClass("off");
+                $("#con_" + name + "_" + i).attr("style", "display:none");
+            }
+        }
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    <div style="float:left;width:48%">
+        @Html.HiddenFor(m => m.OriginJsonData)
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.ModifiedDate)
+        <ul id="panelbar">
+            <li class="k-state-active">
+                <span class="k-link k-state-selected">基本信息</span>
+                <div style="padding: 10px;">
+                    <table class="editFormTable">
+                        <tr>
+                            <td class="textright">@Html.LabelFor(m => m.Code)</td>
+                            <td>@Html.Kendo().TextBoxFor(m => m.Code).HtmlAttributes(new { style = "width:100%;", @readonly = "readonly" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+                            <td class="textright">@Html.LabelFor(m => m.Cname)</td>
+                            <td>@Html.Kendo().TextBoxFor(m => m.Cname).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.Cname, "*")</td>
+                        </tr>
+                        <tr>
+                            <td class="textright">@Html.LabelFor(m => m.Ename)</td>
+                            <td>@Html.Kendo().TextBoxFor(m => m.Ename).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.Ename, "*")</td>
+                            <td class="textright">@Html.LabelFor(m => m.Module)</td>
+                            <td>@Html.Kendo().DropDownListFor(e => e.Module).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosModules", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); }).Events(e => e.Change("moduleChanged"))</td>
+                            <td>@Html.ValidationMessageFor(m => m.Module, "*")</td>
+                        </tr>
+                        <tr>
+                            <td class="textright">@Html.LabelFor(m => m.ActionTypeID)</td>
+                            <td>@Html.Kendo().DropDownListFor(e => e.ActionTypeID).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosActionTypeByModules", "BasicDataPosActionType", new { rnd = new Random().NextDouble() }).Data("posCode_paras")).ServerFiltering(true); }).OptionLabel("请选择作法分类")</td>
+                            <td>@Html.ValidationMessageFor(m => m.ActionTypeID, "*")</td>
+                            <td class="textright">@Html.LabelFor(m => m.ProdPrinter)</td>
+                            <td>@Html.Kendo().MultiSelectFor(m => m.ProdPrinter).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForProdPrinterByModules", "BasicDataPosProdPrinter", new { moduleCode = "CY", rnd = new Random().NextDouble() })); }).AutoClose(false).Placeholder("请选择出品打印机").Value(Model.ProdPrinters)</td>
+                            <td>@Html.ValidationMessageFor(m => m.ProdPrinter, "*")</td>
+                        </tr>
+                        <tr>
+                            <td class="textright">@Html.LabelFor(m => m.AddPrice)</td>
+                            <td>@Html.Kendo().NumericTextBoxFor(m => m.AddPrice).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.AddPrice, "*")</td>
+                            <td class="textright">@Html.LabelFor(m => m.Multiple)</td>
+                            <td>@Html.Kendo().NumericTextBoxFor(m => m.Multiple).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.Multiple, "*")</td>
+                        </tr>
+                        <tr>
+                            <td class="textright">@Html.LabelFor(m => m.SeqId)</td>
+                            <td>@Html.Kendo().IntegerTextBoxFor(m => m.SeqId).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.SeqId, "*")</td>
+                            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+                            <td>@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+                        </tr>
+                        <tr>
+                            <td class="textright">@*@Html.LabelFor(m => m.IsInputPrice)*@</td>
+                            <td>@Html.Kendo().CheckBoxFor(m => m.IsInputPrice).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.IsInputPrice, "*")</td>
+                            <td class="textright">@*@Html.LabelFor(m => m.IsSubProd)*@</td>
+                            <td>@Html.Kendo().CheckBoxFor(m => m.IsSubProd).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.IsSubProd, "*")</td>
+                        </tr>
+                        <tr>
+                            <td class="textright">@*@Html.LabelFor(m => m.IsByQuan)*@</td>
+                            <td>@Html.Kendo().CheckBoxFor(m => m.IsByQuan).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.IsByQuan, "*")</td>
+                            <td class="textright">@*@Html.LabelFor(m => m.IsByGuest)*@</td>
+                            <td>@Html.Kendo().CheckBoxFor(m => m.IsByGuest).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.IsByGuest, "*")</td>
+                        </tr>
+                        <tr>
+                            <td class="textright">@*@Html.LabelFor(m => m.IsByPiece)*@</td>
+                            <td>@Html.Kendo().CheckBoxFor(m => m.IsByPiece).HtmlAttributes(new { style = "width:100%;" })</td>
+                            <td>@Html.ValidationMessageFor(m => m.IsByPiece, "*")</td>
+                        </tr>
+                    </table>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="tab1" id="tab1">
+        <div class="menu">
+            <ul>
+                <li id="one1" onclick="setTab('one',1)">同组作法</li>
+            </ul>
+        </div>
+        <div class="menudiv">
+            <div id="con_one_1" style="padding:15px;">
+                @Html.Partial("_GetActionMultisub", Model)
+            </div>
+        </div>
+    </div>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+            $("#posMaskWindow").html("");
+            closeGeneralWindow();
+        });
+
+        $("#panelbar").kendoPanelBar({
+            expandMode: "single"
+        });
+
+        $("#panelbar").height($(".menudiv").height() + 28);
+
+        moduleChanged();
+    });
+
+    function saveFormDataForPosAction(btn, grid) {
+        var f = $(btn)[0].form;
+        var validator = $(f).validate();
+        if (validator.form()) {
+            $.post(
+                $(f).attr("action"),
+                $(f).serialize(),
+                function (data) {
+                    if (data.Success) {
+                        $("#" + grid).data("kendoGrid").dataSource.read();
+                        $("#" + grid).data("kendoGrid").refresh();
+                        $("#posMaskWindow").html("");
+                        closeGeneralWindow();
+                    } else {
+                        jAlert(data.Data);
+                    }
+                },
+                "json");
+        }
+    }
+</script>

@@ -1,0 +1,75 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+
+@{
+    ViewBag.Title = "房间类型";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var colsDefault = new List<GridColumnSetting>
+       {
+                new GridColumnSetting {Name = "hotelName", Title = "分店", Hidden = false, Order = 1, Width = 0},
+                new GridColumnSetting {Name = "code", Title = "房型代码", Hidden = false, Order = 2, Width = 0},
+                new GridColumnSetting {Name = "name", Title = "房型名称", Hidden = false, Order = 3, Width = 0},
+                new GridColumnSetting {Name = "shortName", Title = "简称", Hidden = false, Order = 4, Width = 0},
+                new GridColumnSetting {Name = "price", Title = "牌价", Hidden = false,Order = 4, Width = 0},
+                new GridColumnSetting {Name = "count", Title = "标准早餐数", Hidden = false,Order = 5, Width = 0},
+                new GridColumnSetting {Name = "isAdd", Title = "是否可加床", Hidden = false,Order = 6, Width = 0},
+                new GridColumnSetting {Name = "isNotRoom", Title = "是否假房", Hidden = false,Order = 7, Width = 0},
+                new GridColumnSetting {Name = "isChangeDirty", Title = "夜审置脏", Hidden = false,Order = 8, Width = 0},
+                new GridColumnSetting {Name = "isDepChangeDirty", Title = "离店置脏", Hidden = false,Order = 9, Width = 0},
+                new GridColumnSetting {Name = "chanelValid", Title = "是否渠道可用", Hidden =false,Order = 10, Width = 0},
+                new GridColumnSetting {Name = "isClose", Title = "是否关闭渠道", Hidden = false,Order = 11, Width = 0},
+                new GridColumnSetting {Name = "overQauntity", Title = "可超预订数", Hidden = false,Order = 12, Width = 0},
+                new GridColumnSetting {Name = "totalRooms", Title = "可用房间数", Hidden = false,Order = 13, Width = 0},
+                new GridColumnSetting {Name = "Disrmount", Title = "禁用房间数", Hidden = false,Order = 14, Width = 0},
+                new GridColumnSetting {Name = "seqid", Title = "排序号", Hidden = false,Order = 15, Width = 0},
+            };
+    var gridViewModel = new KendoGridCustomDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        StatusColumnName = "status",
+        EnableFunctionForEnable = true,
+        EnableFunctionForDisable = true,
+        EnableScrollable = true,
+        Area = "SystemManage",
+        Controller = "RoomTypeManage",
+        Action = "Index",
+        DefaultColumnSettings = colsDefault, 
+        CustomToolbar = c =>
+        {
+            c.Custom().Name("comfirmtext").Text("<span style='float:right;display:inline-block;color:red;margin-right:50px;padding-top:8px;'>双击可修改</span>").HtmlAttributes(new { id = "comfirmtext", href = "javascript:void(0);", style = "cursor:default;" });
+
+        }
+
+    };
+}
+
+@Html.Partial("_KendoGridCustomDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+    $(function () {
+        $("#comfirmtext").removeClass("k-button");
+
+    });
+    //刷新房间类型
+    function grid_dataBoundEnded() {
+        formatBoleantext();
+        var obj = $(window.parent.document).find("a");
+        $(obj).on("click", function (e) {
+            if ($(this).text() == "房间类型") {
+                var grid = $("#grid").data("kendoGrid");
+                grid.dataSource.read();
+                return;
+            }
+        })
+    }
+    
+
+</script>

@@ -1,0 +1,96 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MbrCardCenter.Models.MbrCardManage.MbrCardSubtractMoneyViewModel
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.Id)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.MbrCardNo)</td>
+            <td>@Html.DisplayTextFor(m => m.MbrCardNo)</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.GuestName)</td>
+            <td>@Html.DisplayTextFor(m => m.GuestName)</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Balance)</td>
+            <td>@Html.DisplayTextFor(m => m.Balance)</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.SendBalance)</td>
+            <td>@Html.DisplayTextFor(m => m.SendBalance)</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.AccountType)</td>
+            <td>@Html.Kendo().DropDownListFor(m => m.AccountType).HtmlAttributes(new { style = " width:100%" }).BindTo(new List<DropDownListItem>() { new DropDownListItem { Text = "--请选择--" }, new DropDownListItem { Text= "储值金额", Value= "01" }, new DropDownListItem { Text = "增值金额", Value = "02" } })</td>
+            <td>@Html.ValidationMessageFor(m => m.AccountType, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Money)</td>
+            <td>@Html.TextBoxFor(m => m.Money, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Money, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.InvNo)</td>
+            <td>@Html.TextBoxFor(m => m.InvNo, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td>@Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            var ser = $($(this)[0].form).serialize();
+            $.post('@Url.Action("SubtractMoney")', ser, function (data) {
+                if (data.Success) {
+                    //会员扣款单
+                    var id = $("#Id").val();
+                    var type=$("#AccountType").val()=="01"?"c":"d";
+                    var parameterValues = "@@t00profileid=" + id + "&@@t00ptype=d" + "&@@t00ctype=" + type;
+                    $.post("@Url.Action("AddQueryParaTemp", "SRBillReportView",new { area = "ReportManage" })", { ProcedureName: "up_print_profileRecharge", ReportCode: "up_print_profileRechargeCut", ParameterValues: parameterValues, ChineseName: "扣款单据", print: 1 }, function (result) {
+                        if (result.Success) {
+                            window.open(result.Data);
+                        } else {
+                            ajaxErrorHandle(result);
+                        }
+                    }, 'json');
+                    var dataDiv = $("#dataDiv", $("#mainContent iframe")[0].contentWindow.document);
+                    if (dataDiv.length > 0) {
+                        //刷新会员详情
+                        dataDiv.load($("#mainContent iframe")[0].src + "?viewType=false");
+                    }
+                    else {
+                        //刷新会员列表
+                        $("#mainContent iframe")[0].contentWindow.refreshGrid();
+                    }
+                    closeEditFormWindow();
+                }
+                else {
+                    ajaxErrorHandle(data);
+                }
+            },'json')
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+</script>
+

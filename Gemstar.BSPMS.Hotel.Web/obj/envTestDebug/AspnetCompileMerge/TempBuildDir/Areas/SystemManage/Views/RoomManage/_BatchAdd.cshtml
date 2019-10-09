@@ -1,0 +1,182 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.RoomManage.RoomAddViewModel
+<div style="width:100%;text-align:center;">
+    <div id="data">
+        <table class="editFormTable" style="background-color:rgb(239,247,247);padding-top:10px;padding-bottom:10px;">
+            <tr>
+                <td class="textright">编号从：</td>
+                <td><input type="text" id="NoBegin" /></td>
+
+                <td class="textright">到　</td>
+                <td><input type="text" id="NoEnd" /></td>
+            </tr>
+            <tr>
+                <td class="textright">前缀：</td>
+                <td><input type="text" id="qzhui" /></td>
+
+                <td class="textright">房号字长：</td>
+                <td><input type="text" id="numlength" /></td>
+            </tr>
+            <tr>
+                <td class="textright">房型名称：</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.RoomTypeid).HtmlAttributes(new { id = "roomtype" }).DataTextField("Value").DataValueField("Key").DataSource(e => { e.Read(r => r.Action("GetRoomTypeSelectList", "RoomTypeManage", new { rnd = new Random().NextDouble() })); })
+                    @*<input type="text" id="roomtype" />*@
+                </td>
+
+                <td class="textright">楼层名：</td>
+                <td><input type="text" id="floorno" value="@ViewBag.floorid" style="display:none;" /><input type="text" value="@ViewBag.floorname"  disabled="disabled" style="background-color:rgb(245,245,245)"/></td>
+            </tr>
+            <tr>
+                <td style="text-align:center;padding-top:10px;" colspan="4"><input type="checkbox" id="containFour" /><label for="containFour"> 不含4</label>　　　　　<input type="checkbox" id="containSeven" /><label for="containSeven"> 不含7</label></td>
+            </tr>
+        </table>
+        <div id="cont" style="width:100%;margin-bottom:10px;text-align:left;">
+            <fieldset>
+                <legend><span style="display:block;margin-left:10px;margin-right:10px;font-size:20px;">电话分机 </span> </legend>
+                <div style="margin-top:10px;margin-bottom:10px;text-align:center;">
+                    前缀 <input type="text" id="qianzhuiphone" class="k-textbox" style="height:22px" />　＋　房号后 <input type="text" id="weishuphone" class="k-textbox" style="height:22px" /> 位　＋　后缀 <input type="text" id="houzhuiphone" class="k-textbox" style="height:22px" />
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend><span style="display:block;margin-left:10px;margin-right:10px;font-size:20px;">门锁ID </span> </legend>
+                <div style="margin-top:10px;margin-bottom:10px;text-align:center;">
+                    前缀 <input type="text" id="qianzhuikey" class="k-textbox" style="height:22px" />　＋　房号后 <input type="text" id="weishu" class="k-textbox" style="height:22px" /> 位　＋　后缀 <input type="text" id="houzhuikey" class="k-textbox" style="height:22px" />
+                </div>
+            </fieldset>
+        </div>
+        <div class="formButtons">
+            <button class="k-primary k-button" id="reviewButton" role="button" data-role="button">预览</button>&nbsp;&nbsp;
+            <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+        </div>
+    </div>
+    <div id="showmsg">
+
+    </div>
+
+</div>
+ 
+<script type="text/javascript">
+    $(function () {
+        $(".editFormTable input[type='text']").addClass("k-textbox");
+        $("#cont input[type='text']").addClass("textboxclass");
+        $(".k-window").width(600);
+    });
+    $("#closeEditFormButton").click(function (e) {
+        e.preventDefault();
+        closeEditFormWindow();
+    });
+    function save(arr,oplog) { 
+        $.post("@Url.Action("BatchAdd")", { roomsadd: arr, log: oplog }, function (data) { 
+            if (data.Success) { 
+               
+                $($("#mainContent iframe")[0].contentWindow.document).find("iframe[src$='RoomManage']")[0].contentWindow.gridread();
+                
+            } else {
+                var message = "<font color='red'>操作错误！</font>\n 所增加房间已存在。";
+                jAlert(message,"知道了");
+            }
+        }, 'json');
+    }
+
+
+    $("#reviewButton").click(function (e) {
+        var a = $("#NoBegin").val();
+        var b = $("#NoEnd").val();
+        var qz = $("#qzhui").val();
+        var numlen = $("#numlength").val();
+        var rtype = $("#roomtype").val();
+        var rtypename = $("#roomtype").data("kendoDropDownList").text();
+        var fno = $("#floorno").val();
+        var qzphone = $("#qianzhuiphone").val();
+        var hzphone = $("#houzhuiphone").val();
+        var wsphone = $("#weishuphone").val();
+        var qzkey = $("#qianzhuikey").val();
+        var hzkey = $("#houzhuikey").val();
+        var ws = $("#weishu").val();
+        if (a.length <= 0 || isNaN(a)) {
+            jAlert("起始编号请输入数字！"); return;
+        }
+        if (b.length <= 0 || isNaN(b)) {
+            jAlert("结束编号请输入数字！"); return;
+        }
+        showmsg.style.display = "";
+        var contents = "<div style='max-height:450px;overflow:auto;'><table id=viewtb><tr class='trtitle'><td>房号</td><td>房类</td><td>层号</td><td>电话分机</td><td>门锁ID</td></tr>";
+        var arr = {}; var s = 0;
+        var fanghaoa = ""; var fanghaob = ""; var keyida = ""; var keyidb = "";
+        for (var i = a; i <= b; i++) {
+            if (($("#containFour").is(":checked") && i.toString().indexOf('4') > -1) || ($("#containSeven").is(":checked") && i.toString().indexOf('7') > -1)) {
+                continue;
+            }
+
+            var fanghao = qz + "" + i;
+            if (numlen - fanghao.length > 0) {
+                fanghao = qz;
+                for (var j = 0; j < numlen - (qz + "" + i).length; j++) {
+                    fanghao += "0";
+                }
+                fanghao += i;
+            }
+            var keyid = fanghao.substr(fanghao.length - ws);
+            var phoneId = fanghao.substr(fanghao.length - wsphone); 
+            if (i == a) { fanghaoa = fanghao; } if (i == b) { fanghaob = fanghao; }
+            contents += "<tr><td>" + fanghao + "</td><td>" + rtypename + "</td><td>" + '@ViewBag.floorname' + "</td><td>" + qzphone + phoneId + hzphone + "</td><td>" + qzkey + keyid + hzkey + "</td></tr>";
+            arr[s] = { "RoomNo": fanghao, "RoomTypeid": rtype, "Tel": qzphone + fanghao + hzphone, "Lockid": qzkey + keyid + hzkey, "Floorid": '@ViewBag.floorid', "FloorName": '@ViewBag.floorname', "RoomTypeName": rtypename };
+            s++;
+        }
+        contents += "</table></div>";
+        var isctn = "";
+        if (($("#containFour").is(":checked") && i.toString().indexOf('4') > -1)) {
+            isctn = "其中不包含尾号为4的房号,"
+        }
+        if (($("#containSeven").is(":checked") && i.toString().indexOf('7') > -1)) {
+            if (isctn == "") {
+                isctn += "其中不包含尾号为7的房号,"
+            } else {
+                isctn = "其中不包含尾号为4和7的房号,"
+            }
+        } 
+        var oplog = "批量增加房间资料 房间编号从" + fanghaoa + "到" + fanghaob + "," + isctn + "房型名称：" + rtypename + ",楼层名：" + '@ViewBag.floorname' + ",电话分机：" + qzphone + "+房间号后" + wsphone + "位+" + hzphone + ",门锁ID：" + qzkey + "+房间号后" + ws + "位+" + hzkey;//操作日志记录 
+        contents += " <div class=\"formButtons\" style='margin-top:10px'><button class=\"k-primary k-button\" id=\"sureButton\" role=\"button\" data-role=\"button\" onclick='save(" + JSON.stringify(arr) + ",\"" + oplog + "\")' >保存 </button>&nbsp;&nbsp;<button onclick='data.style.display = \"\";showmsg.style.display = \"none\";' class=\"k-primary k-button\" id=\"returnbutton\" role=\"button\" data-role=\"button\">返回</button></div>";
+        data.style.display = "none";
+        showmsg.innerHTML = contents;
+    });
+
+
+</script>
+<style type="text/css">
+    .textboxclass {
+        width: 40px;
+        border: 1px solid gray;
+    }
+
+    fieldset {
+        display: block;
+        -webkit-padding-before: 0.35em;
+        -webkit-padding-start: 0.75em;
+        -webkit-padding-end: 0.75em;
+        -webkit-padding-after: 0.625em;
+        border-width: 1px;
+        border-color: rgb(204,204,204);
+        border-radius: 4px;
+        border-style: solid;
+    }
+
+    #viewtb {
+        border-collapse: collapse;
+        border-spacing: 0;
+        width: 100%;
+        text-align: center;
+        border: 1px solid rgb(204,204,204);
+        line-height: 40px;
+    }
+
+        #viewtb td {
+            border: 1px solid rgb(204,204,204);
+        }
+
+    .trtitle td {
+        text-align: center;
+        background-color: rgb(245,245,245);
+    }
+</style>

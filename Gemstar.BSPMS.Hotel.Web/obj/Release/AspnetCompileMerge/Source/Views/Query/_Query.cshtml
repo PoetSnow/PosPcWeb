@@ -1,0 +1,29 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Models.Query.QueryModel
+<div style="width:450px;height:auto;max-height:530px;margin-bottom:20px;overflow:auto;">
+    @{
+        if (Model.ProcedureParameters.Count == 0)
+        {
+            <p class="error">请指定查询对象</p>
+        }
+        else
+        {
+            var count = Model.ProcedureParameters.Count;
+            @Html.Hidden("parameterCount", count)
+            <table id="commonQueryTable">
+                @for (int i = 0; i < count; i++)
+                {
+                    var para = Model.ProcedureParameters[i];
+                    @Html.Hidden(string.Format("pname_{0}", i), para.ParameterName)
+                    @Html.Action("Parameter", "Query", new { area = "", parameterName = para.ParameterName, procValues=Model.ParameterValues, defaulValue=para.DefaulValue, displayParameterName=para.DisplayParameterName, index = i })
+                }
+            </table>
+        }
+    }
+</div>
+<div style="text-align:center;margin-bottom:20px;">
+    <button class="k-primary k-button" onclick="doCommonQuery()" role="button" data-role="button">查询</button>&nbsp;&nbsp;
+    <button class="k-primary k-button" onclick="closeCommonQueryWindow()" role="button" data-role="button">返回</button>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () { $("#commonKendoWindow").parent().css("width", "500px"); });
+</script>

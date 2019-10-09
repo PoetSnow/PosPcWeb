@@ -1,0 +1,74 @@
+﻿
+@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "渠道设置";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForQuery = false,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("code").Title("渠道代码");
+            c.Bound("name").Title("渠道名");
+            c.Bound("marketid").Title("市场分类");
+            c.Bound("refno").Title("渠道签约代码");
+            c.Bound("payItemid").Title("预付记账代码");
+            c.Bound("guaranteeItemid").Title("担保记账代码");
+            c.Bound("roomtypeid").Title("可用房型");
+            c.Bound("isShareRoom").Title("是否共享房量");
+            c.Bound("itfVersion").Title("接口版本");
+            c.Bound("isSmsToGuest").Title("发预订短信给客人");
+            c.Bound("isSmsToCustomerservice").Title("发预订短信给客服");
+            c.Bound("isWeChatToCustomerservice").Title("发预订微信给客服");
+            c.Bound("Customerservice").Title("客服人员");
+        },
+        RowTemplate = @"<tr style=#: isvalid==0?'text-decoration:line-through;color:red;':''#  onclick=#: isvalid==0?'NoEdit()':''#;  >
+                                        <td>#: code==null?'':code #</td>
+                                        <td>#: name==null?'':name  #</td>
+                                        <td>#: marketid==null?'':marketid #</td>
+                                        <td>#: refno==null?'':refno #</td>
+                                        <td>#: payItemid==null?'':payItemid #</td>
+                                        <td>#: guaranteeItemid==null?'':guaranteeItemid #</td>
+                                        <td>#: roomtypeid==null?'':roomtypeid #</td>
+                                        <td>#: isShareRoom==true?'是':'否' #</td>
+                                        <td>#: itfVersion=='direct'?'直连':itfVersion #</td>
+                                        <td>#: isSmsToGuest==true?'是':'否' #</td>
+                                        <td>#: isSmsToCustomerservice==true?'是':'否' #</td>
+                                        <td>#: isWeChatToCustomerservice==true?'是':'否' #</td>
+                                        <td>#: Customerservice==null?'':Customerservice #</td>
+                                       </tr>",
+        CustomToolbar = c =>
+        {
+            c.Custom().Name("comfirmtext").Text("<span style='float:left;display:inline-block;color:rgb(0,71,147);margin-right:50px;padding-top:8px;'>需开通渠道，请联系软件销售人员。</span>").HtmlAttributes(new { id = "comfirmtext", href = "javascript:void(0);", style = "cursor:default;" });
+            c.Custom().Name("comfirmtext").Text("<span style='float:right;display:inline-block;color:red;margin-right:50px;padding-top:8px;'>双击可修改已开通渠道</span>").HtmlAttributes(new { id = "comfirmtext1", href = "javascript:void(0);", style = "cursor:default;" });
+
+        }
+    };
+}
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+<script type="text/javascript">
+        function NoEdit() {
+            jAlert("渠道未开通，不可修改！", "知道了");
+        }
+        $(function () {
+            $("#comfirmtext").removeClass("k-button");
+            $("#comfirmtext1").removeClass("k-button");
+
+
+        });
+</script>
+}

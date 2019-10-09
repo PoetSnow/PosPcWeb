@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>快点云Pos系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "微软雅黑","Microsoft YaHei",Arial,Helvetica,sans-serif,"宋体";
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            text-align: center;
+        }
+
+        div {
+            margin-top: 25%;
+            font-size: 2.5rem;
+        }
+
+        .css {
+            -webkit-transform-style: preserve-3d;
+            -webkit-backface-visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="welcome">欢迎使用快点云Pos系统，系统正在启动，请稍候……</div>
+    <a id="url" href="http://pos.gshis.com" hidden></a>
+    <script type="text/javascript">
+        window.onload = function () {
+            var url = document.getElementById("url").href;
+            location.replace(url);
+
+            //if ("undefined" != typeof jsObject) {   //调用自定义Js对象
+            //    jsObject.Hello();
+            //}
+        }
+    </script>
+</body>
+</html>

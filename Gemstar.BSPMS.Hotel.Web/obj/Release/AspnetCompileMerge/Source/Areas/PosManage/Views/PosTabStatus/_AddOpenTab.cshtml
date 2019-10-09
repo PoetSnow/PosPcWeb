@@ -1,0 +1,139 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosTabStatus.OpenTabAddViewModel
+
+@using (Html.BeginForm("AddOpenTab", "PosTabStatus", new { rnd = new Random().NextDouble() }))
+{
+    @Html.HiddenFor(m => m.Tabid)
+    @Html.HiddenFor(m => m.TabNo)
+    @Html.HiddenFor(m => m.Refeid)
+    @Html.HiddenFor(m => m.OpenInfo)
+    @Html.HiddenFor(m => m.ReturnType)
+    @Html.HiddenFor(m => m.BillBsnsDate)
+    <table class="editFormTable">
+        <tr class="otbName">
+            <td class="textright">@Html.LabelFor(m => m.Name)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Name).HtmlAttributes(new { style = "width:80%;", onfocus = "closeTips()" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+        </tr>
+        <tr class="otbIGuest">
+            <td class="textright">@Html.LabelFor(m => m.IGuest)</td>
+            <td>
+                @Html.Kendo().IntegerTextBoxFor(m => m.IGuest).Min(1).HtmlAttributes(new { style = "width:80%;" })
+                <i class="fa fa-keyboard-o fa-3x" style="float:right;" onclick="numberInput(this,'.otbIGuest i')" data-keyboardShow="1" aria-hidden="true"></i>
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.IGuest, "*")</td>
+        </tr>
+        <tr class="otbMobile">
+            <td class="textright">@Html.LabelFor(m => m.Mobile)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Mobile).HtmlAttributes(new { style = "width:80%;", onfocus = "closeTips()" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Mobile, "*")</td>
+        </tr>
+        <tr class="otbCustomerTypeid">
+            <td class="textright">@Html.LabelFor(m => m.CustomerTypeid)</td>
+            <td>@(Html.Kendo().DropDownListFor(e => e.CustomerTypeid).HtmlAttributes(new { style = " width:80%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosCustomerTypeByModules", "BasicDataPosCustomerType", new { rnd = new Random().NextDouble() })).ServerFiltering(true); }))</td>
+            <td>@Html.ValidationMessageFor(m => m.CustomerTypeid, "*")</td>
+        </tr>
+        <tr class="otbSale">
+            <td class="textright">@Html.LabelFor(m => m.Sale)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Sale).HtmlAttributes(new { style = "width:80%;", onfocus = "closeTips()" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Sale, "*")</td>
+        </tr>
+        <tr class="otbCardNo">
+            <td class="textright">@Html.LabelFor(m => m.CardNo)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.CardNo).HtmlAttributes(new { style = "width:80%;", onfocus = "closeTips()" })</td>
+            <td>@Html.ValidationMessageFor(m => m.CardNo, "*")</td>
+        </tr>
+        <tr class="otbOpenMemo">
+            <td class="textright">@Html.LabelFor(m => m.OpenMemo)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.OpenMemo).HtmlAttributes(new { style = "width:80%;", onfocus = "closeTips()" })</td>
+            <td>@Html.ValidationMessageFor(m => m.OpenMemo, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button id="saveEditFormButtonForAjax" role="button" data-role="button">确定</button>
+        <button id="closeEditFormButtonA" role="button" data-role="button">关闭</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButtonForAjax").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButtonForAjax"));
+        });
+
+        $("#closeEditFormButtonA").click(function (e) {
+            e.preventDefault();
+            layer.closeAll();
+        });
+
+        var openinfo = $("#OpenInfo").val().split(',');
+        $(".editFormTable tr").hide();
+        for (var i = 0; i < openinfo.length; i++) {
+            if (openinfo[i] == 'A') {
+                $(".otbIGuest").show();
+                $(".otbIGuest input").focus();
+            }
+            else if (openinfo[i] == 'B') {
+                $(".otbName").show();
+            }
+            else if (openinfo[i] == 'C') {
+                $(".otbMobile").show();
+            }
+            else if (openinfo[i] == 'D') {
+                $(".otbCustomerTypeid").show();
+            }
+            else if (openinfo[i] == 'E') {
+                $(".otbSale").show();
+            }
+            else if (openinfo[i] == 'F') {
+                $(".otbCardNo").show();
+            }
+            else if (openinfo[i] == 'G') {
+                //$(".").show();
+            }
+            else if (openinfo[i] == 'H') {
+                //$(".").show();
+            }
+            else if (openinfo[i] == 'K') {
+                $(".otbOpenMemo").show();
+            }
+        }
+        
+        if ("undefined" != typeof jsObject) //如果是封装程序
+        {
+            $("#Name").focus(function () {
+                if (jsObject.EnableKeyboard) {
+                    jsObject.ScreenKeyboard();  //调用屏幕键盘
+                }
+            });
+            $("#Name").blur(function () {
+                if (jsObject.EnableKeyboard) {
+                    jsObject.ScreenKeyboardClose(); //关闭屏幕键盘
+                }
+            });
+
+            $("#Sale").focus(function () {
+                if (jsObject.EnableKeyboard) {
+                    jsObject.ScreenKeyboard();  //调用屏幕键盘
+                }
+            });
+            $("#Sale").blur(function () {
+                if (jsObject.EnableKeyboard) {
+                    jsObject.ScreenKeyboardClose(); //关闭屏幕键盘
+                }
+            });
+
+            $("#OpenMemo").focus(function () {
+                if (jsObject.EnableKeyboard) {
+                    jsObject.ScreenKeyboard();  //调用屏幕键盘
+                }
+            });
+            $("#OpenMemo").blur(function () {
+                if (jsObject.EnableKeyboard) {
+                    jsObject.ScreenKeyboardClose(); //关闭屏幕键盘
+                }
+            });
+        }
+    });
+</script>

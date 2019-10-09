@@ -1,0 +1,59 @@
+﻿
+@model List<Gemstar.BSPMS.Hotel.Services.ResFolioManage.ResFolioDayChargeInfo>
+
+<div>
+    <input type="hidden" id="authorizationWindow_Url" value="@Url.Action("SubmitAuthByDayCharge", "ResOrderFolio",new { area = "ResManage" })" />
+    <input type="hidden" id="authorizationWindow_UrlCallBack" value="@Url.Action("GetAuthResultByDayCharge", "ResOrderFolio",new { area = "ResManage" })" />
+    <input type="hidden" id="authorizationWindow_Type" value="4" />
+    <input type="hidden" id="authorizationWindow_Content" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model)" />
+</div>
+<div class="k-grid k-widget" style="max-height: 500px;overflow:hidden;">
+    <div class="k-grid-header" style="padding-right: 17px;">
+        <div class="k-grid-header-wrap k-auto-scrollable">
+            <table>
+                <colgroup>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="k-header">房号</th>
+                        <th class="k-header">客人名</th>
+                        <th class="k-header">房型</th>
+                        <th class="k-header">收取类型</th>
+                        <th class="k-header">收取金额</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="k-grid-content k-auto-scrollable" style="max-height: 140px;">
+        <table style="height: auto;">
+            <colgroup>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+            </colgroup>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.RoomNo</td>
+                            <td>@item.GuestName</td>
+                            <td>@item.RoomTypeName</td>
+                            <td>@item.OriginType<br/>&nbsp; &nbsp; &dArr;<br />@item.Type</td>
+                            <td>@item.OriginAmount<br />&nbsp; &nbsp; &dArr;<br />@item.Amount</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

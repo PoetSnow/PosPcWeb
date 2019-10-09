@@ -1,0 +1,224 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_TabStatusResult>
+<ul style="padding-left:10px;padding-top:20px;" id="selectPosTabList">
+    @{
+        @*if ((ViewBag.Isoutsell as bool?) == true && (ViewBag.IsVirtual as bool?) == true
+                || (ViewBag.Isoutsell as bool?) == true && (ViewBag.IsManual as bool?) == true)
+            {
+                <li class="content-list-tabStatus staus-empty tabStatusList">
+                    <a href="javascript:void(0)" onclick='openVirtualTab()'>
+                        <span style="font-size: 5rem;line-height: 5rem;">+</span>
+                    </a>
+                </li>
+            }
+
+            if ((ViewBag.Isoutsell as bool?) == true && (ViewBag.IsVirtual as bool?) == false && (ViewBag.IsManual as bool?) == false)
+            {
+                <li class="content-list-tabStatus staus-empty tabStatusList">
+                    <a href="javascript:void(0)" onclick="openTakeoutTab()">
+                        <span style="font-size: 5rem;line-height: 5rem;">+</span>
+                    </a>
+                </li>
+            }*@
+
+        if (Model != null && Model.Count > 0)
+        {
+            foreach (var tabStaus in Model)
+            {
+                <li class="content-list-tabStatus" data-staus="@tabStaus.TabStatus">
+                    <a href="javascript:void(0);" onclick="checkedTab('@tabStaus.Tabid','@tabStaus.TabName','@tabStaus.TabStatus','@tabStaus.TabNo')">
+                        <span>@tabStaus.TabName</span>
+                        <span>@tabStaus.TabNo</span>
+
+                        @if (!string.IsNullOrEmpty(tabStaus.FloorShowData))
+                        {
+                            foreach (var item in tabStaus.FloorShowData.Split(','))
+                            {
+                                if (item == "A")
+                                {
+                                    <span class="staus-empty-span">@tabStaus.OpenGuest</span>
+                                }
+                                else if (item == "B" && (tabStaus.TabStatus == 1 || tabStaus.TabStatus == 4 || tabStaus.TabStatus == 5))
+                                {
+                                    <span class="staus-empty-span">@tabStaus.GuestName</span>
+                                }
+                                else if (item == "C")
+                                {
+                                    <span class="staus-empty-span">@tabStaus.TabTypeName</span>
+                                }
+                                else if (item == "D")
+                                {
+                                    <span class="staus-empty-span">@(tabStaus.OpenRecord.HasValue ? tabStaus.OpenRecord.Value.ToString("dd HH:mm") : "")</span>
+                                }
+                            }
+
+                        }
+                    </a>
+                </li>
+            }
+        }
+
+        <li class="content-list-paging">
+            <a href="javascript:void(0)" onclick="Up()">上一页</a>
+            <a href="javascript:void(0)" onclick="Down()">下一页</a>
+        </li>
+        <li class="content-list-return" style=""><a href="javascript:void(0)" onclick="CloseSelectTab()"><img src="~/Images/posInSingle/tuic.png" /><br />关闭</a></li>
+    }
+</ul>
+
+<script>
+    var index = layer.index;
+    //关闭
+    function CloseSelectTab() {
+        layer.close(index);
+    }
+    $(function () {
+        setTabBackClassForSelect();
+
+        setItemPriceNull();
+    })
+    //设置餐台样式
+    function setTabBackClassForSelect() {
+        var list = $("#selectPosTab ").find(".content-list-tabStatus");
+        list.each(function () {
+            var status = $(this).attr("data-staus");
+            if (Number(status) === 1) {
+                $(this).addClass("staus-sit");
+            }
+            else if (Number(status) === 2) {
+                $(this).addClass("staus-intimidate");
+            }
+            else if (Number(status) === 3) {
+                $(this).addClass("staus-beAlone");
+            }
+            else if (Number(status) === 4) {
+                $(this).addClass("staus-sit");
+            }
+            else if (Number(status) === 5) {
+                $(this).addClass("staus-reserve");
+            }
+            else if (Number(status) === 6) {
+                $(this).addClass("staus-repair");
+            }
+            else if (Number(status) === 7) {
+                $(this).addClass("staus-empty");
+            }
+        });
+    }
+
+    var pageIndex = '@ViewBag.PageIndex';
+    var PageSize = '@ViewBag.PageSize';
+    var PageTotal = '@ViewBag.PageTotal';
+    var refeId = '@ViewBag.refeId';
+    //翻页
+    function Up() {
+        if (pageIndex > 1) {
+            pageIndex = parseInt(pageIndex) - 1;
+        }
+        if (index <= 1) {
+            return false;
+        }
+        else {
+            var model = {
+                Refeid: refeId,
+                PageIndex: pageIndex,
+                PageSize: PageSize
+            };
+            $.ajax({
+                url: 'PosInSingle/_SelectPosTab',
+                type: "post",
+                data: model,
+                dataType: "html",
+                success: function (data) {
+                    $("#selectPosTab").html(data);
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+    }
+
+    function Down() {
+        var number = (PageTotal % PageSize) > 0 ? parseInt(PageTotal / PageSize) + 1 : parseInt(PageTotal / PageSize);
+
+        if (parseInt(pageIndex) + 1 >number) {
+            return false;
+        }
+        else {
+            pageIndex = parseInt(pageIndex) + 1;
+        }
+        var model = {
+            Refeid: refeId,
+            PageIndex: pageIndex,
+            PageSize: PageSize
+        };
+        $.ajax({
+            url: 'PosInSingle/_SelectPosTab',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#selectPosTab").html(data);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //选择餐台
+    function checkedTab(tabId, TabName, TabStatus, tabNo) {
+        if (TabStatus != "7") {
+            layer.alert("餐台已被占用！", { title: "快点云Pos提示" });
+        }
+        else {
+            @*@Url.Action("GetPosTabInfo", "PosInSingle")*@
+            //添加餐台
+            $.ajax({
+                url: 'PosInSingle/_GetPosTabInfo',
+                type: "post",
+                data: { tabId: tabId, RefeId: refeId },
+                dataType: "json",
+                success: function (data) {
+                    if (data.Success) {
+                        $("#newServiceRate").val(data.Data.newServiceRate);
+                        $("#newLimit").val(data.Data.newLimit);
+                        $("#newTabName").val(TabName)
+                        $("#newTabId").val(tabId);
+                        $("#newTabNo").val(tabNo);
+                        CloseSelectTab();
+                    }
+                    else
+                        layer.alert("选择餐台出错！", { title: "快点云Pos提示" });
+
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+
+        }
+    }
+
+    function setItemPriceNull() {
+        var totalCount = 24;
+        var html = "";
+        var liCount = $("#selectPosTabList").find(".content-list-tabStatus").length + 2;
+        for (var i = 0; i < totalCount - liCount; i++) {
+            html += '<li class="content-list-tabStatus staus-empty" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+        }
+        $("#selectPosTabList .content-list-paging").before(html);
+
+    }
+</script>
+<style>
+    #selectPosTab {
+        background-color: #454545;
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+    }
+
+        #selectPosTab span {
+            font-size: 0.8rem;
+        }
+</style>

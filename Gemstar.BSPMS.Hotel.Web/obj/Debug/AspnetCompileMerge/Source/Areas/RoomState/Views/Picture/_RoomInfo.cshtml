@@ -1,0 +1,27 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntityProcedures
+@model List<UpQueryRoomStatuDetailInfoResult>
+
+@foreach (var info in Model)
+{
+    if (info.Name == "客名")
+    {
+      
+        <p><span class="span-color">@info.Name：</span><span class="color">@info.Value</span></p>
+    }
+    else if (info.Name == "欠费金额"||info.Name== "钟点剩时")
+    {
+        <p><span class="span-color">@info.Name：</span><span class="red-color">@info.Value</span></p>
+    }
+    else if (info.Name == "押金余额")
+    {
+        <p><span class="span-color">@info.Name：</span><span class="color" style="color:green">@info.Value</span></p>
+    }
+    else if (info.Name == "分割线")
+    {
+        <p>--------------------------</p>
+    }
+    else
+    {
+        <p><span class="span-color">@info.Name：</span><span class="black-color">@info.Value</span></p>
+    }
+}

@@ -1,0 +1,87 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItemRefe.PosItemRefeAddViewModel
+
+<style>
+    .k-panelbar > li.k-state-default > .k-link {
+        color: #333;
+    }
+</style>
+
+<script type="text/javascript">
+    function refeId__paras() {
+        var item = $("#Refeid").data("kendoDropDownList");
+        var Refeid = item.value();
+        return {
+            Refeid: Refeid,
+
+        };
+    }
+    function refeChanged() {
+        var Shuffleid = $("#Shuffleid").data("kendoMultiSelect");
+        Shuffleid.dataSource.read();
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Itemid)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Itemid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").Filter("contains").DataSource(e => { e.Read(r => r.Action("ListItemsForPosItem", "BasicDataPosItem", new { rnd = new Random().NextDouble() })); }).OptionLabel("请选择消费项目")</td>
+            <td>@Html.ValidationMessageFor(m => m.Itemid, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Refeid)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Refeid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").Filter("contains").DataSource(e => { e.Read(r => r.Action("ListItemsForPosRefe", "BasicDataPosRefe", new { rnd = new Random().NextDouble() })); }).OptionLabel("请选择营业点").Events(e => e.Change("refeChanged"))</td>
+            <td>@Html.ValidationMessageFor(m => m.Refeid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.ProdPrinter)</td>
+            <td>@Html.Kendo().MultiSelectFor(m => m.ProdPrinter).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForProdPrinterByModules", "BasicDataPosProdPrinter", new { moduleCode = "CY", rnd = new Random().NextDouble() })); }).AutoClose(false).Placeholder("请选择出品打印机")</td>
+            <td>@Html.ValidationMessageFor(m => m.ProdPrinter, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Shuffleid)</td>
+            <td>@Html.Kendo().MultiSelectFor(e => e.Shuffleid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosShuffle", "BasicDataPosShuffle", new { rnd = new Random().NextDouble() }).Data("refeId__paras")); }).AutoClose(false).Placeholder("请选择市别")</td>
+            <td>@Html.ValidationMessageFor(m => m.Shuffleid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.SentPrtNo)</td>
+            <td>@Html.Kendo().MultiSelectFor(m => m.SentPrtNo).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForProdPrinterByModules", "BasicDataPosProdPrinter", new { moduleCode = "CY", rnd = new Random().NextDouble() })); }).AutoClose(false).Placeholder("请选择传菜打印机")</td>
+            <td>@Html.ValidationMessageFor(m => m.SentPrtNo, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.IsDepartPrint)</td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsDepartPrint).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsDepartPrint, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.Seqid).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.IsTabPrint)</td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsTabPrint).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsTabPrint, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+
+</script>

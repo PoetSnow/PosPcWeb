@@ -1,0 +1,27 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_BillDetailActionGroupResult>
+<ul style="position:relative;padding:10px;">
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+
+                <li class="content-list-detail">
+                    <a href="javascript:void(0)" data="@item.Igroupid" data-ids="@item.Ids" data-igroupid="@item.Igroupid" onclick="getSelActionGroup(this,'@Url.Action("GetActionPageIndex", "PosInSingle")','@Url.Action("_ActionList", "PosInSingle")','@Url.Action("GetActionTotal", "PosInSingle")')" style="width:100%;height:100%;">
+                        <span>@*@item.Code*@</span>
+                        <span>@item.ActionName</span>
+                        <span>@*@(Convert.ToDecimal(item.Price == null ? 0 : item.Price).ToString("C"))*@</span>
+                        <span>@*<i class="fa fa-check"></i>*@</span>
+                    </a>
+                </li>
+            }
+
+        }
+        <li class="content-list-detail">
+            <a href="javascript:void(0)" onclick="newActionGroup(this,'@Url.Action("GetActionPageIndex", "PosInSingle")','@Url.Action("_ActionList", "PosInSingle")','@Url.Action("GetActionTotal", "PosInSingle")')">
+                @*<span>@item.Igroupid</span>*@
+                <span style="font-size:5rem; line-height:5rem;">+</span>
+            </a>
+        </li>
+    }
+</ul>

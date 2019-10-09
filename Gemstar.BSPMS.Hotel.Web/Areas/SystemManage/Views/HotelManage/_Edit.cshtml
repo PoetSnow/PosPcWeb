@@ -1,0 +1,181 @@
+﻿
+@Html.Partial("_HeaderCss")
+@Html.Partial("_HeaderJs")
+@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.HotelManage.PmsHotelEditViewModel
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Hid)
+    <div>
+
+        <div style="margin-left:13%; width:30%;text-align:left;margin-top:40px;display:inline-block;" align="center">
+            <div style="font-size:18px;margin-left:2px;color:black;margin-bottom:10px;">信息修改</div>
+            <hr />
+            <table style="text-align:left;margin-top:30px;" class="editFormTable">
+               @if (ViewBag.isGroup != null && ViewBag.isGroup)
+               {
+                 <tr>
+                    <td class="td-one tdwidth">@Html.LabelFor(m => m.Grpid)：</td>
+                    <td class="td-two">
+                        <input id="dd" type="text" disabled="disabled" class="k-textbox" style="width:100%;margin-bottom:1px;background-color:rgb(245,245,245)" value="@ViewBag.grpname" />
+                        @Html.TextBoxFor(m => m.Grpid, new { @class = "k-textbox", style = "width:100%;display:none;" })
+                    </td>
+                    <td>@Html.ValidationMessageFor(m => m.Grpid)</td>
+                </tr>
+               }
+                <tr>
+                    <td class="td-one tdwidth">@Html.LabelFor(m => m.Hid)：</td>
+                    <td class="td-two">
+                        <input id="dd" type="text" disabled="disabled" class="k-textbox" style="width:100%;margin-bottom:1px;background-color:rgb(245,245,245)" value="@Model.Hid" />
+                        @Html.TextBoxFor(m => m.Hid, new { @class = "k-textbox", style = "width:100%;display:none;" })
+                    </td>
+                    <td>@Html.ValidationMessageFor(m => m.Hid)</td>
+                </tr>
+                <tr>
+                    <td class="td-one tdwidth">@Html.LabelFor(m => m.Name)：</td>
+                    <td class="td-two">
+                        <input id="dd" type="text" disabled="disabled" class="k-textbox" style="width:100%;margin-bottom:1px;background-color:rgb(245,245,245)" value="@Model.Name" />
+                        @Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;display:none;" })
+                    </td>
+                    <td>@Html.ValidationMessageFor(m => m.Name)</td>
+                </tr>
+                <tr>
+                    <td class="td-one tdwidth">@Html.LabelFor(m => m.Hotelshortname)：</td>
+                    <td class="td-two">
+
+                        @Html.TextBoxFor(m => m.Hotelshortname, new { @class = "k-textbox", style = "width:100%;" })
+                    </td>
+                    <td>@Html.ValidationMessageFor(m => m.Hotelshortname)</td>
+                </tr>
+                <tr>
+                    <td class="td-one tdwidth">城市选择：</td>
+                    <td class="td-two">
+                        @Html.Kendo().DropDownListFor(m => m.Provinces).HtmlAttributes(new { style = " width:49%;" }).OptionLabel("全部").DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetProvinceSelectList", "HotelManage")); })
+                        <script type="text/javascript">
+                            function filterCitys() {
+                                return {
+                                    key: $("#Provinces").val(),
+                                    r: Math.random()
+                                };
+                            }
+                        </script>
+                        @Html.Kendo().DropDownListFor(m => m.City).HtmlAttributes(new { style = " width:49%;" }).OptionLabel("全部").DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetCitySelectList", "HotelManage").Data("filterCitys")).ServerFiltering(true); }).Enable(false).AutoBind(false).CascadeFrom("Provinces")
+                    </td>
+                    <td>@Html.ValidationMessageFor(m => m.Provinces)</td>
+
+                </tr>
+                <tr>
+                    <td class="td-one tdwidth">星级：</td>
+                    <td class="td-two">
+
+                        @Html.Kendo().DropDownListFor(e => e.Star).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("getStarList", "HotelManage")); })
+                    </td>
+                    <td>@Html.ValidationMessageFor(m => m.Star)</td>
+
+                </tr>
+                @if (ViewBag.isGroup!=null && ViewBag.isGroup)
+                {
+                    <tr>
+                        <td class="td-one tdwidth">@Html.LabelFor(m => m.ManageType)：</td>
+                        <td class="td-two">
+
+                            @Html.Kendo().DropDownListFor(e => e.ManageType).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("getManageTypeList", "HotelManage")); })
+                        </td>
+                        <td>@Html.ValidationMessageFor(m => m.ManageType)</td>
+
+                    </tr>
+                }
+                <tr>
+                    <td class="td-one tdwidth">@Html.LabelFor(m => m.address)：</td>
+                    <td class="td-two">
+                        @Html.TextBoxFor(m => m.address, new { @class = "k-textbox", style = "width:100%;" })
+                    </td>
+                    <td>@Html.ValidationMessageFor(m => m.address)</td>
+
+                </tr>
+
+                <tr>
+                    <td class="td-one tdwidth">经&nbsp;&nbsp;纬&nbsp;&nbsp;度：</td>
+                    <td class="td-two">
+                        @Html.TextBoxFor(m => m.Coordinate, new { @class = "k-textbox", id = "coordinate", style = "width:80%;" })
+                        <a class="k-button k-button- icontext" onclick="getLoc()"><span class=""> </span> 地图</a>
+                        <span class="font-size"></span>
+                    </td>
+                    <td>@Html.ValidationMessageFor(m => m.Coordinate)</td>
+
+                </tr>
+                <tr>
+                    <td class="td-one tdwidth">　　邮　　箱：</td>
+                    <td class="td-two">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "k-textbox", style = "width:100%;" })
+                    </td>
+                    <td>@Html.ValidationMessageFor(m => m.Email)</td>
+                </tr>
+                <tr>
+                    <td class="td-one tdwidth">　　手&nbsp;&nbsp;机&nbsp;&nbsp;号：</td>
+                    <td class="td-two">
+                        <input id="dd" type="text" disabled="disabled" class="k-textbox" style="width:100%;margin-bottom:1px;background-color:rgb(245,245,245)" value="@Model.Mobile" />
+                        @Html.TextBoxFor(m => m.Mobile, new { @class = "k-textbox", style = "width:100%;display:none;" })
+                    </td>
+                    <td>@Html.ValidationMessageFor(m => m.Mobile)</td>
+                </tr>
+                <tr>
+                    <td class="td-one tdwidth">　电　　话：</td>
+                    <td class="td-two">
+                        @Html.TextBoxFor(m => m.tel, new { @class = "k-textbox", style = "width:100%;" })
+                    </td>
+                    <td>@Html.ValidationMessageFor(m => m.tel)</td>
+                </tr>
+
+            </table>
+            <div class="formButtons" align="center" id="aa" style="text-align:center;margin-left:140px;">
+                <a class="k-button k-button-icontext k-grid-cancel-changes" href="javascript: void(0)" onclick="cancel()"><span class="k-icon k-cancel"></span>取消修改</a>
+                <a class="k-button k-button- icontext k-grid-save-changes" onclick="saves()"><span class="k-icon k-update"> </span> 保存修改</a>
+            </div>
+        </div>
+        <div id="Bmap" style="float:right;margin-top:80px;display:none;">
+            <div id="allmap" style="width:400px;height:400px;left:-360px;border-style:solid;"></div>
+            <div style="position:relative;left:-360px;color:red;">（点击地图具体位置拾取经纬度）</div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=vckVrRkO3QMWxMsGv6TkU7USc3AZPGez"></script>
+<script type="text/javascript">
+
+    function getLoc() {
+        //百度地图API功能
+        $("#Bmap").css("display", "");
+        var map = new BMap.Map("allmap");
+        map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);
+        map.enableScrollWheelZoom();
+        map.enableInertialDragging();
+        var local = new BMap.LocalSearch(map, {
+            renderOptions: { map: map }
+        });
+        var address = $("#address").val();
+        local.search(address);
+        map.addEventListener("click", function (e) {
+            //alert(e.point.lng + "," + e.point.lat);
+            $("#coordinate").val(e.point.lng + "," + e.point.lat);
+        });
+    }
+    function saves() {
+        var f = $("#Mobile")[0].form;
+        $.post(
+            $(f).attr("action").replace("Index", "Edit"),
+            $(f).serialize(),
+            function (data) {
+                if (data.Success) {
+                    history.go(0);
+                } else {
+                    jAlert("你没有修改的权限！");
+                }
+            },
+            "json");
+    }
+    function cancel() {
+        document.forms[0].reset();
+    }
+</script>
+

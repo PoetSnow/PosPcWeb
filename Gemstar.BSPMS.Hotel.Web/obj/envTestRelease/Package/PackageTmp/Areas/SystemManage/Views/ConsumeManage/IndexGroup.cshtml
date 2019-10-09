@@ -1,0 +1,185 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "消费项目";
+    var hotelItems = new List<SelectListItem>();
+    if (ViewBag.Hotels != null)
+    {
+        hotelItems.Add(new SelectListItem { Value = "", Text = "全部" });
+        foreach (var hotel in ViewBag.Hotels)
+        {
+            hotelItems.Add(new SelectListItem { Value = hotel.Hid, Text = (string.IsNullOrEmpty(hotel.Hotelshortname) ? hotel.Name : hotel.Hotelshortname) });
+        }
+    }
+    var gridIdP = "gridConsumeClassify";
+    var keyColumnNameP = "id";
+    var gridFatherName = "name";
+
+    var gridViewModelP = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridIdP,
+        JsFuncForGetAjaxQueryPara = "getFatherQueryParas",
+        KeyColumnName = keyColumnNameP,
+        EnableFunctionForPage = true,
+        EnableFunctionForDelete = false,
+        EnableFunctionForQuery = false,
+        EnableFunctionForAdd = false,
+        EnableCustomToolbarForFirst = false,
+        EnableFunctionForEnable = false,
+        EnableFunctionForDisable = false,
+        EnableScrollable = true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("hotelname").Title("分店");
+            c.Bound("code").Title("消费代码");
+            c.Bound("name").Title("消费类型");
+            c.Bound("seqid").Title("排序号");
+            c.Command(e => e.Custom("下级").HtmlAttributes(new { onclick = "selectFatherRow(this)", Href = "javascript:void(0);" }))
+            .Width("110px")
+            .Title("操作");
+        },
+        CustomToolbar = c =>
+        {
+        c.Template(@<text>
+        分店
+        @(Html.Kendo().DropDownList().Name("Hotelname").DataTextField("Text").DataValueField("Value").BindTo(hotelItems))
+        消费类型 <input id='fname' style='height:26px;border:1px solid #ccc;width:70px;' /> <input type='button' value='查询' class='k-button k-button-icontext k-grid-commonQuery' onclick='queryData()' />
+        <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addGridItemConsumeClassifyGroup()"><span class="k-icon k-add"></span>增加</a>
+        <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="batchDelete('gridConsumeClassify','pk','/SystemManage/ConsumeClassifyGroupManage/BatchDelete')"><span class="k-icon k-i-unpin"></span>删除</a>
+        </text>);
+        }
+    };
+
+
+    //下级列表
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var columnName = "@s17消费类型";
+    var btnShowId = "TitleMemberId";
+    var btnShowName = "消费类型：";
+    var colsDefault = new List<GridColumnSetting>
+       {
+                new GridColumnSetting {Name = "hotelName", Title = "分店", Hidden = false, Order = 1, Width = 0},
+                new GridColumnSetting {Name = "code", Title = "项目代码", Hidden = false, Order = 2, Width = 0},
+                new GridColumnSetting {Name = "name", Title = "项目名称", Hidden = false, Order = 3, Width = 0},
+                new GridColumnSetting {Name = "price", Title = "含税单价", Hidden = false,Order = 4, Width = 0},
+                new GridColumnSetting {Name = "nights", Title = "统计间夜数", Hidden = false,Order = 5, Width = 0},
+                new GridColumnSetting {Name = "action", Title = "处理方式", Hidden = false,Order = 6, Width = 0},
+                new GridColumnSetting {Name = "staType", Title = "统计分类", Hidden = false,Order = 7, Width = 0},
+                new GridColumnSetting {Name = "invoiceItemid", Title = "发票项目", Hidden = false,Order = 8, Width = 0},
+                new GridColumnSetting {Name = "taxrate", Title = "增值税率（%）", Hidden = false,Order = 9, Width = 0},
+                new GridColumnSetting {Name = "isInput", Title = "是否可手工录入", Hidden = false,Order = 10, Width = 0},
+                new GridColumnSetting {Name = "isQuantity", Title = "是否录入数量", Hidden = false,Order = 11, Width = 0},
+                new GridColumnSetting {Name = "notScore", Title = "是否可积分", Hidden = false,Order = 12, Width = 0}, 
+    };
+    if (ViewBag.isallowOwner)
+    {
+        colsDefault.Add(new GridColumnSetting { Name = "isOwnerFee", Title = "是否业主费用", Hidden = false, Order = 13, Width = 0 });
+        colsDefault.Add(new GridColumnSetting { Name = "isOwnerAmount", Title = "是否计入业主房租", Hidden = false, Order = 14, Width = 0 });
+    } 
+     colsDefault.Add(new GridColumnSetting { Name = "seqid", Title = "排序号", Hidden = false, Order = 15, Width = 0 });
+    
+    var gridViewModel = new KendoGridCustomDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForPage = true,
+        EnableFunctionForDelete = true,
+        EnableFunctionForQuery = false,
+        EnableFunctionForAdd = false,
+        EnableCustomToolbarForFirst = true,
+        EnableFunctionForEnable = true,
+        EnableFunctionForDisable = true,
+        EnableScrollable = true,
+        StatusColumnName = "status",
+        Area = "SystemManage",
+        Controller = "ConsumeManage",
+        Action = "Index",
+        DefaultColumnSettings = colsDefault,
+        CustomToolbar = c =>
+        {
+            c.Custom().Name("paywaytype").Text("　消费类型：0层　").HtmlAttributes(new { id = @btnShowId, href = "javascript:void(0);", style = "cursor:default" });
+            c.Custom().Name("comfirmtext").Text("<font style='color:red'>双击可修改，自定义代码不能尾数为0（尾数为0是系统固定代码）</font>").HtmlAttributes(new { id = "comfirmtext", href = "javascript:void(0);", style = "cursor:default;cursor:default;margin-right:20px;" });
+            c.Custom().Name("commonQuery").Text("查询").HtmlAttributes(new { id = "queryGridItems", onclick = "showCommonQueryWindow()", href = "javascript:void(0);" });
+            c.Custom().Name("addGridItem").Text("增加").HtmlAttributes(new { id = "addGridItems", onclick = "addGridItemNew()", href = "javascript:void(0);" });
+        }
+    };
+}
+<div style="width:30%; float:left;">
+    @Html.Partial("_KendoGridDataRowView", gridViewModelP)
+</div>
+<div style="width:68%; float:right;">
+    @Html.Partial("_KendoGridCustomDataRowView", gridViewModel)
+</div>
+<input type="hidden" id="querytext" />
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+
+<script type="text/javascript">
+    $(function () {
+        //  $("#gridConsumeClassify .k-grid-header th:eq(2) .k-link").click();
+        $("#" + "@btnShowId").removeClass("k-button");
+        $("#comfirmtext").removeClass("k-button");
+        //var c = $("#grid").width() - 892;
+        //$("#comfirmtext").css("margin-left", c);
+        //$("#comfirmtxt").removeClass("k-button");
+        $(".k-grid-content").css("max-height", "650px");
+        $("#gridConsumeClassify").attr('ondblclick', '').unbind('dblclick').on("dblclick", "tr.k-state-selected", function (e) {
+            var gridId = "gridConsumeClassify";
+            var keyName = "pk";
+            var grid = $("#" + gridId).data("kendoGrid");
+            var data = grid.dataItem($(this));
+            top.openKendoWindow("修改消费类型", "/SystemManage/ConsumeClassifyGroupManage/Edit", { id: data[keyName] });
+        });
+    });
+
+
+    function gridConsumeClassify_dataBoundEnded() {
+        var firstBtn = $("[onclick='selectFatherRow(this)']:first");
+        firstBtn.click();
+    }
+    function selectFatherRow(column) {
+        var grid = $("#" + "@gridIdP").data("kendoGrid");
+        var data = grid.dataItem($(column).parent().parent());
+        selectDoCommonQuery(data["@keyColumnNameP"], data["@gridFatherName"], data["code"]);
+        var btnwidth = $("#" + "@btnShowId").width();
+        var c = $("#grid").width() - 865 - btnwidth;
+        $("#comfirmtext").css("margin-left", c);
+    }
+    function selectDoCommonQuery(id, name, code) {
+        document.getElementById('commonQueryParameterValues').value = ("@columnName" + "=" + id);
+        $("#" + "@btnShowId").html("<span></span>" + "@btnShowName" + code + " " + name);
+        var grid = $("#" + $("#commonQueryGridId").val()).data("kendoGrid");
+        grid.dataSource.read();
+    }
+    function addGridItemNew() {
+        var value = document.getElementById('commonQueryParameterValues').value;
+        value = value.replace(("@columnName" + "="), "");
+        top.openKendoWindow("增加" + "@ViewBag.Title", "/SystemManage/ConsumeManage/Add?pcid=" + value);
+    }
+    //father js
+    function getFatherQueryParas() {
+        return {
+            QueryProcedureName: "up_list_pmsCodeList_GrpDistrib",
+            QueryParameterValues: "@@h99typeCode=02" + $("#querytext").val()
+        };
+    }
+    function addGridItemConsumeClassifyGroup() {
+        top.openKendoWindow("增加消费类型", "/SystemManage/ConsumeClassifyGroupManage/Add?typeCode=02");
+    }
+
+    function queryData() {
+        var Hotelname = $("#Hotelname").val(); var fname = $("#fname").val();
+        var result = "&@@s23分店=" + Hotelname + "&@@t00关键字=" + fname;
+        $("#querytext").val(result);
+        var grid = $("#" + "@gridIdP").data("kendoGrid");
+        grid.dataSource.read();
+    }
+    function grid_dataBoundEnded() {
+        formatBoleantext();
+    }
+</script>

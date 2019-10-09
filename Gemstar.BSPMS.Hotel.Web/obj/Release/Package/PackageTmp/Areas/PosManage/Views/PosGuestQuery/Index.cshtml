@@ -1,0 +1,258 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosCashier.CashierViewModel
+@{
+    ViewBag.Title = "Pos收银";
+}
+<style>
+
+    ul li {
+        line-height: 16px;
+    }
+</style>
+<link href="~/Content/Pos/posCashier.css?version=@ViewBag.Version" rel="stylesheet" />
+<link href="~/Content/Pos/posPublic.css?version=@ViewBag.Version" rel="stylesheet" />
+@using (Html.BeginForm())
+{
+    <ul class="mainLeft-button" style="margin:0.5rem 0;">
+        <li><a href="javascript:void(0);" onclick="intimidate()">打单</a></li>
+        <li><a href="javascript:void(0);" onclick="PrintPaymentMethod()">打印埋脚</a></li>
+        <li><a href="javascript:void(0);" onclick="queryBillHtml()">查询</a></li>
+        @*<li><a href="javascript:void(0);">开发票</a></li>
+        <li><a href="javascript:void(0);">发票管理</a></li>*@
+        <li><a href="javascript:void(0);">修改营业经理</a></li>
+        <li><a href="javascript:void(0);" onclick="showHideDetail(this)">隐藏明细</a></li>
+    </ul>
+    <div class="mainLeft">
+        <div class="mainLeft-bg">
+            <div class="mainLeft-bg1">
+                <div class="mainLeft-query">
+                    台号/客账号：<input id="txtTabNo" type="text" class="k-textbox" />
+                    <a href="javascript:void(0);" class="k-button" onclick="queryGuestBillList()">查询</a>
+                </div>
+                <div class="mainLeft-billList">
+                </div>
+                <img src="~/images/hxz.png" style="position: absolute; right: 0px; top: 0px;" />
+            </div>
+        </div>
+        <!--弹框的查询条件-->
+        <input type="hidden" id="ParentBillBsnsDate" />
+        <input type="hidden" id="ParentPosId" />
+        <input type="hidden" id="ParentRefeId" />
+        <input type="hidden" id="ParentItemName" />
+        <input type="hidden" id="ParentMinAmount" />
+        <input type="hidden" id="ParentMaxAmount" />
+        <input type="hidden" id="ParentPayMethod" />
+    </div>
+    <div class="mainRight">
+        <div class="mainRight-details">
+            <ul>
+                <li style="width:100%;"></li>
+            </ul>
+        </div>
+        <div class="mainRight-table">
+        </div>
+        <div class="mainRight-paymentMethod">
+        </div>
+    </div>
+    <iframe id="printFrame" style="visibility:hidden"></iframe>
+}
+@Html.Partial("PosReverse.JavaScript")
+<script type="text/javascript">
+    $(function () {
+        window.onresize = onResize; onResize();
+
+        queryGuestBillList();
+    });
+
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#gridBill .k-grid-toolbar").height() + 20 + 30 + 145;
+        $("#gridBill .k-grid-content").height(allHeight - showHeight);
+
+        $(".mainLeft").height($(window).height() - $("#remValue").height());
+        $(".mainLeft-billList").height($(".mainLeft").height() - $(".mainLeft-button").outerHeight(true) - $(".mainLeft-query").outerHeight(true) - $("#remValue").height() * 2);
+        $(".mainRight").height($(".mainLeft").height());
+        $(".mainRight").width($(".wrap").width() - $(".mainLeft").outerWidth(true) - $("#remValue").height());
+    }
+
+    //查询账单列表
+    function queryGuestBillList() {
+        var model = {
+            BillBsnsDate: $("#ParentBillBsnsDate").val(),
+            PosId: $("#ParentPosId").val(),
+            RefeId: $("#ParentRefeId").val(),
+            ItemName: $("#ParentItemName").val(),
+            MinAmount: $("#ParentMinAmount").val(),
+            MaxAmount: $("#ParentMaxAmount").val(),
+            PayMethod: $("#ParentPayMethod").val(),
+            tabNo: $("#txtTabNo").val()
+        };
+        $.ajax({
+            url: '@Url.Action("_PosBillList", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $(".mainLeft-billList").html(data);
+                SelectRowAndQuery();
+
+                $("#gridBill").on("click", "tr.k-state-selected", function (e) {
+                    e.preventDefault();
+
+                    var grid = $("#gridBill").data("kendoGrid");
+                    var selectedRows = grid.select();
+                    if (selectedRows.length > 0) {
+                        var row = selectedRows[0];
+                        var data = grid.dataItem(row);
+
+                        var model = {
+                            billid: data["billid"]
+                        };
+
+                        queryBill(model);
+                    }
+                });
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //查询付款方式列表
+    function queryPaymentMethod(model) {
+        $.ajax({
+            url: '@Url.Action("_PaymentMethodList", "Shared", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $(".mainRight-paymentMethod").html(data);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    var detailHeight = $(".mainRight-details").outerHeight(true);
+    function showHideDetail(obj) {
+        var remValue = $("#remValue").height();
+
+        if ($(obj).text() == "隐藏明细") {
+            //$(".mainRight-details *").hide();
+            $(".mainRight-details").animate({ height: "0.9rem" });
+            $(".mainRight-table .k-grid-content").animate({ height: $(".mainRight-table .k-grid-content").height() + remValue * 6.9 });
+            $(obj).text("展开明细");
+        }
+        else {
+            //$(".mainRight-details *").show();
+            $(".mainRight-details").animate({ height: "7.8rem" });
+            $(".mainRight-table .k-grid-content").animate({ height: $(".mainRight-table .k-grid-content").height() - remValue * 6.9 });
+            $(obj).text("隐藏明细");
+        }
+    }
+
+    //客账查询窗体
+    function queryBillHtml() {
+        $.ajax({
+            url: '@Url.Action("_QueryBillHtml", "PosGuestQuery", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: {},
+            dataType: "html",
+            success: function (data) {
+                $("#posMaskWindow").html(data);
+                $("#posMaskWindow_wnd_title").text("请选择查询条件");
+                $(".k-i-close").click(function () {
+                    closeGeneralWindow();
+                });
+                openGeneralWindow();
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+    //打单
+    function intimidate() {
+        let printModel = localStorage.getItem("printModel");
+        var grid = $("#gridBill").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0 || printModel != null) {
+
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+
+            if (printModel != null) {
+                model = JSON.parse(printModel);
+            }
+            else {
+                var model = {
+                    ReportCode: "PosBillPrint",
+                    ProcedureName: "up_pos_print_billDetail",
+                    ParameterValues: "@@h99billid=" + data["billid"] + "&@@h99mBillid=" + data["mBillid"] + "",
+                    IsOpenSearchWindow: false,
+                    ChineseName: "账单打印预览",
+                    StyleName: ""
+                };
+            }
+
+            var gridBillDetail = $("#gridBillDetail").data("kendoGrid");
+            var items = gridBillDetail.items();
+            for (var i = 0; i < items.length; i++) {
+                var rowDetail = gridBillDetail.tbody.find(">tr:not(.k-grouping-row)").eq(i);
+                var dataDetail = gridBillDetail.dataItem(rowDetail);
+                if (dataDetail !== null && (dataDetail["Status"] == 4 || (dataDetail["BatchTime"] == null && Number(dataDetail["Isauto"]) < 4))) {
+                    layer.alert("当前存在未落单的项目", { title: "快点云Pos提示", btn: ['确定', '关闭'] });
+                    return false;
+                }
+
+            }
+
+            $.post('@Html.Raw(Url.Action("AddQueryParaTemp", "PosGuestQuery", new { print = 1,Flag="A" }))', model, function (result) {
+                if (result.Success) {
+                    $("#printFrame").attr("src", result.Data);
+                    localStorage.removeItem("printModel");
+                    queryBillList();
+                } else {
+                    layer.alert(result.Data);
+                }
+            }, 'json');
+        }
+        else {
+            layer.msg("请选择要预览的账单");
+        }
+    }
+
+    //打印埋脚
+    function PrintPaymentMethod() {
+        var grid = $("#gridBill").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0) {
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+            if (data["status"] == "2" || data["status"] == "3") {
+                var model = {
+                    ReportCode: "PosBillPaymentMethodPrint",
+                    ProcedureName: "up_pos_print_billPaymentMethod",
+                    ParameterValues: "@@h99billid=" + data["billid"] + "&@@h99mBillid=" + data["mBillid"] + "",
+                    IsOpenSearchWindow: false,
+                    ChineseName: "埋脚打印",
+                    StyleName: ""
+                };
+
+                $.post('@Html.Raw(Url.Action("PrintBillPayMethod", "PosGuestQuery", new { print = 1 }))', model, function (result) {
+                    if (result.Success) {
+                        $("#printFrame").attr("src", result.Data);
+                    } else {
+                        layer.alert(result.Data);
+                    }
+                }, 'json');
+            }
+        }
+        else {
+            layer.alert("请选择账单");
+        }
+    }
+</script>
+<script src="~/Scripts/layer-v3.1.1/layer.js"></script>

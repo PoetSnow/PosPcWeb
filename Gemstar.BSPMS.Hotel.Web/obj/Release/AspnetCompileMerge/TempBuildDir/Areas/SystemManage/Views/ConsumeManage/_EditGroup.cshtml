@@ -1,0 +1,244 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.ItemManage.ItemGroupEditViewModel
+@using (Html.BeginForm(new { action = "EditGroup" }))
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.DcFlag)
+    @Html.HiddenFor(m => m.IsOwnerFee)
+    @Html.HiddenFor(m => m.IsOwnerAmount)
+    @Html.HiddenFor(m => m.DataControlCode)
+    if (Model.IsOwnerFee)
+    {
+        Model.OwnerProperty = "1";
+
+    }
+    else if (Model.IsOwnerAmount)
+    {
+        Model.OwnerProperty = "2";
+    }
+    else
+    {
+        Model.OwnerProperty = "0";
+    }
+    <div style="max-height:508px;overflow-y:auto;">
+        <table class="editFormTable">
+            <tr>
+                <td class="textright">消费类型</td>
+                @if (ViewBag.isexistItemReserv)
+                {
+                    <td>
+                        @Html.HiddenFor(m => m.ItemTypeName)
+                        @Html.Kendo().DropDownListFor(e => e.ItemTypeid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForConsume", "ConsumeManage")); })
+                    </td>
+                    <td>@Html.ValidationMessageFor(m => m.ItemTypeid, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.Code)</td>
+                        <td>@Html.TextBoxFor(m => m.Code, new { @class = "k-textbox", style = "width:100%;" })</td>
+                }
+                else
+                {
+                    <td>
+                        @Html.HiddenFor(m => m.ItemTypeid)
+                        @Html.TextBoxFor(m => m.ItemTypeName, new { @class = "k-textbox", style = "width:100%;background-color:rgb(245,245,245);", @readonly = "readonly" })
+                    </td>
+                    <td>@Html.ValidationMessageFor(m => m.ItemTypeid, "*")</td>
+                        <td class="textright">@Html.LabelFor(m => m.Code)</td>
+                        <td>
+                            @Html.TextBoxFor(m => m.Code, new { @class = "k-textbox", style = "width:100%;background-color:rgb(245,245,245);", @readonly = "readonly" })
+                        </td>
+                }
+                <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Name)</td>
+                @if (ViewBag.isexistItemReserv)
+                {
+                    <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;" })</td>
+                }
+                else
+                {
+                    <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;background-color:rgb(245,245,245);", @readonly = "readonly" })</td>
+                }
+                <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+
+                <td class="textright">@Html.LabelFor(m => m.Price)</td>
+                <td>@Html.TextBoxFor(m => m.Price, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Price, "*")</td>
+
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Action)</td>
+                <td>
+                    @if (ViewBag.isexistItemReserv)
+                    {
+                        @Html.Kendo().DropDownListFor(e => e.Action).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetActionList", "ConsumeManage")); })
+                    }
+                    else
+                    {
+                        @Html.HiddenFor(m => m.Action)
+                        <input type="text" class="k-textbox" style="width:100%;background-color:rgb(245,245,245);" readonly="readonly" value="@ViewBag.actions" />
+                    }
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.Action, "*")</td>
+
+                <td class="textright">@Html.LabelFor(m => m.StaType)</td>
+                <td>
+                    <input id="statypename" type="text" disabled="disabled" class="k-textbox" style="width:100%;margin-bottom:1px;background-color:rgb(245,245,245);" value="" />
+                    @Html.TextBoxFor(m => m.StaType, new { @class = "k-textbox", style = "width:100%;display:none;", })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.StaType, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.InvoiceItemid)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.InvoiceItemid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForInvoiceItemid", "ConsumeManage")); })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.InvoiceItemid, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.Taxrate)</td>
+                <td>@Html.TextBoxFor(m => m.Taxrate, new { @class = "k-textbox", style = "width:25%;" })    %</td>
+                <td>@Html.ValidationMessageFor(m => m.Taxrate, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.IsInput)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.IsInput).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetIsSelectList", "PayWayManage")); })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.IsInput, "*")</td>
+
+                <td class="textright">@Html.LabelFor(m => m.IsQuantity)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.IsQuantity).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetIsSelectList", "PayWayManage")); })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.IsQuantity, "*")</td>
+
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Notscore)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.Notscore).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetIsSelectList", "PayWayManage")); })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.Notscore, "*")</td>
+
+                <td class="textright">@Html.LabelFor(m => m.Nights)</td>
+                <td>@Html.TextBoxFor(m => m.Nights, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Nights, "*")</td>
+
+
+            </tr>
+            @if (ViewBag.isallowOwner)
+            {
+                <tr>
+                    <td class="textright">@Html.LabelFor(m => m.OwnerProperty)</td>
+                    <td>
+                        @Html.Kendo().DropDownListFor(e => e.OwnerProperty).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetOwnerProperty", "ConsumeManage")); })
+                    </td>
+                    <td>@Html.ValidationMessageFor(m => m.OwnerProperty, "*")</td>
+                    <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+                    <td>@Html.TextBoxFor(m => m.Seqid, new { @class = "k-textbox", style = "width:100%;" })</td>
+                    <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+                    <td>@Html.TextBoxFor(m => m.Seqid, new { @class = "k-textbox", style = "width:100%;" })</td>
+                    <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+                </tr>
+            }
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.DataControlName)</td>
+                <td>@Html.TextBoxFor(m => m.DataControlName, new { @class = "k-textbox", style = "width:100%;", @readonly = "readonly" })</td>
+                <td>@Html.ValidationMessageFor(m => m.DataControlName, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.ResortCanUpdate)</td>
+                <td>@Html.CheckBoxFor(m => m.ResortCanUpdate, new { onclick = "return false;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.ResortCanUpdate, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.SelectedResortHids)</td>
+                <td>@Html.DropDownListFor(m => m.SelectedResortHids, Model.ResortItems, new { @class = "box", multiple = "multiple", style = "width:100%;height:200px;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.SelectedResortHids, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.UpdateProperties)</td>
+                <td>@Html.DropDownListFor(m => m.UpdateProperties, Model.PropertyItems, new { @class = "box", multiple = "multiple", style = "width:180px;height:200px;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.UpdateProperties, "*")</td>
+            </tr>
+        </table>
+
+    </div>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript"> 
+    $(function () {
+        actionChange();
+        $(".k-input").css("text-indent", "1em");
+        $.validator.unobtrusive.parse(document);
+        var canEditCode = "@ViewBag.canEditCode";
+        if (canEditCode == "False") {
+            $("#Code").attr("readonly", "readonly");
+            $("#Code").css("background-color", "rgb(245,245,245)");
+        }
+
+        var controlType = "@Model.DataControlCode";
+        if (controlType != "@Gemstar.BSPMS.Common.Services.BasicDataControls.DataControlType.SelectedResorts.Code") {
+            $("#SelectedResortHids").attr("disabled", "disabled");
+        }
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            var Id = "" + $("#Id").val();
+            var act = "" + $("#Action").val(); var sta = "" + $("#StaType").val();
+            if (parseInt(sta) < 21 && parseInt(act) != 9) {
+                var events = jsonajax("/ConsumeManage/checkAction?act=" + act + "&Id=" + Id);
+                if (events == "处理方式已存在") {
+                    jAlert(events + "!");
+                    return;
+                }
+
+            }
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        $("#Action").change(function () {
+            actionChange();
+        });
+        $("#InvoiceItemid").change(function () {
+            var invoice = "" + $("#InvoiceItemid").val();
+            var events = jsonajax("/ConsumeManage/GetInvoiceItemid?invoice=" + invoice);
+            var arr = events.split(',');
+            $("#Taxrate").val(arr[0]);
+        });
+        $("#Nights").blur(function () {
+            var vl = $("#Nights").val();
+            if (isNaN(vl) || vl < 0 || vl > 1 || vl.length > 4) {
+                $("#Nights").val("");
+                jAlert("间夜数必须为0-1间的数字（最多保留两位小数）");
+            }
+        });
+    });
+    function actionChange() {
+        var act = "" + $("#Action").val();
+        var events = jsonajax("/ConsumeManage/GetStatypeList?act=" + act);
+        var arr = events.split(',');
+        $("#StaType").val(arr[0]);
+        $("#statypename").val(arr[1]);
+    }
+    //ajax方法
+    function jsonajax(urls) {
+        var events = {};
+        var Rand = Math.random();
+        $.ajax({
+            url: urls + "&rand=" + Rand,
+            success: function (data) {
+                events = data;
+            },
+            async: false
+        });
+        return events;
+    }
+
+</script>

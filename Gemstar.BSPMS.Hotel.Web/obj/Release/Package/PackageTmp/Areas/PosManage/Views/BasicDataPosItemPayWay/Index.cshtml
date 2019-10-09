@@ -1,0 +1,79 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+@{
+    ViewBag.Title = "Pos付款方式";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var colsDefault = new List<GridColumnSetting>
+{
+new GridColumnSetting {Name = "Code", Title = "项目代码", Hidden = false, Order = 1, Width = 0},
+new GridColumnSetting {Name = "Cname", Title = "中文名称", Hidden = false, Order = 2, Width = 0},
+new GridColumnSetting {Name = "Ename", Title = "英文名称", Hidden = false, Order = 3, Width = 0},
+new GridColumnSetting {Name = "statusName", Title = "状态", Hidden = false, Order = 2, Width = 0},
+new GridColumnSetting {Name = "PayTypeName", Title = "处理方式", Hidden = false, Order = 3, Width = 0},
+new GridColumnSetting {Name = "MontypenoName", Title = "币种", Hidden = false,Order = 4, Width = 0},
+new GridColumnSetting {Name = "Rate", Title = "汇率", Hidden = false,Order = 4, Width = 0},
+new GridColumnSetting {Name = "moduleName", Title = "模块", Hidden = false,Order = 4, Width = 0},
+new GridColumnSetting {Name = "RefeName", Title = "所属营业点", Hidden = false, Order = 4, Width = 0},
+new GridColumnSetting {Name = "CodeIn", Title = "内部编码", Hidden = false, Order = 4, Width = 0},
+new GridColumnSetting {Name = "isWxShow", Title = "微信显示", Hidden = true, Order = 4, Width = 0},
+new GridColumnSetting {Name = "isInCome", Title = "计收入", Hidden = false,Order = 4, Width = 0},
+new GridColumnSetting {Name = "isChange", Title = "可找赎", Hidden = false,Order = 4, Width = 0},
+new GridColumnSetting {Name = "isSubscription", Title = "可作订金", Hidden = true,Order = 4, Width = 0},
+new GridColumnSetting {Name = "isPayout", Title = "可支出", Hidden = true,Order = 4, Width = 0},
+new GridColumnSetting {Name = "isCharge", Title = "是否可充值", Hidden = true, Order = 4, Width = 0},
+new GridColumnSetting {Name = "isInvoice", Title = "是否开发票", Hidden = true, Order = 4, Width = 0},
+new GridColumnSetting {Name = "Seqid", Title = "排列顺序", Hidden = false,Order = 4, Width = 0},
+new GridColumnSetting {Name = "Remark", Title = "备注", Hidden = false,Order = 4, Width = 0},
+new GridColumnSetting {Name = "OperName", Title = "操作员", Hidden = false,Order = 4, Width = 0},
+new GridColumnSetting {Name = "ModifiedDate", Title = "修改时间", Hidden = false,Order = 4, Width = 0}
+};
+    var gridViewModel = new KendoGridCustomDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        StatusColumnName = "Status",
+        EnableFunctionForEnable = true,
+        EnableFunctionForDisable = true,
+        EnableScrollable = true,
+        Area = "PosManage",
+        Controller = "BasicDataPosItemPayWay",
+        Action = "Index",
+        DefaultColumnSettings = colsDefault,
+        CustomToolbar = c =>
+        {
+            c.Custom().Name("comfirmtextone").Text("双击可修改").HtmlAttributes(new { id = "comfirmtextone", href = "javascript:void(0);", style = "color:red;margin-top:9px;margin-left:10px;cursor:default;" });
+        }
+    };
+
+}
+
+@Html.Partial("_KendoGridCustomDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+    $(function () {
+        window.onresize = onResize; onResize();
+        $("#comfirmtext").removeClass("k-button");
+        $("#comfirmtextone").removeClass("k-button");
+    });
+    function gridread() {
+        $("#grid").data("kendoGrid").dataSource.read();
+    }
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 145;
+        $("#grid .k-grid-content").height(allHeight - showHeight);
+    }
+</script>

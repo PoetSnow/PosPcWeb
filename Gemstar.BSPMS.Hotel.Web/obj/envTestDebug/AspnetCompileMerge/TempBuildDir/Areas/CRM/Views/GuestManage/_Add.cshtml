@@ -1,0 +1,96 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.CRM.Models.GuestManage.GuestAddViewModel
+@using (Html.BeginForm())
+{
+    <div id="contentdiv" style="text-align:center;">
+        <table class="editFormTable largeRowTable" style="text-align:center;width:100%">
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.GuestName)</td>
+                <td>@Html.TextBoxFor(m => m.GuestName, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.GuestName, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.Gender)</td>
+                <td>@Html.Kendo().DropDownListFor(m => m.Gender).HtmlAttributes(new { style = " width:100%;text-align: left" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetIsSelectList", "GuestManage", new { rnd = new Random().NextDouble() })); })</td>
+                <td>@Html.ValidationMessageFor(m => m.Gender, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.CerType)</td>
+                <td>@Html.Kendo().DropDownListFor(e => e.CerType).HtmlAttributes(new { style = " width:100%;text-align: left" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetCerTypeList", "GuestManage", new { rnd = new Random().NextDouble() })); })</td>
+                <td>@Html.ValidationMessageFor(m => m.CerType, "*")</td>
+                 <td class="textright">@Html.LabelFor(m => m.Cerid)</td>
+                <td>@Html.TextBoxFor(m => m.Cerid, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Cerid, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Nation)</td>
+                <td>@(Html.Kendo().DropDownList().Name("nation").Filter(FilterType.Contains).DataTextField("Name").DataValueField("Name").DataSource(s => s.Read(r => r.Url(Url.Action("ListItemsForNation"))).ServerFiltering(true)).AutoBind(true).HtmlAttributes(new { style = " width:100%;text-align: left" }))</td>
+                <td>@Html.ValidationMessageFor(m => m.Nation, "*")</td>
+                 <td class="textright">@Html.LabelFor(m => m.Birthday)</td>
+                <td >@Html.Kendo().DatePickerFor(m => m.Birthday).HtmlAttributes(new { style = " width:100%;margin-bottom: 5px" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Birthday, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.City)</td>
+                <td>@Html.TextBoxFor(m => m.City, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.City, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.Mobile)</td>
+                <td>@Html.TextBoxFor(m => m.Mobile, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Mobile, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.CompanyName)</td>
+                <td>@Html.Kendo().DropDownListFor(e => e.CompanyName).OptionLabel(" ").Filter(FilterType.Contains).HtmlAttributes(new { style = " width:100%;text-align: left" }).DataTextField("Key").AutoBind(false).DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ResListItemsForCompanys", "ResOrderCustomer", new { area = "ResManage", rnd = new Random().NextDouble() })); })</td>
+                <td></td>
+                <td class="textright">@Html.LabelFor(m => m.Email)</td>
+                <td>@Html.TextBoxFor(m => m.Email, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Email, "*")</td>
+            </tr>
+            <tr>
+                
+
+                <td class="textright">@Html.LabelFor(m => m.Interest)</td>
+                <td colspan="5">@Html.TextBoxFor(m => m.Interest, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Interest, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Address)</td>
+                <td colspan="5" >@Html.TextAreaFor(m => m.Address, new { @class = "k-textbox", style = "width:100%;" })</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+                <td colspan="5" >@Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;" })</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m =>m.BlacklistReason)</td>
+                <td colspan="5">@Html.TextAreaFor(m => m.BlacklistReason, new { @class = "k-textbox", style = "width:100%;" })</td>
+            </tr>
+        </table>
+    </div>
+        @Html.ValidationSummary()
+        <div class="formButtons">
+            <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+            <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+        </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) { 
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        //证件号改变事件
+        $("#Cerid").change(function () {
+            var cerType = $("#CerType").data("kendoDropDownList").text();
+            if (cerType == "居民身份证") {
+                var cerId = $("#Cerid").val();
+                getCity(cerId, $("#City"));
+                $("#Birthday").data("kendoDatePicker").value(getBirthDay(cerId));
+            }
+        });
+    });
+     
+</script>
+<script type="text/javascript" src="~/Scripts/idCard.js"></script>

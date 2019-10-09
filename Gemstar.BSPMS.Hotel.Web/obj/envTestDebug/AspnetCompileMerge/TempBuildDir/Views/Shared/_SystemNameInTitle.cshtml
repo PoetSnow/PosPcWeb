@@ -1,0 +1,5 @@
+﻿@{
+    var product = ViewBag.product as Gemstar.BSPMS.Common.Services.Entities.M_v_products;
+    var sysName = product == null ? "GS快点云POS系统" : product.SysShortName;
+}
+@sysName - @ViewBag.Title

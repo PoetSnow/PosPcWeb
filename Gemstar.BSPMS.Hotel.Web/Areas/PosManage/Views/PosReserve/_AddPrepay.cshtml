@@ -1,0 +1,122 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosReserve.AddPrepayViewModel
+
+@using (Html.BeginForm("AddPrepay", "PosReserve", FormMethod.Post, new { id = "fromAddPrepay", name = "fromAddPrepay" }))
+{
+    <input type="hidden" id="PosNo" name="PosNo" value="@Model.PosNo" />
+    <input type="hidden" id="Shiftid" name="Shiftid" value="@Model.Shiftid" />
+    <input type="hidden" id="OpenFlag" name="OpenFlag" value="@Model.OpenFlag" />
+    <table class="editFormTable" style="padding:10px">
+        <tr style="height:40px">
+            <td class="textright">@Html.LabelFor(m => m.PosName)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.PosName).HtmlAttributes(new { style = "width:80%;", @readonly = "readonly" })</td>
+            <td>@Html.ValidationMessageFor(m => m.PosName, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.DBusiness)</td>
+            <td>
+                @Html.Kendo().TextBoxFor(m => m._DBusiness).HtmlAttributes(new { style = "width:80%;", @readonly = "readonly" })
+                <input type="hidden" name="DBusiness" id="DBusiness" value="@Model.DBusiness" />
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.DBusiness, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.ShiftName)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.ShiftName).HtmlAttributes(new { style = "width:80%;", @readonly = "readonly" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ShiftName, "*")</td>
+        </tr>
+        <tr style="height:40px">
+            <td class="textright">@Html.LabelFor(m => m.OriBillNo)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.OriBillNo).HtmlAttributes(new { style = "width:80%;", @readonly = "readonly" })</td>
+            <td>@Html.ValidationMessageFor(m => m.OriBillNo, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.BillNo)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.BillNo).HtmlAttributes(new { style = "width:80%;", @readonly = "readonly" })</td>
+            <td>@Html.ValidationMessageFor(m => m.BillNo, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.Amount)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.Amount).HtmlAttributes(new { style = "width:80%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Amount, "*")</td>
+        </tr>
+        <tr style="height:40px">
+            <td class="textright">@Html.LabelFor(m => m.VGuest)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.VGuest).HtmlAttributes(new { style = "width:80%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.VGuest, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.Mobile)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Mobile).HtmlAttributes(new { style = "width:80%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Mobile, "*")</td>
+
+            <td class="textright"></td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsMsg).HtmlAttributes(new { style = "width:80%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsMsg, "*")</td>
+
+        </tr>
+        <tr style="height:40px">
+            <td class="textright">@Html.LabelFor(m => m.HandBillno)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.HandBillno).HtmlAttributes(new { style = "width:80%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.HandBillno, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.UsedDate)</td>
+            <td>@Html.Kendo().DateTimePickerFor(m => m.UsedDate).HtmlAttributes(new { style = "width:80%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.UsedDate, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.UsedDesc)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.UsedDesc).HtmlAttributes(new { style = "width:80%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.UsedDesc, "*")</td>
+        </tr>
+        <tr style="height:40px">
+            <td class="textright">@Html.LabelFor(m => m.PayModeNo)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.PayModeNo).HtmlAttributes(new { style = " width:80%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetPayMethodList", "PosReserve", new { rnd = new Random().NextDouble() })).ServerFiltering(true); }).Events(e => e.Change("PayModeNo_change")).OptionLabel("请选择付款方式")</td>
+            <td>@Html.ValidationMessageFor(m => m.PayModeNo, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td colspan="4">@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:90%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+
+    </table>
+    <div style="height:60px;">
+        <table class="editFormTable">
+            <tr style="height:40px;display:none" id="tr_card">
+                <td class="textright">@Html.LabelFor(m => m.CardId)</td>
+
+                <td>
+                    <script>
+                        function onAdditionalData() {
+                            return { nameOrMobile: $("#CardId").data("kendoComboBox").text() };
+                        }
+                    </script>
+                    @(Html.Kendo().ComboBox()
+                                                            .Name("CardId")
+                                                            .Placeholder("卡号/姓名/手机号")
+                                                            .DataTextField("MbrCardNo")
+                                                            .DataValueField("Id")
+                                                            .Template("<label title='#= MbrCardNo # | #= GuestName # | #= Mobile == null ? '' : Mobile #'>#= MbrCardNo # | #= GuestName # </label>").Filter("contains")
+                                                            .MinLength(2)
+                                                            .DataSource(e => { e.Read(r => r.Url(Url.Action("ListItemsForProfiles", new { rnd = new Random().NextDouble() })).Data("onAdditionalData")).ServerFiltering(true); })
+                                                            .Events(e => e.Change("editControl_changed").Select("profileComboBox_selected").DataBound("profileComboBox_databound")).AutoBind(false))
+
+                </td>
+                <td><input type="button" value="详细" title="查看会员详细信息" class="selectBtn" onclick="selectHYInfo()" style="display:none" /></td>
+                <td>
+                    <input type="hidden" id="folioMbrCardNo" name="folioMbrCardNo" />
+                </td>
+            </tr>
+            <tr style="height:40px;display:none" id="tr_Wx">
+                <td class="textright">@Html.LabelFor(m => m.BarCode)</td>
+                <td>@Html.Kendo().TextBoxFor(m => m.BarCode).HtmlAttributes(new { style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.BarCode, "*")</td>
+                <td><input type="hidden" id="folioWxBarcode" name="folioWxBarcode" /></td>
+            </tr>
+        </table>
+        <input type="hidden" id="FolioItemActionJsonPara" name="FolioItemActionJsonPara" />
+    </div>
+    @Html.ValidationSummary()
+
+}
+<div class="formButtons">
+    <input type="button" value="确定" class="k-primary k-button" onclick="addPrepay()" id="addPrepay2" />
+    <input type="button" value="关闭" class="k-primary k-button" onclick="cancel_clicked()" />
+    @*<button class="k-primary k-button" id="saveEditFormButtonForAjax" role="button" data-role="button">确定</button>
+        <button class="k-primary k-button" id="closeEditFormButtonA" role="button" data-role="button">关闭</button>*@
+</div>
+
+
+

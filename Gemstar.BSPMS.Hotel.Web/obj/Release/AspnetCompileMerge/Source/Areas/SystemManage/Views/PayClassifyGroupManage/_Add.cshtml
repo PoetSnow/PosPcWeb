@@ -1,0 +1,60 @@
+﻿
+@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.CodelistGroupManage.CodeListGroupAddModel
+
+@using (Html.BeginForm(new { action = "Add" }))
+{
+    @Html.HiddenFor(m => m.TypeCode);
+    <div style="height:508px;overflow-y:auto">
+        <table class="editFormTable">
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Code) </td>
+                <td>@Html.TextBoxFor(m => m.Code, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Name)</td>
+                <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+                <td>@Html.TextBoxFor(m => m.Seqid, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.DataControlName)</td>
+                <td>@Html.TextBoxFor(m => m.DataControlName, new { @class = "k-textbox", style = "width:100%;", @readonly = "readonly" })</td>
+                <td>@Html.ValidationMessageFor(m => m.DataControlName, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.SelectedResortHids)</td>
+                <td>@Html.DropDownListFor(m => m.SelectedResortHids, Model.ResortItems, new { @class = "box", multiple = "multiple", style = "width:100%;height:200px;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.SelectedResortHids, "*")</td>
+            </tr>
+        </table>
+        @Html.HiddenFor(m => m.DataControlCode)
+    </div>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"), function () {
+                $("#mainContent iframe")[0].contentWindow.queryData();
+            });
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+
+</script>
+

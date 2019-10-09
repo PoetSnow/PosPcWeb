@@ -1,0 +1,35 @@
+﻿
+@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "分成类型定义";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "TypeId";
+
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("TypeName").Title("类型名称");
+            c.Bound("TypeDesc").Title("类型说明");
+            c.Bound("CalcFormula").Title("类型计算公式");
+            c.Bound("SeqId").Title("排序号");
+        },
+        CustomToolbar = c =>
+        {
+           
+        }
+    };
+}
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+ 

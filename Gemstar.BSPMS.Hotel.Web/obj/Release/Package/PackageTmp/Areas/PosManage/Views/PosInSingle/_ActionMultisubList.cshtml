@@ -1,0 +1,23 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_ActionMultisubByActionidResult>
+
+<ul>
+    @if (Model != null && Model.Count > 0)
+    {
+        foreach (var item in Model)
+        {
+            <li class="content-list-detail">
+                <a href="javascript:void(0)" data-type="" data-id="@item.Actionid2" data-code="@item.ActionCode2" data-name="@item.ActionName2" onclick="updateBillDetailAction(this,'@(Url.Action("UpdateBillDetailAction", "PosInSingle"))')">
+                    <span>@item.ActionCode2</span>
+                    <span>@item.ActionName2</span>
+                    <span>&nbsp;</span>
+                    <span><i class="fa fa-check"></i></span>
+                </a>
+            </li>
+        }
+        <li class="content-list-paging">
+            <a href="javascript:void(0)" onclick="getListPage(this,'1','@(Url.Action("_ActionList", "PosInSingle"))','@(Url.Action("GetActionTotal", "PosInSingle"))')" data-id="@ViewBag.ActionId">上一页</a>
+            <a href="javascript:void(0)" onclick="getListPage(this,'2','@(Url.Action("_ActionList","PosInSingle"))','@(Url.Action("GetActionTotal","PosInSingle"))')" data-id="@ViewBag.ActionTypeId">下一页</a>
+        </li>
+    }
+    <li class="content-list-return" style=""><a href="javascript:void(0)" onclick="getActionTypeList(this,'@(Url.Action("_ActionTypeList", "PosInSingle"))','@(Url.Action("GetActionTypeTotal", "PosInSingle"))')"><img src="~/Images/posInSingle/fanh.png" /><br />返回</a></li>
+</ul>

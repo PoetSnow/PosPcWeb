@@ -1,0 +1,243 @@
+﻿@{
+    Layout = null;
+}
+@model Gemstar.BSPMS.Hotel.Web.Models.Account.PayByCardViewModel
+
+<style>
+    .payByCard {
+        margin: 2rem;
+        width: 350px;
+        padding-bottom: 5rem;
+    }
+
+        .payByCard td {
+            width: 100px;
+            padding: 5px;
+            float: left;
+        }
+
+            .payByCard td:first-child {
+                position: relative;
+            }
+
+            .payByCard td i {
+                position: absolute;
+                font-size: 24px;
+                right: 0.6rem;
+                top: 1rem;
+                color: #aaa;
+                padding: 0;
+                margin: 0;
+                background: #fff;
+            }
+
+        .payByCard tr:first-child td:first-child {
+            width: 60%;
+        }
+
+        .payByCard input[type=button] {
+            width: 100%;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            line-height: 3.0rem;
+            border-radius: 0.5rem;
+            border: 1px #aaa solid;
+        }
+
+    .inputText {
+        height: 3.0rem;
+        display: block;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        font-size: 24px;
+        text-indent: 0.5rem;
+        border-radius: 0.1rem;
+        border: 1px solid #aaa;
+        /*box-shadow: 0px 0px 5px 1px #ccc inset;*/
+    }
+
+    .inputButton {
+        color: #fff;
+        font-size: 2.5rem;
+        background: linear-gradient(#1cc185,#1edc9b);
+    }
+
+    .inputNumber {
+        color: #393939;
+        font-size: 2.5rem;
+        background: linear-gradient(#bababa,#e9e9e9);
+    }
+
+        .inputNumber:nth-child(10), .inputNumber:nth-child(12) {
+            font-size: 2.5rem;
+        }
+</style>
+<table class="payByCard">
+    <tr>
+        <td colspan="2">
+            @Html.Password("txtPayByCardId", Model.Value, new { @class = "inputText lo-input-password", @placeholder = Model.Message })
+            <i class="fa fa-eye" aria-hidden="true" onclick="showPwd(this)"></i>
+        </td>
+        <td><input id="btnPayByCard" type="button" class="inputButton" onclick="screenInput()" value="输入" /></td>
+    </tr>
+    <tr>
+        <td><input id="btnKey1" type="button" class="inputNumber" value="1" onclick="input('1')" /></td>
+        <td><input id="btnKey2" type="button" class="inputNumber" value="2" onclick="input('2')" /></td>
+        <td><input id="btnKey3" type="button" class="inputNumber" value="3" onclick="input('3')" /></td>
+    </tr>
+    <tr>
+        <td><input id="btnKey4" type="button" class="inputNumber" value="4" onclick="input('4')" /></td>
+        <td><input id="btnKey5" type="button" class="inputNumber" value="5" onclick="input('5')" /></td>
+        <td><input id="btnKey6" type="button" class="inputNumber" value="6" onclick="input('6')" /></td>
+    </tr>
+    <tr>
+        <td><input id="btnKey7" type="button" class="inputNumber" value="7" onclick="input('7')" /></td>
+        <td><input id="btnKey8" type="button" class="inputNumber" value="8" onclick="input('8')" /></td>
+        <td><input id="btnKey9" type="button" class="inputNumber" value="9" onclick="input('9')" /></td>
+    </tr>
+    <tr>
+        <td><input id="btnKeyHt" type="button" class="inputNumber" value="回退" onclick="input('回退')" /></td>
+        <td><input id="btnKey0" type="button" class="inputNumber" value="0" onclick="input('0')" /></td>
+        <td><input id="btnKeyQc" type="button" class="inputNumber" value="清除" onclick="input('清除')" /></td>
+    </tr>
+</table>
+<div class="formButtons">
+    <button id="saveEditFormButton" onclick="checkPayByCard()" role="button" data-role="button">确定</button><button id="closeEditFormButton" onclick="closePayByCard()" role="button" data-role="button">关闭</button>
+</div>
+<style>
+    .msg {
+        left: 0;
+        bottom: 0;
+        clear: both;
+        width: 100%;
+        text-align: center;
+        position: absolute;
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+    }
+
+        .msg input[type=button] {
+            border: 0;
+            width: 100%;
+            float: left;
+            padding: 0.5rem;
+            font-size: 24px;
+            border-top: 1px solid #ccc;
+            color: #fff;
+            background: #f55858;
+            border-bottom-left-radius: 1rem;
+        }
+</style>
+<script type="text/javascript">
+    $("#txtPayByCardId").focus();
+
+    //回车事件
+    $('#txtPayByCardId').bind('keyup', function (event) {
+        if (event.keyCode == "13") {
+            checkPayByCard();
+        }
+    });
+    //检查卡号
+    function checkPayByCard() {
+
+        var model={
+            CardId:$("#txtPayByCardId").val(),
+            Tabid: '@Model.Tabid',
+            TabNo:  '@Model.TabNo',
+            Billid:  '@Model.Billid',
+            ComputerName:'@Model.ComputerName',
+            Flag:'@Model.Flag'
+        };
+        $.ajax({
+            url: '@Url.Action("CheckCardForCancel", "Shared")',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (data) {
+                if (data.Success == true) {
+                    layer.closeAll();
+                    @(Html.Raw(Model.Callback));
+                }
+                else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+    function exitMsg() {
+        layer.close(layer.index);
+    }
+    //屏幕输入
+    function screenInput() {
+        if ("undefined" != typeof jsObject) {
+            jsObject.ScreenKeyboard();
+        }
+        else {
+            location.replace("PosKeyboard:");
+        }
+    }
+
+    //关闭刷卡
+    function closePayByCard() {
+        $.ajax({
+            url: '@Url.Action("ExitPayByCard", "Shared")',
+            type: "post",
+            data: { returnType : @Model.ReturnType },
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    layer.closeAll();
+                } else {
+                    location.href = data.Data;
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //处理输入
+    function input(value) {
+        var val = $("#txtPayByCardId").val();
+
+        if (value.indexOf("回退") === -1 && value.indexOf("清除") === -1 && value.indexOf("确定") === -1) {
+            $("#txtPayByCardId").val(val + value);
+            $("@Model.Tag").val(val + value);
+        }
+        else if (value.indexOf("回退") > -1) {
+            $("#txtPayByCardId").val(val.replace(/.$/, ''));
+            $("@Model.Tag").val(val.replace(/.$/, ''));
+        }
+        else if (value.indexOf("清除") > -1) {
+            $("#txtPayByCardId").val("");
+            $("@Model.Tag").val("");
+        }
+        else if (value.indexOf("确定") > -1) {
+            @(Html.Raw(Model.Callback))
+            return false;
+        }
+        @(Html.Raw(Model.InputCallback))
+    }
+
+    //显示/隐藏密码
+    function showPwd(obj)
+    {
+        if($(obj).hasClass("fa fa-eye"))
+        {
+            $(obj).removeClass("fa fa-eye");
+            $(obj).addClass("fa fa-eye-slash");
+            $(obj).prev("input").attr("type","text");
+        }
+        else{
+            $(obj).removeClass("fa fa-eye-slash");
+            $(obj).addClass("fa fa-eye");
+            $(obj).prev("input").attr("type","password");
+        }
+    }
+</script>

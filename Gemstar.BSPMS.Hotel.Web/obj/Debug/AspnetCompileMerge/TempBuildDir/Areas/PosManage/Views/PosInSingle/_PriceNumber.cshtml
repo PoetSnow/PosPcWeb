@@ -1,0 +1,135 @@
+﻿
+<link href="~/Content/Pos/posNumberInput.css" rel="stylesheet" />
+<div style="padding-top:10px;margin-bottom:6px">
+    <input type="hidden" value="@ViewBag.Id" id="ItemPriceBillId" />
+    <input id="txtPrice" class="k-textbox" type="text" style="background-color:#ececec;width:100%;height:48px;font-size:initial;" value="" placeholder="请输入金额" onkeyup="clearNoNum(this)" onpaste="return false" ondragenter="return false">
+
+</div>
+<table id="letterInput">
+    <tr>
+        <td><input id="btnKey1" type="button" value="1" onclick="inputPrcie('1')" class="number" /></td>
+        <td><input id="btnKey2" type="button" value="2" onclick="inputPrcie('2')" class="number" /></td>
+        <td><input id="btnKey3" type="button" value="3" onclick="inputPrcie('3')" class="number" /></td>
+        <td colspan="2" style="width:100%;height:100%;"><input id="btnOpenTabtypeWindow" type="button" value="确定" onclick="UpdatePrice()" /></td>
+    </tr>
+    <tr>
+        <td><input id="btnKey4" type="button" value="4" onclick="inputPrcie('4')" class="number" /></td>
+        <td><input id="btnKey5" type="button" value="5" onclick="inputPrcie('5')" class="number" /></td>
+        <td><input id="btnKey6" type="button" value="6" onclick="inputPrcie('6')" class="number" /></td>
+        <td colspan="2"><input id="btnKeyTg" type="button" value="退格" onclick="inputPrcie('退格')" /></td>
+    </tr>
+    <tr>
+        <td><input id="btnKey7" type="button" value="7" onclick="inputPrcie('7')" class="number" /></td>
+        <td><input id="btnKey8" type="button" value="8" onclick="inputPrcie('8')" class="number" /></td>
+        <td><input id="btnKey9" type="button" value="9" onclick="inputPrcie('9')" class="number" /></td>
+       
+        <td colspan="2"><input id="btnKeyQk" type="button" value="清空" onclick="inputPrcie('清空')" class="letter" /></td>
+    </tr>
+    <tr>
+        <td><input id="btnKey." type="button" value="." onclick="inputPrcie('.')" class="number" /></td>
+        <td colspan="2"><input id="btnKey0" type="button" value="0" onclick="inputPrcie('0')" class="number" /></td>
+      
+        <td colspan="2"><input id="btnclose" type="button" value="退出" onclick="Signout()" class="letter" /></td>
+    </tr>
+</table>
+<script>
+    var index = layer.index;
+    
+    function clearNoNum(obj) {
+
+        if (obj.value != '' && obj.value.substr(0, 1) == '.') {
+            obj.value = "";
+        }
+        obj.value = obj.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+        obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的     
+        obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数     
+        if (obj.value.indexOf(".") < 0 && obj.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+            if (obj.value.substr(0, 1) == '0' && obj.value.length == 2) {
+                obj.value = obj.value.substr(1, obj.value.length);
+            }
+        }
+    
+
+        if (obj.value.indexOf(".00") > -1) {
+            obj.value = obj.value.replace(".00", '');
+        }
+    }
+    function inputPrcie(value) {
+        var val = $("#txtPrice").val();
+        if (value.indexOf("退格") === -1 && value.indexOf("清空") === -1 && value.indexOf("确定") === -1) {
+            var sumVal = val + value;
+
+            if (sumVal != '' && sumVal.substr(0, 1) == '.') {
+                sumVal = "";
+            }
+            sumVal = sumVal.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+            sumVal = sumVal.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的     
+            sumVal = sumVal.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            sumVal = sumVal.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数  
+
+            if (sumVal.indexOf(".") < 0 && sumVal != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+                if (sumVal.substr(0, 1) == '0' && sumVal.length == 2) {
+                    sumVal = sumVal.substr(1, sumVal.length);
+                }
+            }
+        
+            if (sumVal.indexOf(".00") > -1) {
+                sumVal = sumVal.replace(".00", '');
+            }
+            $("#txtPrice").val(sumVal);
+        }
+        else if (value.indexOf("退格") > -1) {
+            $("#txtPrice").val(val.replace(/.$/, ''));
+        }
+        else if (value.indexOf("清空") > -1) {
+            $("#txtPrice").val("");
+        }
+    }
+
+    //修改单价
+    function UpdatePrice() {
+        var Id = $("#ItemPriceBillId").val();
+        if (Id == null || Id == "") {
+            layer.alert("请选择消费项目", { title: "快点云pos提示" });
+            return false;
+        }
+        var price = $("#txtPrice").val();
+        var reg = /^[0-9]+(.[0-9]{1,2})?$/;
+        if (!reg.test(price)) {
+            layer.alert("请输入正确的数字");
+            return false;
+        }
+        $.ajax({
+            url: 'PosInSingle/UpdatePriceNumber',
+            type: "post",
+            data: { Id: Id, Price: price },
+            datatype: "json",
+            success: function (data) {
+                if (data.Success) {
+                    $("#grid").data("kendoGrid").dataSource.read();
+                    getStatistics(1);
+                    layer.close(index);
+                }
+                else {
+                    layer.alert(data.Data, { title: "快点云pos提示" });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responsetext, { title: "快点云pos提示" });
+            }
+        });
+    }
+    function exitPrice() {
+        layer.close(index);
+    }
+    function Signout() {
+        var url = window.location.href;
+        if (url.indexOf("PosInSingle") > -1) {
+            if (isHandle == true) {
+                isHandle = false;
+            }
+        }
+        layer.closeAll();
+    }
+</script>

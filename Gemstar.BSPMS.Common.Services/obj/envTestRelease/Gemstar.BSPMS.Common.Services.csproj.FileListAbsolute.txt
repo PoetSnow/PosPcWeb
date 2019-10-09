@@ -1,0 +1,9 @@
+D:\work\Pos\Gemstar.BSPMS.Common.Services\bin\envTestRelease\Gemstar.BSPMS.Common.Services.dll
+D:\work\Pos\Gemstar.BSPMS.Common.Services\bin\envTestRelease\Gemstar.BSPMS.Common.Services.pdb
+D:\work\Pos\Gemstar.BSPMS.Common.Services\bin\envTestRelease\System.Web.Mvc.dll
+D:\work\Pos\Gemstar.BSPMS.Common.Services\bin\envTestRelease\System.Web.Mvc.xml
+D:\work\Pos\Gemstar.BSPMS.Common.Services\bin\envTestRelease\zh-Hans\System.Web.Mvc.resources.dll
+D:\work\Pos\Gemstar.BSPMS.Common.Services\obj\envTestRelease\Gemstar.BSPMS.Common.Services.csproj.CoreCompileInputs.cache
+D:\work\Pos\Gemstar.BSPMS.Common.Services\obj\envTestRelease\Gemstar.BSPMS.Common.Services.csproj.CopyComplete
+D:\work\Pos\Gemstar.BSPMS.Common.Services\obj\envTestRelease\Gemstar.BSPMS.Common.Services.dll
+D:\work\Pos\Gemstar.BSPMS.Common.Services\obj\envTestRelease\Gemstar.BSPMS.Common.Services.pdb

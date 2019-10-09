@@ -1,0 +1,63 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPos.PosRefe>
+<style type="text/css">
+    .selectRefe {
+        display: block;
+        float: left;
+        width: 12%;
+        height: 5rem;
+        margin: 1%;
+        padding: 0.5%;
+        border-radius: 5%;
+        background-color: #d8d8d8;
+    }
+
+    .selectRefe span {
+        width: 100%;
+        display: block;
+        text-align: center;
+    }
+
+    .refeList {
+    }
+    .refeList li {
+        float:left;
+        width: 8rem;
+        height: 8rem;
+        padding: 1rem;
+        font-size: 1rem;
+        text-align: center;
+        margin:0 0 0.5rem 0.5rem;
+    }
+
+    .refeList li a {
+        height: 100%;
+        display: block;
+        font-size:1.5rem;
+        padding:0.5rem;
+        border:2px solid #666;
+        width: calc(100% - 1rem);
+    }
+</style>
+<ul class="refeList"><li>
+                <a href="javascript:void(0);" class="selectRefe" onclick="refeQuery('', '全部营业点')">
+                    <span>全部营业点</span>
+                </a>
+            </li>
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            
+            foreach (var refe in Model)
+            {
+                <li>
+                    <a href="javascript:void(0);" class="selectRefe" onclick="refeQuery('@refe.Id', '@refe.Cname')">
+                        @refe.Cname
+                    </a>
+                </li>
+            }
+        }
+    }
+</ul>
+<div class="formButtons">
+<input id="btnCloseRefeWindow" type="button" value="翻页" onclick="closeWindow('refeWindow')" /><input id="btnCloseRefeWindow" type="button" value="关闭" onclick="closeWindow('refeWindow')" />
+</div>

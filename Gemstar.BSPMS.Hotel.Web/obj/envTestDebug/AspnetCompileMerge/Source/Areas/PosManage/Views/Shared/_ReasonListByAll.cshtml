@@ -1,0 +1,53 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPos.PosReason>
+<ul id="ReasonListAll" style="padding-left:5px">
+
+
+    @{
+        var pageIndex = ViewBag.pageIndex;
+        if (pageIndex <= 1)
+        {
+            <li class="content-list-detail">
+                <a href="javascript:void(0)" onclick="handReasonAll()">
+                    <span style="font-size: 5rem;line-height: 5rem;">+</span>
+                </a>
+            </li>
+           
+        }
+
+
+        if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <li class="content-list-detail">
+                    <a href="javascript:void(0)" onclick='CancelAllItemByNum(this)' data-id="@item.Id" data-istagtype="@(Model[0].IstagType)" data-isreuse="@(item.Isreuse)" data-name="@item.Cname">
+                        <span>@item.Code</span>
+                        <span>@item.Cname</span>
+                    </a>
+                </li>
+            }
+            <li class="content-list-paging">
+                <a href="javascript:void(0)" onclick="getListPageByReason(this,'1','@(Url.Action("_ReasonListByAll", "PosInSingle"))','@(Url.Action("GetReasonTotal", "PosInSingle"))')" data="@Model[0].IstagType">上一页</a>
+                <a href="javascript:void(0)" onclick="getListPageByReason(this,'2','@(Url.Action("_ReasonListByAll","PosInSingle"))','@(Url.Action("GetReasonTotal","PosInSingle"))')" data="@Model[0].IstagType">下一页</a>
+            </li>
+        }
+        <li class="content-list-return" style=""><a href="javascript:void(0)" onclick="layer.closeAll()"><img src="~/Images/posInSingle/fanh.png" /><br />关闭</a></li>
+    }
+</ul>
+<script type="text/javascript">
+    $(function () {
+        setItemPriceNull();
+        $("#ReasonListByAll").css("background-color", "#454545");
+        
+    })
+    function setItemPriceNull() {
+        var totalCount = 15;
+        var html = "";
+        var liCount = $("#ReasonListAll").find(".content-list-detail").length + 2;
+        for (var i = 0; i < totalCount - liCount; i++) {
+            html += '<li class="content-list-detail" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+        }
+        $("#ReasonListAll .content-list-paging").before(html);
+
+    }
+</script>

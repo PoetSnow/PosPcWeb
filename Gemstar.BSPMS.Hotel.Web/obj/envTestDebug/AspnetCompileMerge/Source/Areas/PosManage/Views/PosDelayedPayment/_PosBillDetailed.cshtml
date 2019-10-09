@@ -1,0 +1,464 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+<link href="~/Content/Pos/posPublic.css?version=@ViewBag.Version" rel="stylesheet" />
+<div class="divTop">
+    @(Html.Kendo().Grid<up_pos_list_BillDetailByBillidResult>()
+                                .Name("gridBillDetailA")
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(m => m.Id).Hidden();
+                                    columns.Bound(m => m.isIsDiscountStringForItem).Hidden();
+                                    columns.Bound(m => m.Status).Hidden();
+                                    columns.Bound(m => m.Isauto).Hidden();
+                                    columns.Bound(m => m.Billid).Hidden();
+                                    columns.Bound(m => m.MBillid).Hidden();
+                                    columns.Bound(m => m.Row).Title("序号").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50).ClientFooterTemplate("合计");
+                                    columns.Bound(m => m.ItemName).Title("食品").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(120);
+                                    columns.Bound(m => m.Quantity).Title("数量").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                                    columns.Bound(m => m.UnitName).Title("单位").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                                    columns.Bound(m => m.Price).Title("价格").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(80).Format("{0:C}");
+                                    columns.Bound(m => m.Multiple).Title("倍数").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                                    columns.Bound(m => m.AddPrice).Title("作法加价").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(65);
+                                    columns.Bound(m => m.Dueamount).Title("折前金额").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(75).Format("{0:C}")
+                            .ClientFooterTemplate("<div style='color: red'>¥#= sum #</div>");
+                                    columns.Bound(m => m.Discount).Title("折扣").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                                    columns.Bound(m => m.DiscAmount).Title("金额折").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+                                    columns.Bound(m => m.Amount).Title("折后金额").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(75).Format("{0:C}")
+                            .ClientFooterTemplate("<div style='color: red'>¥#= sum #</div>");
+                                    columns.Bound(m => m.Service).Title("服务费").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60)
+                            .ClientFooterTemplate("<div style='color: red'>¥#= sum #</div>");
+                                    columns.Bound(m => m.isCheckString).Title("付款").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50).Hidden();
+                                    columns.Bound(m => m.statusString).Title("状态").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                                    columns.Bound(m => m.isIsDiscountStringForItem).Title("可折否").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(70);
+                                    columns.Bound(m => m.BatchTime).Title("批次").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                                    columns.Bound(m => m.Place).Title("客位").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(100);
+                                    columns.Bound(m => m.isautoString).Title("自动标志").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(65);
+                                    columns.Bound(m => m.TransUser).Title("点菜员").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(70);
+                                    columns.Bound(m => m.TransDate).Title("点餐时间").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50).Format("{0:yyyy-MM-dd HH:mm:ss}").Width(135);
+                                    columns.Bound(m => m.isHandWriteString).Title("手写单").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(70);
+                                    columns.Bound(m => m.DeptClassName).Title("部门类别").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(65);
+                                    columns.Bound(m => m.Memo).Title("备注").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+                                })
+
+                            .Sortable()
+                                .Scrollable()
+                                .Resizable(r => r.Columns(true))
+                                .Selectable(s => s.Mode(GridSelectionMode.Single))
+
+                                .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .Read(read => read.Action("ListUpBillDetailByBillid", "PosCashier", new { rnd = new Random().NextDouble(), billid = ViewBag.PosBillId }))
+                                .Aggregates(aggregates =>
+                                {
+                                    aggregates.Add(p => p.Dueamount).Sum();
+                                    aggregates.Add(p => p.Amount).Sum();
+                                    aggregates.Add(p => p.Service).Sum();
+                                })
+                                )
+                                .HtmlAttributes(new { @style = "height:100%" })
+                                .Events(e => e.DataBound("SelectRow"))
+    )
+</div>
+@*<div class="container">
+    <div style="width:31%;margin-left:2%">
+        @(Html.Kendo().Grid<up_pos_list_BillDetailByGroupItemClassResult>()
+                    .Name("gridBillDetailForDept")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(m => m.Id).Hidden();
+
+                        columns.Bound(m => m.Name).Title("部门类别").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(70).ClientFooterTemplate("合计");
+                        columns.Bound(m => m.status).Title("状态").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(70);
+                        columns.Bound(m => m.sumNum).Title("数量").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(70).ClientFooterTemplate("<div style='color: red'>#= sum #</div>");
+                        columns.Bound(m => m.sumDueamount).Title("折前金额").HtmlAttributes(new { @style = "white-space: nowrap;" }).Format("{0:C}").Width(85)
+                        .ClientFooterTemplate("<div style='color: red'>¥#= sum #</div>");
+                        columns.Bound(m => m.sumTaxAmount).Title("折扣金额").HtmlAttributes(new { @style = "white-space: nowrap;" }).Format("{0:C}").Width(85)
+                            .ClientFooterTemplate("<div style='color: red'>¥#= sum #</div>");
+                        columns.Bound(m => m.sumAmount).Title("折后金额").HtmlAttributes(new { @style = "white-space: nowrap;" }).Format("{0:C}").Width(85)
+                        .ClientFooterTemplate("<div style='color: red'>¥#= sum #</div>");
+
+                    })
+                        .Sortable()
+                    .Scrollable()
+                    .Resizable(r => r.Columns(true))
+                    .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .PageSize(10)
+                        .Read(read => read.Action("ListUpBillDetailByGroupItem", "PosInSingle", new { rnd = new Random().NextDouble(), billid = ViewBag.PosBillId, Flag = "A" }))
+                        .Aggregates(aggregates =>
+                        {
+                            aggregates.Add(p => p.sumTaxAmount).Sum();
+                            aggregates.Add(p => p.sumNum).Sum();
+                            aggregates.Add(p => p.sumDueamount).Sum();
+                            aggregates.Add(p => p.sumAmount).Sum();
+                        })
+                    )
+                    .HtmlAttributes(new { @style = "height:100%" })
+        )
+    </div>
+    <div style="width:31%;margin-left:2%">
+        @(Html.Kendo().Grid<up_pos_list_BillDetailByGroupItemClassResult>()
+                            .Name("gridBillDetailForSubClass")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(m => m.Id).Hidden();
+
+                                columns.Bound(m => m.Name).Title("大类").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(70)
+                                .ClientFooterTemplate("合计");
+                                columns.Bound(m => m.status).Title("状态").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(70);
+                                columns.Bound(m => m.sumNum).Title("数量").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(70)
+                                .ClientFooterTemplate("<div style='color: red'>#= sum #</div>"); ;
+                                columns.Bound(m => m.sumDueamount).Title("折前金额").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(85).Format("{0:C}")
+                                    .ClientFooterTemplate("<div style='color: red'>¥#= sum #</div>"); ;
+                                columns.Bound(m => m.sumTaxAmount).Title("折扣金额").HtmlAttributes(new { @style = "white-space: nowrap;" }).Format("{0:C}").Width(85)
+                                    .ClientFooterTemplate("<div style='color: red'>¥#= sum #</div>");
+                                columns.Bound(m => m.sumAmount).Title("折后金额").HtmlAttributes(new { @style = "white-space: nowrap;" }).Format("{0:C}").Width(85)
+                                    .ClientFooterTemplate("<div style='color: red'>¥#= sum #</div>");
+                            })
+                                .Sortable()
+                            .Scrollable()
+                            .Resizable(r => r.Columns(true))
+                            .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+
+                            .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .PageSize(10)
+                                .Read(read => read.Action("ListUpBillDetailByGroupItem", "PosInSingle", new { rnd = new Random().NextDouble(), billid = ViewBag.PosBillId, Flag = "B" }))
+                                .Aggregates(aggregates =>
+                                {
+                                    aggregates.Add(p => p.sumTaxAmount).Sum();
+                                    aggregates.Add(p => p.sumNum).Sum();
+                                    aggregates.Add(p => p.sumDueamount).Sum();
+                                    aggregates.Add(p => p.sumAmount).Sum();
+                                })
+                            )
+                            .HtmlAttributes(new { @style = "height:100%" })
+        )
+    </div>
+    <div style="width:31%;margin-left:2%">
+        @(Html.Kendo().Grid<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_BillDetailByGroupItemClassResult>()
+                            .Name("gridBillDetailForItemClass")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(m => m.Id).Hidden();
+
+                                columns.Bound(m => m.Name).Title("项目分类").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(70).ClientFooterTemplate("合计");
+                                columns.Bound(m => m.status).Title("状态").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(70);
+                                columns.Bound(m => m.sumNum).Title("数量").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(70)
+                                    .ClientFooterTemplate("<div style='color: red'>#= sum #</div>");
+                                columns.Bound(m => m.sumDueamount).Title("折前金额").HtmlAttributes(new { @style = "white-space: nowrap;" }).Format("{0:C}").Width(85)
+                                    .ClientFooterTemplate("<div style='color: red'>¥#= sum #</div>");
+                                columns.Bound(m => m.sumTaxAmount).Title("折扣金额").HtmlAttributes(new { @style = "white-space: nowrap;" }).Format("{0:C}").Width(85)
+                                    .ClientFooterTemplate("<div style='color: red'>¥#= sum #</div>");
+                                columns.Bound(m => m.sumAmount).Title("折后金额").HtmlAttributes(new { @style = "white-space: nowrap;" }).Format("{0:C}").Width(85)
+                                    .ClientFooterTemplate("<div style='color: red'>¥#= sum #</div>");
+                            })
+                                .Sortable()
+                            .Scrollable()
+                            .Resizable(r => r.Columns(true))
+                            .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+                            .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .PageSize(10)
+                                .Read(read => read.Action("ListUpBillDetailByGroupItem", "PosInSingle", new { rnd = new Random().NextDouble(), billid = ViewBag.PosBillId, Flag = "C" }))
+                                .Aggregates(aggregates =>
+                                {
+                                    aggregates.Add(p => p.sumTaxAmount).Sum();
+                                    aggregates.Add(p => p.sumNum).Sum();
+                                    aggregates.Add(p => p.sumDueamount).Sum();
+                                    aggregates.Add(p => p.sumAmount).Sum();
+                                })
+                            )
+                            .HtmlAttributes(new { @style = "height:100%" })
+        )
+    </div>
+</div>*@
+<div class="foot">
+    @{
+        var openFlag = ViewBag.openFlag;
+
+        if (openFlag == "A")//详细
+        {
+            <input type="button" value="补打全部点菜单" class="button" onclick="SupplyPrintAll()" />
+            <input type="button" value="补打所选批次的点菜单" class="button" onclick="SupplyPrintSelBatch()" />
+            <input type="button" value="补打所选项的点菜单" class="button" onclick="SupplyPrintSelItem()" />
+            <input type="button" value="退出" class="button" onclick="exitBill()" style="color:#fafafa;background:#f55858;" />
+        }
+        if (openFlag == "C")//折扣
+        {
+            <input type="button" value="全单折扣" class="button" onclick="AddDiscType('0')" />
+            <input type="button" value="照单全折" class="button" onclick="AddDiscType('1')" />
+            <input type="button" value="全单金额折" class="button" onclick="AddDiscType('2')" />
+            <input type="button" value="照单金额折" class="button" onclick="AddDiscType('3')" />
+            <input type="button" value="单道折扣" class="button" onclick="AddDiscType('4')" />
+            <input type="button" value="单道金额折" class="button" onclick="AddDiscType('5')" />
+            <input type="button" value="退出" class="button" onclick="exitBill()" style="color:#fafafa;background:#f55858;" />
+        }
+
+    }
+</div>
+<script type="text/javascript">
+    $(function () {
+        //判断按钮个数，如果只有退出按钮，则按钮浮动在右
+        var length = $(".foot input:button").length;
+        if (length <= 1) {
+            $(".foot input:button").css("float", "right");
+        }
+        var windowWidth = $(document).width() * 0.8;
+        var width = windowWidth / length;
+        $(".button").css("width", width);
+    })
+
+    //添加折扣
+    function AddDiscType(discType) {
+        $.ajax({
+            url: '@Url.Action("CheckEditForBillRefe", "PosInSingle", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: { BillId: $("#billid").val() },
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    var detailIdList = 0;
+                    if (discType == "4" || discType == "5") {//单道折扣或者单道金额折
+                        var grid = $("#gridBillDetailA").data("kendoGrid");
+                        var trList = $("#gridBillDetailA").find(".k-grid-content tr");
+                        var IsDisText = "";
+                        var ids = "";//选中的ID集合
+                        for (var i = 0; i < trList.length; i++) {
+                            var selected = $(trList[i]).attr("aria-selected");
+                            if (selected == "true") {
+                                var id = $(trList[i]).find("td").eq(0).html();
+                                var isForce = $(trList[i]).find("td").eq(1).html();
+                                if (isForce == "否") {
+                                    IsDisText += $(trList[i]).find("td").eq(7).html() + ",";
+                                }
+                                ids += id + ",";
+                            }
+                        }
+                        if (IsDisText != "") {
+                            layer.alert(IsDisText + "不可打折", { title: "快点云Pos提示", skin: "err"});
+                            return false;
+                        }
+                        if (ids == "") {
+                            layer.alert("请选择消费项目", { title: "快点云Pos提示", skin: "err" });
+                            return false;
+                        }
+                    }
+                    var ulr = "";
+                    switch (discType) {
+                        case "-1":
+                        case "0":
+                            ulr = "/PosManage/PosDelayedPaymentDiscount/_DiscountNumBerA";
+                            break;
+                        case "1":
+                            ulr = "/PosManage/PosDelayedPaymentDiscount/_DiscountNumBerB";
+                            break;
+                        case "2":
+                            ulr = "/PosManage/PosDelayedPaymentDiscount/_DiscountNumBerC";
+                            break;
+                        case "3":
+                            ulr = "/PosManage/PosDelayedPaymentDiscount/_DiscountNumBerD";
+                            break;
+                        case "4":
+                            ulr = "/PosManage/PosDelayedPaymentDiscount/_DiscountNumBerE";
+                            break;
+                        case "5":
+                            ulr = "/PosManage/PosDelayedPaymentDiscount/_DiscountNumBerF";
+                            break;
+                        default:
+                            ulr = "/PosManage/PosDelayedPaymentDiscount/_DiscountNumBerA";
+                            break;
+                    }
+
+                    $.ajax({
+                        url: ulr,
+                        type: "post",
+                        data: { discType: discType, BillId: $("#billid").val(), detailIdList: ids },
+                        dataType: "html",
+                        success: function (data) {
+                            var boolJson = isJson(data);
+                            if (boolJson) {
+                                var obj = JSON.parse(data);
+                                if (obj.Success == false) {
+                                    layer.alert(obj.Data, { title: "快点云Pos提示", skin: "err" });
+                                    return false;
+                                }
+                            }
+                            layer.open({
+                                type: 1,
+                                title: "添加折扣",
+                                closeBtn: 0, //不显示关闭按钮
+                                area: ['320px', '435px'], //宽高
+                                content: data
+                            });
+                        },
+                        error: function (data) {
+                            layer.alert(data.responseText, { title: "快点云Pos提示", skin: "err" });
+                        }
+                    });
+                }
+                else {
+                    layer.alert(data.Data, { title: "快点云Pos提示", skin: "err"});
+                }
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示", skin: "err" });
+            }
+        });
+    }
+
+    function SupplyPrintAll() {
+        $.ajax({
+            url: '@Url.Action("SupplyPrintAll", "PosInSingle")' + "?billid=" + $("#billid").val(),
+            type: "post",
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    if ("undefined" != typeof jsObject) {   //封装程序
+                        if (data.Data.length > 0 && data.Data != "") {
+                            jsObject.UserName = $("#userName").val();
+                            jsObject.PrintReport("PosTheMenu", "TheMenu", JSON.stringify(data.Data), false, true);
+                        }
+                    }
+                } else {
+                    layer.alert(data.Data, { title: "快点云Pos提示", skin: "err"});
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示", skin: "err" });
+            }
+        });
+    }
+
+    function SupplyPrintSelBatch() {
+        var grid = $("#gridBillDetailA").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0) {
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+
+            $.ajax({
+                url: '@Url.Action("SupplyPrintSelBatch", "PosInSingle")' + "?billid=" + $("#billid").val() + "&batchTime=" + data["BatchTime"].toString(),
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    if (data.Success) {
+                        if ("undefined" != typeof jsObject) {   //封装程序
+                            if (data.Data.length > 0 && data.Data != "") {
+                                jsObject.UserName = $("#userName").val();
+                                jsObject.PrintReport("PosTheMenu", "TheMenu", JSON.stringify(data.Data), false, true);
+                            }
+                        }
+                    } else {
+                        layer.alert(data.Data, { title: "快点云Pos提示", skin: "err"});
+                    }
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示", skin: "err" });
+                }
+            });
+        }
+        else {
+            layer.alert("请选择消费项目", { title: "快点云Pos提示", skin: "err"});
+        }
+    }
+
+    function SupplyPrintSelItem() {
+        var grid = $("#gridBillDetailA").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0) {
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+
+            $.ajax({
+                url: '@Url.Action("SupplyPrintSelItem", "PosInSingle")' + "?billid=" + $("#billid").val() + "&id=" + data["Id"].toString(),
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    if (data.Success) {
+                        if ("undefined" != typeof jsObject) {   //封装程序
+                            if (data.Data.length > 0 && data.Data != "") {
+                                jsObject.UserName = $("#userName").val();
+                                jsObject.PrintReport("PosTheMenu", "TheMenu", JSON.stringify(data.Data), false, true);
+                            }
+                        }
+                    } else {
+                        layer.alert(data.Data, { title: "快点云Pos提示", skin: "err" });
+                    }
+
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示", skin: "err" });
+                }
+            });
+        }
+        else {
+            layer.alert("请选择消费项目", { title: "快点云Pos提示", skin: "err"});
+        }
+    }
+</script>
+<style>
+    .container {
+        display: flex;
+        margin-top: 2rem;
+        height: 30%;
+    }
+
+    .foot {
+        left: 0;
+        bottom: 0;
+        clear: both;
+        width: 100%;
+        text-align: center;
+        position: relative;
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+    }
+
+    .msg {
+        left: 0;
+        bottom: 0;
+        clear: both;
+        width: 100%;
+        text-align: center;
+        position: absolute;
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+    }
+
+        .msg input[type=button] {
+            border: 0;
+            width: 100%;
+            float: left;
+            font-size: 2rem;
+            border-top: 1px solid #ccc;
+        }
+
+    .button {
+        border: 0;
+        margin: 10px;
+        color: #fff;
+        font-size: 20px;
+        border-radius: 8px;
+        padding: 10px 20px;
+        background: #009fff;
+    }
+
+    .divTop table tr {
+        height: 35px;
+    }
+
+    /* 1030宽度时候的样式 */
+    @@media screen and (max-width: 1030px) {
+        .button {
+            border: 0;
+            margin: 5px;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 8px;
+            padding: 10px;
+            background: #009fff;
+        }
+    }
+</style>

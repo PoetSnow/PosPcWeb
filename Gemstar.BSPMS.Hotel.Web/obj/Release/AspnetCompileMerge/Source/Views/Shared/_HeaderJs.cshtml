@@ -1,0 +1,34 @@
+﻿@System.Web.Optimization.Scripts.Render(BundleConfig.BundleHeaderJs)
+@System.Web.Optimization.Scripts.Render(BundleConfig.BundlePermanentRoomResScripts)
+@System.Web.Optimization.Scripts.Render(BundleConfig.BundleResScripts)
+@System.Web.Optimization.Scripts.Render(BundleConfig.BundlePayScripts)
+<script type="text/javascript">
+    $(document).ready(function () {
+        kendo.culture("zh-CN");
+        //var spinner = new Spinner();
+        //$(document).ajaxStart(function () {
+        //    spinner.spin(document.getElementById("loadingDiv"));
+        //}).ajaxStop(function () {
+        //    spinner.spin();
+        //});
+    });
+    function openKendoDatePicker(obj) {
+        var datepicker = $(obj).data("kendoDatePicker");
+        datepicker.open();
+    }
+    function openKendoDatetimePicker(obj) {
+        var datepicker = $(obj).data("kendoDateTimePicker");
+        datepicker.open("date");
+    }
+    //ajax错误处理
+    function ajaxErrorHandle(data) {
+        if (data.ErrorCode == 1) {
+            jAlert(data.Data, "知道了", function () {
+                window.top.location = '@Url.Action("index","account",new { area=""})';
+            });
+        }
+        else {
+            jAlert(data.Data, "知道了");
+        }
+    }
+</script>

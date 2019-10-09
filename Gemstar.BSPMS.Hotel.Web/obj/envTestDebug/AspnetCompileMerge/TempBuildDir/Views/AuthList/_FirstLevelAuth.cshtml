@@ -1,0 +1,16 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.Entities.AuthList>
+@{
+    foreach (var auth in Model)
+    {
+        if (auth.AuthCode != "p60" && auth.AuthCode != "p40" && auth.AuthCode != "p70")
+        {
+            <li>
+                <a class="firstLevelAuth" data-authid="@auth.AuthCode" href="javascript:changeAuth('@auth.AuthCode');" style="display:block">
+                    <i class="icon-newauth-@auth.AuthCode newys"></i>
+                    <span style="display:block"> @auth.AuthName</span>
+                </a>
+            </li>
+        }
+
+    }
+}

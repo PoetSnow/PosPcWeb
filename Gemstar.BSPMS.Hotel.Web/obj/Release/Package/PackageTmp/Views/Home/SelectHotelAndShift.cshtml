@@ -1,0 +1,295 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Models.Home.SelectHotelAndShiftViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+}
+
+    <style type="text/css">
+            a:hover  {
+            color: #428BCA;
+        }
+        .info-table {
+            font-size: 20px;
+        }
+
+         .info-table h2 {
+             color: #428bca;
+             display: inline-block;
+             margin-left: 60px;
+         }
+
+         .info-table tr {
+             line-height: 3;
+         }
+
+          .info-table td {
+              text-align: left;
+          }
+
+        .lefttd {
+            width: 170px;
+        }
+
+        .div {
+            width: 330px;
+            float: left;
+            margin-top: 10px;
+            line-height: 2;
+        }
+
+        .towdiv {
+            border: 1px solid #ccc;
+            width: 280px;
+            border-radius: 6px;
+        }
+
+        .spandiv {
+            float: left;
+            text-align: left;
+            margin-left: 20px;
+            width: 85px;
+        }
+
+        .timediv {
+            float: left;
+        }
+
+        .imgdiv {
+            margin-left: 15px;
+            vertical-align:sub;
+        }
+
+        .divMaion {
+            background: rgba(235, 235, 235, 0.12);
+            border-radius: 10px;
+            color: black;
+        }
+
+        .bnttr a:hover {
+            color: white !important;
+        }
+
+        .bnttr a {
+            color: black !important;
+        }
+
+        .span {
+            display: block;
+            height: 90px;
+            line-height: 90px;
+        }
+
+        .bgcolor {
+            background-color: #004793;
+            border:1px solid red;
+        }
+        .font-color {
+            font-weight: bold;
+            font-style: normal;
+            color: rgb(85, 85, 85);
+        }
+        .fendiv {
+            float:left;
+            width:330px
+        }
+        .a-color {
+             color: #428BCA;
+        }
+    </style>
+    <div class="divMaion">
+        <h3>选择班次 <a id="bntReturn" style="margin-top:4px;" class="k-primary k-button a-back"  href="javascript: history.back(-1);">返回</a></h3>
+        <div class="info-list">
+            <table class="info-table">
+                <tr>
+                    <td class="lefttd font-color">分店选择：</td>
+                    <td class="font-color">
+                        @foreach (var hotel in Model.ResortList)
+                        {
+                           <div class="fendiv">
+                          <a href="javascript:void(0)" data-resortid="@hotel.Hid" data-hname="@hotel.Hname" onclick="selectReosrt(this)">@(hotel.Hid+"  "+hotel.Hname)</a>
+                           </div>
+                        }
+                    </td>
+                </tr>
+               
+                <tr class="tr" id="liShifts">
+                    <td class="lefttd font-color" valign="top">
+                        班次选择：
+                    </td>
+                    <td>
+                        @{
+                            foreach (var shift in Model.Shifts)
+                            {
+                                <div class="div">
+                                    <div class="towdiv">
+                                            <a href="javascript:void(0)" data-shiftid="@shift.Id" data-shiftstatus="@shift.LoginStatus" data-shiftname="@shift.ShiftName" onclick="selectShift(this)">
+                                                <div class="spandiv">@shift.ShiftName</div>
+                                                <div class="timediv">(@shift.BeginTime-@shift.EndTime)</div>
+                                                @if (shift.LoginStatus.ToString() == "已关闭")
+                                                {
+                                                    <span class="imgdiv"><img src="~/images/selectShift/guanbi.png" /></span>
+                                                }
+                                                else if (shift.LoginStatus.ToString() == "未开")
+                                                {
+                                                    <span class="imgdiv"><img src="~/images/selectShift/weikai.png" /></span>
+                                                }
+                                                else if (shift.LoginStatus.ToString() == "已开")
+                                                {
+                                                    <span class="imgdiv"><img src="~/images/selectShift/kai.png" /></span>
+                                                }
+
+                                            </a>
+                                        </div>
+                                </div>
+                            }
+                        }
+                       
+                    </td>
+                </tr>
+               
+                <tr>
+                    <td colspan="2">
+                       
+                        <input type="hidden" id="selectedHotelId" value="@Model.CurrentHotelId" />
+                        <input type="hidden" id="selectedShiftId" value="@Model.CurrentShiftId" />
+                        <input type="hidden" id="selectedShiftName" value="@Model.CurrentShiftName" />
+                        <input type="hidden" id="checkShiftStatu" value="1" />
+                        <input type="hidden" id="selectedHotelName"value="@Model.CurrentHotelName" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+   @section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $("#bannerDiv").removeClass("apply-banner");
+            $("#bannerDiv").addClass("apply-banner-shift");
+            bgcolor();
+            selectColor();
+        })
+        function bgcolor() {
+            var shiftid = "@Model.CurrentShiftId";
+            var hotelId = "@Model.CurrentHotelId";
+            var data = $(".div a");
+            for (var i = 0; i < data.length; i++) {
+                var id = $(data[i]).attr("data-shiftid");
+                var name = $(data[i]).attr("data-shiftname");
+                if (name.length > 4) {
+                    $(data[i]).parent().css("height", "80px");
+                }
+                if (shiftid == id && shiftid != "") {
+                    $(data[i]).parent().addClass("bgcolor");
+                    $(data[i]).css("color", "white");
+                    var status = $(data[i]).attr("data-shiftstatus")
+                    var src = "";
+                    if (status == "已关闭") {
+                        src = "/images/selectShift/guanbi-1.png"
+                    }
+                    else if (status == "未开") {
+                        src = "/images/selectShift/weikai-1.png"
+                    }
+                    else if (status == "已开") {
+                        src = "/images/selectShift/kai-1.png"
+                    }
+                    $(data[i]).find("img").attr("src", src);
+                    break;
+                }
+            }
+            
+        }
+        function selectColor() {
+            $(".fendiv a").removeClass("a-color");
+            $(".fendiv a").each(function () {
+                var hid = $(this).attr("data-resortid");
+                if (hid == hotelId && hotelId != "") {
+                    $(this).addClass("a-color");
+                    return false;
+                }
+            })
+        }
+        function selectReosrt(a) {
+            
+            $(".fendiv a").removeClass("a-color");
+            $(a).addClass("a-color");
+            $("#selectedHotelId").val($(a).data("resortid"));
+            $("#selectedHotelName").val($(a).data("hname"));
+            getShiftsAvailable();
+        }
+        function selectShift(a) {
+            $("#selectedShiftId").val($(a).data("shiftid"));
+            $("#selectedShiftName").val($(a).data("shiftname"));
+            setSelectedValue();
+        }
+        function setSelectedValue() {
+            var hid = $("#selectedHotelId").val();
+            var hname = $("#selectedHotelName").val();
+            var shiftId = $("#selectedShiftId").val();
+            var shiftName = $("#selectedShiftName").val();//$("#selectedShiftId").data("shiftname");
+            
+            var checkShiftStatu = $("#checkShiftStatu").val();
+
+            $.post('@Url.Action("SetHotelAndShift")', { hid: hid, hname: hname, shiftId: shiftId, shiftName: shiftName, checkShiftStatu: checkShiftStatu }, function (data) {
+                if (data.Success) {
+                    if (data.Data.ResultType == 2) {
+                        top.location.href = data.Data.Message;
+                    } else {
+                        jConfirm(data.Data.Message, "确定", "取消", function (confirmed) {
+                            if (confirmed) {
+                                $("#checkShiftStatu").val("0");
+                                setSelectedValue();
+                            }
+                        });
+                    }
+                } else {
+                    //jAlert(data.Data);
+                    ajaxErrorHandle(data);
+                }
+            }, 'json');
+        }
+        function getShiftsAvailable() {
+            $("#selectedShiftId").val("");
+            $("#selectedShiftName").val("");
+
+            var hid = $("#selectedHotelId").val();
+
+            $.post('@Url.Action("GetShiftsAvailable", "Home")', { hid: hid }, function (data) {
+                if (data.Success) {
+                    var td = "<td class='lefttd font-color' valign='top'>班次选择：</td>";
+                    td += "<td>";
+                    $.each(data.Data, function (i, item) {
+                        var status = item.LoginStatus == 0 ? "未开" : item.LoginStatus == 1 ? "已开" : "已关闭";
+                        var span = "";
+                        if (status == "已关闭")
+                        {
+                            span= '<span class="imgdiv"><img src="/images/selectShift/guanbi.png" /></span>';
+                        }
+                        else if (status == "未开")
+                          {
+                            span=' <span class="imgdiv"><img src="/images/selectShift/weikai.png" /></span>';
+                           }
+                        else if (status == "已开")
+                            {
+                            span = ' <span class="imgdiv"><img src="/images/selectShift/kai.png" /></span>';
+                            }
+                        td+= "<div class='div'>"+
+                                     "<div class='towdiv'>"+
+                                             "<a href='javascript:void(0)' data-shiftid='"+item.Id+"' data-shiftstatus='"+status+"' data-shiftname='"+item.ShiftName+"' onclick='selectShift(this)'>"+
+                                                " <div class='spandiv'>"+item. ShiftName+"</div>"+
+                                                " <div class='timediv'>("+item.BeginTime+"-"+item.EndTime+")</div>"+
+                                                   span+
+                                               "</a>"+
+                                       " </div>"+
+                           " </div>";
+                    });
+                    td+="</td>"
+                    $("#liShifts").text("");
+                    $("#liShifts").append($(td));
+                    bgcolor();
+                } else {
+                    //jAlert(data.Data);
+                    ajaxErrorHandle(data);
+                }
+            }, 'json');
+        }
+    </script>
+       }

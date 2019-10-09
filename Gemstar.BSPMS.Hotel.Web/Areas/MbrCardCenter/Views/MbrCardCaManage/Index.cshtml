@@ -1,0 +1,238 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Common.Services;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "会员交易记录";
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForQuery = false,
+        HtmlAttributes = new { style = "height:465px;max-height:465px;" },
+        EnableScrollable = true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("transDate").Title("发生时间").Width(135);
+            c.Bound("type").Title("类型");
+            c.Bound("itemTypeName").Title("付款方式");
+            c.Bound("amount_plus").Title("增值").ClientTemplate(" <span class='sp-list'> #:amount_plus==null?'0':amount_plus# </span> ");
+            c.Bound("amount_minus").Title("减值").ClientTemplate(" <span class='sp-list'> #:amount_minus==null?'0':amount_minus# </span> ");
+            c.Bound("balance").Title("余额").ClientTemplate(" <span class='sp-list'> #:balance# </span> ");
+            c.Bound("invno").Title("单号").HtmlAttributes(new { style = "word-break: break-all;" });
+            //c.Bound("IsRefunded").Title("退款").ClientTemplate("#:IsRefunded==1?'已退':'未退'#");
+            c.Bound("remark").Title("备注");
+            c.Bound("hname").Title("分店").Column.Visible = ViewBag.IsGroup;
+            c.Bound("outletCode").Title("营业点");
+            c.Bound("shiftName").Title("班次");
+            c.Bound("inputUser").Title("操作员");
+            c.Bound("regid").Title("账号");
+        },
+        CustomToolbar = toolbar =>
+        {
+        toolbar.Template(@<text>
+        <div class="toolbar">
+            <table>
+                <tr id="dd">
+                    <td style="border:none;width:60px;padding-right:0px;"><label class="category-label" for="category">账户类型:</label></td>
+                    <td style="border:none;text-align:left;max-width:260px;">
+                        @(Html.Kendo().MultiSelect()
+                            .Name("categories")
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .AutoBind(true)
+                            .Events(e => e.Change("categoriesChange"))
+
+                            .DataSource(ds =>
+                            {
+                                ds.Read("AccountTypeList", "MbrCardCaManage", new { area = "MbrCardCenter", rnd = new Random().NextDouble() });
+                            })
+                        )
+                    </td>
+                    <td style="border:none">
+                        <button class="k-primary k-button" style="display:inline-block" id="printMbarLog" role="button" data-role="button" onclick="printMbr()">打印单据</button>
+
+                        <button class="k-primary k-button" style="display:inline-block" id="chargeRefund" role="button" data-role="button" onclick="chargeRefund()">充值退款</button>
+                    </td>
+                    <td style="border:none;height:100%;width:400px;">
+                        <span class="span-red" id="Recharge" style="padding-top:5px;">双击充值可修改付款方式</span>
+
+                        <span class="span-red" id="SubtractMoney" style="padding-top:5px;margin-right: 10px;">双击消费扣款可显示账单详情</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        </text>);
+        }
+    };
+}
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+    <script>
+        $(function () {
+            $("#dd").mouseover(function () {
+                $("#dd>td").css("background-color", "white");
+            });
+        });
+        function categoriesChange() {
+            var value = this.value();
+            loadPrintBnt(value);
+            var obj = $("#commonQueryParameterValues");
+            var index = obj.val().indexOf("&");
+            if (index == -1) {
+                obj.val(obj.val() + "&@@m14会员账户类型=" + value);
+            } else {
+                obj.val(obj.val().toString().substring(0, index) + "&@@m14会员账户类型=" + value);
+            }
+            gridRead();
+        }
+        function gridRead() {
+            var grid = $("#grid").data("kendoGrid");
+            grid.dataSource.read();
+        }
+        $(function () {
+            var val = "@ViewBag.profileType".split(',');
+            loadPrintBnt(val);
+            $("#categories").data("kendoMultiSelect").value('@ViewBag.profileType');
+            //$("#grid").on("dblclick", "tr.k-state-selected", function (e) {
+            //    e.preventDefault();
+            //    editGridItem(this);
+            //});
+        })
+        function loadPrintBnt(value) {
+            if (value.length == 0) {
+                $("#Recharge").show();
+                $("#SubtractMoney").show();
+                $("#printMbarLog").show();
+            } else {
+                if ($.inArray("01", value) >= 0) {
+                    $("#Recharge").show();
+                }
+                else {
+                    $("#Recharge").hide();
+                }
+                if ($.inArray("01", value) >= 0 || $.inArray("02", value) >= 0) {
+
+                    $("#SubtractMoney").show();
+                    $("#printMbarLog").show();
+                }
+                else {
+                    $("#SubtractMoney").hide();
+                    $("#printMbarLog").hide();
+                }
+            }
+        }
+        function printMbr() {
+            var grid = $("#grid").data("kendoGrid");
+            var selectedRows = grid.select();
+            if (selectedRows.length == 0) {
+                jAlert("请选择要打印的数据行");
+                return;
+            }
+            var data = grid.dataItem(selectedRows);
+            var type = data.type == "充值" ? "up_print_profileRecharge" : "up_print_profileRechargeCut";
+            var parameterValues = "@@t00id=" + data.id;
+            $.post("@Url.Action("AddQueryParaTemp", "SRBillReportView",new { area = "ReportManage" })", { ReportCode: type, ParameterValues: parameterValues, ChineseName: "充值单据" }, function (result) {
+                if (result.Success) {
+                    window.open(result.Data);
+                } else {
+                    ajaxErrorHandle(result);
+                }
+            }, 'json');
+
+        }
+        //充值退款
+        function chargeRefund() {
+
+            var grid = $("#grid").data("kendoGrid");
+            var selectedRows = grid.select();
+            if (selectedRows.length == 0) {
+                jAlert("请选择要退款的充值记录");
+                return;
+            }
+            var data = grid.dataItem(selectedRows);
+            if (data.type != "充值") {
+                jAlert("充值退款只能针对充值记录，请选择充值记录来进行退款");
+                return;
+            }
+            if (data.IsRefunded == 1) {
+                jAlert("选中的记录已经退款，请选择其他未退款记录");
+                return;
+            }
+            jConfirm("是否需要退还充值款?", "是", "否", function (confirmed) {
+                if (confirmed) {
+                    $.post("@Url.Action("Refund", "MbrCardCaManage",new { area = "MbrCardCenter" })", { id: data.id }, function (result) {
+                        if (result.Success) {
+                            gridRead();
+                        } else {
+                            ajaxErrorHandle(result);
+                        }
+                    }, 'json');
+                }
+            });
+        }
+        //双击编辑订单
+        function editGridItem(row) {
+            var grid = $("#grid").data("kendoGrid");
+            var data = grid.dataItem($(row));
+
+            //过滤不能修改的
+            if (data.balanceType == "01" && (data.itemTypeAction == "no" || data.itemTypeAction == "credit"))
+                top.openSecondKendoWindow("修改付款方式", "/MbrCardCenter/MbrCardCaManage/EditRecharge", { itemid: data.itemid, remark: data.remark, id: data.id });
+                //else
+                //    jAlert("此记录不能修改付款方式", "知道了");
+            else if ((data.balanceType == "01" || data.balanceType == "02") && data.type.indexOf("扣款") >= 0 && data.outletCode == "客房") {
+                if (data.refno != null && data.refno != "") {
+                    var url = "@Url.Action("Index", "ResOrderAdd", new { area= "ResManage" })" + "?type=I" + "&id=" + data.refno + "&IsRoomStatus=4";
+                    top.openResKendoWindow("客单", url, null, "20020", "新预订/入住");
+                }
+                else {
+                    jAlert("此记录为会员中心直接扣款", "知道了");
+                }
+            }
+            else if (data.balanceType == "41" && data.itemTypeAction == "roomFolio" && data.outletCode == "客房")
+            {
+                var url = "@Url.Action("Index", "ResOrderAdd", new { area= "ResManage" })" + "?type=I" + "&id=" + data.refno + "&IsRoomStatus=4";
+                top.openResKendoWindow("客单", url, null, "20020", "新预订/入住");
+            }
+            else {
+                if (data.balanceType == "01" && data.type == "充值")
+                    jAlert("此记录不能修改付款方式", "知道了");
+            }
+        }
+    </script>
+}
+@section headerContent{
+    <style type="text/css">
+        html, body {
+            overflow: hidden;
+            width: 978px;
+            height: 474px;
+        }
+
+        .wrap {
+            width: 970px;
+            height: 466px;
+            margin: 0px;
+            padding: 4px;
+            overflow: hidden;
+        }
+
+        .sp-title {
+            display: block;
+            text-align: center;
+        }
+
+        .sp-list {
+            display: block;
+            text-align: right;
+        }
+    </style>
+}

@@ -1,0 +1,39 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+@(Html.Kendo().Grid<up_pos_list_BillDetailByBillidResult>()
+        .Name("grid")
+        .Columns(columns =>
+        {
+            columns.Bound(m => m.Id).Hidden();
+            columns.Bound(m => m.SD).Hidden();
+            columns.Bound(m => m.SP).Hidden();
+            columns.Bound(m => m.isIsDiscountStringForItem).Hidden();
+            columns.Bound(m => m.BatchTime).Hidden();
+            columns.Bound(m => m.Itemid).Hidden();
+            columns.Bound(m => m.ItemCode).Hidden();
+            columns.Bound(m => m.isDiscount).Hidden();
+            columns.Bound(m => m.isService).Hidden();
+            columns.Bound(m => m.Unitid).Hidden();
+            columns.Bound(m => m.Status).Hidden();
+            columns.Bound(m => m.Isauto).Hidden();
+            columns.Bound(m => m.DeptClassid).Hidden();
+            columns.Bound(m => m.statusString).Hidden();
+            columns.Bound(m => m.isCurrent).Hidden();
+            columns.Bound(m => m.isLargess).Hidden();
+            columns.Bound(m => m.Row).Title("行").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(25);
+            columns.Bound(m => m.ItemName).Title("名称").HtmlAttributes(new { @style = "white-space: nowrap;text-align: left;" }).Width(100);
+            columns.Bound(m => m.Quantity).Title("数量").ClientTemplate("#=Quantity##=UnitName#").HtmlAttributes(new { @style = "white-space: nowrap;" });
+            columns.Bound(m => m.Dueamount).Title("金额").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+            columns.Bound(m => m.Action).Title("作法").ClientTemplate("<a href='javascript:void(0);' style = 'white-space: nowrap;overflow: hidden;text-overflow: ellipsis;' data-row='#: Row #' onclick = \"getActionGroup(this,'" + Url.Action("GetActionPageIndex", "PosInSingle") + "', '" + Url.Action("_ActionList", "PosInSingle") + "', '" + Url.Action("GetActionTotal", "PosInSingle") + "')\">#: Action #</a>");
+            columns.Bound(m => m.Request).Title("要求").HtmlAttributes(new { @style = "white-space: nowrap;" });
+            columns.Bound(m => m.Memo).Title("备注").HtmlAttributes(new { @style = "white-space: nowrap;" });
+        })
+        .HtmlAttributes(new { style = "height:100%;", onclick = "setlocalStorageValue()" })
+        .Pageable()
+        .Scrollable()
+        .Resizable(r => r.Columns(true))
+        .Selectable(s => s.Mode(GridSelectionMode.Single))
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(15)
+        .Read(read => read.Action("ListUpBillDetailByBillid", "PosInSingle", new { billid = ViewBag.Billid }))
+        ).Events(e => e.DataBound("selRow")))

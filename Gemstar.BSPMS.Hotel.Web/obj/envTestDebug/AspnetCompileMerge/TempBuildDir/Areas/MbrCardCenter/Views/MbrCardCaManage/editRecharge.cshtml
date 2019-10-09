@@ -1,0 +1,40 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MbrCardCenter.Models.MbrCardManage.MbrCardRechargeViewModel
+<table class="editFormTable">
+    <tr>
+        <td class="textright">付款方式</td>
+        <td>@Html.Kendo().DropDownListFor(m => m.PayWayId).BindTo(ViewBag.PayWapSelectList as List<SelectListItem>).HtmlAttributes(new { style = "width:100%;" })</td>
+   </tr>
+    <tr>
+        <td class="textright">备注</td>
+        <td>@Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;" })</td>
+  </tr>
+</table>
+
+<div class="formButtons" style="text-align:center">
+    <input type="hidden" id="hidid" value="@Model.Id" />
+    <button class="k-primary k-button" id="saveEditFormButtoneEdit" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+    <button class="k-primary k-button" id="closeEditFormButtonEdit" role="button" data-role="button">返回</button>
+</div>
+<script type="text/javascript">
+
+    $("#saveEditFormButtoneEdit").click(function (e) {
+        debugger;
+        var itemid = $("#PayWayId").val();
+        var remark = $("#Remark").val().trim();
+        var id = $("#hidid").val();
+        $.post("@Url.Action("EditRechargeSave")", { itemid: itemid, remark: remark, id: id }, function (data) {
+            if (data.Success) {
+                $(document).find("iframe[src*='MbrCardCaManage']")[0].contentWindow.gridRead();
+                closeSecondKendoWindow();
+            }
+            else {
+                ajaxErrorHandle(data);
+            }
+
+        },'json');
+    });
+    $("#closeEditFormButtonEdit").click(function (e) {
+        e.preventDefault();
+        closeSecondKendoWindow();
+    });
+</script>

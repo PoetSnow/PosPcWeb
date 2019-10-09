@@ -1,0 +1,77 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.RoomManage.RoomAddViewModel
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.Floorid)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">楼层</td>
+            <td><input id="dd" type="text"  disabled="disabled"  class="k-textbox" style="width:100%;margin-bottom:1px;background-color:rgb(245,245,245)" value="@ViewBag.floorname" /> </td>
+            <td> </td>
+            <td class="textright">@Html.LabelFor(m => m.RoomNo)</td>
+            <td>@Html.TextBoxFor(m => m.RoomNo, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.RoomNo, "*")</td>
+           
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Tel)</td>
+            <td>@Html.TextBoxFor(m => m.Tel, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Tel, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.RoomTypeid)</td>
+            <td colspan="1">
+                @Html.Kendo().DropDownListFor(e => e.RoomTypeid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Value").DataValueField("Key").DataSource(e => { e.Read(r => r.Action("GetRoomTypeSelectList", "RoomTypeManage", new { rnd = new Random().NextDouble() })); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.RoomTypeid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Feature)</td>
+            <td colspan="4">
+                @Html.HiddenFor(m => m.Feature)
+                @(Html.Kendo().MultiSelect()
+                .Name("FeatureMultiSelect")
+                .AutoClose(false)
+                .Placeholder("请选择房间特色...")
+                .BindTo(ViewBag.FeatureList))
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.Feature, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Description)</td>
+            <td colspan="4">@Html.TextAreaFor(m => m.Description, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Description, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Lockid)</td>
+            <td colspan="4">@Html.TextBoxFor(m => m.Lockid, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Lockid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.LockInfo)</td>
+            <td colspan="4">@Html.TextAreaFor(m => m.LockInfo, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.LockInfo, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td colspan="4">@Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            document.getElementById('Feature').value = ($("#FeatureMultiSelect").data("kendoMultiSelect").value());
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+</script>

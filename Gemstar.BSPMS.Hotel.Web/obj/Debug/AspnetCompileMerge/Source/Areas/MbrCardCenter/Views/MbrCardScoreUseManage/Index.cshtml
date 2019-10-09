@@ -1,0 +1,48 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Common.Services;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "会员积分兑换记录";
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForQuery =  false,
+        HtmlAttributes = new { style = "height:465px;max-height:465px;" },
+        EnableScrollable = true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("transDate").Title("日期").Width(135);
+            c.Bound("hname").Title("分店").Column.Visible=ViewBag.IsGroup;
+            c.Bound("outletid").Title("营业点");
+            c.Bound("scoreItemName").Title("项目");
+            c.Bound("score").Title("兑换积分");
+            c.Bound("amount").Title("兑换金额");
+            c.Bound("invno").Title("单号");
+            c.Bound("remark").Title("备注");
+        }
+    };
+}
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+@section headerContent{
+    <style type="text/css">
+        html,body{overflow:hidden;width:964px;height:474px;}
+        .wrap {
+            width: 956px;
+            height: 466px;
+            margin: 0px;
+            padding: 4px;
+            overflow:hidden;
+        }
+    </style>
+}

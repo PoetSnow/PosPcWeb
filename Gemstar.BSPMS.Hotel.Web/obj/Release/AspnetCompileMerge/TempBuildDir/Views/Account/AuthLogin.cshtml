@@ -1,0 +1,226 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Models.Account.AuthLoginViewModel
+@{
+    Layout = null;
+    ViewBag.Title = "捷信达快点云POS系统";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Html.Partial("_HeaderCss")
+    @Html.Partial("_HeaderJs")
+    <link href="~/Content/jquery.nivo.slider/themes/default/default.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/jquery.nivo.slider/nivo-slider.css" rel="stylesheet" type="text/css" />
+    <!--[if IE]>
+    <script src="/Scripts/jquery.placeholder.min.js" type="text/javascript"></script>
+    <script type="text/javascript">$(function(){$('input, textarea').placeholder();});</script>
+    <![endif]-->
+</head>
+<body>
+    <div class="header clearfix">
+        <div class="header-inner">
+            <div class="logo">
+                <img src="~/images/logo.png" /><span class="fleft"><i class="system-name">捷信达快点云POS管理软件V1.0</i></span>
+            </div>
+            <div class="try">
+                <span class="phone-icon"></span><span class="number">服务热线<br /><b class="font-lag">400-7755-123</b></span>
+            </div>
+        </div>
+    </div>
+    <div class="banner">
+        <div id="slider-wrapper" class="slider-wrapper theme-default" style="width:auto;height:484px;overflow:hidden;position:absolute;z-index:0;">
+            <div id="slider" class="nivoSlider" style="width:2000px;height:484px;"></div>
+        </div>
+        <div class="banner-inner">
+            <div class="login"></div>
+            <div class="login-box">
+                <span class="pms-login">
+                    GS云POS系统授权登录 @ViewBag.Code
+                    @if (MvcApplication.IsTestEnv)
+                    {
+                        <b class="font-lag" style="color:red">测试版本</b>
+                    }
+                </span>
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <ul>
+                        <li class="login-i-t">
+                            @Html.TextBoxFor(m => m.AuthCode, new { @class = "lo-input-text", placeholder = "请先输入授权码，再点击刷新登录二维码" })
+                        </li>
+                        <li>
+                            <div class="login-weixin" style="padding:0;">
+                                <div class="qrcode" id="IDQrcode">
+                                    <div class="tit" style="visibility:hidden;">请打开微信扫一扫，扫描二维码登录</div>
+                                    <div class="pic">
+                                        <div alt="" onclick="wechatAuthLogin.refreshQrcode();" id="IDQrcodeImg"></div>
+                                        <div class="alt" id="IDQrcodeInvalid">
+                                            <div class="void">
+                                                <i class="ico ico-void"></i>
+                                                <p class="txt">二维码失效<br>点击刷新</p>
+                                            </div>
+                                            <div class="mask"></div>
+                                        </div>
+                                    </div>
+                                    <div class="msg">请打开微信扫一扫，扫描二维码登录</div>
+                                </div>
+                                <div class="status status-succ hide" id="IDQrcodeScaned">
+                                    <i class="ico ico-succ"></i>
+                                    <p class="tit">扫码成功，请在手机端完成操作</p>
+                                    <p class="txt">请勿刷新页面</p>
+                                </div>
+                                <div class="status status-warn hide" id="IDRefuseLogin">
+                                    <i class="ico ico-warn"></i>
+                                    <p class="tit">登录被拒绝</p>
+                                    <a class="opr" href="javascript:;" id="IDRefuseLoginReturn">返回</a>
+                                </div>
+                                <div class="status status-info hide" id="IDHasNotBind">
+                                    <i class="ico ico-info"></i>
+                                    <p class="tit">该微信号尚未绑定任何操作员<br>请先登录系统绑定操作员</p>
+                                </div>
+                                <div class="tips-error hide" id="IDQrcodeError"></div>
+                            </div>
+                        </li>
+                        <li class="login-i-t"><a href="@Url.Action("Index")">返回酒店登录</a></li>
+                        <li id="PromptLi" style="margin-top:10px;"><span class="red-color">请用谷歌浏览器登录</span></li>
+
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="footer" style="background:#fff;">
+        <div class="footer-inner">
+            <span class="wx-a" style="padding-top: inherit"><img src="~/images/wx1.jpg" style="width:100px;" /><br /><span style="margin-left: 25px;display: inherit;margin-top: -12px">官方公众号</span></span><span class="wx-b" style="padding-top: inherit"><img src="~/images/wx2.jpg" style="width:85px;margin-top: 8px" /><br /><span style="margin-left: 15px;margin-top: -5px;display: inherit;">微信预订系统</span></span>
+            <div class="company-info">
+                <p>深圳市捷信达电子有限公司</p>
+                <p>深圳市福田区深南大道6025号英龙大厦25楼</p>
+                <p>TEL:0755-83664567(总机) FAX:0755-83663702</p>
+                <p>7*24小时服务与支持：400-7755-123</p>
+                <p>深圳市捷信达电子有限公司版权所有( 粤ICP备09046004号 ) </p>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        window.onmessage = function (e) {
+            e = e || event;
+            location.href = e.data;
+        };
+        $(function () {
+            $("#doLogin").click(function (e) {
+                $("#loadingDiv").remove();
+                e.preventDefault(this);
+                doLogin();
+            });
+            $("#showPassword").click(function (e) {
+                e.preventDefault();
+                showPassword('showPassword', 1);
+            });
+            if (window.navigator.userAgent.indexOf("Chrome") > -1) {//谷歌浏览器
+                $("#PromptLi").css("display", "none")
+                $("#PromptLi").next().css("margin-top", "20px")
+            }
+        });
+        function doLogin() {
+            showPassword('showPassword', 0);
+            //数据有效性检测
+            var authCode = $.trim($("#AuthCode").val());
+            if (authCode.length == 0) {
+                jAlert("请输入授权码");
+                return;
+            }
+            var uid = $.trim($("#Username").val());
+            if (uid.length == 0) {
+                jAlert("请输入用户名");
+                return;
+            }
+            var pwd = $.trim($("#Password").val());
+            if (pwd.length == 0) {
+                jAlert("请输入密码");
+                return;
+            }
+            var f = $("#doLogin")[0].form;
+            var validator = $(f).validate();
+            if (validator.form()) {
+                $(".login-box").append("<div id=\"loadingDiv\"></div>");
+                $.post(
+                    $(f).attr("action"),
+                    $(f).serialize(),
+                    function (data) {
+                        if (data.Success) {
+                            location.href = data.Data;
+                        } else {
+                            //jAlert(data.Data);
+                            ajaxErrorHandle(data);
+                        }
+                    },
+                    "json");
+            }
+        }
+        //眼睛
+        function showPassword(btnId, changeStatu) {
+            var $btn = $("#" + btnId);
+            var isHidePassword = $btn.data("statu");
+            var passwordId = $btn.data("password");
+            var textId = $btn.data("text");
+
+            if (isHidePassword == "1") {
+                if (changeStatu == 1) {
+                    $btn.data("statu", "0");
+                    $btn.removeClass("k-eye-open");
+                    $btn.addClass("k-eye-close");
+                    $("#" + passwordId).hide();
+                    $("#" + textId).show();
+                }
+                $("#" + textId).val($("#" + passwordId).val());
+            } else {
+                if (changeStatu == 1) {
+                    $btn.data("statu", "1");
+                    $btn.removeClass("k-eye-close");
+                    $btn.addClass("k-eye-open");
+                    $("#" + textId).hide();
+                    $("#" + passwordId).show();
+                }
+                $("#" + passwordId).val($("#" + textId).val());
+            }
+        }
+    </script>
+    <script src="~/Scripts/jquery.nivo.slider.pack.js"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            $("#slider-wrapper").css("width", $(window).width());
+            var offset = (2000 - parseInt($(document).width())) / 2;
+            $("#slider").css("right", offset);
+            function getBanner() {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetBanner", "Account")',
+                    dataType: "json",
+                    success: function (result) {
+                        if (result != null && result.Success && result.Data != null && result.Data.length > 0) {
+                            var arrayContent = new Array();
+                            $.each(result.Data, function (i, item) {
+                                arrayContent[i] = "<a target=\"_blank\" href=\"" + item.Link + "\"><img src=\"" + item.PicLink + "\" data-thumb=\"" + item.PicLink + "\" alt=\"\" /></a>";
+                            });
+                            $(".banner").css("background", "none");
+                            $("#slider").html(arrayContent.join(""));
+                            $('#slider').nivoSlider({ controlNav: false });
+                            $(".nivo-prevNav").css("left", offset + 15);
+                            $(".nivo-nextNav").css("left", parseInt(2000 - offset - 45));
+                        } else {
+                            $("#slider-wrapper").css("display", "none");
+                        }
+                    },
+                    error: function () {
+                        $("#slider-wrapper").css("display", "none");
+                    }
+                });
+            }
+            getBanner();
+        }
+    </script>
+    <script type="text/javascript" src="~/Scripts/login/wechatAuthLogin.js"></script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+﻿<input type="hidden" id="kendoGridOriginModelValues" />
+<script type="text/javascript">
+    function onDataBound(e) {
+        $(".k-grid-batchDelete").find("span").addClass("k-icon k-i-unpin");
+        $(".k-grid-commonQuery").find("span").addClass("k-icon k-i-search");
+        $(".k-grid-addGridItem").find("span").addClass("k-icon k-add");
+        $(".k-grid-disable").find("span").addClass("k-icon k-i-lock");
+        $(".k-grid-enable").find("span").addClass("k-icon k-i-unlock");
+        $(".k-grid-roleMember").find("span").addClass("k-icon k-i-folder-add");
+        $(".k-grid-roleAuth").find("span").addClass("k-icon k-i-ungroup");
+        $(".k-grid-reportAuth").find("span").addClass("k-icon k-i-folder-up");
+        //取到触发事件的grid控件id传进去，以便同一界面上有多个grid时，触发不同的后续事件
+        var gridId = e.sender.wrapper.attr("id");
+        dataBoundEnd(gridId);
+        $(".k-grid-cancel-changes").insertBefore($(".k-grid-save-changes"));
+        //设置通用的禁用状态效果,要求grid控件增加data-status属性，标识出状态字段的名称，如果没有此属性或者属性值小于50则正常显示
+        var grid = $("#" + gridId).data("kendoGrid");
+        if (grid) {
+            var statusName = $("#" + gridId).data("status");
+            var items = grid.items();
+            $.each(items, function (i, o) {
+                var dataItem = grid.dataItem(o);
+                if (dataItem[statusName]) {
+                    if (dataItem[statusName] > 50) {
+                        var uid = dataItem.uid;
+                        $("tr[data-uid='" + uid + "']").addClass("status-disabled");
+                    }
+                }
+            });
+        }
+     
+    }
+    //在grid加载完数据后，自动将数据保存到一个隐藏域里面
+    function gridDatasourceRequestEnded(e) {
+        if (e.type === "read" && e.response) {
+            if (e.response.Data) {
+                $("#kendoGridOriginModelValues").val(JSON.stringify(e.response.Data));
+            }
+        }
+        //if (e.type === "update" && e.response) {
+        //    if (e.response.Data) {
+        //        if (e != null && e.sender != null) {
+
+        //            e.sender.read();
+        //        }
+        //    }
+        //}
+    }
+    function gridDataSourceSynced(e) {
+        //增加修改后，把数据源里面的内容设置为原始值
+        var data = this.data();
+        $("#kendoGridOriginModelValues").val(JSON.stringify(data));
+    }
+    function getUpdatedOriginValues() {
+        var jsonStr = $("#kendoGridOriginModelValues").val();
+        var originModels = $.parseJSON(jsonStr);
+        return { originModels: originModels };
+    }
+    function gridDatasourceRequestError(e, status) {
+        if (e.errors) {
+            var message = "<font color='red'>操作错误！</font>\n";
+            $.each(e.errors, function (key, value) {
+                if (value.errors) {
+                    message += value.errors.join("\n"); 
+                }
+            }); 
+            jAlert(message, "知道了"); 
+        }
+    }
+    //数据加载并展示完毕之后，执行自定义方法
+    function dataBoundEnd(gridId) {
+
+        
+
+        var funcName = gridId + "_dataBoundEnded";
+
+    
+
+        try {
+            var func = eval(funcName);
+            if (typeof (func) == "function") {
+                func();
+            }
+        } catch (e) { }
+    }
+    //批量删除
+    function batchDelete(gridId, keyName, url, onSuccess) {
+
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要删除的数据行");
+        } else {
+            jConfirm("确认要删除所有选中的数据行?", "确认", "取消", function (confirmed) {
+                if (confirmed) {
+                    var ids = [];
+                    for (var i = 0; i < selectedRows.length; i++) {
+                        var row = selectedRows[i];
+                        var data = grid.dataItem(row);
+                        ids.push(data[keyName]); 
+                    } 
+                    //删除前需要做判断的页面
+                    if (url.indexOf("PayClassify") > 0 || url.indexOf("ConsumeClassify") > 0 || url.indexOf("UserManage") > 0 || url.indexOf("ConsumeManage") > 0 || url.indexOf("PayWayManage") > 0 || url.indexOf("ShiftManage") > 0 || url.indexOf("CouponClassifyManage") > 0 || url.indexOf("CommonCodeManage") > 0) {
+                        $.post(url.replace("BatchDelete", "CheckForDelete"), { id: ids.join(",") }, function (data) {
+                            if (data.Success) {
+                                $.post(url, { id: ids.join(",") }, function (data) {
+                                    if (data.Success) {
+                                        grid.dataSource.read();
+                                    } else {
+                                        //jAlert(data.Data);
+                                        ajaxErrorHandle(data);
+                                    }
+                                }, 'json');
+                            } else {
+                                //jAlert(data.Data);
+                                ajaxErrorHandle(data);
+                            }
+                        });
+                    } else {
+                        $.post(url, { id: ids.join(",") }, function (data) {
+                            if (data.Success) { 
+                                grid.dataSource.read();
+                            } else { 
+                                //jAlert(data.Data);
+                                ajaxErrorHandle(data);
+                            }
+                            if (typeof (onSuccess) == "function") { onSuccess(data); }
+                        }, 'json');
+                    }
+                }
+            });
+        }
+    }
+    //批量启用
+    function enable(gridId, keyName, url) {
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要启用的数据行");
+        } else {
+            jConfirm("确认要启用所有选中的数据行?", "确认", "取消", function (confirmed) {
+                if (confirmed) {
+                    var ids = [];
+                    for (var i = 0; i < selectedRows.length; i++) {
+                        var row = selectedRows[i];
+                        var data = grid.dataItem(row);
+                        ids.push(data[keyName]); 
+                    }
+                    $.post(url, { id: ids.join(",") }, function (data) {
+                        if (data.Success) {
+                            grid.dataSource.read();
+                        } else {
+                            //jAlert(data.Data);
+                            ajaxErrorHandle(data);
+                        }
+                    }, 'json');
+
+                }
+            });
+        }
+    }
+    //批量禁用
+    function disable(gridId, keyName, url) {
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要禁用的数据行");
+        } else {
+            jConfirm("确认要禁用所有选中的数据行?", "确认", "取消", function (confirmed) {
+                if (confirmed) {
+                    var ids = [];
+                    for (var i = 0; i < selectedRows.length; i++) {
+                        var row = selectedRows[i];  
+                        var data = grid.dataItem(row);
+                        ids.push(data[keyName]);
+                    }
+                    $.post(url, { id: ids.join(",") }, function (data) {
+                        if (data.Success) {
+                            grid.dataSource.read();
+                        } else {
+                            //jAlert(data.Data);
+                            ajaxErrorHandle(data);
+                        }
+                    }, 'json');
+
+                }
+            });
+        }
+    }
+    //查询明细列表
+    function detail(gridId, keyName, url) {
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要查询客人消费的数据行");
+        } else {
+            var ids = [];
+            for (var i = 0; i < selectedRows.length; i++) {
+                var row = selectedRows[i];
+                var data = grid.dataItem(row);
+                ids.push(data[keyName]);
+            }
+            addGridItemNew1(ids.join(","));
+        }
+    }
+    function addGridItemNew1(id) {
+        top.openKendoWindow("查看客人消费明细", "/CRM/GuestTransManage/Index?id=" + id);//?profileid=" + value
+
+    }
+    //管理自定义表格列
+    function btnManageGridColumnsClicked(gridId) { 
+        var formId = "formGridColumns_" + gridId;
+        var $form = $("#" + formId);
+        if ($form.length > 0) {
+            $form[0].submit();
+        } else {
+            jAlert("没有找到与表格id对应的管理自定义表格列form");
+        }
+    }
+    function formatBoleantext() {
+        $("td[role='gridcell']").each(function () {
+            var str = $(this).text();//文本框的值
+            if (str == "true") {
+                $(this).text("是");
+            } else if (str == "false") {
+                $(this).text("否");
+            }
+        });
+    }
+</script>

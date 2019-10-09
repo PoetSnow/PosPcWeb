@@ -1,0 +1,119 @@
+﻿@* 使用通用查询的页面，要求必须给viewbag.commonQueryModel给CommonQueryModel类型的实例 *@
+@{
+    var queryModel = ViewBag.commonQueryModel as Gemstar.BSPMS.Common.Tools.CommonQueryModel;
+    if (queryModel != null)
+    {
+        <input type="hidden" id="commonQueryGridId" value="@queryModel.GridControlId" />
+        <input type="hidden" id="commonQueryProcedureName" value="@queryModel.QueryProcedureName" />
+        <input type="hidden" id="commonQueryParameterValues" value="@queryModel.QueryParameterValues" />
+        <script type="text/javascript">
+            function GetControl(controlSelector) {
+                var $obj = $(controlSelector); 
+                if ($obj.length > 0) {
+                    return $obj;
+                }
+                //由于通用查询的控件到时会显示到最外层界面上的kendo窗口中，导致在iframe里面执行的代码无法取到控件值，特增加此方法来屏蔽这些差异
+                //先默认从本窗口中查找，如果没有，则切换为top窗口来进行查找
+                $obj = top.jQuery(controlSelector);
+                return $obj;
+            }
+            function showCommonQueryWindow() { 
+                var procName = GetControl("#commonQueryProcedureName").val();
+             
+                var procValues = GetControl("#commonQueryParameterValues").val();
+                top.openKendoWindow("请选择查询条件", "@Url.Action("Index","Query",new { area=""})", {procName:procName,procValues:procValues}, "POST");
+            }
+            function closeCommonQueryWindow() {
+                top.closeKendoWindow();
+            }
+            function getCommonQueryParas() {
+                return {
+                    QueryProcedureName: GetControl("#commonQueryProcedureName").val(),
+                    QueryParameterValues: GetControl("#commonQueryParameterValues").val()
+                }
+            }
+            function doCommonQuery() {
+                
+                //获取总的参数数量
+                var paraCount = GetControl("#parameterCount").val();
+                //循环获取所有的参数值
+                var result = "";
+                var splitChar = "";
+
+                for (var i = 0; i < paraCount; i++) {
+                    //获取参数名称
+                    var paraName = GetControl("#pname_" + i).val();
+                    var paraValue = "";
+                    var paraText = "";
+
+                    if (paraName.indexOf("h99") > 0) {
+                        continue;
+                    }
+
+                    //默认的直接从文本框中获取
+                    var paraValueId = "#p" + i;
+                    var objParaValue = GetControl(paraValueId);
+                    if (objParaValue.length > 0)//如果控件存在，则直接取控件的值
+                    {
+                        objParaValue = objParaValue[0];
+                        if ((objParaValue.tagName.toUpperCase() == "INPUT" && (objParaValue.type.toUpperCase() == "TEXT" || objParaValue.type.toUpperCase() == "PASSWORD")) || (objParaValue.tagName.toUpperCase() == "TEXTAREA"))//如果是文本框则直接取值
+                        {
+                            paraValue = objParaValue.value;
+                            paraText = objParaValue.value;
+                        }
+                        else if (objParaValue.tagName.toUpperCase() == "INPUT" && objParaValue.type.toUpperCase() == "CHECKBOX")//如果是复选框，则根据是否选中赋值
+                        {
+                            if (objParaValue.checked) {
+                                paraValue = "1";
+                                paraText = "是";
+                            }
+                            else {
+                                paraValue = "0";
+                                paraText = "否";
+                            }
+                        }
+                        else if (objParaValue.tagName.toUpperCase() == "SELECT")//如果是下拉列表框
+                        {
+                            //paraValue = objParaValue.options[objParaValue.selectedIndex].value;
+                            //paraText = objParaValue.options[objParaValue.selectedIndex].text;
+                            
+                            var paraSelectObj = $(paraValueId + " option:selected", window.top.document);
+                            if (paraSelectObj.length > 0) {
+                                $.each(paraSelectObj, function (index, item) {
+                                    paraText += item.text + ",";
+                                    paraValue += item.value + ",";
+                                });
+                                paraText = paraText.substring(0, paraText.length - 1);
+                                paraValue = paraValue.substring(0, paraValue.length - 1);
+                            } else {
+                                paraText = "全部";
+                                paraValue = "";
+                            }
+                        }
+                    }
+                    else//如果控件不存在，则是其他情况。目前只有自动完成的
+                    {
+                        //自动完成的默认值
+                        objParaValue = $(paraValueId + "_Value");
+                        if (objParaValue.length > 0)
+                            paraValue = objParaValue.val();
+                        objParaValue = $(paraValueId + "_Text");
+                        if (objParaValue.length > 0)
+                            paraText = objParaValue.val();
+                    }
+                    //如果规则码生成的控件不在上述的控件内，则需要根据code规则码的值做特殊处理，如if(code=="00")...
+                    //将值累加到结果字符串中,注意，为了方便，将控件的值与名称都保存在参数值中，用^分隔
+                    //alert(result);
+                    //result = result + splitChar + paraName + "=" + paraValue.replace(/ /g, '') + "^" + paraText.replace(/ /g, '');
+                    result = result + splitChar + paraName + "=" + paraValue + "^" + paraText;
+                    splitChar = "&";
+                }
+                GetControl("#commonQueryParameterValues").val(result);
+                var grid = $("#" + $("#commonQueryGridId").val()).data("kendoGrid");
+                grid.dataSource.read();
+                closeCommonQueryWindow();
+            }
+        </script>
+    }
+}
+

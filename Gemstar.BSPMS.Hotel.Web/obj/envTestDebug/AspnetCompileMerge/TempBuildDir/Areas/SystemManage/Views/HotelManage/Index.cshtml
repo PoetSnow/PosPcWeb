@@ -1,0 +1,47 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "酒店资料";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "hid";
+
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForQuery = false,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("hid").Title("酒店代码");
+            c.Bound("name").Title("酒店名称");
+            c.Bound("Hotelshortname").Title("酒店简称");
+            c.Bound("provinces").Title("省份");
+            c.Bound("city").Title("城市");
+            c.Bound("manageType").Title("管理类型");
+            c.Bound("star").Title("星级");
+            c.Bound("tel").Title("电话"); 
+            c.Bound("seqid").Title("排序号");
+        },
+        CustomToolbar = c =>
+        {
+            c.Custom().Name("comfirmtext").Text("<span style='float:left;display:inline-block;color:red;margin-left:30px;padding-top:8px;'>双击可修改</span>").HtmlAttributes(new { id = "comfirmtext", href = "javascript:void(0);", style = "cursor:default;" }); 
+        }
+    };
+}
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+    $(function () {
+        $("#comfirmtext").removeClass("k-button");
+
+    });
+</script>

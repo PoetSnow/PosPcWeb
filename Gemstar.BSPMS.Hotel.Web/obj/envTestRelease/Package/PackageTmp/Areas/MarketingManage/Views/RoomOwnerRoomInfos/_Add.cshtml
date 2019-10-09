@@ -1,0 +1,186 @@
+﻿@using Kendo.Mvc.UI
+
+@model Gemstar.BSPMS.Hotel.Web.Areas.MarketingManage.Models.RoomOwnerRoomInfos.RoomOwnerRoomInfosAddViewModel
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.Hid)
+    @Html.HiddenFor(m => m.RoomInfoId)
+    @Html.HiddenFor(m => m.RoomId)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">业主姓名</td>
+            <td>
+
+                @Html.Kendo().DropDownListFor(e => e.ProfileId).Filter(FilterType.Contains).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetProfileIsOwnerSelectList", "RoomOwnerRoomInfos", new { rnd = new Random().NextDouble() })); })
+            </td>
+            <td> </td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.RoomNo)</td>
+            <td>
+                 @Html.Kendo().DropDownListFor(e => e.RoomNo).Filter(FilterType.Contains).HtmlAttributes(new { style = " width:40%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("getRoomlist", "RoomOwnerRoomInfos", new { rnd = new Random().NextDouble() })); })
+                <span>　　　　　　</span> 房型  <input id="rtname" type="text" class="k-textbox" disabled="disabled" style="width:40%;margin-bottom:1px;background-color:rgb(245,245,245)" value="@ViewBag.rtname" />  
+            </td>            
+            <td>                 
+            </td> 
+        </tr>
+        <tr style="height:30px;">
+            <td class="textright">房间特色</td>
+            <td><div id="feature" style="padding-left:5px;">@ViewBag.feature</div> </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.StartDate) </td>
+            <td>@Html.Kendo().DatePickerFor(m => m.StartDate) 　　　 @Html.LabelFor(m => m.EndDate) @Html.Kendo().DatePickerFor(m => m.EndDate)</td>
+            <td>@Html.ValidationMessageFor(m => m.StartDate, "*")</td>
+        </tr>
+
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.CalcTypeId)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.CalcTypeId).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetRoomOwnerCalcTypeList", "RoomOwnerRoomInfos", new { rnd = new Random().NextDouble() })); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.CalcTypeId, "*")</td>
+
+        </tr>
+        <tr style="height:30px;">
+            <td class="textright">分成说明</td>
+            <td><div id="describ" style="padding-left:5px;">@ViewBag.desc</div> </td>
+            <td></td>
+        </tr>
+        <tr style="height:30px;">
+            <td class="textright">备注</td>
+            <td>@Html.TextBoxFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td></td>
+        </tr>
+        @foreach (var roomparas in ViewBag.roompara)
+        {
+            <tr>
+                <td class="textright">@roomparas.ParaName</td>
+
+                @if (@roomparas.ParaCode == "r1")
+                {
+                    <td>
+                        @Html.TextBoxFor(m => m.r1, new { @class = "k-textbox", style = "width:50%;" }) @if (roomparas.dataType == "percent")
+                        {  <label>%</label>}
+                    </td>
+                }
+                else if (@roomparas.ParaCode == "r2")
+                {
+                    <td>
+                        @Html.TextBoxFor(m => m.r2, new { @class = "k-textbox", style = "width:50%;" }) @if (roomparas.dataType == "percent")
+                        {  <label>%</label>}
+                    </td>
+                }
+                else if (@roomparas.ParaCode == "r3")
+                {
+                    <td>
+                        @Html.TextBoxFor(m => m.r3, new { @class = "k-textbox", style = "width:50%;" }) @if (roomparas.dataType == "percent")
+                        {  <label>%</label>}
+                    </td>
+                }
+                else if (@roomparas.ParaCode == "r4")
+                {
+                    <td>
+                        @Html.TextBoxFor(m => m.r4, new { @class = "k-textbox", style = "width:50%;" }) @if (roomparas.dataType == "percent")
+                        {  <label>%</label>}
+                    </td>
+                }
+                else if (@roomparas.ParaCode == "r5")
+                {
+                    <td>
+                        @Html.TextBoxFor(m => m.r5, new { @class = "k-textbox", style = "width:50%;" }) @if (roomparas.dataType == "percent")
+                        {  <label>%</label>}
+                    </td>
+                }
+                else if (@roomparas.ParaCode == "r6")
+                {
+                    <td>
+                        @Html.TextBoxFor(m => m.r6, new { @class = "k-textbox", style = "width:50%;" }) @if (roomparas.dataType == "percent")
+                        {  <label>%</label>}
+                    </td>
+                }
+                else if (@roomparas.ParaCode == "r7")
+                {
+                    <td>
+                        @Html.TextBoxFor(m => m.r7, new { @class = "k-textbox", style = "width:50%;" }) @if (roomparas.dataType == "percent")
+                        {  <label>%</label>}
+                    </td>
+                }
+                else if (@roomparas.ParaCode == "r8")
+                {
+                    <td>
+                        @Html.TextBoxFor(m => m.r8, new { @class = "k-textbox", style = "width:50%;" }) @if (roomparas.dataType == "percent")
+                        {  <label>%</label>}
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<style type="text/css">
+    select {
+        width: 150px;
+        min-height: 100px;
+        outline: none;
+    }
+
+    #tit td {
+        text-align: center;
+    }
+</style>
+
+<script type="text/javascript">
+    $(function () {
+
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+
+        $("#CalcTypeId").change(function () {
+            var calctype = $("#CalcTypeId").val();
+            $.post("@Url.Action("getCalctypeDescrib")", { typeid: calctype }, function (data) {
+                if (data.Success) {
+                    $("#describ").html(data.Data);
+
+                } else {
+                    ajaxErrorHandle(data);
+                }
+            }, 'json');
+
+        });
+
+        $("#RoomNo").change(function () {
+            $("#RoomId").val($("#RoomNo").val());
+            var calctype = $("#RoomId").val();
+            $.post("@Url.Action("getRoomFeature")", { id: calctype }, function (data) {
+                if (data.Success) {
+                    console.log(data.Data);
+                    var a = data.Data.split('_'); console.log(a);
+                    $("#feature").html(a[0]);
+                    $("#rtname").val(a[1]);
+
+                } else {
+                    ajaxErrorHandle(data);
+                }
+            }, 'json');
+
+        });
+
+    });
+
+</script>
+
+
+

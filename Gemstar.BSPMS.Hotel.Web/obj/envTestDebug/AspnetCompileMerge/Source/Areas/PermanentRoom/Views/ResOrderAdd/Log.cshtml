@@ -1,0 +1,84 @@
+﻿@using Kendo.Mvc.UI;
+@using Gemstar.BSPMS.Common.Services.Enums;
+@{
+    ViewBag.Title = "当前订单操作日志";
+}
+<style type="text/css">
+    html,body{overflow:hidden;} .wrap{margin: 0px 0px 0px 0px;}
+</style>
+
+@(Html.Kendo().Grid<Gemstar.BSPMS.Hotel.Services.Entities.OpLog>()
+    .Name("grid")
+    .Pageable(pageable => pageable.PageSizes(Gemstar.BSPMS.Common.Tools.CommonHelper.PageSizes))
+    .Pageable(pageable => pageable.Messages(c => c.ItemsPerPage("")).Refresh(true))
+    .Sortable()
+    .Filterable()
+    .ColumnMenu()
+    .Selectable(s => s.Mode(GridSelectionMode.Single))
+    .DataSource(c =>
+    {
+        c.Ajax().Read(r => r.Action("LogAjax", "ResOrderAdd").Data("getQueryParas")).PageSize(Gemstar.BSPMS.Common.Extensions.UrlHelperExtension.GetPageSizeForCookies(Request));
+    })
+    .AutoBind(true)
+    .Columns(c =>
+    {
+
+        c.Bound(w => w.CDate).Title("操作时间").Format("{0: yyyy-MM-dd HH:mm:ss}").Width(135);
+        c.Bound(w => w.XType).Title("操作类型").Width(135);
+        c.Bound(w => w.CText).Title("操作内容");
+        c.Bound(w => w.CUser).Title("操作员").Width(135);
+    })
+    .Scrollable(c => c.Enabled(true))
+    .HtmlAttributes(new { style = "height:510px;max-height:510px;width:1270px;max-width:1270px;" })
+    .ToolBar(toolbar => toolbar.Template(@<text>
+            <div class="toolbar">
+                <label class="category-label" for="category">账号:</label>
+                @(Html.Kendo().DropDownList()
+                        .Name("categories")
+                        .DataTextField("Data")
+                        .DataValueField("Key")
+                        .OptionLabel("全部")
+                        .Template("<span style=\"display:inline-block;width:80px;\" data-id=\"#=Key#\">账号：#= Data #</span><span>房号：#=Value == null ? '' : Value #</span>")
+                        .AutoBind(false)
+                        .Events(e => e.Change("categoriesChange"))
+                        .HtmlAttributes(new { style = "width: 150px;" })
+                        .DataSource(d => d.Read(c=>c.Action("GetResDetailsByResId", "ResOrderCustomer").Data("getCategoriesParas")))
+                )
+                <label class="content-label" for="content" style="padding-left:3px;">操作内容:</label>
+                @(Html.Kendo().TextBox().Name("content").HtmlAttributes(new { placeholder = "模糊匹配" }))
+                @(Html.Kendo().Button().Name("searchLogBtn").Content("查询"))
+            </div>
+        </text>))
+)
+
+<input type="hidden" id="LogType" value="1" />
+<input type="hidden" id="LogValueId" value="@ViewBag.ResId" />
+@section scripts{
+    <script type="text/javascript">
+        $("#LogValueId").val($("#Resid", window.parent.document).val());
+
+        function getQueryParas() { return { type: $("#LogType").val(), id: $("#LogValueId").val(), keywords: $("#content").val() }; }
+        function getCategoriesParas() { return { resid: $("#Resid", window.parent.document).val(), }; }
+
+        function categoriesChange() {
+            var typeObj = $("#LogType");
+            var residObj = $("#LogValueId");
+            var value = this.value();
+            if (value == null || value == undefined || $.trim(value) == "") {
+                typeObj.val("1");
+                residObj.val($("#Resid", window.parent.document).val());
+            } else {
+                typeObj.val("2");
+                residObj.val(value);
+            }
+            $("#grid").data("kendoGrid").dataSource.read();
+        }
+
+        $(document).ready(function () {
+            $("#categories").data("kendoDropDownList").list.width(180);
+            $("#searchLogBtn").click(function () {
+                $("#grid").data("kendoGrid").dataSource.read();
+            });
+        });
+    </script>
+}

@@ -1,0 +1,74 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItemPrice.PosItemPriceAddViewModel
+@using (Html.BeginForm("Add", "BasicDataPosItemPrice", new { rnd = new Random().NextDouble() }))
+{
+    @Html.HiddenFor(m => m.Itemid)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Unitid)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Unitid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").Filter("contains").DataSource(e => { e.Read(r => r.Action("ListItemsForPosUnit", "BasicDataPosUnit", new { rnd = new Random().NextDouble() })); }).OptionLabel("请选择单位")</td>
+            <td>@Html.ValidationMessageFor(m => m.Unitid, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Price)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.Price).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Price, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Multiple)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.Multiple).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Multiple, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Grossrate)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.Grossrate).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Grossrate, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.CostPrice)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.CostPrice).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.CostPrice, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.OilAmount)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.OilAmount).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.OilAmount, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Percent)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.Percent).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Percent, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.MemberPrice)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.MemberPrice).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.MemberPrice, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.TabTypeid)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.TabTypeid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").Filter("contains").DataSource(e => { e.Read(r => r.Action("ListItemsForPosTabtype", "BasicDataPosTabtype", new { rnd = new Random().NextDouble() })); }).OptionLabel("请选择餐台类型")</td>
+            <td>@Html.ValidationMessageFor(m => m.TabTypeid, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+            <td>@Html.Kendo().IntegerTextBoxFor(m => m.Seqid).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.IsDefault)</td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsDefault).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsDefault, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton1" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton1" role="button" data-role="button">取消</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton1").click(function (e) {
+            e.preventDefault();
+            saveFormDataForPosItem($("#saveEditFormButton1"), "gridItemPrice");
+        });
+        $("#closeEditFormButton1").click(function (e) {
+            $("#posMaskWindow").html("");
+            closeGeneralWindow();
+
+        });
+    });
+</script>

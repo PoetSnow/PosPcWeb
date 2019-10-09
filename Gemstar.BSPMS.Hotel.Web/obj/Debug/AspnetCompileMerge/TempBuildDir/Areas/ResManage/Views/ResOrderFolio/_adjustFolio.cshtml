@@ -1,0 +1,45 @@
+﻿@*调账*@
+<div id="adjustFolioWindow" style="display:none;min-height:100px;">
+    <table style="margin: 5px 0px 10px 0px;">
+        <tr style="height:31px;">
+            <td style="text-align:right;padding-right:8px;">已选账务</td>
+            <td id="adjustFolioWindow_FolioInfo"></td>
+        </tr>
+        <tr>
+            <td style="text-align:right;padding-right:8px;">目标账单</td>
+            <td>
+                @(Html.Kendo().DropDownList().Name("folioQueryResBillIdAll").BindTo(
+                new List<SelectListItem>() {
+                    new SelectListItem(){ Text = "A账单", Value = "A" },
+                    new SelectListItem(){ Text = "B账单", Value = "B" },
+                    new SelectListItem(){ Text = "C账单", Value = "C" },
+                    new SelectListItem(){ Text = "D账单", Value = "D" },
+                    new SelectListItem(){ Text = "E账单", Value = "E" },
+                    new SelectListItem(){ Text = "F账单", Value = "F" },
+                    new SelectListItem(){ Text = "G账单", Value = "G" },
+                    new SelectListItem(){ Text = "H账单", Value = "H" },
+                    new SelectListItem(){ Text = "I账单", Value = "I" },
+                    new SelectListItem(){ Text = "J账单", Value = "J" },
+                    new SelectListItem(){ Text = "K账单", Value = "K" },
+                    new SelectListItem(){ Text = "L账单", Value = "L" },
+                    new SelectListItem(){ Text = "M账单", Value = "M" },
+                    new SelectListItem(){ Text = "N账单", Value = "N" },
+                    new SelectListItem(){ Text = "O账单", Value = "O" },
+                    new SelectListItem(){ Text = "P账单", Value = "P" },
+                    new SelectListItem(){ Text = "Q账单", Value = "Q" },
+                    new SelectListItem(){ Text = "R账单", Value = "R" },
+                    new SelectListItem(){ Text = "S账单", Value = "S" },
+                    new SelectListItem(){ Text = "T账单", Value = "T" },
+                    new SelectListItem(){ Text = "U账单", Value = "U" },
+                    new SelectListItem(){ Text = "V账单", Value = "V" },
+                    new SelectListItem(){ Text = "W账单", Value = "W" },
+                    new SelectListItem(){ Text = "X账单", Value = "X" },
+                    new SelectListItem(){ Text = "Y账单", Value = "Y" },
+                    new SelectListItem(){ Text = "Z账单", Value = "Z" }
+                }).HtmlAttributes(new { style = "width: 150px;" }).Height(150).Filter(FilterType.StartsWith))&nbsp;&nbsp;
+                <button class="k-primary k-button" id="adjustFolioWindow_saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+                <button class="k-primary k-button" id="adjustFolioWindow_closeEditFormButton" role="button" data-role="button">取消</button>
+            </td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,201 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MbrCardCenter.Models.MbrCardManage.MbrCardEditViewModel
+<style type="text/css">
+    a {
+        text-align: left !important;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.MbrCardNo)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.MbrCardNo).HtmlAttributes(new { @class = "k-textbox", style = "width:100%;background-color:#f5f5f5;",disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.MbrCardNo, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.MbrCardTypeId)</td>
+            <td>@Html.Kendo().DropDownListFor(m => m.MbrCardTypeId).BindTo(ViewBag.MbrCardTypeSelectList as SelectList).HtmlAttributes(new { style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.MbrCardTypeId, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Sales)</td>
+            <td>@Html.TextBoxFor(m => m.Sales, new { @class = "k-textbox", style = "width:100%;background-color:#f5f5f5;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Sales, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.InductionCar)</td>
+            <td>
+                @Html.TextBoxFor(m => m.InductionCar, new { @class = "k-textbox bg-disabled", style = "width:100%;background-color:#f5f5f5;", disabled="disabled"})
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.InductionCar, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Mobile)</td>
+            <td>@Html.TextBoxFor(m => m.Mobile, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@*<span class="red-color">*</span>*@</td>
+
+            <td class="textright">@Html.LabelFor(m => m.CerType)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(m => m.CerType).BindTo(ViewBag.CerTypeSelectList as SelectList).HtmlAttributes(new { style = "width:88%;" })
+            <img class="res-icon-img" src="/images/saomiao.png" title="扫描" id="mbrScanIdButton"><input type="hidden" id="certificatesScan" value="mbrIDFunc" />
+        </td>
+        <td>@Html.ValidationMessageFor(m => m.CerType, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.GuestName)</td>
+        <td>@Html.TextBoxFor(m => m.GuestName, new { @class = "k-textbox", style = "width:100%;" })</td>
+        <td><span class="red-color">*</span></td>
+
+        <td class="textright">@Html.LabelFor(m => m.CerId)</td>
+        <td>@Html.TextBoxFor(m => m.CerId, new { @class = "k-textbox", style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.CerId, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Gender)</td>
+        <td>@Html.Kendo().DropDownListFor(m => m.Gender).BindTo(ViewBag.GenderSelectList as List<SelectListItem>).HtmlAttributes(new { style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Gender, "*")</td>
+
+        <td class="textright">@Html.LabelFor(m => m.City)</td>
+        <td>@Html.TextBoxFor(m => m.City, new { @class = "k-textbox", style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.City, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.BirthDay)</td>
+        <td>@Html.Kendo().DatePickerFor(m => m.BirthDay).HtmlAttributes(new { style = " width:100%" })</td>
+        <td>@Html.ValidationMessageFor(m => m.BirthDay, "*")</td>
+
+        <td class="textright">@Html.LabelFor(m => m.Address)</td>
+        <td>@Html.TextBoxFor(m => m.Address, new { @class = "k-textbox", style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Address, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.QQ)</td>
+        <td>@Html.TextBoxFor(m => m.QQ, new { @class = "k-textbox", style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.QQ, "*")</td>
+
+        <td class="textright">@Html.LabelFor(m => m.WeiXin)</td>
+        <td>@Html.TextBoxFor(m => m.WeiXin, new { @class = "k-textbox", style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.WeiXin, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Email)</td>
+        <td>@Html.TextBoxFor(m => m.Email, new { @class = "k-textbox", style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Email, "*")</td>
+
+        <td class="textright">@Html.LabelFor(m => m.CarNo)</td>
+        <td>@Html.TextBoxFor(m => m.CarNo, new { @class = "k-textbox", style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.CarNo, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Interest)</td>
+        <td colspan="4">@Html.TextAreaFor(m => m.Interest, new { @class = "k-textbox", style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Interest, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+        <td colspan="4">@Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.IsTransactionMsg)</td>
+        <td>@Html.CheckBoxFor(m => m.IsTransactionMsg)</td>
+        <td>@Html.ValidationMessageFor(m => m.IsTransactionMsg, "*")</td>
+
+        <td class="textright">@Html.LabelFor(m => m.IsAdvertisementMsg)</td>
+        <td style="line-height:30px;">@Html.CheckBoxFor(m => m.IsAdvertisementMsg)</td>
+        <td>@Html.ValidationMessageFor(m => m.IsAdvertisementMsg, "*")</td>
+
+        <td>@Html.TextBoxFor(m => m.IsNeedPhone, new {type = "hidden", id = "isNeedPhone"})</td>
+    </tr>
+    @if (ViewBag.isallowOwner)
+    {
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.IsOwner)</td>
+            <td style="line-height:25px;">@Html.CheckBoxFor(m => m.IsOwner)</td>
+            <td>@Html.ValidationMessageFor(m => m.IsOwner, "*")</td>
+        </tr>
+    }
+</table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            $(".validation-summary-errors ul").html("<li style='display:none'></li>");//清除提示信息
+            e.preventDefault();
+            if ($("#Mobile").val().trim() == "" && $("#isNeedPhone").val().trim() == "1")
+                jConfirm("手机号未输入是否保存？", "是", "否", function (flag) {
+                    if (flag) {
+                        postData();
+                    } else $("#isNeedPhone").val("0");
+                });
+            else
+                postData();
+            //saveFormData($("#saveEditFormButton"), function () { $("#dataDiv", $("#mainContent iframe")[0].contentWindow.document).load($("#mainContent iframe")[0].src + "?viewType=false"); });
+        });
+        function postData() {
+            var btn = $("#saveEditFormButton");
+            var f = $(btn)[0].form;
+            var validator = $(f).validate();
+            if (validator.form()) {
+                $.post(
+                    $(f).attr("action"),
+                    $(f).serialize(),
+                    function (data) {
+                        if (data.Success) {
+                            if (data.Data == "1") {
+                                $("#isNeedPhone").val("1");
+                                $("#saveEditFormButton").click();
+                            }
+                            else {
+                                closeEditFormWindow();
+                                $("#dataDiv", $("#mainContent iframe")[0].contentWindow.document).load($("#mainContent iframe")[0].src + "?viewType=false");
+                            }
+
+                        } else {
+                            //jAlert(data.Data);
+                            ajaxErrorHandle(data);
+                        }
+                    },
+                    "json");
+            }
+            //saveSecondFormData($("#saveEditFormButton"), function () {
+
+            //});
+        }
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        if ($("#InductionCar").val() == "") {
+            $("#InductionCar").removeClass("bg-disabled");
+            $("#InductionCar").removeAttr("disabled");
+        }
+        //证件号改变事件
+        $("#CerId").change(function () {
+            var cerType = $("#CerType").data("kendoDropDownList").text();
+            if (cerType == "居民身份证") {
+                var cerId = $("#CerId").val();
+                getCity(cerId, $("#City"));
+                $("#BirthDay").data("kendoDatePicker").value(getBirthDay(cerId));
+                $("#Gender").data("kendoDropDownList").value(getGender(cerId));
+            }
+        });
+        //证件扫描
+        $("#mbrScanIdButton").click(function (e) { scanIdButton_clicked(e); });
+    });
+</script>
+<script type="text/javascript">
+    var CustomerCommonValues = {
+        idType: '@ViewBag.idType',
+        idCode: '@ViewBag.idCode',
+        idEditionName: '@ViewBag.idEditionName',
+    };
+</script>
+<script type="text/javascript" src="~/Scripts/idCard.js"></script>

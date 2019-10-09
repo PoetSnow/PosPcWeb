@@ -1,0 +1,374 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPos.PosRefe>
+@using Gemstar.BSPMS.Hotel.Services.EnumsPos;
+
+<input type="hidden" id="CopyRefeId" value="" />
+<input type="hidden" id="CopyTotalTab" />
+<input type="hidden" id="CopypageIndex" />
+<input type="hidden" id="CopyPageSize" />
+
+<div style="height:2.5rem;padding-left:11px;width:50%">
+    <input id="btnRefe" type="button" value="全部营业点" onclick="showRefeList()" class="btn" />
+    <ul class="refe">
+        @{
+            <li><a href="javascript:void(0);" onclick="SelectRefe('0')">全部</a></li>
+            foreach (var item in Model)
+            {
+                <li>
+                    <a href="javascript:void(0);" onclick="SelectRefe(this)" data-id="@item.Id" data-name="@item.Cname">@item.Cname</a>
+                </li>
+            }
+        }
+    </ul>
+</div>
+
+<!--餐台列表-->
+<div id="TabStatusListByCopyTab" style="padding-left:11px">
+</div>
+
+<style>
+    .refe {
+        z-index: 99999;
+        position: absolute;
+        width: 50%;
+        text-align: center;
+        background-color: #1d4666;
+        color: #eee;
+        display: none
+    }
+
+        .refe li {
+            border-bottom: 1px solid;
+            line-height: 35px;
+        }
+
+            .refe li a {
+                color: #eee;
+            }
+
+    .btn {
+        border: 1px solid #aaa;
+        background: #eee;
+        border-radius: 5px;
+        padding: 7px;
+        margin: 0;
+        width: 100%;
+        margin-top: 2px;
+        color: #333;
+    }
+
+    .tabListCopy {
+        color: #fff;
+        height: 2rem;
+        background-color: #274f7a;
+        margin-bottom: 5px;
+    }
+
+    #tabList {
+        padding-left: 5px;
+    }
+
+    #TabStatusListByCopyTabList {
+        background-color: #454545;
+    }
+
+    #TabStatusListByCopyTab span {
+        font-size: 0.8rem;
+    }
+</style>
+
+<script>
+    $(function () {
+        $("#CopypageIndex").val('@ViewBag.PageIndex');
+        $("#CopyPageSize").val('@ViewBag.PageSize');
+        $("#CopyFlag").val('@ViewBag.Flag')
+        GetTabList();
+    })
+    //获取餐台列表
+    function GetTabList() {
+        var model = {
+            PageIndex: $("#CopypageIndex").val(),
+            PageSize: $("#CopyPageSize").val(),
+            Refeid: $("#CopyRefeId").val()
+        };
+        $.ajax({
+            url: 'PosInSingAdvanceFunc/_CopyTabView',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#TabStatusListByCopyTab").html(data);
+                setItemPriceNull();
+                setTabBackClass1();
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+        GetTabStatusTotal();
+    }
+
+    function setTabBackClass1() {
+        var list = $("#tabListCopy").find(".content-list-tabStatus");
+        list.each(function () {
+            var status = $(this).attr("data-staus");
+            if (status == '@((byte)PosTabStatusEnum.已买单未离座)') {
+                $(this).addClass("staus-sit");
+            }
+            else if (status == '@((byte)PosTabStatusEnum.已打单超时未买单)') {
+                $(this).addClass("staus-intimidate");
+            }
+            else if (status == '@((byte)PosTabStatusEnum.落单后超时未有再点菜)') {
+                $(this).addClass("staus-beAlone");
+            }
+            else if (status == '@((byte)PosTabStatusEnum.就座)') {
+                $(this).addClass("staus-sit");
+            }
+            else if (status == '@((byte)PosTabStatusEnum.预订)') {
+                $(this).addClass("staus-reserve");
+            }
+            else if (status == '@((byte)PosTabStatusEnum.维修)') {
+                $(this).addClass("staus-repair");
+            }
+            else if (status == '@((byte)PosTabStatusEnum.空净)') {
+                $(this).addClass("staus-empty");
+            }
+        });
+    }
+
+    function setItemPriceNull() {
+        var totalCount = 24;
+        var html = "";
+        var liCount = $("#tabListCopy li").length;
+        for (var i = 0; i < totalCount - liCount; i++) {
+            html += '<li class="content-list-tabStatus staus-empty" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+        }
+        $("#tabListCopy .content-list-paging").before(html);
+
+    }
+    //翻页 （减）
+    function pageUpCopyTab() {
+        var pageIndex = $("#CopypageIndex").val();
+        var PageSize = $("#CopyPageSize").val();
+
+        if (pageIndex > 1) {
+            pageIndex = parseInt(pageIndex) - 1;
+            $("#CopypageIndex").val(pageIndex);
+            var model = {
+                Refeid: $("#CopyRefeId").val(),
+                PageIndex: pageIndex,
+                PageSize: PageSize
+            };
+            $.ajax({
+                url: 'PosInSingAdvanceFunc/_CopyTabView',
+                type: "post",
+                data: model,
+                dataType: "html",
+                success: function (data) {
+                    $("#TabStatusListByCopyTab").html(data);
+                    setTabBackClass1();
+                    GetTabStatusTotal();
+                    setItemPriceNull();
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+    }
+
+    //翻页 （加）
+    function pageDownCopyTab() {
+        var PageTotal = $("#CopyTotalTab").val();
+        var pageIndex = $("#CopypageIndex").val();
+        var PageSize = $("#CopyPageSize").val();
+
+        var number = (PageTotal % PageSize) > 0 ? parseInt(PageTotal / PageSize) + 1 : parseInt(PageTotal / PageSize);
+
+        if (parseInt(pageIndex)+1 > number) {
+            return false;
+        }
+        else {
+            pageIndex = parseInt(pageIndex) + 1;
+            $("#CopypageIndex").val(pageIndex);
+        }
+        var model = {
+            Refeid: $("#CopyRefeId").val(),
+            PageIndex: pageIndex,
+            PageSize: PageSize
+        };
+        $.ajax({
+            url: 'PosInSingAdvanceFunc/_CopyTabView',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#TabStatusListByCopyTab").html(data);
+                setTabBackClass1();
+                GetTabStatusTotal();
+                setItemPriceNull();
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //获取餐台列表总数
+    function GetTabStatusTotal() {
+        var model = {
+            PageIndex: $("#CopypageIndex").val(),
+            PageSize: $("#CopyPageSize").val(),
+            RefeId: $("#CopyRefeId").val()
+        }
+        $.ajax({
+            url: 'PosInSingle/GetTabStatusTotal',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#CopyTotalTab").val(data);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //关闭
+    function CloseCopyTab() {
+        layer.closeAll();
+    }
+
+    function CopyTab(obj)
+    {
+         $.ajax({
+            url: '@Url.Action("GetSmearList", "PosTabStatus")',
+            type: "post",
+            data: { tabid: $(obj).attr("data-id") },
+            dataType: "json",
+            success: function (smear) {
+                if (smear.Success == true) {
+                    //没有抹台的餐台
+                    if (smear.Data == "") {
+                        if ($("#tabid").val() == $(obj).attr("data-id")) {
+                            layer.alert("请勿重复操作餐台", { title: "快点云Pos提示" });
+                            return false;
+                        }
+                        else {
+                            if ($(obj).attr("data-staus") == '@((byte)PosTabStatusEnum.维修)') {
+                                layer.alert("此餐台正在维修，请选择其他餐台", { title: "快点云Pos提示" });
+                                return false;
+                            }
+                            else {
+                                layer.close(layer.index);
+                                //如果是空台 则需要选择服务费率是原台还是新台的
+                                $.ajax({
+                                    url: '@Url.Action("_CopyTabBillDetail", "PosInSingAdvanceFunc")',
+                                    type: "post",
+                                    data: { newTabId: $(obj).attr("data-id"), billId: $("#billid").val(),newBillId:"" },
+                                    dataType: "html",
+                                    success: function (data) {
+                                        layer.open({
+                                            type: 1,
+                                            title: "复制菜式",
+                                            skin: 'layui-layer-demo', //样式类名
+                                            closeBtn: 0, //不显示关闭按钮
+                                            shadeClose: false,
+                                            area: ['660px', '540px'], //宽高
+                                            content: data,
+                                            id:"ChangeItemInfo"
+
+                                        });
+                                    },
+                                    error: function (data) {
+                                        layer.alert(data.responseText, { title: "快点云Pos提示" });
+                                    }
+                                });
+                            }
+                        }
+                    }
+                    else {
+                        $.ajax({
+                            url: '@Url.Action("_PosSmearListByChangeItem", "PosInSingAdvanceFunc")',
+                            type: "post",
+                            data: { model: JSON.stringify(smear.Data) },
+                            dataType: "html",
+                            success: function (data) {
+                                layer.open({
+                                    type: 1,
+                                    title: "账单列表",
+                                    skin: 'layui-layer-demo', //样式类名
+                                    closeBtn: 1, //不显示关闭按钮
+                                    shadeClose: true,
+                                    area: ['auto', 'auto'], //宽高
+                                    content: data,
+                                    id:"MergeBillList"
+                                });
+                            },
+                            error: function (data) {
+                                layer.alert(data.responseText, { title: "快点云Pos提示" });
+                            }
+                        });
+                    }
+                }
+                else {
+                    layer.alert(smear.Data, { title: "快点云Pos提示" });
+                }
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //选择营业点
+    function showRefeList() {
+        $(".refe").attr("style", "display:block");
+    }
+    function SelectRefe(obj) {
+        if (obj == "0") {
+            $("#btnRefe").val("全部");
+            $("#CopyRefeId").val("");
+            $("#CopypageIndex").val(1);
+        }
+        else {
+            var refeName = $(obj).attr("data-name");
+            var refeid = $(obj).attr("data-id");
+            $("#CopypageIndex").val(1);
+            $("#CopyRefeId").val(refeid);
+
+            $("#btnRefe").val(refeName);
+        }
+
+        GetTabList();
+        $(".refe").attr("style", "display:none");
+    }
+
+    function ChangeItemBySmear(obj)
+    {
+        layer.closeAll();
+        $.ajax({
+            url: '@Url.Action("_CopyTabBillDetail", "PosInSingAdvanceFunc")',
+            type: "post",
+            data: { newTabId: $(obj).attr("data-tabid"), billId: $("#billid").val(), newBillId: $(obj).attr("data-billid") },
+            dataType: "html",
+            success: function (data) {
+                layer.open({
+                    type: 1,
+                    title: "转菜",
+                    skin: 'layui-layer-demo', //样式类名
+                    closeBtn: 0, //不显示关闭按钮
+                    shadeClose: false,
+                    area: ['660px', '540px'], //宽高
+                    content: data,
+                    id: "ChangeItemInfo"
+
+                });
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+</script>

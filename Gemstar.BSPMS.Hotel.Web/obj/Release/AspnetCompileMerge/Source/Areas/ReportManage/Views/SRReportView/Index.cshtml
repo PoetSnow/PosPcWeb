@@ -1,0 +1,416 @@
+﻿@using Stimulsoft.Report.Mvc;
+@using Gemstar.BSPMS.Hotel.Web.Areas.ReportManage.Models;
+@model ReportQueryModel
+@{
+    Layout = "~/Areas/ReportManage/Views/Shared/_Layout.cshtml";
+    var hasPermissionToDeleteCustomFormat = true;
+    var hasPermissionToDesign = true;
+    var addNewValue = "增加新格式";
+    var styleItems = ViewBag.styleItems as List<SelectListItem>;
+    var chooseStyleItems = new List<SelectListItem>(styleItems);
+    chooseStyleItems.Add(new SelectListItem { Value = addNewValue, Text = string.Format("({0})", addNewValue) });
+}
+
+@section headerContent{
+    @Html.Stimulsoft().RenderMvcViewerScripts()
+    <script type="text/javascript">
+        try {
+            StiMvcViewer.prototype.showError = function (text) {
+                if (text != null && text.substr(0, 6) == "Error:") {
+                    if (text.length == 7) text += "Undefined";
+                    jAlert(text.substring(6));
+                    return true;
+                }
+                return false;
+
+            }
+        } catch (e) { }
+    </script>
+}
+<script src="~/Scripts/layer-v3.1.1/layer.js"></script>
+@section scripts{
+    <script type="text/javascript">
+
+        $(function () {
+            //查询条件按回车切换到下一个文本框
+            //$(document).keydown(function () {
+            //    if (window.event.keyCode == 13) {
+            //        var txtarr = $("input[class='k-textbox']");
+            //        for (var i = 0; i < txtarr.length; i++) {
+            //            if (txtarr[i] == $(this)[0] || $(this)[0].className=='k-input') {
+            //                if (txtarr.length > (i + 1)) {
+            //                    if ($(txtarr[i + 1]).attr("aria-readonly") != undefined) {
+            //                        doCommonQuery(); return;
+            //                    } else {
+            //                        $(txtarr[i + 1]).focus();
+            //                        return;
+            //                    }
+            //                } else {
+            //                    doCommonQuery(); return;
+            //                }
+            //            }
+            //        }
+            //        if (txtarr.length <= 0)
+            //        {
+            //            doCommonQuery();
+            //        }
+            //    }
+            //});
+
+            var $td = "";
+            //将删除自定义格式格式放在工具栏上
+            if ('@hasPermissionToDeleteCustomFormat' == 'True') {
+                $td = $("#delCustTplButtonTableWrapper").wrap("<td style=\"border-width:0px;padding:0px;\"></td>").parent();
+                $td.prependTo($("#MvcViewerButtonDesign").parents("tr:first"));
+                try { jsMvcViewer.AddControl('delCustTplButtonTableWrapper', 'Button'); } catch (e) { }
+            }
+
+            //将打印按钮放在工具栏上
+            if (true) {
+                $td = $("#printButtonTableWrapper").wrap("<td style=\"border-width:0px;padding:0px;\"></td>").parent();
+                $td.prependTo($("#MvcViewerButtonDesign").parents("tr:first"));
+                try { jsMvcViewer.AddControl('printButtonTableWrapper', 'Button'); } catch (e) { }
+            }
+            //将查询按钮放置在工具栏上
+            if (true) {
+                $td = $("#searchButtonTableWrapper").wrap("<td style=\"border-width:0px;padding:0px;\"></td>").parent();
+                $td.prependTo($("#MvcViewerButtonDesign").parents("tr:first"));
+                try { jsMvcViewer.AddControl('searchButtonTableWrapper', 'Button'); } catch (e) { }
+            }
+
+            //添加按钮并控制权限
+            try { if ('@hasPermissionToDesign' != 'True') { $("#MvcViewerButtonDesign").hide(); } } catch (e) { }
+
+            //查询弹框
+            $("#searchWindowDiv").kendoWindow({
+                title: "请选择查询条件",
+                visible: false,
+            });
+            $("#searchWindowDiv div:eq(0)").css("height", "auto");
+            $("#searchButtonTableWrapper").click(function (e) {
+                e.preventDefault();
+                $("#searchWindowDiv").data("kendoWindow").center().open();
+            });
+            //删除自定义格式
+            $("#delCustTplButtonTableWrapper").click(function (e) {
+                e.preventDefault();
+                jConfirm("确定要删除自定义格式吗？", "确认", "取消", function (flag) {
+                    if (flag) {
+                        var ReportCode = $('#ReportCode').val();
+                        if (!ReportCode) {
+                            jAlert("报表号不存在,请关闭页面后重新打开");
+                            return;
+                        }
+                        var styleName = $("#StyleName").val();
+                        $.post('@Url.Action("DelReportTemplate")', { reportCode: ReportCode, styleName: styleName }, function (data) {
+                            if (data.Success) {
+                                jAlert('删除自定义格式成功！', "知道了", function () { $("form")[0].submit(); });
+                            } else {
+                                //jAlert(data.Data, "知道了");
+                                ajaxErrorHandle(data);
+                            }
+                        }, 'json');
+                    }
+                });
+            });
+            //格式更改时提交表单
+            $("#StyleName").change(function (e) {
+                //判断是否是增加新格式选项，是则弹出选择源格式窗口
+                var addNewValue = "@addNewValue";
+                var selectedValue = $("#StyleName").val();
+                console.log(addNewValue + '------' + selectedValue);
+                if (selectedValue == addNewValue) {
+                    $("#addNewStyleWindow").data("kendoWindow").center().open();
+                } else {
+                    $("form")[0].submit();
+                }
+            });
+            //增加新格式窗口
+            $("#addNewStyleWindow").kendoWindow({
+                width: 300,
+                title: "增加新格式",
+                visible: false,
+                modal: true,
+                resizable: false
+            });
+            //执行条件
+            if ('@Model.IsOpenSearchWindow' == 'True') {
+                setTimeout(function () {
+                    $("#searchWindowDiv").data("kendoWindow").center().open();
+                }, 1000);
+            }
+            //直接打印
+            $("#printButtonTableWrapper").click(function (e) {
+                e.preventDefault();
+                jsMvcViewer.postPrint('PrintWithoutPreview');
+            });
+            if ("@Model.ReportCode" == "210" && "@Model.ChineseName" == "远期房态") {
+                $("#printButtonTableWrapper").click();
+            }
+        });
+        //执行查询请求
+        function doCommonQuery() {
+            var paraCount = $("#parameterCount").val();//获取总的参数数量
+            var result = "";//循环获取所有的参数值
+            var splitChar = "";
+            for (var i = 0; i < paraCount; i++) {
+                var paraName = $("#pname_" + i).val();//获取参数名称
+                var paraValue = "";
+                var paraText = "";
+                if (paraName.indexOf("h99") > 0) { continue; }
+                var paraValueId = "#p" + i;//默认的直接从文本框中获取
+                var objParaValue = $(paraValueId);
+                if (objParaValue.length > 0)//如果控件存在，则直接取控件的值
+                {
+                    objParaValue = objParaValue[0];
+                    if ((objParaValue.tagName.toUpperCase() == "INPUT" && (objParaValue.type.toUpperCase() == "TEXT" || objParaValue.type.toUpperCase() == "PASSWORD")) || (objParaValue.tagName.toUpperCase() == "TEXTAREA"))//如果是文本框则直接取值
+                    {
+                        paraValue = objParaValue.value;
+                        paraText = objParaValue.value;
+                        if (objParaValue.getAttribute("data-role") == "dropdownlist") {
+                            paraText = $(paraValueId).data("kendoDropDownList").text();
+                        }
+                    }
+                    else if (objParaValue.tagName.toUpperCase() == "INPUT" && objParaValue.type.toUpperCase() == "CHECKBOX")//如果是复选框，则根据是否选中赋值
+                    {
+                        if (objParaValue.checked) {
+                            paraValue = "1";
+                            paraText = "是";
+                        }
+                        else {
+                            paraValue = "0";
+                            paraText = "否";
+                        }
+                    }
+                    else if (objParaValue.tagName.toUpperCase() == "SELECT")//如果是下拉列表框
+                    {
+                        var paraSelectObj = $(paraValueId + " option:selected");
+                        if (paraSelectObj.length > 0) {
+                            $.each(paraSelectObj, function (index, item) {
+                                paraText += item.text + ",";
+                                paraValue += item.value + ",";
+                            });
+                            paraText = paraText.substring(0, paraText.length - 1);
+                            paraValue = paraValue.substring(0, paraValue.length - 1);
+                        } else {
+                            paraText = "全部";
+                            paraValue = "";
+                        }
+                    }
+                }
+                else//如果控件不存在，则是其他情况。目前只有自动完成的
+                {
+                    objParaValue = $(paraValueId + "_Value");//自动完成的默认值
+                    if (objParaValue.length > 0)
+                        paraValue = objParaValue.val();
+                    objParaValue = $(paraValueId + "_Text");
+                    if (objParaValue.length > 0)
+                        paraText = objParaValue.val();
+                }
+                //如果规则码生成的控件不在上述的控件内，则需要根据code规则码的值做特殊处理，如if(code=="00")...
+                //将值累加到结果字符串中,注意，为了方便，将控件的值与名称都保存在参数值中，用^分隔
+                //alert(result);
+                //result = result + splitChar + paraName + "=" + paraValue.replace(/ /g, '') + "^" + paraText.replace(/ /g, '');
+                result = result + splitChar + paraName + "=" + paraValue + "^" + paraText;
+                splitChar = "&";
+            }
+            $("#ParameterValues").val(result);
+            $("form")[0].submit();
+        }
+        //关闭弹框
+        function closeCommonQueryWindow() { $("#searchWindowDiv").data("kendoWindow").close(); }
+        //报表中超链接
+        function ToNextReport(reportCode, appendParameterValues) {
+            var parameterValues = $("#ParameterValues").val() + "&" + appendParameterValues;
+            $.post("@Url.Action("AddQueryParaTemp", "SRReportView", new { area = "ReportManage" })", { ReportCode: reportCode, ParameterValues: parameterValues, ChineseName: "", IsOpenSearchWindow: false }, function (result) {
+                if (result.Success) {
+                    window.open(result.Data);
+                } else {
+                    //jAlert(data.Data, "知道了");
+                    ajaxErrorHandle(result);
+                }
+            }, 'json');
+        }
+
+
+        //排序
+        function OrderBy(dataBandName,orderColumn) {
+            var oldOrderColumn = $("#orderColumn").val();
+            var order = $("#order").val();
+
+
+            console.log(orderColumn);
+            console.log(oldOrderColumn);
+            console.log(order);
+
+            if (oldOrderColumn == orderColumn)
+            {
+                if (order == 0) {
+                    order = 1;
+                }
+                else if (order == 1)
+                {
+                    order = 2;
+                }
+                else if (order == 2) {
+                    order = 0;
+                }
+            }
+            else {
+                order = 1;
+            }
+
+            if (order== 0) {
+                dataBandName = "";
+            }
+
+            $("#orderColumn").val(orderColumn);
+            $("#order").val(order);
+            var options = jsMvcViewer.options;
+            var formValues = $("#formValues").val();
+            if (formValues == "") {
+                formValues = options.formValues;
+                $("#formValues").val(options.formValues);
+            }
+            //需要该参数才能正确返回
+            var sendParams = "reportguid=" + jsMvcViewer.newGuid("", "");
+            //给reportGuid赋个新的值，才会刷新
+            options.reportGuid = jsMvcViewer.newGuid("", "");
+            //参数带上数据源，排序方式，排序字段
+            options.formValues = formValues + "&dataBandName=" + dataBandName
+                + "&order=" + (order == 1 ? "ASC" : "DESC")
+                + "&orderColumn=" + orderColumn;
+            jsMvcViewer.postInteraction(sendParams);
+            //console.log();
+        }
+
+
+
+        //在报表中打开客单
+        function ToOrderInfo(regid) {
+            var url = "@Url.Action("Index","ResOrderAdd", new { area = "ResManage" })" + "?type=I" + "&id=" + regid + "&IsRoomStatus=4";
+            top.openResKendoWindow("客单", url, null, "20020", "新预订/入住");
+        }
+        //在报表中打开客情
+        function ToGuestInfo(regid) {
+            var url = "@Url.Action("Index","ResOrderAdd", new { area = "ResManage" })" + "?type=I" + "&id=" + regid + "&IsRoomStatus=2";
+            top.openResKendoWindow("客情", url, null, "20020", "新预订/入住");
+        }
+        //云Pos报表中打开账单明细的消费项目
+        function ToBillDetail(regid) {
+
+            var url = "@Url.Action("_BillDetailByReport", "PosCashier", new { area = "PosManage" })" + "?" + "&billId=" + regid;
+            $.ajax({
+                url: '@Url.Action("_BillDetailByReport", "PosCashier", new { area = "PosManage" })',
+                type: "post",
+                data: { billId: regid },
+                dataType: "html",
+                success: function (data) {
+                    layer.open({
+                        type: 1,
+                        title: "账单明细",
+                        //  skin: 'layui-layer-demo', //样式类名
+                        closeBtn: 1, //不显示关闭按钮
+                        area: ['75%', '75%'], //宽高
+                        content: data
+                    });
+
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+           // top.openResKendoWindow("账单明细", url, null, "20001", "账单明细");
+
+        }
+        //将格式选择放在工具栏上
+        if (true) {
+            $td = $("#styleSelectTableWrapper").wrap("<td style=\"border-width:0px;padding:0px;\"></td>").parent();
+            $td.prependTo($("#MvcViewerButtonDesign").parents("tr:first"));
+            try { jsMvcViewer.AddControl('styleSelectTableWrapper', 'Button'); } catch (e) { }
+        }
+        //保存新增加的格式
+        function saveStyle_clicked(e) {
+            if (e) { e.preventDefault(); }
+            //check
+            var styleNewName = $("#styleNewName").val();
+            if (!styleNewName) {
+                jAlert("请输入新格式名称");
+                return;
+            }
+            var ReportCode = $('#ReportCode').val();
+            if (!ReportCode) {
+                jAlert("报表号不存在,请关闭页面后重新打开");
+                return;
+            }
+            var styleSourceName = $("#styleSourceName").data("kendoDropDownList").value();
+            var chineseName = $("#ChineseName").val();
+            $.post("@Url.Action("AddStyle")", { reportCode: ReportCode, sourceStyle: styleSourceName, styleName: styleNewName, chineseName: chineseName }, function (data) {
+                if (data.Success) {
+                    $("#StyleName").append("<option value='" + styleNewName + "'>" + styleNewName + "</option>");
+                    $("#StyleName").val(styleNewName);
+                    $("form")[0].submit();
+                } else {
+                    jAlert(data.Data);
+                    return;
+                }
+            }, 'json');
+
+        }
+        //取消增加
+        function cancelStyle_clicked(e) {
+            if (e) { e.preventDefault(); }
+            $("#addNewStyleWindow").data("kendoWindow").close();
+        }
+    </script>
+}
+    <div>
+        <input type="hidden" id="order" name="order" value="1" />
+        <input type="hidden" id="orderColumn" name="orderColumn" value="" />
+        <input type="hidden" id="formValues" name="formValues" value="" />
+        @using (Html.BeginForm())
+        {
+            <input type="hidden" id="ReportCode" name="ReportCode" value="@Model.ReportCode" />
+            <input type="hidden" id="ParameterValues" name="ParameterValues" value="@Model.ParameterValues" />
+            <input type="hidden" id="IsOpenSearchWindow" name="IsOpenSearchWindow" value="False" />
+            <div id="searchButtonTableWrapper" buttonname="searchButton" formbutton="False" style="cursor:default;padding:0px 0px 0px 1px;">
+                <table id="searchButtonTable" cellspacing="0" cellpadding="0" style="border-width:0px;height:24px;border-collapse:collapse;cursor:default;"><tbody><tr><td style="border-width:0px;padding:0px;"><div class="stiLeftHalfButton" style="width:3px;"></div></td><td class="stiMiddleHalfButton" style="font-size:0;"><img src="~/images/search.png" style="height: 16px; width: 16px; padding: 0px 3px;"></td><td class="stiMiddleHalfButton" style="white-space:nowrap;font-family:Arial;color:#202020;">查询&nbsp;</td><td style="border-width:0px;padding:0px;"><div class="stiRightHalfButton" style="width:3px;"></div></td></tr></tbody></table>
+            </div>
+            <div id="styleSelectTableWrapper" buttonname="styleSelect" formbutton="False" style="cursor:default;padding:0px 0px 0px 1px;">
+                @Html.DropDownListFor(m => m.StyleName, chooseStyleItems, new { style = "color:black;font-size:12px;height:22px;border:1px solid" })
+            </div>
+            <div id="printButtonTableWrapper" buttonname="printButton" formbutton="False" style="cursor:default;padding:0px 0px 0px 1px;">
+                <table id="printButtonTable" cellspacing="0" cellpadding="0" style="border-width:0px;height:24px;border-collapse:collapse;cursor:default;"><tbody><tr><td style="border-width:0px;padding:0px;"><div class="stiLeftHalfButton" style="width:3px;"></div></td><td class="stiMiddleHalfButton" style="font-size:0;"><img src="~/images/print.gif" style="height: 16px; width: 16px; padding: 0px 3px;"></td><td class="stiMiddleHalfButton" style="white-space:nowrap;font-family:Arial;color:#202020;">打印&nbsp;</td><td style="border-width:0px;padding:0px;"><div class="stiRightHalfButton" style="width:3px;"></div></td></tr></tbody></table>
+            </div>
+            if (hasPermissionToDeleteCustomFormat)
+            {
+                <div id="delCustTplButtonTableWrapper" buttonname="delCustTplButton" formbutton="False" style="cursor: default; padding: 0px 0px 0px 1px;">
+                    <table id="delCustTplButtonTable" cellspacing="0" cellpadding="0" style="border-width: 0px; height: 24px; border-collapse: collapse; cursor: default;"><tbody><tr><td style="border-width: 0px; padding: 0px;"><div class="stiLeftHalfButton" style="width: 3px;"></div></td><td class="stiMiddleHalfButton" style="font-size:0;"><img src="~/images/delete.png" style="height: 16px; width: 16px; padding: 0px 3px;"></td><td class="stiMiddleHalfButton" style="white-space: nowrap; font-family: Arial; color: #202020;">删除自定义格式&nbsp;</td><td style="border-width: 0px; padding: 0px;"><div class="stiRightHalfButton" style="width: 3px;"></div></td></tr></tbody></table>
+                </div>
+            }
+            @Html.GetStiMvcViewer((Request.RequestType == "GET" && Model.IsOpenSearchWindow == false) ? Model : null)
+        }
+        <div id="searchWindowDiv">@Html.Action("Index", "Query", new { area = "", procName = Model.ProcedureName, procValues = Model.ParameterValues })</div>
+        <div id="addNewStyleWindow">
+            <table>
+                <tr>
+                    <td>源格式名称:</td>
+                    <td>@(Html.Kendo().DropDownList().Name("styleSourceName").BindTo(styleItems))</td>
+                </tr>
+                <tr>
+                    <td>新格式名称:</td>
+                    <td>@(Html.Kendo().TextBox().Name("styleNewName"))</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        @(Html.Kendo().Button().Name("saveStyle").Content("增加").Events(e => e.Click("saveStyle_clicked")))
+                        @(Html.Kendo().Button().Name("cancelStyle").Content("取消").Events(e => e.Click("cancelStyle_clicked")))
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+@Html.Partial("_KendoCommonWindow")
+<div id="helpFilesDiv"></div>
+<input type="hidden" id="txtOnLoadSuccess" value="0" />

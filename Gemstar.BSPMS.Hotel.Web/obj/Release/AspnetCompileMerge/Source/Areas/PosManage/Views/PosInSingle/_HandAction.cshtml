@@ -1,0 +1,85 @@
+﻿@model  Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosInSingle.PosHandActionViewModel
+
+<input type="hidden" id="Mid" value="@Model.Mid" />
+<table class="editFormTable">
+    @{
+
+
+        <tr class="inputOriQuan">
+            <td class="textright">消费项目：</td>
+            <td>@Model.ItemName</td>
+        </tr>
+        <tr class="inputOriQuan">
+            <td class="textright">作法名称：</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.ActionName).HtmlAttributes(new { style = " width:89%", onclick = "openHandwrite(this,'table')" })</td>
+        </tr>
+        <tr class="inputOriPiece" style="line-height:50px">
+            <td class="textright">金额：</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.ActionPrice)<i class="fa fa-keyboard-o fa-3x" style="float:right;line-height:50px" onclick="numberInput(this,'ActionPrice')" data-keyboardShow="1" aria-hidden="true"></i></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding-left:78px;">@(Html.Kendo().CheckBoxFor(e => e.iByGuest))</td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding-left:78px;">@(Html.Kendo().CheckBoxFor(e => e.iByQuan))</td>
+        </tr>
+
+
+    }
+
+</table>
+<div class="formButtons">
+    <input type="button" id="saveHandAction" value="确定" />
+    <input type="button" id="closeHadnAction" value="关闭" />
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        $("#closeHadnAction").bind("click", function () {
+            layer.closeAll();
+        })
+        $("#saveHandAction").bind("click", function () {
+            var grid = $("#grid").data("kendoGrid");
+            var selectedRows = grid.select();
+            if (selectedRows.length > 0) {
+                var row = selectedRows[0];
+                var dataRow = grid.dataItem(row);
+                var model =
+                {
+                     MBillid: $("#mBillid").val(),
+                     Igroupid: $("#igroupid").val(),
+                     HandActionName: $("#ActionName").val(),
+                     IByQuan: $("#iByQuan").prop("checked"),
+                     IByGuest: $("#iByGuest").prop("checked"),
+                     AddPrice: $("#ActionPrice").val(),
+                     Quan: dataRow["Quantity"],
+                     DeptClassid: dataRow["DeptClassid"],
+                     IGuest: $("#iGuest").val(),
+                     Mid: $("#Mid").val()
+                };
+                $.ajax({
+                    url: '@Url.Action("UpdateBillDetailHandAction", "PosInSingle")',
+                    type: "post",
+                    data: model,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.Success) {
+                            layer.closeAll();
+                            $("#grid").data("kendoGrid").dataSource.read();
+                            $("#igroupid").val(data.Data);
+                            openActionGroup();
+                            getStatistics(1);
+                        } else {
+                            layer.alert(data.Data, { title: "快点云Pos提示",skin:'err' });
+                        }
+                    },
+                    error: function (data) {
+                        layer.alert(data.responseText, { title: "快点云Pos提示", skin: 'err'  });
+                    }
+                });
+            }
+
+        })
+    })
+</script>

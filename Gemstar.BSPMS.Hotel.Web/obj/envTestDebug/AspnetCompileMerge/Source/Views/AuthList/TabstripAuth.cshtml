@@ -1,0 +1,47 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.Entities.AuthList>
+@{
+}
+<style>
+    html, body, div.wrap, div.k-tabstrip-wrapper, div#tabstripAuth {
+        height: 98%;
+    }
+
+    .k-tabstrip .k-content {
+        position: absolute;
+        overflow: hidden;
+        top: 40px;
+        bottom: 0;
+        width: 100%;
+        margin: -2px 0 0 -48px;
+    }
+</style>
+<script type="text/javascript">
+    var iframe = $("#mainContent", window.parent.document).find("iframe");
+    if (iframe != null && iframe != undefined && iframe.length > 0) {
+        iframe.attr("scrolling", "no");
+        $("body").css("overflow","hidden");
+    }
+    function tabstripAuth_onActivate(e) {
+        var iframe = $('#tabstripAuth div.k-state-active iframe[data-contenttype="forthmenu"]');
+        var iframeWindow = iframe[0].contentWindow;
+        if (typeof (iframeWindow.gridread) == "function") { iframeWindow.gridread(); }
+
+    }
+</script>
+@(Html.Kendo().TabStrip()
+            .Name("tabstripAuth")
+            .TabPosition(TabStripTabPosition.Top)
+            .Scrollable(true)
+            .Navigatable(false)
+            .Items(c =>
+            {
+                foreach (var auth in Model)
+                {
+                    c.Add().Text(auth.AuthName).LoadContentFrom("TabstripContent", "AuthList", new { area = "", url = Url.Action(auth.Action, auth.Controller, new { area = auth.Area }) });
+                }
+            })
+            .HtmlAttributes(new { style = "height:100%;width:100%;" })
+            .SelectedIndex(0)
+            .Events(e=>e.Activate("tabstripAuth_onActivate"))
+)
+

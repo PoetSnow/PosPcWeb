@@ -1,0 +1,137 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.CRM.Models.GuestManage.GuestEditViewModel
+<style type="text/css">
+    label {
+        text-align: left;
+    }
+
+    .textright1 {
+        padding-top: 5px;
+        text-align: right;
+        width:129px;
+    }
+
+    .textleft {
+        padding-top: 5px;
+        text-align: left;
+        padding-left: 15px;
+        width:150px;
+    }
+
+    #cont div {
+        margin-left: 20px;
+        margin-top: 20px;
+    }
+
+    #cont {
+        margin-top: 20px;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+
+    fieldset {
+        display: block;
+        -webkit-padding-before: 0.35em;
+        -webkit-padding-start: 0.75em;
+        -webkit-padding-end: 0.75em;
+        -webkit-padding-after: 0.625em;
+        border-width: 1px;
+        border-color: rgb(204,204,204);
+        border-radius: 4px;
+        border-style: solid;
+    }
+</style>
+<script type="text/javascript">
+
+    //查询客人消费明细
+    function updateGuest() {
+        top.openSecondKendoWindow("客历修改", "@Url.Action("Edit", new { id = Model.Id })");
+    }
+    //查询客人消费明细
+    function queryGuestTrans() {
+        top.openIframeKendoWindow("查询客人消费明细", "@Html.Raw(Url.Action("Index", "GuestTransManage", new { id = Model.Id, begintime = DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd"), endtime = DateTime.Now.ToString("yyyy-MM-dd") }))",null, "60020_8192","消费明细");
+    }
+</script>
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.Id)
+    Model.Gender = (Model.Gender == "M" ? "男" : (Model.Gender == "F" ? "女" : ""));
+
+    <div id="cont">
+        <fieldset>
+            <legend><span style="display:block;margin-left:10px;margin-right:10px;font-size:20px;">客人信息</span> </legend>
+            <table class="editFormTable largeRowTable" style="text-align:center;width:100%;margin-top:20px;">
+                <tr>
+                    <td class="textright1">@Html.LabelFor(m => m.GuestName)：</td>
+                    <td class="textleft">@Html.DisplayTextFor(m => m.GuestName)</td>
+                    <td class="textright1">@Html.LabelFor(m => m.Gender)：</td>
+                    <td class="textleft">@Html.DisplayTextFor(m => m.Gender)</td>
+                </tr>
+                <tr>
+                    <td class="textright1">@Html.LabelFor(m => m.CerType)：</td>
+                    <td class="textleft">@ViewBag.certype</td>
+                    <td class="textright1">@Html.LabelFor(m => m.Cerid)：</td>
+                    <td class="textleft">@Html.DisplayTextFor(m => m.Cerid)</td>
+                </tr>
+                <tr>
+                    <td class="textright1">@Html.LabelFor(m => m.Nation)：</td>
+                    <td class="textleft">@Html.DisplayTextFor(m=>m.Nation)</td>
+                    <td class="textright1">@Html.LabelFor(m => m.Birthday)：</td>
+                    <td class="textleft">@(Model.Birthday == null ? "" : Model.Birthday.Value.ToString("yyyy-MM-dd"))</td>
+                </tr>
+                <tr>
+                    <td class="textright1">@Html.LabelFor(m => m.City)：</td>
+                    <td class="textleft">@Html.DisplayTextFor(m => m.City)</td>
+                    <td class="textright1">@Html.LabelFor(m => m.Mobile)：</td>
+                    <td class="textleft">@Html.DisplayTextFor(m => m.Mobile)</td>
+                </tr>
+                <tr>
+                    <td class="textright1">@Html.LabelFor(m => m.Interest)：</td>
+                    <td class="textleft">@Html.DisplayTextFor(m => m.Interest)</td>
+                    <td class="textright1">@Html.LabelFor(m => m.Email)：</td>
+                    <td class="textleft">@Html.DisplayTextFor(m => m.Email)</td>
+                </tr>
+                <tr>
+                    <td class="textright1">@Html.LabelFor(m => m.Address)：</td>
+                    <td class="textleft">@Html.DisplayTextFor(m => m.Address)</td>
+                    <td class="textright1">@Html.LabelFor(m => m.CompanyName)：</td>
+                    <td class="textleft">@Html.DisplayTextFor(m => m.CompanyName)</td>
+                </tr>
+                <tr>
+                    <td class="textright1">@Html.LabelFor(m => m.Remark)：</td>
+                    <td colspan="3" class="textleft">@Html.DisplayTextFor(m => m.Remark)</td>
+                </tr>                
+            </table>
+           
+        </fieldset>
+        <fieldset>
+            <legend><span style="display:block;margin-left:10px;margin-right:10px;font-size:20px;">统计信息</span> </legend>
+            <table class="editFormTable largeRowTable" style="text-align:center;width:100%;margin-top:20px;">
+                <tr>
+                    <td class="textright1">@Html.LabelFor(m => m.JoinDate)：</td>
+                    <td class="textleft">@(Model.JoinDate == null ? "" : Model.JoinDate.Value.ToString("yyyy-MM-dd"))</td>
+                    <td class="textright1">@Html.LabelFor(m => m.Amount)：</td>
+                    <td class="textleft">@Model.Amount</td>
+                </tr>
+                <tr>
+                   
+                    <td class="textright1">@Html.LabelFor(m => m.DepDate)：</td>
+                    <td class="textleft">@Model.DepDate</td>
+                    <td class="textright1">@Html.LabelFor(m => m.Nigths)：</td>
+                    <td class="textleft">@Model.Nigths</td>
+                </tr>
+                <tr>
+                    <td class="textright1">@Html.LabelFor(m => m.RoomNo)：</td>
+                    <td class="textleft" colspan="3">@Model.RoomNo</td>
+                </tr>
+                </table>
+           </fieldset>
+            <div style="text-align:center;margin-top:30px;margin-bottom:30px;">
+            @if (ViewBag.HasButton != false)
+            {
+                <input type="button" value="修改客人信息" class="k-primary k-button" onclick="updateGuest()" />
+            }
+                <input type="button" value="查看消费明细" class="k-primary k-button" onclick="queryGuestTrans()" />
+            </div>
+    </div>
+}

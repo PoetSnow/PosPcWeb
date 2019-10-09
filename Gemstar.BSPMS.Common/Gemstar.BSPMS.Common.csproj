@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C2A3A84B-8FE4-4B00-9D00-309C740EA855}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Gemstar.BSPMS.Common</RootNamespace>
+    <AssemblyName>Gemstar.BSPMS.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'envTestDebug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\envTestDebug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'envTestRelease|AnyCPU'">
+    <OutputPath>bin\envTestRelease\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AopSdk">
+      <HintPath>..\lib\AopSdk.dll</HintPath>
+    </Reference>
+    <Reference Include="Gma.QrCodeNet.Encoding">
+      <HintPath>..\lib\Gma.QrCodeNet.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OOXML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Qiniu">
+      <HintPath>..\lib\Qiniu.dll</HintPath>
+    </Reference>
+    <Reference Include="RazorEngine">
+      <HintPath>..\lib\RazorEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="RazorEngine.Mvc">
+      <HintPath>..\lib\RazorEngine.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataAnnotations\ExecuteTimeLogAttribute.cs" />
+    <Compile Include="DataAnnotations\JsonExceptionAttribute.cs" />
+    <Compile Include="DataAnnotations\RegexHelper.cs" />
+    <Compile Include="DataAnnotations\LogExceptionAttribute.cs" />
+    <Compile Include="Enumerator\CheckFunc.cs" />
+    <Compile Include="Enumerator\CheckMethod.cs" />
+    <Compile Include="Enumerator\EmailTemplate.cs" />
+    <Compile Include="Enumerator\Gender.cs" />
+    <Compile Include="Enumerator\InvoiceType.cs" />
+    <Compile Include="Enumerator\IsGroup.cs" />
+    <Compile Include="Enumerator\MbrCardStatus.cs" />
+    <Compile Include="Extensions\DateTableExtension.cs" />
+    <Compile Include="Extensions\DateTimeExtension.cs" />
+    <Compile Include="Extensions\DayOfWeekExtension.cs" />
+    <Compile Include="Extensions\EnumExtension.cs" />
+    <Compile Include="Extensions\Extension.cs" />
+    <Compile Include="Extensions\TimeExtension.cs" />
+    <Compile Include="Extensions\UrlHelperExtension.cs" />
+    <Compile Include="LogLevel.cs" />
+    <Compile Include="PayManage\AliProviderPay\AliPayConfigPara.cs" />
+    <Compile Include="PayManage\AliProviderPay\AliPayException.cs" />
+    <Compile Include="PayManage\AliProviderPay\AliPayNotify.cs" />
+    <Compile Include="PayManage\AliProviderPay\AlipayTradeCloseContentBuilder.cs" />
+    <Compile Include="PayManage\AliProviderPay\AlipayTradePayContentBuilder.cs" />
+    <Compile Include="PayManage\AliProviderPay\AlipayTradePrecreateContentBuilder.cs" />
+    <Compile Include="PayManage\AliProviderPay\AlipayTradeQueryContentBuilder.cs" />
+    <Compile Include="PayManage\AliProviderPay\AlipayTradeRefundContentBuilder.cs" />
+    <Compile Include="PayManage\AliProviderPay\AlipayTradeRefundQueryContentBuilder.cs" />
+    <Compile Include="PayManage\AliProviderPay\ExtendParams.cs" />
+    <Compile Include="PayManage\AliProviderPay\GoodsInfo.cs" />
+    <Compile Include="PayManage\AliProviderPay\JsonBuilder.cs" />
+    <Compile Include="PayManage\AliProviderPay\ResultCode.cs" />
+    <Compile Include="PayManage\IPayLogService.cs" />
+    <Compile Include="PayManage\PayCallbackPara.cs" />
+    <Compile Include="PayManage\PayLogNotRecordService.cs" />
+    <Compile Include="PayManage\PayProductType.cs" />
+    <Compile Include="PayManage\WxProviderPay\HttpService.cs" />
+    <Compile Include="PayManage\WxProviderPay\IWxHttpServicePara.cs" />
+    <Compile Include="PayManage\WxProviderPay\WxPayApi.cs" />
+    <Compile Include="PayManage\WxProviderPay\WxPayAttach.cs" />
+    <Compile Include="PayManage\WxProviderPay\WxPayConfigPara.cs" />
+    <Compile Include="PayManage\WxProviderPay\WxPayData.cs" />
+    <Compile Include="PayManage\WxProviderPay\WxPayException.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingInfo.cs" />
+    <Compile Include="Tools\ADOHelper.cs" />
+    <Compile Include="Tools\AutoSetValueHelper.cs" />
+    <Compile Include="Tools\CheckCodeBuilder.cs" />
+    <Compile Include="Tools\CommonHelper.cs" />
+    <Compile Include="Tools\CommonQueryHelper.cs" />
+    <Compile Include="Tools\CommonQueryModel.cs" />
+    <Compile Include="Tools\CommonQueryParameterHelper.cs" />
+    <Compile Include="Tools\ConnStrHelper.cs" />
+    <Compile Include="Tools\CryptHelper.cs" />
+    <Compile Include="Tools\EmailModel.cs" />
+    <Compile Include="Tools\EmailSendHelper.cs" />
+    <Compile Include="Tools\EncryptUtil.cs" />
+    <Compile Include="Tools\EnumHelper.cs" />
+    <Compile Include="Tools\ExcelHelp.cs" />
+    <Compile Include="Tools\ExcelHelper.cs" />
+    <Compile Include="Tools\FileHelper.cs" />
+    <Compile Include="Tools\HttpHelper.cs" />
+    <Compile Include="Tools\ISettingProvider.cs" />
+    <Compile Include="Tools\JsonHelper.cs" />
+    <Compile Include="Tools\KeyValuePairModel.cs" />
+    <Compile Include="Tools\PasswordHelper.cs" />
+    <Compile Include="Tools\QiniuHelper.cs" />
+    <Compile Include="Tools\QrCodeHelper.cs" />
+    <Compile Include="Tools\ResultDataModel.cs" />
+    <Compile Include="Tools\SettingHelper.cs" />
+    <Compile Include="Tools\SharedSessionModule.cs" />
+    <Compile Include="Tools\SMSSendHelper.cs" />
+    <Compile Include="Tools\CommonUrlHelper.cs" />
+    <Compile Include="Tools\SMSSendPara.cs" />
+    <Compile Include="Tools\SMSSendParaCheckCode.cs" />
+    <Compile Include="Tools\SMSSendParaHotel.cs" />
+    <Compile Include="Tools\SMSSendParaHotelMsgToCutom.cs" />
+    <Compile Include="Tools\SMSSendParaCommonSms.cs" />
+    <Compile Include="Tools\SMSSendParaHotelMsgToGuest.cs" />
+    <Compile Include="Tools\SMSSendParaHotelLockPwd.cs" />
+    <Compile Include="Tools\SMSSendParaHotelMbrConsume.cs" />
+    <Compile Include="Tools\SMSSendParaHotelMbrRecharge.cs" />
+    <Compile Include="Tools\XmlHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Template\Default.htm" />
+    <Content Include="Template\ResetPassword.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Gemstar.BSPMS.Common.Services\Gemstar.BSPMS.Common.Services.csproj">
+      <Project>{00595ed1-611e-43b1-ac43-470b54830b9b}</Project>
+      <Name>Gemstar.BSPMS.Common.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="PayManage\WxProviderPay\apiclient_cert.p12" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,70 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <META NAME="ROBOTS" CONTENT="NOINDEX,NOFOLLOW" />
+    <title>错误提示</title>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+        }
+
+        body {
+            padding-top: 10%;
+        }
+
+        i {
+            margin-bottom: 10px;
+        }
+
+        span {
+            line-height: 40px;
+        }
+
+        a {
+            margin: 0 5px;
+            display: block;
+        }
+
+        .ico {
+            color: rgba(250, 200, 0, 1);
+        }
+
+        .title {
+            font-size: 22px;
+            padding-bottom: 10px;
+            color: #000;
+        }
+
+        .content {
+            font-size: 14px;
+            padding-bottom: 10px;
+            color: #808080;
+        }
+    </style>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div style="width:100%;text-align:center">
+        <span class="ico"><i class="fa fa-warning fa-5x" aria-hidden="true"></i></span><br />
+        <span class="title">抱歉！访问出现问题</span><br />
+        <span class="content">可能原因：@ViewBag.ErrorInfo</span>
+    </div>
+    <div style="margin-top:10px;width:100%;text-align:center;clear:both">
+        <a class="btn btn-info" href="@Url.Action("Index","Account")">返回首页</a>
+        @*<a class="btn btn-default" href="javascript:closeWindow();">关闭页面</a>*@
+    </div>
+    <script type="text/javascript">
+        function closeWindow() {
+
+        }
+    </script>
+</body>
+</html>

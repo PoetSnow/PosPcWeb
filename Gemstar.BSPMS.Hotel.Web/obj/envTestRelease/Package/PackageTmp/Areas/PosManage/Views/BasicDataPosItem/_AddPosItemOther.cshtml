@@ -1,0 +1,156 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItem.PosItemOtherViewModel
+
+<div style="width:100%;padding:0.5rem 1rem 1rem 0.8rem;font-size:0.8rem;">
+    @Html.LabelFor(m => m.Code)：<span style="color:blue">@Model.Code</span>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    @Html.LabelFor(m => m.Cname)：<span style="color:blue">@Model.Cname</span>
+</div>
+<ul id="panelbar">
+    <li class="k-state-active">
+        <span class="k-link k-state-selected">单位价格</span>
+        <div id="itemPriceTable">
+            @Html.Partial("_GetPosItemPriceByItemId", Model)
+        </div>
+        <div id="itemPrice" style="padding: 10px;">
+            @*@Html.Partial("_AddPosItemPrice", Model.PosItemPrice)*@
+        </div>
+    </li>
+    <li>
+        <span>项目大类</span>
+        <div id="itemMultiClassTable">
+            @Html.Partial("_GetPosItemMultiClassByItemId", Model)
+        </div>
+        <div id="itemMultiClass" style="padding: 10px;">
+            @*@Html.Partial("_AddPosItemMultiClass", Model.PosItemMultiClass)*@
+        </div>
+    </li>
+    <li>
+        <span>营业点</span>
+        <div id="itemRefeTable">
+            @Html.Partial("_GetPosItemRefeByItemId", Model)
+        </div>
+        <div id="itemRefe" style="padding: 10px;">
+            @*@Html.Partial("_AddPosItemRefe", Model.PosItemRefe)*@
+        </div>
+    </li>
+</ul>
+<div class="formButtons" style="text-align:center;padding:0.5rem">
+    <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">关闭</button>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#panelbar").kendoPanelBar({
+            expandMode: "single"
+        });
+
+        $("#itemPrice").hide();
+    });
+
+    $("#closeEditFormButton").click(function (e) {
+        e.preventDefault();
+        closeEditFormWindow();
+    });
+
+    function itemOtherSaveFormData(btn, grid) {
+        var iframe = getContentIfrmae();
+        if (iframe.contentWindow.itemOtherSaveFormData) {
+            iframe.contentWindow.itemOtherSaveFormData(btn);
+        }
+        else {
+            itemOtherSaveKendoWindowFormData(btn, null, grid);
+        }
+    }
+
+    function itemOtherSaveKendoWindowFormData(btn, successCallback, grid) {
+        var f = $(btn)[0].form;
+        var validator = $(f).validate();
+        if (validator.form()) {
+            $.post(
+                $(f).attr("action"),
+                $(f).serialize(),
+                function (data) {
+                    if (data.Success) {
+                        $("#" + grid).data("kendoGrid").dataSource.read();
+                    } else {
+                        ajaxErrorHandle(data);
+                    }
+                },
+            "json");
+        }
+    }
+
+    //批量删除
+    function batchDelete(gridId, keyName, url) {
+
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            layer.msg("请选择要删除的数据行");
+        } else {
+            jConfirm("确认要删除所有选中的数据行?", "确认", "取消", function (confirmed) {
+                if (confirmed) {
+                    var ids = [];
+                    for (var i = 0; i < selectedRows.length; i++) {
+                        var row = selectedRows[i];
+                        var data = grid.dataItem(row);
+                        ids.push(data[keyName]);
+                    }
+                    $.post(url, { id: ids.join(",") }, function (data) {
+                        if (data.Success) {
+                            grid.dataSource.read();
+                        } else {
+                            //layer.alert(data.Data);
+                            ajaxErrorHandle(data);
+                        }
+                    }, 'json');
+                }
+            });
+        }
+    }
+
+    function hideItemOther(divid) {
+        $("#" + divid).hide();
+    }
+    function addGridItemOther(url, id, divid) {
+        $.ajax({
+            url: url + "?id=" + id,
+            type: "post",
+            dataType: "html",
+            success: function (result) {
+                $("#" + divid).html(result);
+                $("#" + divid).show();
+            },
+            error: function (result) {
+                alert(result.responseText);
+            }
+        });
+    }
+    function editGridItemOther(gridId, keyName, url, divid) {
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            layer.msg("请选择要修改的数据行");
+        } else if (selectedRows.length == 1) {
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+
+            $.ajax({
+                url: url + "?id=" + data[keyName],
+                type: "post",
+                dataType: "html",
+                success: function (result) {
+                    $("#" + divid).html(result);
+                    $("#" + divid).show();
+                },
+                error: function (result) {
+                    alert(result.responseText);
+                }
+            });
+
+        }
+        else {
+            layer.msg("请选择一行数据行");
+        }
+    }
+</script>

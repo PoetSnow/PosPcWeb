@@ -1,0 +1,7 @@
+--------------------------
+2018/12/5 12:31:11 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Sessionme3cn3zrqcwss3iagnsqpukiValueKey

@@ -1,0 +1,33 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPos;
+
+@model List<PosBillDetail>
+
+<div class="shopCart">
+    <div class="shopCart-top"><a href="javascript:void(0);" onclick="clearShopCart()"><i class="fa fa-trash" aria-hidden="true"></i> 清空购物车</a></div>
+    <ul class="mui-table-view">
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <li class="mui-table-view-cell mui-media">
+                    @*<img class="mui-media-object mui-pull-left" src="~/images/ScanOrder/cai1.jpg">*@
+                    <div class="mui-media-body">
+                        <h4>@item.ItemName</h4>
+                        <p class='mui-ellipsis'>
+                            <i class="fa fa-rmb price" aria-hidden="true"></i><label class="price">@(item.Price <= 0 ? item.Price : item.Price)<span>/@item.UnitName</span></label>
+                        </p>
+       
+
+                        <div style="display:block; flex-flow:row nowrap; float:right ">
+
+                            <a class="addB" style="@(item.Quantity>0?"display:block":"display:none")" onclick="reductionQuantity(this)" data-id="@item.Itemid" data-code="@item.ItemCode" data-name="@item.ItemName" data- data-unitId="@item.Unitid" data-unitCode="@item.UnitCode" data-UnitName="@item.UnitName" data-price="@item.Price"></a>
+                            <span class="inputSpan" style="@(item.Quantity>0?"display:block":"display:none")">@item.Quantity</span>
+
+                            <a onclick="addQuantity(this)" class="addA" data-id="@item.Itemid" data-code="@item.ItemCode" data-name="@item.ItemName" data- data-unitId="@item.Unitid" data-unitCode="@item.UnitCode" data-UnitName="@item.UnitName" data-price="@item.Price"></a>
+                        </div>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+</div>

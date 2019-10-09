@@ -1,0 +1,252 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.Weixin.Models.AuthorizationModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>授权</title>
+    <link rel="stylesheet" href="~/Content/weui.min.css" />
+    <style type="text/css">
+        .weui-footer {
+            padding-top: 40px;
+            padding-bottom: 10px;
+        }
+        .weui-form-preview__value_table {
+            border: 1px solid #efeff4;
+            border-left: 0px;
+            border-right: 0px;
+            border-top: 0px;
+            margin-top: 0px;
+            margin-bottom: 10px;
+        }
+        #ignore-value{ visibility:hidden; }
+        #none-data{text-align: center;margin-top: 40px;}
+        #authform{width:100%}
+        .weui-form-preview__value, .list-title{color:#000000;}
+        .split_section{border-top: 1px solid #efeff4;}
+    </style>
+</head>
+<body>
+    @if (Model != null)
+    {
+        <div class="weui-form-preview">
+            <div class="weui-form-preview__hd">
+                <label class="weui-form-preview__label">@Model.Title</label>
+                <em class="weui-form-preview__value" id="ignore-value">0</em>
+            </div>
+            <div class="weui-form-preview__bd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">酒店名称</label>
+                    <span class="weui-form-preview__value">@Model.AuthorizationRecord.HotelName</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">授权申请人</label>
+                    <span class="weui-form-preview__value">@Model.AuthorizationRecord.CreateUserName</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">授权申请时间</label>
+                    <span class="weui-form-preview__value">@Model.AuthorizationRecord.CreateDate</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">授权内容</label>
+                    <span class="weui-form-preview__value"></span>
+                </div>
+                <div class="weui-form-preview__value_table">
+                    @if (Model.AuthorizationRecord.Type == 1)
+                    {
+                        var adjustPriceList = Model.AuthContent as List<Gemstar.BSPMS.Hotel.Services.ResManage.ResAdjustPriceInfo.AdjustPriceResultModel>;
+                        if (adjustPriceList != null && adjustPriceList.Count > 0)
+                        {
+                            foreach (var entity in adjustPriceList)
+                            {
+                                @*<div class="weui-flex split_section">
+                                    <div class="weui-flex__item"><div>价格代码</div><div>房间类型</div><div>房号</div><div>客人姓名</div></div>
+                                    <div class="weui-flex__item">
+                                        @if (string.IsNullOrWhiteSpace(entity.OriginRateCodeName)){<div>&nbsp;</div>}else{<div>@entity.OriginRateCodeName</div>}
+                                        @if (string.IsNullOrWhiteSpace(entity.OriginRoomTypeName)){<div>&nbsp;</div>}else{<div>@entity.OriginRoomTypeName</div>}
+                                        @if (string.IsNullOrWhiteSpace(entity.OriginRoomNo)){<div>&nbsp;</div>}else{<div>@entity.OriginRoomNo</div>}
+                                        <div>&nbsp;</div>
+                                    </div>
+                                    <div class="weui-flex__item"><div>=></div><div>=></div><div>=></div><div>=></div></div>
+                                    <div class="weui-flex__item">
+                                        @if (string.IsNullOrWhiteSpace(entity.RateCodeName)){<div>&nbsp;</div>}else{<div>@entity.RateCodeName</div>}
+                                        @if (string.IsNullOrWhiteSpace(entity.RoomTypeName)){<div>&nbsp;</div>}else{<div>@entity.RoomTypeName</div>}
+                                        @if (string.IsNullOrWhiteSpace(entity.RoomNo)){<div>&nbsp;</div>}else{<div>@entity.RoomNo</div>}
+                                        @if (string.IsNullOrWhiteSpace(entity.GuestName)){<div>&nbsp;</div>}else{<div>@entity.GuestName</div>}
+                                    </div>
+                                </div>*@
+                                <div class="weui-form-preview__item split_section">
+                                    <label class="weui-form-preview__label">价格代码</label>
+                                    <span class="weui-form-preview__value">
+                                        @(entity.OriginRateCodeName == entity.RateCodeName ? "" : entity.OriginRateCodeName) => @entity.RateCodeName
+                                    </span>
+                                </div>
+                                <div class="weui-form-preview__item">
+                                    <label class="weui-form-preview__label">房间类型</label>
+                                    <span class="weui-form-preview__value">
+                                        @(entity.OriginRoomTypeName == entity.RoomTypeName ? "" : entity.OriginRoomTypeName) => @entity.RoomTypeName
+                                    </span>
+                                </div>
+                                <div class="weui-form-preview__item">
+                                    <label class="weui-form-preview__label">房号</label>
+                                    <span class="weui-form-preview__value">
+                                        @(entity.OriginRoomNo == entity.RoomNo ? "" : entity.OriginRoomNo) => @entity.RoomNo
+                                    </span>
+                                </div>
+                                <div class="weui-form-preview__item">
+                                    <label class="weui-form-preview__label">客人姓名</label>
+                                    <span class="weui-form-preview__value">
+                                         => @entity.GuestName
+                                    </span>
+                                </div>
+                                <div class="weui-flex">
+                                    <div class="weui-flex__item"><div class="list-title">日期</div></div>
+                                    <div class="weui-flex__item"><div class="list-title">原价格</div></div>
+                                    <div class="weui-flex__item"><div class="list-title">价格体系</div></div>
+                                    <div class="weui-flex__item"><div class="list-title">新价格</div></div>
+                                </div>
+                                foreach (var item in entity.AdjustPriceList)
+                                {
+                                    <div class="weui-flex">
+                                        <div class="weui-flex__item"><div>@item.Ratedate.ToString("yyyy-MM-dd")</div></div>
+                                        <div class="weui-flex__item"><div>@item.OriginPrice</div></div>
+                                        <div class="weui-flex__item"><div>@item.PlanPrice</div></div>
+                                        <div class="weui-flex__item"><div>@item.Price</div></div>
+                                    </div>
+                                }
+                            }
+                        }
+                    }
+                    else if (Model.AuthorizationRecord.Type == 2)
+                    {
+                        var resFolioAbatementInfo = Model.AuthContent as Gemstar.BSPMS.Hotel.Services.ResFolioManage.ResFolioAbatementInfo;
+                        if (resFolioAbatementInfo != null)
+                        {
+                            <div class="weui-form-preview__item  split_section">
+                                <label class="weui-form-preview__label">消费入账</label>
+                                <span class="weui-form-preview__value"></span>
+                            </div>
+                            <div class="weui-form-preview__item">
+                                <label class="weui-form-preview__label">账单</label>
+                                <span class="weui-form-preview__value">房号:@resFolioAbatementInfo.RoomNo　账号:@resFolioAbatementInfo.RegId.Substring(resFolioAbatementInfo.Hid.Length)　客人名:@resFolioAbatementInfo.CustomerName</span>
+                            </div>
+                            <div class="weui-form-preview__item">
+                                <label class="weui-form-preview__label">项目</label>
+                                <span class="weui-form-preview__value">@resFolioAbatementInfo.ItemCode-@resFolioAbatementInfo.ItemName</span>
+                            </div>
+                            if (resFolioAbatementInfo.Quantity != null && resFolioAbatementInfo.Quantity.HasValue && resFolioAbatementInfo.Quantity != 0)
+                            {
+                                <div class="weui-form-preview__item">
+                                    <label class="weui-form-preview__label">数量</label>
+                                    <span class="weui-form-preview__value">@((Int32)resFolioAbatementInfo.Quantity)</span>
+                                </div>
+                            }
+                            <div class="weui-form-preview__item">
+                                <label class="weui-form-preview__label">金额</label>
+                                <span class="weui-form-preview__value">@resFolioAbatementInfo.Amount</span>
+                            </div>
+                            <div class="weui-form-preview__item">
+                                <label class="weui-form-preview__label">单号</label>
+                                <span class="weui-form-preview__value">@resFolioAbatementInfo.InvNo</span>
+                            </div>
+                            <div class="weui-form-preview__item">
+                                <label class="weui-form-preview__label">备注</label>
+                                <span class="weui-form-preview__value">@resFolioAbatementInfo.Remark</span>
+                            </div>
+                        }
+                    }
+                    else if (Model.AuthorizationRecord.Type == 4)
+                    {
+                        var resFolioDayChargeInfo = Model.AuthContent as List<Gemstar.BSPMS.Hotel.Services.ResFolioManage.ResFolioDayChargeInfo>;
+                        if (resFolioDayChargeInfo != null && resFolioDayChargeInfo.Count > 0)
+                        {
+                            <div class="weui-flex">
+                                <div class="weui-flex__item"><div class="list-title">房号</div></div>
+                                <div class="weui-flex__item"><div class="list-title">客人名</div></div>
+                                <div class="weui-flex__item"><div class="list-title">房型</div></div>
+                                <div class="weui-flex__item"><div class="list-title">收取类型</div></div>
+                                <div class="weui-flex__item"><div class="list-title">收取金额</div></div>
+                            </div>
+                            foreach (var item in resFolioDayChargeInfo)
+                            {
+                                <div class="weui-flex">
+                                    <div class="weui-flex__item"><div><br />@item.RoomNo</div></div>
+                                    <div class="weui-flex__item"><div><br />@item.GuestName</div></div>
+                                    <div class="weui-flex__item"><div><br />@item.RoomTypeName</div></div>
+                                    <div class="weui-flex__item"><div>@item.OriginType<br />&nbsp; &nbsp; &dArr;<br />@item.Type</div></div>
+                                    <div class="weui-flex__item"><div>@item.OriginAmount<br />&nbsp; &nbsp; &dArr;<br />@item.Amount</div></div>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">@Model.Title.Replace("授权申请","")原因</label>
+                    <span class="weui-form-preview__value">@Model.AuthorizationRecord.Reason</span>
+                </div>
+                @if (Model.AuthorizationRecord.AuthStatus == 1 || Model.AuthorizationRecord.AuthStatus == 2)
+                {
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">授权人</label>
+                        <span class="weui-form-preview__value">@Model.AuthorizationRecord.AuthUserName</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">授权结果</label>
+                        <span class="weui-form-preview__value">@(Model.AuthorizationRecord.AuthStatus == 1 ? "同意授权" : "拒绝授权")</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">授权时间</label>
+                        <span class="weui-form-preview__value">@Model.AuthorizationRecord.AuthDate</span>
+                    </div>
+                }
+            </div>
+            <div class="weui-form-preview__ft">
+                @if (Model.AuthorizationRecord.AuthStatus == 0)
+                {
+                    <form method="post" class="weui-form-preview__ft" id="authform">
+                        <input type="hidden" name="hid" value="@Model.AuthorizationRecord.Hid" />
+                        <input type="hidden" name="id" value="@Model.AuthorizationRecord.Id" />
+                        <input type="hidden" name="type" value="@Model.AuthorizationRecord.Type" />
+                        <input type="hidden" name="weixinTemplateMessageId" value="@Model.WeixinTemplateMessageId" />
+                        <button type="submit" class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:" name="authSuccess" value="false">拒绝授权</button>
+                        <button type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:" name="authSuccess" value="true">同意授权</button>
+                    </form>
+                }
+                else if (Model.AuthorizationRecord.AuthStatus == 1)
+                {
+                    <button type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:" disabled="disabled">已同意授权</button>
+                }
+                else if (Model.AuthorizationRecord.AuthStatus == 2)
+                {
+                    <button class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:" disabled="disabled">已拒绝授权</button>
+                }
+                else
+                {
+                    <button class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:" disabled="disabled">状态错误，请联系管理员！</button>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="weui-flex">
+            <div class="weui-flex__item" id="none-data">
+                @if (string.IsNullOrWhiteSpace(ViewBag.Msg))
+                {
+                    <div class="placeholder">找不到授权记录！</div>
+                }
+                else
+                {
+                    <div class="placeholder">@ViewBag.Msg</div>
+                }
+            </div>
+        </div>
+    }
+    <div class="weui-footer">
+        <p class="weui-footer__text">Copyright © 2016-2017 捷云PMS</p>
+    </div>
+</body>
+</html>

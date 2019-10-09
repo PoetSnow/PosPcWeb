@@ -1,0 +1,113 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosReserve.TabStatusList
+
+@{
+    var count = Model.TimeLists.Count;
+    foreach (var item in Model.TabStatusLists)
+    {
+        <tr>
+            @foreach (var a in Model.TimeLists)
+            {
+                if (a.Time == 0)
+                {
+
+                    <td data-id="@item.Id" class="@((item.Time0<=0||item.Time0==null)?"usable":"reservation")" data-time="@a.Time" ></td>
+                }
+                if (a.Time == 1)
+                {
+                    <td data-id="@item.Id" class="@((item.Time1<=0||item.Time1==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 2)
+                {
+                    <td data-id="@item.Id" class="@((item.Time2<=0||item.Time2==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 3)
+                {
+                    <td data-id="@item.Id" class="@((item.Time3<=0||item.Time3==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 4)
+                {
+                    <td data-id="@item.Id" class="@((item.Time4<=0||item.Time4==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 5)
+                {
+                    <td data-id="@item.Id" class="@((item.Time5<=0||item.Time5==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 6)
+                {
+                    <td data-id="@item.Id" class="@((item.Time6<=0||item.Time6==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 7)
+                {
+                    <td data-id="@item.Id" class="@((item.Time7<=0||item.Time7==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 8)
+                {
+                    <td data-id="@item.Id" class="@((item.Time8<=0||item.Time8==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 9)
+                {
+                    <td data-id="@item.Id" class="@((item.Time9<=0||item.Time9==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 10)
+                {
+                    <td data-id="@item.Id" class="@((item.Time10<=0||item.Time10==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 11)
+                {
+                    <td data-id="@item.Id" class="@((item.Time11<=0||item.Time11==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 12)
+                {
+                    <td data-id="@item.Id" class="@((item.Time12<=0||item.Time12==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 13)
+                {
+                    <td data-id="@item.Id" class="@((item.Time13<=0||item.Time13==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 14)
+                {
+                    <td data-id="@item.Id" class="@((item.Time14<=0||item.Time14==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 15)
+                {
+                    <td data-id="@item.Id" class="@((item.Time15<=0||item.Time15==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 16)
+                {
+                    <td data-id="@item.Id" class="@((item.Time16<=0||item.Time16==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 17)
+                {
+                    <td data-id="@item.Id" class="@((item.Time17<=0||item.Time17==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 18)
+                {
+                    <td data-id="@item.Id" class="@((item.Time18<=0||item.Time18==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 19)
+                {
+                    <td data-id="@item.Id" class="@((item.Time19<=0||item.Time19==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 20)
+                {
+                    <td data-id="@item.Id" class="@((item.Time20<=0||item.Time20==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 21)
+                {
+                    <td data-id="@item.Id" class="@((item.Time21<=0||item.Time21==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 22)
+                {
+                    <td data-id="@item.Id" class="@((item.Time22<=0||item.Time22==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+                if (a.Time == 23)
+                {
+                    <td data-id="@item.Id" class="@((item.Time23<=0||item.Time23==null)?"usable":"reservation")" data-time="@a.Time"></td>
+                }
+
+            }
+
+        </tr>
+
+    }
+}

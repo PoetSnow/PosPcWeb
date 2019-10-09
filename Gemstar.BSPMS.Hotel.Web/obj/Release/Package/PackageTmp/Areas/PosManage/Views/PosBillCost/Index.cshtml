@@ -1,0 +1,84 @@
+﻿@model Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_query_cleaningMachineResult
+
+@{
+    ViewBag.Title = "Pos耗用单";
+}
+<link href="~/Content/Pos/posPublic.css?version=@ViewBag.Version" rel="stylesheet" />
+
+<style type="text/css">
+    table.editForm {
+        padding: 20px;
+        font-size: 16px;
+        position: relative;
+    }
+
+        table.editForm tr {
+            line-height: 40px;
+        }
+
+        table.editForm .textleft, table.editForm .textright {
+            width: auto;
+        }
+
+    form .formButtons {
+        margin: 0;
+        height: 47px;
+        position: relative;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.PosId)
+    <div style="color:#f20000;margin:10px 10px -10px 15px;font-size:16px;padding:0 10px">重新生成耗用单操作</div>
+    <table class="editForm">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.PosName)：</td>
+            <td class="textleft">@Model.PosName</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="textright">营业日：</td>
+            <td class="textleft">@Html.Kendo().DatePicker().Name("BillBsnsDate").Value(DateTime.Today).Format("yyyy-MM-dd")</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <input type="button" value="确定" onclick="UpdateBusiness()" />
+        <input type="button" value="关闭" onclick="closeAllLayer()" />
+    </div>
+}
+<script type="text/javascript">
+    function closeAllLayer()
+    {
+        layer.closeAll();
+    }
+    //重新生成耗用单
+    function UpdateBusiness() {
+        $.ajax({
+            url: '@Url.Action("RegainBillCost", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: { "BillBsnsDate": $("#BillBsnsDate").val()},
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    layer.alert("生成成功", {
+                        title: "快点云Pos提示",
+                        skin: "err",
+                        end: function () {
+                            closeAllLayer();
+                            //logout()
+                        }
+                    });
+                } else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            },
+            complete: function () { isMachine = false; }
+        });
+    }
+</script>

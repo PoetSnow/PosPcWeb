@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewBag.Title = "业主绑定";
+}
+<div data-role="page">
+    <div role="main" class="ui-content">
+        @using (Html.BeginForm())
+        {  <input type="hidden" id="getCheckcode" />
+        <input type="hidden" id="Profileid" />
+        <input type="hidden" id="openid" value="@ViewBag.openId" />
+        <label for="hotelId">酒店代码：</label>
+        <input type="text" id="hotelId" placeholder="酒店代码请从酒店获取" />
+        <label for="mobile">手机号：</label>
+        <input type="text" id="mobile" />
+        <p id="getCheckCodeMsg" style="color:red;"></p>
+        <button id="getCheckCode">获取验证码</button>
+        <label for="checkCode">验证码：</label>
+            <input type="text" id="checkCode" />
+            <button id="save">绑定</button>
+        }
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $("#getCheckCode").click(function (e) {
+                e.preventDefault();
+                getCheckCode_clicked();
+            });
+            $("#save").click(function (e) {
+                e.preventDefault();
+                $("#getCheckCodeMsg").text("");
+                var hotelId = $("#hotelId").val();
+                var mobile = $("#mobile").val();
+                if (!hotelId) {
+                    $("#getCheckCodeMsg").text("请输入酒店代码");
+                    return;
+                }
+                if (!mobile) {
+                    $("#getCheckCodeMsg").text("请输入手机号");
+                    return;
+                }
+                save_clicked();
+            });
+        });
+        function getCheckCode_clicked() {
+            $("#getCheckCodeMsg").text("");
+            var hotelId = $("#hotelId").val();
+            var mobile = $("#mobile").val();
+            if (!hotelId) {
+                $("#getCheckCodeMsg").text("请输入酒店代码");
+                return;
+            }
+            if (!mobile) {
+                $("#getCheckCodeMsg").text("请输入手机号");
+                return;
+            }
+            $("#getCheckCodeMsg").text("请稍候，正在请求服务器发送...");
+            $.post("@Url.Action("SendCheckCode")", { hid: hotelId, mobile: mobile }, function (data) {
+                if (data.Success) {
+                    $("#getCheckCode").addClass("ui-state-disabled");
+                    $("#getCheckCodeMsg").text("已经发送");
+                    $("#getCheckcode").val(data.Data.checkcode);
+                    $("#Profileid").val(data.Data.profileid);
+                    setTimeout(resetGetCheckCodeButton, 60000);
+                } else {
+                    $("#getCheckCodeMsg").text(data.Data);
+                }
+            }, "json");
+        }
+        function resetGetCheckCodeButton() {
+            $("#getCheckCode").removeClass("ui-state-disabled");
+        }
+        function save_clicked() {
+            var hotelId = $("#hotelId").val();
+            var mobile = $("#mobile").val();
+            var Profileid = $("#Profileid").val();//(string hid, string mobile, string profileId, string openId, string md5CheckCode, string checkCode)
+            var openid = $("#openid").val();
+            var ckcode = $("#getCheckcode").val();
+            var ckcodeuser = $("#checkCode").val();
+
+            $.post("@Url.Action("Bind")", { hid: hotelId, mobile: mobile, profileId: Profileid, openId: openid, md5CheckCode: ckcode, checkCode: ckcodeuser }, function (data) {
+                if (data.Success) {
+                    window.location.href = "@Url.Action("Index", "RoomOwnerMonthCalc")" + "?profileid=" + Profileid + "&hid=" + hotelId + "&openid=" + openid;
+                } else {
+                    $("#getCheckCodeMsg").text(data.Data);
+                }
+            }, "json");
+        }
+    </script>
+</div>

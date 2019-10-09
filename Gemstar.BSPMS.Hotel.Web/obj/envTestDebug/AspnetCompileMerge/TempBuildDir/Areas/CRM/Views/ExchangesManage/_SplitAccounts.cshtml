@@ -1,0 +1,83 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.CRM.Models.ExchangesManage.SplitAccountsViewModel
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.Type)
+    @Html.HiddenFor(m=>m.CompanyId)
+    @Html.HiddenFor(m=>m.Payable)
+    @Html.HiddenFor(m=>m.ItemName)
+    @Html.HiddenFor(m=>m.Amount)
+    @Html.HiddenFor(m=>m.Invno)
+    @Html.HiddenFor(m=>m.Remark)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.CompanyName)</td>
+            <td colspan="4">@Html.TextBoxFor(m => m.CompanyName, new { @class = "k-textbox k-state-disabled", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.CompanyName, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Payable)</td>
+            <td colspan="4">@Html.TextBoxFor(m => m.Payable, new { @class = "k-textbox k-state-disabled", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Payable, "*")</td>
+        </tr>
+        <tr>
+            @if (Model.Type == "C")
+            {
+                <td class="textright">@Html.Label("付款方式")</td>
+            }
+            else if (Model.Type == "D")
+            {
+                <td class="textright">@Html.Label("项目")</td>
+            }
+            <td colspan="4">@Html.TextBoxFor(m => m.ItemName, new { @class = "k-textbox k-state-disabled", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ItemName, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.Label(Model.Type=="C"?"付款金额":"消费金额")</td>
+            <td>@Html.TextBoxFor(m => m.Amount, new { @class = "k-textbox k-state-disabled", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Amount, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.SplitAmount)</td>
+            <td>@Html.TextBoxFor(m => m.SplitAmount, new { @class = "k-textbox", style = "width:100%;", AutoComplete = "off" })</td>
+            <td>@Html.ValidationMessageFor(m => m.SplitAmount, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Invno)</td>
+            <td colspan="4">@Html.TextBoxFor(m => m.Invno, new { @class = "k-textbox k-state-disabled", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Invno, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td colspan="4">@Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox k-state-disabled", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.SplitRemark)</td>
+            <td colspan="4">@Html.TextAreaFor(m => m.SplitRemark, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.SplitRemark, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" type="submit" id="saveEditFormButton_SplitAccountSave" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" type="button" id="closeEditFormButton_SplitAccountSave" role="button" data-role="button">返回</button>
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton_SplitAccountSave").click(function (e) {
+            e.preventDefault();
+            saveSecondFormData($("#saveEditFormButton_SplitAccountSave"), function () {
+                exchangeDetail.init();
+            });
+        });
+        $("#closeEditFormButton_SplitAccountSave").click(function (e) {
+            e.preventDefault();
+            closeSecondEditFormWindow();
+        });
+        document.getElementById('SplitAmount').value = "";
+        document.getElementById('SplitAmount').focus();
+    });
+</script>

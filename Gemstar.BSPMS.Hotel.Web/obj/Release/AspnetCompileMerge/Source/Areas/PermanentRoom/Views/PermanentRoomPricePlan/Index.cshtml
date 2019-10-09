@@ -1,0 +1,129 @@
+﻿@using Kendo.Mvc.UI;
+@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "长租房价";
+
+
+
+    //上级列表
+    var gridFatherId = "gridRoomType";
+    var gridFatherKey = "Id";
+    var gridFatherName = "Name";
+    var gridFatherModel = new KendoGridCommonViewModel()
+    {
+        GridControlId = gridFatherId,
+        KeyColumnName = gridFatherKey,
+        JsFuncForGetAjaxQueryPara = "getFatherQueryParas",
+        EnableFunctionForQuery = false,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForEnable = false,
+        EnableFunctionForDisable = false,
+        EnableFunctionForSave = false,
+        EnableFunctionForEdit = false
+    };
+    var gridFatherHelper = new KendoGridEditInCellHtmlHelper<System.Data.DataRow>(
+        Html,
+        Url,
+        gridFatherModel,
+        c =>
+        {
+            c.Bound("Name").Title("房间类型");
+            c.Command(e => e.Custom("下级列表").HtmlAttributes(new { onclick = "selectFatherRow(this)", Href = "javascript:void(0);" }))
+            .Width("110px")
+            .Title("操作");
+        },
+        c => c.Id("Id"),
+        c =>
+        {
+            c.Custom().Name("Title").Text("房间类型列表").HtmlAttributes(new { style = "visibility:hidden;" });
+        },
+        pageable => pageable.Enabled(false),
+        "PermanentRoomType"
+        );
+
+
+    var gridId = "grid";
+    var keyColumnName = "Roomid";
+    var gridViewModel = new KendoGridCommonViewModel()
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        JsFuncForGetAjaxQueryPara = "getCommonQueryParas",
+        EnableFunctionForQuery = false,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+    };
+    var gridHelper = new KendoGridEditInCellHtmlHelper<Gemstar.BSPMS.Hotel.Web.Areas.PermanentRoom.Models.PermanentRoomPricePlan>(
+        Html,
+        Url,
+        gridViewModel,
+        c =>
+        {
+            c.Bound("Roomid").Title("房间ID").Visible(false);
+            c.Bound("FloorName").Title("楼层");
+            c.Bound("RoomNo").Title("房号");
+            c.Bound("Feature").Title("房间特色");
+            c.Bound("Description").Title("房间描述");
+            c.Bound("RoomPriceByMonth").Title("月租");
+            c.Bound("RoomPriceByDay").Title("日租");
+        },
+        c => {
+            c.Id<string>(d => d.Roomid);
+            c.Field<string>(d => d.Roomid).Editable(false);
+            c.Field<string>(d => d.FloorName).Editable(false);
+            c.Field<string>(d => d.RoomNo).Editable(false);
+            c.Field<string>(d => d.Feature).Editable(false);
+            c.Field<string>(d => d.Description).Editable(false);
+        },
+        null,
+        null,
+        "PermanentRoomPricePlan"
+        );
+}
+<style type="text/css">
+    .k-grid-edit-row>td>.text-box{   
+        color: #333; 
+        height: 2.42em;
+    text-indent: 0.6em;
+        padding: 2px .3em;
+        border-radius: 4px;
+        border-color: #ccc;
+        display: inline-block;
+    vertical-align: middle;
+    border-width: 1px;
+    border-style: solid;
+    line-height: 1.6em;}
+</style>
+<div style="width:30%; float:left;">
+    @(gridFatherHelper.KendoGridEditInCell())
+</div>
+<div style="width:68%; float:right;">
+    @(gridHelper.KendoGridEditInCell())
+</div>
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+
+<script type="text/javascript">
+    function getFatherQueryParas() {
+        return {
+            QueryProcedureName: "up_list_pmsRoomType",
+            QueryParameterValues: ""
+        };
+    }
+    function gridRoomType_dataBoundEnded() {
+        var firstBtn = $("[onclick='selectFatherRow(this)']:first");
+        firstBtn.click();
+    }
+    function selectFatherRow(column) {
+        var data = $("#gridRoomType").data("kendoGrid").dataItem($(column).parent().parent());
+
+        document.getElementById('commonQueryParameterValues').value = ("@@t00RoomTypeId=" + data.Id);
+        var grid = $("#grid").data("kendoGrid");
+        grid.dataSource.read();
+    }
+</script>

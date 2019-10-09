@@ -1,0 +1,16 @@
+﻿<script type="text/javascript">
+    $(document).ready(function () {
+        //设置分页存入cookie
+        $(".k-pager-sizes select").kendoDropDownList({
+            change: function (e) {
+                if (e) { e.preventDefault(); }
+                var value = this.value();
+                var pageSize = "pageSize";
+                if ($.cookie(pageSize) != value) {
+                    $.removeCookie(pageSize, { path: '/' });
+                    $.cookie(pageSize, value, { expires: 365, path: '/' });
+                }
+            }
+        });
+    });
+</script>

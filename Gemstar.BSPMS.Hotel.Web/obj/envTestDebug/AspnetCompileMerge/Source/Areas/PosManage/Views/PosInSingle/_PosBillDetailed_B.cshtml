@@ -1,0 +1,115 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+<div class="divTop">
+    @(Html.Kendo().Grid<up_pos_list_BillDetailByBillidResult>()
+        .Name("gridBillDetailA")
+        .Columns(columns =>
+        {
+            columns.Bound(m => m.Id).Hidden();
+            columns.Bound(m => m.Status).Hidden();
+            columns.Bound(m => m.Isauto).Hidden();
+            columns.Bound(m => m.Billid).Hidden();
+            columns.Bound(m => m.MBillid).Hidden();
+            columns.Bound(m => m.Row).Title("序号").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50).ClientFooterTemplate("合计");
+            columns.Bound(m => m.ItemName).Title("食品").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(120);
+            columns.Bound(m => m.Quantity).Title("数量").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+            columns.Bound(m => m.UnitName).Title("单位").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+            columns.Bound(m => m.Price).Title("价格").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(80).Format("{0:C}");
+            columns.Bound(m => m.BatchTime).Title("批次").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+            columns.Bound(m => m.Place).Title("客位").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(100);
+        })
+
+        .Sortable()
+        .Scrollable()
+        .Resizable(r => r.Columns(true))
+        //.Selectable(s => s.Mode(GridSelectionMode.Multiple))
+
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("ListUpBillDetailByBillid", "PosInSingle", new { rnd = new Random().NextDouble(), billid = ViewBag.PosBillId }))
+            .Aggregates(aggregates =>
+            {
+                aggregates.Add(p => p.Dueamount).Sum();
+                aggregates.Add(p => p.Amount).Sum();
+                aggregates.Add(p => p.Service).Sum();
+            })
+        )
+        .HtmlAttributes(new { @style = "height:100%" })
+        .Events(e => e.DataBound("SelectRow"))
+    )
+</div>
+<div class="foot">
+    @{
+        var openFlag = ViewBag.openFlag;
+        if (openFlag == "B")//客位
+        {
+            <input type="button" value="第一道" class="button" onclick="editBillDetailPlace(this)" />
+            <input type="button" value="第二道" class="button" onclick="editBillDetailPlace(this)" />
+            <input type="button" value="第三道" class="button" onclick="editBillDetailPlace(this)" />
+            <input type="button" value="客位" class="button" onclick="editBillDetailPlace(this)" />
+            <input type="button" value="退出" class="button" style="color:#fafafa;background:#f55858;" onclick="exitBill()" />
+        }
+    }
+</div>
+<script type="text/javascript">
+    $(function () {
+        //判断按钮个数，如果只有退出按钮，则按钮浮动在右
+        var length = $(".foot input:button").length;
+        if (length <= 1) {
+            $(".foot input:button").css("float", "right");
+        }
+        //var windowWidth = $(document).width() * 0.8;
+        //var width = windowWidth / length;
+        //$(".button").css("width", width);
+    })
+</script>
+<style>
+    .container {
+        display: flex;
+        margin-top: 2rem;
+        height: 30%;
+    }
+
+    .foot {
+        left: 0;
+        bottom: 0;
+        clear: both;
+        width: 100%;
+        text-align: center;
+        position: relative;
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+    }
+
+    .msg {
+        left: 0;
+        bottom: 0;
+        clear: both;
+        width: 100%;
+        text-align: center;
+        position: absolute;
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+    }
+
+        .msg input[type=button] {
+            border: 0;
+            width: 100%;
+            float: left;
+            font-size: 2rem;
+            border-top: 1px solid #ccc;
+        }
+
+    .button {
+        border: 0;
+        margin: 10px;
+        color: #fff;
+        font-size: 20px;
+        border-radius: 8px;
+        padding: 10px 20px;
+        background: #009fff;
+    }
+
+    .divTop table tr {
+        height: 35px;
+    }
+</style>

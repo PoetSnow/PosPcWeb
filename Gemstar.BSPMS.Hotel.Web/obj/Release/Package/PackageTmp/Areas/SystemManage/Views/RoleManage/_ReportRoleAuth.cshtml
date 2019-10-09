@@ -1,0 +1,66 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.RoleManage.AuthManageViewModel
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.RoleId)
+    @Html.HiddenFor(m => m.Hid)
+    <div id="authTreeDiv">
+        @Html.Kendo().TreeView().Name("authTree").BindTo(new List<TreeViewItemModel> { Model.RootAuth }).Checkboxes(c => c.CheckChildren(true))
+    </div>
+    <div style="margin-top:200px;">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>    <input type="text" value="@ViewBag.roleid" style="display:none;" id="roleid" />
+}
+
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveRoleAuths();
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        $("#commonKendoWindow").parent().css("width", "600px");
+    });
+    function saveRoleAuths() {
+        var roleId = $("#RoleId").val();
+        var hid = $("#Hid").val();
+        var checkedNodes = [],
+                treeView = $("#authTree").data("kendoTreeView");
+
+        checkedNodeIds(treeView.dataSource.view(), checkedNodes);
+        var events = jsonajax("/RoleManage/saveChangeroleauth?reportCodes=" + checkedNodes + "&roleid=" + $("#roleid").val());
+        if (events == "成功") {
+            closeEditFormWindow();
+        } else {
+            jAlert("保存失败！");
+        } 
+    }
+    //ajax方法
+    function jsonajax(urls) {
+        var events = {};
+        var Rand = Math.random();
+        $.ajax({
+            url: urls + "&rand=" + Rand,
+            success: function (data) {
+                events = data;
+            },
+            async: false
+        });
+        return events;
+    }
+    function checkedNodeIds(nodes, checkedNodes) {
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i].checked) {
+                checkedNodes.push(nodes[i].id);
+            }
+
+            if (nodes[i].hasChildren) {
+                checkedNodeIds(nodes[i].children.view(), checkedNodes);
+            }
+        }
+    }
+</script>

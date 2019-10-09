@@ -1,0 +1,10 @@
+**********【13:47:40】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos出品程序
+【信息提示】database disk image is malformed
+database disk image is malformed
+【堆栈跟踪】   在 PrintSqlite.SQLiteHelper.ExecuteSql(String SQLString) 位置 D:\work\Pos\PrintSqlite\Handle\SQLiteHelper.cs:行号 133
+   在 PrintSqlite.FrmMain.PrintFrom_Load(Object sender, EventArgs e) 位置 D:\work\Pos\PrintSqlite\FrmMain.cs:行号 69
+【目标位置】Int32 ExecuteSql(System.String)
+【异常实例】
+

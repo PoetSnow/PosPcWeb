@@ -1,0 +1,971 @@
+--------------------------
+2018/11/22 9:11:43 错误信息:Timeout performing HGETALL smt4txquhgiib4doh0ay1c2z, inst: 1, mgr: RecordConnectionFailed_OnDisconnected, err: never, queue: 2, qu: 2, qs: 0, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 9:23:30 错误信息:It was not possible to connect to the redis server(s); to create a disconnected multiplexer, disable AbortOnConnectFail. SocketFailure on PING
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ConnectImpl(Func`1 multiplexerFactory, TextWriter log) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 827
+   在 StackExchange.Redis.ConnectionMultiplexer.Connect(ConfigurationOptions configuration, TextWriter log) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 803
+   在 RedisSessionProvider.Redis.RedisConnectionWrapper.GetConnection()
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.<>c__DisplayClass2.<GetItem>b__0(String redisKey)
+   在 RedisSessionProvider.LocalSharedSessionDictionary.<>c__DisplayClass3.<GetSessionForBeginRequest>b__0(String redisKey)
+   在 System.Collections.Concurrent.ConcurrentDictionary`2.AddOrUpdate(TKey key, Func`2 addValueFactory, Func`3 updateValueFactory)
+   在 RedisSessionProvider.LocalSharedSessionDictionary.GetSessionForBeginRequest(String redisHashId, Func`2 getDel)
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItem(HttpContext context, String id, Boolean& locked, TimeSpan& lockAge, Object& lockId, SessionStateActions& actions)
+--------------------------
+2018/11/22 9:28:58 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 9:29:01 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Sessionsmt4txquhgiib4doh0ay1c2zValueKey
+--------------------------
+2018/11/22 9:29:02 错误信息:No connection is available to service this operation: HGETALL smt4txquhgiib4doh0ay1c2z
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 9:54:58 错误信息:Timeout performing HGETALL smt4txquhgiib4doh0ay1c2z, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 9:54:59 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 10:04:21 错误信息:No connection is available to service this operation: HGETALL smt4txquhgiib4doh0ay1c2z
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 10:04:22 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 10:05:00 错误信息:Timeout performing HGETALL smt4txquhgiib4doh0ay1c2z, inst: 1, mgr: CheckForStaleConnections, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 10:05:01 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 10:05:58 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 10:06:00 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Sessionsmt4txquhgiib4doh0ay1c2zValueKey
+--------------------------
+2018/11/22 10:06:00 错误信息:No connection is available to service this operation: HGETALL smt4txquhgiib4doh0ay1c2z
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 10:06:00 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Sessionsmt4txquhgiib4doh0ay1c2zValueKey
+--------------------------
+2018/11/22 10:11:42 错误信息:Timeout performing HGETALL smt4txquhgiib4doh0ay1c2z, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 10:14:39 错误信息:Timeout performing HGETALL smt4txquhgiib4doh0ay1c2z, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 10:14:40 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 10:43:02 错误信息:Timeout performing HGETALL smt4txquhgiib4doh0ay1c2z, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 11:53:39 错误信息:SocketFailure on HGETALL
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1935
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 13:41:59 错误信息:Timeout performing HGETALL smt4txquhgiib4doh0ay1c2z, inst: 1, mgr: ExecuteSelect, err: never, queue: 3, qu: 0, qs: 3, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=2,Free=8189,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 13:42:00 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 13:42:00 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Sessionsmt4txquhgiib4doh0ay1c2zValueKey
+--------------------------
+2018/11/22 13:42:00 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Sessionsmt4txquhgiib4doh0ay1c2zValueKey
+--------------------------
+2018/11/22 13:42:00 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Sessionsmt4txquhgiib4doh0ay1c2zValueKey
+--------------------------
+2018/11/22 13:46:20 错误信息:Timeout performing HGETALL smt4txquhgiib4doh0ay1c2z, inst: 1, mgr: LocateActiveSockets, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 13:47:20 错误信息:Timeout performing HGETALL smt4txquhgiib4doh0ay1c2z, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 13:47:21 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 13:50:20 错误信息:Timeout performing HGETALL smt4txquhgiib4doh0ay1c2z, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 13:50:21 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 13:52:20 错误信息:Timeout performing HGETALL smt4txquhgiib4doh0ay1c2z, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 13:52:21 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 13:56:01 错误信息:Timeout performing HGETALL smt4txquhgiib4doh0ay1c2z, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 13:56:02 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 13:56:03 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Sessionsmt4txquhgiib4doh0ay1c2zValueKey
+--------------------------
+2018/11/22 13:56:03 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Sessionsmt4txquhgiib4doh0ay1c2zValueKey
+--------------------------
+2018/11/22 13:57:17 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 13:57:17 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Sessionsmt4txquhgiib4doh0ay1c2zValueKey
+--------------------------
+2018/11/22 13:57:17 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Sessionsmt4txquhgiib4doh0ay1c2zValueKey
+--------------------------
+2018/11/22 13:57:19 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Sessionsmt4txquhgiib4doh0ay1c2zValueKey
+--------------------------
+2018/11/22 13:58:41 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 14:01:41 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 14:08:41 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 14:09:41 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 14:18:40 错误信息:Timeout performing HGETALL smt4txquhgiib4doh0ay1c2z, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 14:20:38 错误信息:Timeout performing HGETALL smt4txquhgiib4doh0ay1c2z, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 14:20:39 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 14:20:44 错误信息:No connection is available to service this operation: HGETALL smt4txquhgiib4doh0ay1c2z
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 14:21:19 错误信息:Timeout performing HGETALL smt4txquhgiib4doh0ay1c2z, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 14:21:20 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 14:22:19 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 14:22:19 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Sessionsmt4txquhgiib4doh0ay1c2zValueKey
+--------------------------
+2018/11/22 14:22:19 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Sessionsmt4txquhgiib4doh0ay1c2zValueKey
+--------------------------
+2018/11/22 14:24:41 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 14:24:42 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 14:55:57 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 2, mgr: ExecuteSelect, err: never, queue: 3, qu: 0, qs: 3, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=2,Free=8189,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 14:55:57 错误信息:SocketFailure on HGETALL
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1935
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 14:55:58 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 14:55:59 错误信息:No connection is available to service this operation: HGETALL 5udxovcqvr324f2x0qncje3g
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 14:55:59 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Session5udxovcqvr324f2x0qncje3gValueKey
+--------------------------
+2018/11/22 14:56:39 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 14:56:40 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 14:57:39 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 14:57:40 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 14:58:00 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 14:58:01 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 14:58:39 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 14:58:40 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 14:58:43 错误信息:No connection is available to service this operation: HGETALL 5udxovcqvr324f2x0qncje3g
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 14:58:43 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Session5udxovcqvr324f2x0qncje3gValueKey
+--------------------------
+2018/11/22 14:59:00 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 14:59:01 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:00:00 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:00:39 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:00:40 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:01:58 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 3, qu: 0, qs: 3, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=2,Free=8189,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:01:58 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 3, qu: 0, qs: 3, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=2,Free=8189,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:01:59 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:02:00 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Session5udxovcqvr324f2x0qncje3gValueKey
+--------------------------
+2018/11/22 15:03:40 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:04:40 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:04:41 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:04:43 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Session5udxovcqvr324f2x0qncje3gValueKey
+--------------------------
+2018/11/22 15:05:57 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 3, qu: 0, qs: 3, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=2,Free=8189,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:05:57 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Session5udxovcqvr324f2x0qncje3gValueKey
+--------------------------
+2018/11/22 15:05:57 错误信息:SocketFailure on HGETALL
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1935
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:05:57 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Session5udxovcqvr324f2x0qncje3gValueKey
+--------------------------
+2018/11/22 15:05:59 错误信息:No connection is available to service this operation: HGETALL 5udxovcqvr324f2x0qncje3g
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:05:59 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Session5udxovcqvr324f2x0qncje3gValueKey
+--------------------------
+2018/11/22 15:06:39 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: CheckForHeartbeat, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:06:40 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:06:57 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:06:58 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:08:40 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:08:41 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:08:58 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 3, qu: 0, qs: 3, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=2,Free=8189,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:08:58 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 3, qu: 0, qs: 3, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=2,Free=8189,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:08:59 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:13:44 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:14:01 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:14:02 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:14:40 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:15:40 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:15:41 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:17:58 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 3, qu: 0, qs: 3, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=2,Free=8189,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:17:58 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 3, qu: 0, qs: 3, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=2,Free=8189,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:17:59 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:18:00 错误信息:No connection is available to service this operation: HGETALL 5udxovcqvr324f2x0qncje3g
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:18:00 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Session5udxovcqvr324f2x0qncje3gValueKey
+--------------------------
+2018/11/22 15:21:40 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:23:01 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:25:40 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:28:40 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:29:40 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:31:58 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:32:00 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Session5udxovcqvr324f2x0qncje3gValueKey
+--------------------------
+2018/11/22 15:33:01 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:33:37 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:33:39 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Session5udxovcqvr324f2x0qncje3gValueKey
+--------------------------
+2018/11/22 15:34:57 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:34:57 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Session5udxovcqvr324f2x0qncje3gValueKey
+--------------------------
+2018/11/22 15:34:59 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Session5udxovcqvr324f2x0qncje3gValueKey
+--------------------------
+2018/11/22 15:36:40 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:36:40 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Session5udxovcqvr324f2x0qncje3gValueKey
+--------------------------
+2018/11/22 15:37:58 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 3, qu: 0, qs: 3, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=2,Free=8189,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:37:58 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 3, qu: 0, qs: 3, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=2,Free=8189,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:37:59 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:37:59 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:38:00 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Session5udxovcqvr324f2x0qncje3gValueKey
+--------------------------
+2018/11/22 15:46:01 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 2, mgr: ExecuteSelect, err: never, queue: 3, qu: 0, qs: 3, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=2,Free=8189,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:46:02 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 15:51:40 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 15:51:41 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 16:06:01 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 16:40:58 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 3, qu: 0, qs: 3, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=2,Free=8189,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 16:40:58 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 3, qu: 0, qs: 3, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=2,Free=8189,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 16:40:59 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 16:41:00 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Session5udxovcqvr324f2x0qncje3gValueKey
+--------------------------
+2018/11/22 16:41:40 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 16:41:41 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 16:41:43 错误信息:No connection is available to service this operation: HGETALL 5udxovcqvr324f2x0qncje3g
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 16:41:43 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Session5udxovcqvr324f2x0qncje3gValueKey
+--------------------------
+2018/11/22 16:41:49 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：No connection is available to service this operation: GET Session5udxovcqvr324f2x0qncje3gValueKey
+--------------------------
+2018/11/22 17:11:21 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 2, qu: 0, qs: 2, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 17:11:22 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET
+--------------------------
+2018/11/22 17:32:22 错误信息:Timeout performing HGETALL 5udxovcqvr324f2x0qncje3g, inst: 1, mgr: ExecuteSelect, err: never, queue: 3, qu: 0, qs: 3, qc: 0, wr: 0, wq: 0, in: 0, ar: 0, IOCP: (Busy=0,Free=1000,Min=4,Max=1000), WORKER: (Busy=1,Free=8190,Min=4,Max=8191), clientName: SNOW
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1927
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+--------------------------
+2018/11/22 17:32:23 错误信息:发生一个或多个错误。
+调用堆栈:   在 System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   在 System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   在 System.Threading.Tasks.Task.Wait()
+   在 Gemstar.BSPMS.Hotel.Web.Models.CurrentInfoSession.LoadValues() 位置 D:\work\Pos\Gemstar.BSPMS.Hotel.Web\Models\CurrentInfoSession.cs:行号 305
+内部异常错误信息：SocketFailure on GET

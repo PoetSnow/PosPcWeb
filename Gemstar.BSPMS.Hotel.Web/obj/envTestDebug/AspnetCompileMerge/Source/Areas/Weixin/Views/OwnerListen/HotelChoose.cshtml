@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Title = "酒店选择";
+}
+<div data-role="page" style="margin-top:10px;">
+    <input type="hidden" id="openidhidden" value="@ViewBag.openId" />
+    <h3>　请选择酒店  </h3>
+    <div align="center">
+        @for (int i = 0; i < ViewBag.hotelsinfo.Length; i++)
+        {
+
+            <button id="save" style="width:94%;" onclick=select("@ViewBag.hotelsinfo[i][0]","@ViewBag.hotelsinfo[i][1]")>@ViewBag.hotelsinfo[i][2] </button>
+        }
+    </div>
+
+    <div style="text-align:right;margin-right:20px;"> <a id="aa">绑定其他酒店</a> </div>
+    <script type="text/javascript">
+        function select(hid, profileid) {
+            window.location.href = "@Url.Action("Index", "RoomOwnerMonthCalc")" + "?profileid=" + profileid + "&hid=" + hid + "&openid=" + "@ViewBag.openid";
+        }
+        $(function () {  
+            $("#aa").click(function () { 
+                var openid = $("#openidhidden").val(); 
+                window.location.href = "@Url.Action("HotelBind", "OwnerListen")" + "?openid=" + openid;
+            });
+           // $("#aa").attr("href", "@Url.Action("HotelBind", "OwnerListen")" + "?openid=" + openid);
+        });
+    </script>
+</div>

@@ -1,0 +1,362 @@
+/*酒店和班次选择*/
+ input[type="number"] {
+        height: 25px;color:#333;
+    }
+.stores-shifts-con{ width:980px; background:#f5f5f5; margin:150px auto; border-width:1px 1px 0 1px; border-color: #e5e5e5; }
+.stores-shifts-con h2{color:#428bca;display:inline-block;margin-left:60px;}
+.stores-shifts-con li{ border-bottom:1px solid #e5e5e5; padding:50px;solid;font-size:20px;line-height:20px;}
+.stores-shifts-con .hotel-select{ border:1px solid #e5e5e5; line-height:35px; height:35px; margin-left:30px; width:180px;}
+.stores-shifts-con div{float:left;margin-right:50px;}
+.m-shift{margin:0 36px;}
+.stores-shifts-con li a{margin-top:20px;display:inline-block;}
+
+/*房态图开始*/
+.wrap{ margin:0 0 0 36px;}
+
+.side-bar-l{ float:left;width:9%;background:#EEEEEE;padding-right:6px;}
+.side-bar-l .list-f{padding-left:4%;}
+.side-bar-l li{ padding-top:4px;}
+.search-bar-f{position:relative;}
+.side-bar-l .s-input-text{ height:28px;line-height:28px; border:1px solid #9bb8d6;  color:#333333;  border-radius: 3px; }
+.side-bar-l .search-icon{ position:absolute; right:3%; top:12px;background:url(../images/all_icon.png) no-repeat; width:14px; height:14px; display:inline-block;background-position:-49px 0px;}
+.side-bar-l .list-t{ margin-top:10px; border-top:1px dashed #9bb8d6; padding-left:4%; }
+.side-bar-l label{ display:inline-block; color:#333333 }
+.side-bar-l .avai-bg,.side-bar-l .live-room-bg{ width:15px; height:15px; display:inline-block; vertical-align:middle;}
+.avai-bg{background:#428bca; }
+.live-room-bg{background:#4ac1f9;}
+.side-bar-l .dirty-room-bg,.side-bar-l .wait-room-bg,.side-bar-l .maint-room-bg,.side-bar-l .service-room-bg{ width:15px; height:15px; border-radius:0 0 10px 0; display:inline-block; vertical-align:middle;}
+.dirty-room-bg{background:#000;}
+.maint-room-bg{background:#d60303;}
+.wait-room-bg {background:#4b0082;}
+.service-room-bg{background:#fadb21;}
+.side-bar-l .eta-room-bg,.side-bar-l .pre-room-bg{background: url(../images/all_icon.png) no-repeat; width:24px; height:24px; display:inline-block;}
+.side-bar-l .eta-room-bg{background-position:-54px -146px;}
+.side-bar-l .pre-room-bg{background-position:-54px -170px;}
+.side-bar-r{ float:right; width:90%;}
+.room-statistics{margin-bottom:5px;height:35px; background-color: #EEEEEE;}
+
+.refresh{ float:right;border-radius:4px; padding:0px 16px; background:#428BCA; color:#fff;height:36px;line-height:36px;}
+.house-state-list{}
+.house-state-list .house-state-bg{ float:left; margin:0 2px 2px 0;width:110px; height:101px; color:#333333;border-width:2px;border-style:solid;border-color:white;}
+.house-state-drag{width:88px;height:80px;}
+.house-state-list .live-room-bg{ float:left; margin:0 10px 10px 0;width:150px; height:110px; color:#fff;}
+.house-state-bg .dirty-room-bg,.house-state-bg  .wait-room-bg,.house-state-bg .eta-room-bg,.house-state-bg .pre-room-bg,.house-state-bg .maint-room-bg,.house-state-bg .service-room-bg{width:50px; border-radius:0 0 20px 0; padding-left:6px;}
+.house-state-list .house-state-bg .default,.house-state-bg .default{ padding-left:6px;float:left;color:white;font-weight:bold;font-size:14px;}
+.house-state-list .house-state-bg .roomtype,.house-state-bg .roomtype{ float:right;padding-right:6px;color:black;}
+.house-state-bg dd{clear:both;}
+.house-state-bg .icon-all{ padding-top:10px;  margin-left:6px;}
+.icon-eta-room,.icon-pre-room,.icon-union-room,.icon-hours-room,.icon-secrecy-room,.icon-room-f{ position:relative;background:url(../images/all_icon.png) no-repeat; width:18px; height:16px; display:inline-block; margin-right:8px;}
+.icon-eta-room{background-position:-22px -159px;}
+.icon-pre-room{background-position:-22px -176px;}
+.icon-secrecy-room{background-position:0 -131px;}
+.icon-union-room{background-position:0 -176px;}
+.icon-hours-room{background-position:0 -194px;}
+.guest-info{ display:block;
+             position:relative;
+             width:150px;
+             border:1px solid #e5e5e5;
+             background:#fff;color:#000;
+             z-index:2; left:13px; 
+             top:0px;padding-left:10px;
+             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+/*房态表开始*/
+.state-table-text{ background:#f0f6fb;border-radius:8px; margin-top:20px; padding:15px;}
+.house-state-table{ margin-top:20px;border-width:1px 0 0 1px; border-color: #e5e5e5; border-style:solid;}
+.house-state-table th,.house-state-table td{border-width:0 1px 1px 0; border-color: #e5e5e5; border-style:solid; line-height:34px; height:34px; text-align:center;}
+.house-state-table .bg-grey{ background:#f5f5f5;}
+.house-state-table tfoot{ background:#f0f6fb;}
+/*远期房态开始*/
+.date-inquire{ margin-top:20px;}
+.date-inquire li{ float:left; padding-right:10px;}
+.date-inquire label{ line-height:30px; padding:0 5px;}
+.date-inquire .date-box{ border:1px solid #e5e5e5; width:200px; height:30px;position:relative; display:inline-block;background:#fff;}
+.date-inquire .date-input{height:30px;line-height:30px;width:170px;}
+.date-inquire .icon-date,.new-book-table .icon-date,.book-short .icon-date{ position:absolute; right:5px; top:0;background:url(../images/all_icon.png) no-repeat; display:inline-block; width:20px; height:24px; background-position:-56px -35px; }
+.date-inquire .channel-select{border:1px solid #e5e5e5; width:160px; height:30px;line-height:30px;}
+.button-inquire{padding:5px 16px;background: #428bca;color: #fff; margin-left:10px;cursor:pointer}
+/*管家房态开始*/
+.book-short .button-r{padding:5px 16px;background:#e5e5e5;margin-right:10px; border-radius:6px; cursor:pointer; color:#333;}
+.book-short .input-box{border:1px solid #e5e5e5; width:200px; height:30px;line-height:30px;}
+/*预订列表开始*/
+.book-short{margin-top:20px;}
+.book-short .input-shortcuts{ padding-bottom:10px;}
+.book-short .input-shortcuts a{ padding:3px 15px;}
+.book-short .input-shortcuts .current{ background:#428bca; color:#fff; border-radius:4px;}
+.book-short .book-input{ float:left; padding-right:10px;}
+/*新预订开始*/
+.guests-info{margin-top:20px;}
+.tab-guests-info .fir{ border-left:1px solid #e5e5e5;}
+.tab-guests-info a{padding:6px 40px; display:inline-block;background:#f5f5f5; border-style:solid; border-width:1px 1px 0px 0px; border-color:#e5e5e5;}
+.tab-guests-info .current{background:#428bca; color:#fff; }
+.table-guests-info{border:1px solid #e5e5e5; padding:0 10px 20px;}
+
+.new-book-table{ float:left; margin:20px 0 0 2%; background:#f0f6fb; padding:10px;}
+.new-book-table td{ padding:4px;text-align:right;}
+.new-book-table .date-box{ border:1px solid #e5e5e5;height:28px; line-height:28px;position:relative; display:inline-block; background:#fff;width:100%;}
+.new-book-table .date-input{height:28px; line-height:28px;}
+.new-book-table .icon-date{ position:absolute; right:5px; top:0;background:url(../images/all_icon.png) no-repeat; display:inline-block; width:20px; height:24px; background-position:-56px -35px; }
+.new-book-table .channel-select{border:1px solid #e5e5e5;height:30px; line-height:30px; width:100%;}
+.new-book-table .input-box{border:1px solid #e5e5e5;height:28px; line-height:28px;width:100%;}
+.new-book-table .btn-price{padding:2px 0; width:100%; display:inline-block; text-align:center;background:#e5e5e5;border-radius:4px;}
+.btn-save{ margin:30px 0 50px; text-align:center;}
+.btn-save a{padding:6px 20px;background:#428bca;color:#fff; margin-left:10px;cursor:pointer; border-radius:4px;}
+#screen{width:100%;height:100%;position:absolute;top:0;left:0;display:none;z-index:100;background-color:#666;opacity:0.5;filter:alpha(opacity=50);-moz-opacity:0.5;}
+.popbox{width:40%;background-color:#fff;border:1px solid #e5e5e5;position:absolute;top:0;left:0;display:none;z-index:120; padding:10px 40px;}
+.popbox-table{ margin-top:20px;border-width:1px 0 0 1px; border-color: #e5e5e5; border-style:solid;}
+.popbox-table th,.popbox-table td{border-width:0 1px 1px 0; border-color: #e5e5e5; border-style:solid; line-height:34px; height:34px; text-align:center;}
+.popbox-table .input-box{height:34px; line-height:34px;width:100%;text-align:center;}
+.btn-close{ position:absolute;font-size: 24px;color: #999; top:5px;right:10px;}
+/*账单开始*/
+.book-short .date-box{ border:1px solid #e5e5e5; width:200px; height:30px;position:relative; display:inline-block;background:#fff;}
+.book-short .date-input{height:30px;line-height:30px;width:170px;}
+
+/*保留房设置开始*/
+.book-short .channel-select{border:1px solid #e5e5e5; width:160px; height:30px;line-height:30px;}
+.checkbox{ border:1px solid #e5e5e5; vertical-align:middle;}
+
+.k-tabstrip .k-content{margin:0 0 0 -15px;}
+
+/*  ---------------------新版样式------------------------*/
+/* 房态图*/
+.s-input-text-new {
+    width:100%;
+}
+.s-input-text-new span {
+   border-color:#9bb8d6!important;
+}
+.new-right {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    float:right;
+    
+}
+.input-cbx {
+    width:15px;
+    display:inline-block;
+}
+.roomStatus-imgs{
+    background-image: url(../images/priture-11-15/roomStatus-1-18.png); display: block;
+    
+}
+.new-ean-room-bg-small { /* 净房*/
+   background-image:initial;
+}
+.new-avai-bg { /*空房*/
+    background-position:  -200px -0px;  /*左侧*/
+}
+.new-avai-bg-large {
+    background-position: -0px -103px;  /*房态图中*/
+}
+.new-avai-bg-large-color {
+    background-color:#18A818;
+}
+.new-live-room-bg {/*在住房*/
+    background-position: -180px -0px; /*左侧*/
+}
+.new-live-room-bg-large {
+      background-position: -110px -103px;/*房态图中*/
+}
+.new-live-room-bg-large-color {
+    background-color:#0078C0;
+}
+.new-eta-room-bg {/*预抵房*/
+    background-position: -100px -0px;
+}
+.new-eta-room-bg-small {
+    background-position: -100px -0px;
+}
+.new-pre-room-bg {/*预离房*/
+      background:url(../images/priture/yuli.png) no-repeat; /*没有用到*/
+}
+.new-pre-room-bg-small {
+     background-position: -120px -0px; 
+}
+.new-maint-room-bg{/*维修房*/
+     background-position:  -60px -0px;
+}
+.new-maint-room-bg-small{
+     background-position: -60px -0px; 
+}
+.new-maint-room-bg-large{
+     background-position: -260px -0px;
+}
+.new-maint-room-bg-large-color {
+    background-color:#F04848;
+}
+.new-service-room-bg {/*停用房*/
+     background-position: -0px -0px; 
+}
+.new-service-room-bg-large {
+     background-position: -220px -103px;
+}
+.new-service-room-bg-large-color {
+    background-color:#F0A818;
+}
+.new-service-room-bg-small {
+     background-position: -0px -0px; 
+}
+.new-dirty-room-bg {/*脏房*/
+   background:url(../images/priture/zf.png) no-repeat;/*没有用到*/
+}
+.new-dirty-room-bg-small {
+   background-position: -140px -0px; 
+}
+.new-wait-room-bg {/*清洁房*/
+   background-position: -60px -0px;
+}
+.new-birth-room-bg-small
+{/*客人生日*/
+    background-image: url(../images/priture/dg.png) !important;
+    background-size:20px 20px;
+}
+.new-continue-room-bg-small
+{/*续住*/
+    background-image: url(../images/priture/xu02.png) !important;
+    background-size:20px 20px;
+}
+.new-wait-room-bg-small {
+ background-position: -40px -0px; 
+}
+.new-arrears-room-bg-small { /*欠款*/
+     background-position: -20px -0px;
+}
+.new-hour-room-bg-small { /*钟点房*/
+      background-position: -80px -0px;
+}
+/*钟点房动画*/
+.new-hour-room-remind-bg-small { /*钟点房到时提醒*/
+      z-index: 1;
+      /*background-size: 100%;*/
+      background-repeat: no-repeat;
+      background-position: -160px -0px; 
+      animation: hourRoom 1s infinite;
+      height:22px!important;
+}
+
+@keyframes hourRoom {
+  0% {
+    transform: scale(1);
+  }
+  5% {
+    transform: scale(1.3);
+  }
+  10% {
+    transform: scale(1.1);
+  }
+  15% {
+    transform: scale(1.5);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.room-re {
+    background-color:white!important;
+    display:inline-block!important;
+        margin-left: 10px;
+}
+.room-statistics a:hover {
+    background-color:#eef6ff;
+
+}
+.span-right {
+    margin-left:20px;
+}
+.span-red {
+    color:red;
+    float:right;
+    margin-right:1%;
+}
+.dd-center {
+    text-align:center;
+    padding-top:10px;
+}
+.icon-all span {
+   background-image: url(../images/priture-11-15/roomStatus-1-18.png);
+   display:inline-block;
+   width:20px;
+   height:20px;
+  
+}
+.span-block {
+    display:block;
+    height:20px;
+}
+.bg-red-close {
+      background:url(../images/priture/jgtx-jy.png) no-repeat;
+      width:15px;
+      height:15px;
+      display:inline-block;
+}
+.border-color {
+    border-color:red!important;
+    border-style:solid!important;
+  
+}
+/* 帮助文档样式 */
+/* 菜单显示*/
+ .helpFilesDiv {
+    position: absolute;
+    top: 105px;
+    right: 30px;
+    z-index: 999;
+    max-width:400px;
+    color:white;
+    }
+ .helpFilesDiv img,.helpFilesDiviframe img {
+    background-color: white;
+    border-radius: 10px;
+}
+    #helpinfodiv,#helpinfodiviframe {
+        background-color:white;
+        min-width:240px;
+        padding: 5px; 
+        display: none;
+        border :1px solid rgb(235, 235, 235);
+        border-top-width:0px;
+    }
+.helpFilesDiv ol,.helpFilesDiviframe ol {
+    padding-left:20px;
+    color:#444
+}
+/* iframe显示*/
+.helpFilesDiviframe {
+    position: absolute;
+    top: 6px;
+    right: 70px;
+    z-index: 999;
+    max-width:400px;
+    color:white;
+    }
+   
+/* grid 表格自适应*/
+@media only screen and (max-width:1600px) {/* 小于1600px*/
+    .grid-240 .k-grid-content {
+        overflow-y:auto;
+        max-height:240px;
+    }
+    .grid-260 .k-grid-content {
+        overflow-y:auto;
+        max-height:260px;
+    }
+    .grid-300 .k-grid-content {
+        overflow-y:auto;
+        max-height:300px;
+    }
+    .room-statistics span{ padding-right:2px;}
+    .span-red {margin-right:initial;}
+    .room-statistics .span-right {margin-left:initial;}
+}
+ @media only screen and (min-width:1600px) {/* 大于1600px*/
+       .grid-260 .k-grid-content,.grid-300 .k-grid-content {
+            max-height:570px;
+        }
+       .room-statistics span{ padding-right:3%;}
+   
+ }
+ 

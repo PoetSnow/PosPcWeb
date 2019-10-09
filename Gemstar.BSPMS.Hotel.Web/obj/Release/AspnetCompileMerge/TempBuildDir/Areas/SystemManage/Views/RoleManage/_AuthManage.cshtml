@@ -1,0 +1,139 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.RoleManage.AuthManageViewModel
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.RoleId)
+    @Html.HiddenFor(m => m.Hid)
+    <div id="authTreeDiv">
+        @Html.Partial("AuthManageForQuery", Model)
+        @* @Html.Kendo().TreeView().Name("authTree").BindTo(new List<TreeViewItemModel> { ViewBag.rootTreeNode }).Checkboxes(c=>c.CheckChildren(true)).Events(events=>events.Check("onCheck"))*@
+    </div>
+    <div style="margin-top:200px;">
+        <input type="text" id="queryText" class="k-textbox" style="margin-left:20px;margin-bottom:10px" placeholder="二级，三级栏目查询"/>
+        <input type="button" class="k-primary k-button" id="SearchEditFormButton" value="查询" />
+        
+        @*<button class="k-primary k-button" id="SearchEditFormButton" role="button" data-role="button">查询</button>&nbsp;&nbsp;*@
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<style type="text/css">
+    #authTree {
+        overflow: hidden;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveRoleAuths($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        $("#commonKendoWindow").parent().css("width", "600px");
+        $("#SearchEditFormButton").click(function (e) {
+            var roleid = $("#RoleId").val();
+            var queryText = $("#queryText").val();
+            $.ajax({
+                url: '@Url.Action("AuthManageForQuery", "RoleManage")',
+                data: { roleId: roleid, QueryText: queryText },
+                type: "post",
+                dataType: "html",
+                success: function (result) {
+                    $("#authTreeDiv").html(result);
+                },
+                error: function (result) {
+                    alert(result.responseText);
+                }
+            });
+        })
+    });
+    function saveRoleAuths(btn) {
+        var roleId = $("#RoleId").val();
+        var hid = $("#Hid").val();
+        var checkedNodes = [],
+                treeView = $("#authTree").data("kendoTreeView");
+        checkedNodeIds(treeView.dataSource.view(), checkedNodes);
+        $.post(
+            "@Url.Action("AuthManageSave")",
+            { roleId: roleId, hid: hid, auths: checkedNodes },
+            function (data) {
+                if (data.Success) {
+                    closeEditFormWindow();
+                } else {
+                    //jAlert(data.Data);
+                    ajaxErrorHandle(data);
+                }
+            },
+            "json");
+    }
+    function checkedNodeIds(nodes, checkedNodes) {
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i].checked) {
+                checkedNodes.push(nodes[i].id);
+            }
+            if (nodes[i].hasChildren) {
+                checkedNodeIds(nodes[i].children.view(), checkedNodes);
+            }
+        }
+    }
+    $("input:checkbox").click(function () {
+        loadisGo = true;
+        //结账
+        var box = $(this).prop("checked");
+        var val = $(this).val();
+        var view = $("#authTree").data("kendoTreeView").dataSource.view();
+        if (val == "btn2002020_2199023255552") {
+            $("li[data-id=auth10]").find("li[data-id=btn10001_2199023255552] input").prop("checked", box);
+            setCheckedNodeIds(view, "btn10001_2199023255552", box);
+        }
+        else if (val == "btn10001_2199023255552") {
+            $("li[data-id=auth20]").find("li[data-id=btn2002020_2199023255552] input").prop("checked", box);
+            setCheckedNodeIds(view, "btn2002020_2199023255552", box);
+            loadisGo = true;
+            $("li[data-id=auth20]").find("li[data-id=btn20020_1] input").prop("checked", box);
+            setCheckedNodeIds(view, "btn20020_1", box);
+        }
+            //客单操作
+        else if (val == "btn10001_4") {
+            $("li[data-id=auth20]").find("li[data-id=btn20020_1] input").prop("checked", box);
+            setCheckedNodeIds(view, "btn20020_1", box);
+        }
+        else if (val == "btn20020_1") {
+            $("li[data-id=auth10]").find("li[data-id=btn10001_4] input").prop("checked", box);
+            setCheckedNodeIds(view, "btn10001_4", box);
+        }
+            //客单列表
+        else if ((val == "auth20010" || val == "btn20010_1") && !box) {
+            $("li[data-id=auth20]").find("div input").prop("checked", false);
+        }
+        else if (val == "btn40030_2251799813685248") {
+            $("li[data-id=btn40030_1]").find("div input").prop("checked", box);
+        }
+    })
+    //设置值选中 因为checked选中，其对象中的checked为false
+    var loadisGo = true;
+    function setCheckedNodeIds(nodes, id, box) {
+        if (!loadisGo) return;
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i].id == id) {
+                nodes[i].checked = box;
+                loadisGo = false;
+                break;
+            }
+            if (nodes[i].hasChildren) {
+                setCheckedNodeIds(nodes[i].children.view(), id, box);
+            }
+        }
+    }
+    function onCheck(e) {
+        //console.log(e.node);
+        console.log(e.node.attr("data-id"));
+        //alert(e.node);
+        //console.log($("li[data-id='btn10001_1']:checkbox"));
+        // alert($("li[data-id='btn10001_1'] input[type='checkbox']"));
+        // kendoConsole.log("Checkbox changed :: " + this.text(e.node));
+    }
+</script>

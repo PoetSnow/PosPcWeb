@@ -1,0 +1,108 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+@{
+    ViewBag.Title = "Pos餐台";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var colsDefault = new List<GridColumnSetting>
+    {
+        new GridColumnSetting {Name = "tabNo", Title = "台号", Hidden = false, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "Cname", Title = "中文名称", Hidden = false, Order = 2, Width = 0},
+        new GridColumnSetting {Name = "Ename", Title = "英文名称", Hidden = false, Order = 3, Width = 0},
+        new GridColumnSetting {Name = "RefeName", Title = "营业点", Hidden = false,Order = 4, Width = 0},
+        new GridColumnSetting {Name = "tabTypeCode", Title = "餐台类型代码", Hidden = false,Order = 6, Width = 0},
+        new GridColumnSetting {Name = "tabTypeName", Title = "餐台类型名称", Hidden = false,Order = 7, Width = 0},
+        new GridColumnSetting {Name = "MaxSeat", Title = "最大座位数", Hidden = false,Order = 8, Width = 0},
+        new GridColumnSetting {Name = "moduleName", Title = "模块", Hidden = false,Order = 9, Width = 0},
+        new GridColumnSetting {Name = "statnoName", Title = "餐台状态", Hidden = false,Order = 10, Width = 0},
+        new GridColumnSetting {Name = "ipaddress", Title = "IP地址", Hidden = false,Order = 11, Width = 0},
+        new GridColumnSetting {Name = "RelayNo", Title = "继电器号", Hidden = false,Order = 12, Width = 0},
+        new GridColumnSetting {Name = "LargessLimit", Title = "赠送限额", Hidden = false,Order = 13, Width = 0},
+        new GridColumnSetting {Name = "isWxUsed", Title = "是否微信上预订", Hidden = false,Order = 14, Width = 0},
+        new GridColumnSetting {Name = "ServiceRate", Title = "微信服务费率", Hidden = false,Order = 15, Width = 0},
+        new GridColumnSetting {Name = "TeaPrice", Title = "微信茶位费", Hidden = false,Order = 16, Width = 0},
+        new GridColumnSetting {Name = "istagtempName", Title = "临时台标志", Hidden = false,Order = 17, Width = 0},
+        new GridColumnSetting {Name = "netPrinter", Title = "网络打印机", Hidden = false,Order = 18, Width = 0},
+        new GridColumnSetting {Name = "ProdPrinter", Title = "对应传菜部打印机", Hidden = false,Order = 19, Width = 0},
+        new GridColumnSetting {Name = "seqid", Title = "排列序号", Hidden = false,Order = 20, Width = 0},
+        new GridColumnSetting {Name = "Remark", Title = "备注", Hidden = false,Order = 21, Width = 0},
+        new GridColumnSetting {Name = "ModifiedDate", Title = "修改时间", Hidden = false,Order = 22, Width = 0}
+    };
+    var gridViewModel = new KendoGridCustomDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        StatusColumnName = "iStatus",
+        EnableFunctionForEnable = true,
+        EnableFunctionForDisable = true,
+        EnableScrollable = true,
+        Area = "PosManage",
+        Controller = "BasicDataPosTab",
+        Action = "Index",
+        DefaultColumnSettings = colsDefault,
+        CustomToolbar = c =>
+        {
+
+            c.Custom().Text("复制").HtmlAttributes(new { onclick = "tabcopy('grid', 'id')", href = "javascript:void(0);" });
+
+            c.Custom().Name("comfirmtextone").Text("双击可修改").HtmlAttributes(new { id = "comfirmtextone", href = "javascript:void(0);", style = "color:red;margin-top:9px;margin-left:10px;cursor:default;" });
+
+
+        }
+    };
+}
+
+@Html.Partial("_KendoGridCustomDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+    $(function () {
+        window.onresize = onResize; onResize();
+        $("#comfirmtext").removeClass("k-button");
+        $("#comfirmtextone").removeClass("k-button");
+    });
+    function gridread() {
+        $("#grid").data("kendoGrid").dataSource.read();
+    }
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 145;
+        $("#grid .k-grid-content").height(allHeight - showHeight);
+    }
+
+    //餐台复制
+    function tabcopy(gridId, keyName) {
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要复制的数据行");
+        }
+        else if (selectedRows.length == 1) {
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+            console.log(data[keyName]);
+            var model = {
+                tabid: data[keyName]
+            }
+            top.openKendoWindow("增加" + "Pos餐台资料", '@Url.Action("Copy", "BasicDataPosTab")', model);
+        }
+        else {
+            jAlert("请选择一行数据行");
+        }
+    }
+
+
+
+
+</script>

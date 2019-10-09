@@ -1,0 +1,69 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosInSingle.InSingleViewModel
+@(Html.Kendo().Grid<up_pos_list_BillDetailByBillidResult>()
+            .Name("gridSelect")
+            .Columns(columns =>
+            {
+                columns.Bound(m => m.Id).Hidden();
+                columns.Bound(m => m.Itemid).Hidden();
+                columns.Bound(m => m.Unitid).Hidden();
+                columns.Bound(m => m.Id).HeaderTemplate("<input type='checkbox' value='#: Id #' onclick='checkedRowAll(this)' />")
+                    .ClientTemplate("<input type='checkbox' value='#: Id #' onclick='checkedRow(this)' />");
+                columns.Bound(m => m.Row).Title("行").HtmlAttributes(new { @style = "white-space: nowrap;" });
+                columns.Bound(m => m.ItemName).Title("名称").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(100);
+                columns.Bound(m => m.Quantity).Title("数量").ClientTemplate("#=Quantity##=UnitName#").HtmlAttributes(new { @style = "white-space: nowrap;" });
+                columns.Bound(m => m.Amount).Title("金额").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+                columns.Bound(m => m.Action).Title("作法").HtmlAttributes(new { @style = "white-space: nowrap;" });
+                columns.Bound(m => m.Request).Title("要求").HtmlAttributes(new { @style = "white-space: nowrap;" });
+                columns.Bound(m => m.Memo).Title("备注").HtmlAttributes(new { @style = "white-space: nowrap;" });
+            })
+            .HtmlAttributes(new { style = "height:calc(100% - 4rem);" })
+            .Pageable()
+            .Scrollable()
+            .Selectable(s => s.Mode(GridSelectionMode.Multiple).Enabled(false))
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(10)
+                .Read(read => read.Action("ListUpBillDetailByBillidAndStatus", "PosInSingle", new { billid = Model.Billid }))
+            )
+)
+<div class="formButtons">
+    <button id="saveEditFormButton" role="button" data-role="button" onclick="beforeBeAlone()">确定</button>
+    <button id="closeEditFormButton" role="button" data-role="button" onclick="cancelBeAlone()">关闭</button>
+</div>
+
+<script type="text/javascript">
+    //先落
+    function beforeBeAlone() {
+        if ($("#billid").val() === "") {
+            layer.msg("请选择要操作的台号");
+            return false;
+        }
+
+        $.ajax({
+            url: '@(Url.Action("beAloneB", "PosInSingle", new { rnd = new Random().NextDouble() }))' + "&billid=" + $("#billid").val() + "&ids=" + $("#selIds").val(),
+            type: "post",
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    getStatistics(1);
+                    $("#grid").data("kendoGrid").dataSource.read();
+                    layer.closeAll();
+                } else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" ,skin:"err"});
+                }
+
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //取消先落
+    function cancelBeAlone() {
+        $("#selIds").val("");
+        layer.closeAll();
+    }
+</script>

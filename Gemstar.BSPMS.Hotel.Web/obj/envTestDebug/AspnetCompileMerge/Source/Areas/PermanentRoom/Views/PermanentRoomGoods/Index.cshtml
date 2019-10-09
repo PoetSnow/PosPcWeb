@@ -1,0 +1,362 @@
+﻿@using Kendo.Mvc.UI;
+@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "物品设置";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var resId = queryModel == null ? "" : queryModel.QueryParameterValues;
+    var keyColumnName = "id";
+    var gridModel = new KendoGridCommonViewModel()
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForQuery = false,
+        EnableFunctionForPage = false,
+        HtmlAttributes = new { style = "height:434px;max-height:434px;" },
+        EnableScrollable = true,
+    };
+    var gridHelper = new KendoGridEditInCellHtmlHelper<PermanentRoomGoodsSet>(
+        Html,
+        Url,
+        gridModel,
+        c =>
+        {
+            c.Bound(w => w.Itemid).Title("物品").EditorTemplateName("GridForeignKey").Width(150).ClientTemplate("#= ShowItemName(Itemid) #"); ;
+            c.Bound(w => w.Amount).Title("赔偿金额").EditorTemplateName("Currency").Width(150);
+            c.Bound(w => w.BorrowType).Title("是否借用").EditorTemplateName("GridForeignKey").Width(90).ClientTemplate("#= ShowBorrowTypeName(BorrowType) #"); ;
+            c.Bound(w => w.Remark).Title("备注");
+        },
+        c => c.Id(w => w.Id),
+        c =>
+        {
+            c.Template(@<text>
+        <a class="k-button k-button-icontext k-grid-add" href="javascript:void(0)"><span class="k-icon k-add"></span>增加</a>
+        <a class="k-button k-button-icontext k-grid-cancel-changes" href="javascript:void(0)"><span class="k-icon k-cancel"></span>取消修改</a>
+        <a class="k-button k-button-icontext k-grid-save-changes" href="javascript:void(0)"><span class="k-icon k-update"></span>保存修改</a>
+        <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="batchDelete('@gridModel.GridControlId', '@gridModel.KeyColumnName','@Url.Action("BatchDelete")')"><span class="k-icon k-i-unpin"></span>删除</a>
+        <div class="resBillRightDiv">
+            <label for="ResGoodsTempleteSelect">模板</label>
+            @(Html.Kendo().DropDownList()
+                            .Name("resGoodsTempleteSelect")
+                            .DataTextField("TempleteName")
+                            .DataValueField("TempleteId")
+                            .AutoBind(true)
+                            .Events(e => e.Change("ResGoodsTemplete.OnChange").Select("ResGoodsTemplete.OnSelect").DataBound("ResGoodsTemplete.OnDataBound"))
+                            .HtmlAttributes(new { style = "width: 150px;" })
+                            .Template("<div><span title=\"#:TempleteId=='add'?'将当前物品列表数据保存为新模板':''#\">#:TempleteName#</span><span title=\"删除此模板\" class=\"delTempleteBtn\" onclick=\"ResGoodsTemplete.OnDel('#:TempleteId#')\">#:TempleteId=='add'?'':'删除'#</span></div>")
+                            .OptionLabel(" ")
+                            .DataSource(d => d.Read("GetTempleteList", "PermanentRoomGoods")))
+        </div>
+            </text>);
+        },
+        page => page.Enabled(false).Numeric(false).PreviousNext(false).Refresh(true)
+    );
+}
+<style type="text/css">
+    .wrap {
+        margin: 7px 7px 0px 7px;
+    }
+
+    body {
+        overflow-y: hidden;
+    }
+
+    .delTempleteBtn {
+        float: right;
+        color: rgb(166,166,166);
+        font-size: 9px;
+        cursor: pointer;
+    }
+
+    .resBillRightDiv {
+        float: right;
+        padding-right: 17px;
+    }
+</style>
+<div style="display:none;">@Html.Kendo().DropDownList().Name("ItemIdData").BindTo((SelectList)ViewData["Itemid_Data"])<input type="hidden" id="isUseTemplete" /></div>
+@(gridHelper.KendoGridEditInCell())
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridModel)
+    <script type="text/javascript">
+        function ShowItemName(value) {            
+            var result = "";
+            if (value != null && value != undefined && value.length > 0) {
+                var itemIdList = $("#ItemIdData").data("kendoDropDownList").dataSource.data();
+                $.each(itemIdList, function (index, item) {
+                    if (item.Value == value) {
+                        result = item.Text;
+                        return result;
+                    }
+                });
+            }
+            return result;
+        }
+        function ShowBorrowTypeName(value) {
+            if (value == "1") {
+                return "借用";
+            } else if (value == "2") {
+                return "归还";
+            }
+            return "";
+        }
+        //初始化完成后执行
+        $(document).ready(function () {
+            //点击保存按钮事件 验证内容是否合法
+            function grid_saveChanges(e) {
+                var itemids = [];
+                var list = e.sender.dataItems();
+                if (list != null && list != undefined && list.length > 0) {
+                    $.each(list, function (index, item) {
+                        if (item.PermanentRoomSetId == null || item.PermanentRoomSetId == undefined || $.trim(item.PermanentRoomSetId).length <= 0) {
+                            item.PermanentRoomSetId = "@ViewBag.PermanentRoomSetId";
+                        } else {
+                            if (item.PermanentRoomSetId != "@ViewBag.PermanentRoomSetId") {
+                                e.preventDefault();
+                                jAlert("账单所属子单ID错误，请刷新页面后重试！", "知道了"); return false;
+                            }
+                        }
+                        if ($.trim(item.Itemid) == "") {
+                            e.preventDefault();
+                            jAlert("物品不能为空！", "知道了"); return false;
+                        }
+
+                        var count = 0;
+                        $.each(itemids, function (index, itemid) {
+                            if (itemid == item.Itemid) {
+                                count++;
+                            }
+                        });
+                        if (count > 0) {
+                            e.preventDefault();
+                            var existsName = null;
+                            var itemIdList = $("#ItemIdData").data("kendoDropDownList").dataSource.data();
+                            $.each(itemIdList, function (index, itemEntity) {
+                                if (itemEntity.Value == item.Itemid) {
+                                    existsName = itemEntity.Text;
+                                }
+                            });
+                            jAlert("物品[" + existsName + "]已重复，请修改！", "知道了"); return false;
+                        }
+                        itemids.push(item.Itemid);
+                        
+                    });
+                }
+            }
+            var grid = $("#grid").data("kendoGrid");
+            grid.bind("saveChanges", grid_saveChanges);
+
+            var isAdd = false;//是否添加
+            var isError = false;//是否有错误
+            //请求开始前
+            function dataSource_requestStart(e) {
+                if (e.type == "read") {
+                    $("#isUseTemplete").val("false");
+                } else if (e.type == "create") {
+                    var url = e.sender.transport.options.create.url;
+                    var index = url.indexOf("?");
+                    if (index != -1) {
+                        url = url.substring(0, index) + "?isTemplete=" + $("#isUseTemplete").val();
+                    } else {
+                        url = url + "?isTemplete=" + $("#isUseTemplete").val();
+                    }
+                    e.sender.transport.options.create.url = url;
+                }
+            }
+            //是否请求服务器
+            function dataSource_requestEnd(e) {
+                if (e != null && e != undefined && e.response.Errors != null && e.response.Errors != undefined) {
+                    isError = true;
+                }
+                if (e != null && e != undefined && e.type == "create") {
+                    isAdd = true;//添加了新行
+                }
+            }
+            grid.dataSource.bind("requestStart", dataSource_requestStart);
+            grid.dataSource.bind("requestEnd", dataSource_requestEnd);
+
+
+            //删除完毕后执行的方法
+            function deleteEnd(result) {
+                if (result != null && result != undefined && result.Success) {                    
+                    jAlert("删除成功！", "知道了");
+                }
+            }
+            //修改删除按钮事件，增加删除完毕后执行的方法
+            var batchDeleteButton = $(".k-grid-batchDelete");
+            if (batchDeleteButton != null && batchDeleteButton != undefined) {
+                var clickStr = batchDeleteButton.attr("onclick");
+                if ($.trim(clickStr) != "") {
+                    //"batchDelete('grid','id','/ResManage/PermanentRoomGoods/BatchDelete')"
+                    if (clickStr.indexOf("batchDelete") == 0) {
+                        clickStr = clickStr.replace("batchDelete", "").replace("(", "").replace(")", "");
+                        var list = clickStr.split(",");
+                        if (list.length == 3) {
+                            batchDeleteButton.removeAttr("onclick");
+                            batchDeleteButton.click(function () {
+                                batchDelete($.trim(list[0].replace("'", "").replace("'", "")), $.trim(list[1].replace("'", "").replace("'", "")), $.trim(list[2].replace("'", "").replace("'", "")), deleteEnd);
+                            });
+                        }
+                    }
+                }
+            }
+        });
+
+        //检查账单表格数据
+        function checkGridData(list) {
+            var itemids = [];
+            var isTrue = true;
+            if (list != null && list != undefined && list.length > 0) {
+                $.each(list, function (index, item) {
+                    if (item.PermanentRoomSetId == null || item.PermanentRoomSetId == undefined || $.trim(item.PermanentRoomSetId) == "") {
+                        item.PermanentRoomSetId = "@ViewBag.PermanentRoomSetId";
+                    } else {
+                        if (item.PermanentRoomSetId != "@ViewBag.PermanentRoomSetId") {
+                            isTrue = false;
+                            jAlert("账单所属主单ID错误，请刷新页面后重试！", "知道了"); return false;
+                        }
+                    }
+                    if ($.trim(item.Itemid) == "") {
+                        isTrue = false;
+                        jAlert("物品不能为空！", "知道了"); return false;
+                    }
+
+                    var count = 0;
+                    $.each(itemids, function (index, itemid) {
+                        if (itemid == item.Itemid) {
+                            count++;
+                        }
+                    });
+                    if (count > 0) {
+                        e.preventDefault();
+                        var existsName = null;
+                        var itemIdList = $("#ItemIdData").data("kendoDropDownList").dataSource.data();
+                        $.each(itemIdList, function (index, itemEntity) {
+                            if (itemEntity.Value == item.Itemid) {
+                                existsName = itemEntity.Text;
+                            }
+                        });
+                        jAlert("物品[" + existsName + "]已重复，请修改！", "知道了"); return false;
+                    }
+                    itemids.push(item.Itemid);
+
+                });
+            }
+            return isTrue;
+        }
+
+
+        //模板
+        var ResGoodsTemplete = {
+            //事件-绑定数据
+            OnDataBound: function (e) {
+                //增加一个选项
+                var isExists = false;
+                var list = e.sender.dataSource.data();
+                $.each(list, function (index, item) {
+                    if (item.TempleteId == "add") {
+                        isExists = true;
+                    }
+                });
+                if (!isExists) {
+                    e.sender.dataSource.insert(0, { Hid: "", TempleteId: "add", TempleteName: "添加模板" });
+                }
+            },
+            //是否删除
+            IsDel: false,
+            //事件-删除模板
+            OnDel: function (value) {
+                ResGoodsTemplete.IsDel = true;
+            },
+            //事件-选中事件
+            OnSelect: function (e) {
+                var dataItem = e.sender.dataItem(e.item);
+                var id = dataItem[e.sender.options.dataValueField];
+                var name = dataItem[e.sender.options.dataTextField];
+                //选择第一项
+                if (name == e.sender.options.optionLabel) {
+                    try { $("#grid").data("kendoGrid").dataSource.read(); } catch (e) { }
+                    return;
+                }
+                //点击删除，则不选中项目
+                if (ResGoodsTemplete.IsDel == true) {
+                    e.preventDefault();
+                    ResGoodsTemplete.IsDel = false;
+                    ResGoodsTemplete.DelTemplete(id, name);
+                    return;
+                }
+                //点击添加，则不选中项目
+                if (id == "add") {
+                    e.preventDefault();
+                    ResGoodsTemplete.AddTemplete();
+                    return;
+                }
+            },
+            //事件-改变事件
+            OnChange: function (e) {
+                var id = this.value();
+                var name = this.text();
+                if ($.trim(id) == "") { return; }
+                ResGoodsTemplete.GetTemplete(id, name);
+            },
+            //添加模板
+            AddTemplete: function () {
+                //验证
+                var list = $("#grid").data("kendoGrid").dataSource.data();
+                var isTrue = checkGridData(list);
+                if (list == null || list == undefined || list.length <= 0) {
+                    jAlert("内容不能为空！", "知道了"); isTrue = false;
+                }
+                if (!isTrue) { return; }
+                //提交
+                jPrompt("将当前物品列表数据保存为新模板！\n请输入模板名称：", "", "保存", "取消", function (result) {
+                    if (result == null) { return; }
+                    if ($.trim(result) == "") {
+                        jAlert("请输入模板名称！", "知道了"); return;
+                    }
+                    var addVersions = [];
+                    $.each(list, function (index, item) {
+                        addVersions.push({ Itemid: item.Itemid, Amount: item.Amount, BorrowType: item.BorrowType, Remark: item.Remark });
+                    });
+                    $.post("@Url.Action("AddTemplete", "PermanentRoomGoods")", { name: $.trim(result), addVersions: addVersions }, function (result) {
+                        if (result.Success) {
+                            jAlert("保存新模板成功！", "知道了");
+                            try { $("#resGoodsTempleteSelect").data("kendoDropDownList").dataSource.read(); } catch (e) { }
+                        } else {
+                            jAlert("保存新模板失败！" + result.Data, "知道了");
+                        }
+                    }, "json");
+                });
+            },
+            //删除模板
+            DelTemplete: function (id, name) {
+                jConfirm("是否删除模板[" + name + "]？", "  是  ", "  否  ", function (isTrue) {
+                    if (isTrue) {
+                        $.post("@Url.Action("DelTemplete", "PermanentRoomGoods")", { id: id }, function (result) {
+                            if (result.Success) {
+                                jAlert("删除模板成功！", "知道了");
+                                try { $("#resGoodsTempleteSelect").data("kendoDropDownList").dataSource.read(); } catch (e) { }
+                            } else {
+                                jAlert("删除模板失败！" + result.Data, "知道了");
+                            }
+                        }, "json");
+                    }
+                });
+            },
+            //获取模板
+            GetTemplete: function (id, name) {
+                $.post("@Url.Action("ToTempleteDetailList", "PermanentRoomGoods")", { id: id }, function (result) {
+                    if (result.Success) {
+                        $("#grid").data("kendoGrid").dataSource.data(result.Data);
+                        $("#isUseTemplete").val("true");
+                    } else {
+                        jAlert("获取模板信息失败！" + result.Data, "知道了");
+                    }
+                }, "json");
+            },
+        };
+    </script>
+}

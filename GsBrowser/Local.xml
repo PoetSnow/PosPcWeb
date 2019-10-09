@@ -1,0 +1,8 @@
+﻿<LocalUpdate>
+  <!-- 本地版本号 -->
+  <LocalVersion>1.0.0.5</LocalVersion>
+  <!-- 最后更新时间 -->
+  <LastUdpate>2018/11/27 14:30:00</LastUdpate>
+  <!-- server.xml文件地址 -->
+  <ServerUpdateUrl>http://pos.gshis.com/Update/GsBrowser/Server.xml</ServerUpdateUrl>
+</LocalUpdate>

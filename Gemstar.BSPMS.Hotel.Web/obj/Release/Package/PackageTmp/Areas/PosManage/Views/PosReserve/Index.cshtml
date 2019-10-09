@@ -1,0 +1,563 @@
+﻿@using Gemstar.BSPMS.Common.Extensions;
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPos;
+@{
+
+    var refeList = ViewBag.RefeList as List<PosRefe>;
+    var tabTypeList = ViewBag.TabTypeList as List<PosTabtype>;
+    var timeList = ViewBag.Time as List<int>;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>预订</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+    <link href="~/Scripts/layer-v3.1.1/theme/default/layer.css" rel="stylesheet" />
+    <link href="~/Content/Pos/reset.css" rel="stylesheet" />
+    <link href="~/Content/Pos/PosReserveContent.css" rel="stylesheet" />
+    <script src="~/Scripts/PosReserve/prePay.js"></script>
+    <style>
+        openKendoDatetimePicker
+        .house-state-list .house-state-selected {
+            background-color: cornflowerblue;
+        }
+
+        .layui-layer-addres {
+            margin-right: 50px;
+        }
+    </style>
+</head>
+<body>
+    <!--隐藏值-->
+    <input type="hidden" id="refeId" value="@ViewBag.RefeId" />
+    <input type="hidden" id="tabTypeId" value="0" />
+    <input type="hidden" id="business" value="@ViewBag.Business" />
+
+    <div class="content">
+        <div class="header-top">
+            <ul class="content-tab">
+                <li class="tab-on"><a href="">按时间预订</a></li>
+                <li><a href="javascript:void(0);">按市别预订</a></li>
+                <li><a href="javascript:void(0);">按日期预订</a></li>
+            </ul>
+            <a href="javascript:history.go(-1)">退出</a>
+        </div>
+        
+        <div class="content-head">
+            <div class="date-name">
+                <span>预订日期</span>
+                <div class="date-select" style="display: none">
+                    <p>预订日期</p>
+                    <p>预抵日期</p>
+                </div>
+            </div>
+            <div class="date">
+
+            </div>
+            @(Html.Kendo().DatePicker()
+                                        .Name("depDate")
+                                        .Value(DateTime.Now.AddDays(1))
+                                        .Format(DateTimeExtension.DateFormatStr)
+                                        //.Events(e => e.Change("editControl_changed"))
+                                        .HtmlAttributes(new { onclick = "openKendoDatePicker(this)", style = "width:190px;" }))
+            <div class="dining-type"><span>营业点：</span></div>
+            @(Html.Kendo().DropDownList()
+                                        .Name("refe")
+                                        .DataTextField("Text")
+                                        .DataValueField("Value")
+                                        .DataSource(s => { s.Read(r => r.Url(Url.Action("ListItemsForPosRefe", new { rnd = new Random().NextDouble(), posId = ViewBag.PosId }))); })
+            )
+            <div class="dining-type"><span>餐台类型：</span></div>
+            @(Html.Kendo().DropDownList()
+                                        .Name("TabType")
+                                        .DataTextField("Text")
+                                        .DataValueField("Value")
+                                        .DataSource(s => { s.Read(r => r.Url(Url.Action("ListItemsForPosTabType", new { rnd = new Random().NextDouble() }))); })
+            )
+            <a href="javascript:void(0);" class="query" id="btnQuery">查询</a>
+            <a href="javascript:void(0);" class="query" id="btnQuery2" style="width:150px">查询预定列表</a>
+        </div>
+
+        <div class="table-content">
+            <div class="table-box" id="table-box">
+                <div id="left_div">
+                    <div id="left_div1">
+                        <table id="left_table1" class="table">
+                            <tr>
+                                <th>餐台/时间</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="left_div2">
+                        <table id="left_table2" class="table">
+                            <!--餐台列表-->
+                        </table>
+                    </div>
+                </div>
+                <div id="right_div">
+                    <div id="right_div1">
+                        <div id="right_divx">
+                            <table id="right_table1" class="table">
+                                <!--时间列表-->
+                            </table>
+                        </div>
+                    </div>
+                    <div id="right_div2">
+                        <table id="right_table2" class="table">
+                            <!--餐台状态-->
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="orderList" style="display:none"> </div>
+
+        @*<div class="state-box" >
+                <ul class="state-list">
+                    <li class="usable">
+                        <span></span>
+                        <em>可用</em>
+                    </li>
+                    @*<li class="stop">
+                        <span>12</span>
+                        <em>停用</em>
+                    </li>
+                    <li class="past">
+                        <span>12</span>
+                        <em>过期</em>
+                    </li>
+                    <li class="occupation">
+                        <span>12</span>
+                        <em>占用</em>
+                    </li>
+                    <li class="reservation">
+                        <span></span>
+                        <em>预订</em>
+                    </li>
+                    <li class="all">
+                        <span>12</span>
+                        <em>全部</em>
+                    </li>
+                </ul>
+                <div class="scrollDiv" id="s3" style="display:none">
+                    <ul>
+                        <li><a href="#">101号餐台在9:00有预订过期</a></li>
+                        <li><a href="#">102号餐台在9:00有预订过期</a></li>
+                        <li><a href="#">103号餐台在9:00有预订过期</a></li>
+                        <li><a href="#">104号餐台在9:00有预订过期</a></li>
+                        <li><a href="#">105号餐台在9:00有预订过期</a></li>
+                        <li><a href="#">106号餐台在9:00有预订过期</a></li>
+                        <li><a href="#">107号餐台在9:00有预订过期</a></li>
+                        <li><a href="#">108号餐台在9:00有预订过期</a></li>
+                    </ul>
+                </div>
+            </div>*@
+    </div>
+
+    @*<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>*@
+    @*<script src="~/Scripts/jquery-1.12.3.min.js"></script>*@
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script src="~/Scripts/PosReserve/superTables.js"></script>
+    <script src="~/Scripts/PosReserve/public.js"></script>
+    <!--业务处理Js-->
+    <script src="~/Scripts/PosReserve/Reserve.js"></script>
+    <script>
+        var isOpen=0;
+        $(function () {
+            var refeId = $("#refeId").val();
+            var business = $("#business").val();
+            var tabTypeId = $("#tabTypeId").val();
+            var Flag = "1";//默认为预定日期
+            //加载事件
+            GetTimeHtml(refeId);
+            GetTabHtml(refeId, business, tabTypeId, Flag);
+            GetTabStatusHtml(refeId, business, tabTypeId, Flag);
+            $("#s3").Scroll({
+                line: 2,
+                speed: 500,
+                timer: 2000,
+            });
+            //查询按钮事件
+            $("#btnQuery").bind("click", function () {
+                refeId= $("#refe").data("kendoDropDownList").value();
+
+                business = $("#depDate").data("kendoDatePicker").value().ToDateTimeString();
+
+                tabTypeId = $("#TabType").data("kendoDropDownList").value();
+                if ($(".date-name span").text()=="预订日期") {
+                    Flag = "1";
+                }
+                else {
+                    Flag = "2";
+                }
+                $("#orderList").css('display', 'none');
+                $(".table-content").css('display', 'block');
+                GetTimeHtml(refeId);
+                GetTabHtml(refeId, business, tabTypeId, Flag);
+                GetTabStatusHtml(refeId, business, tabTypeId, Flag);
+            })
+            $("#btnQuery2").bind("click", function () {
+                refeId = $("#refe").data("kendoDropDownList").value();
+
+                business = $("#depDate").data("kendoDatePicker").value().ToDateTimeString();
+
+                tabTypeId = $("#TabType").data("kendoDropDownList").value();
+                if ($(".date-name span").text() == "预订日期") {
+                    Flag = "1";
+                }
+                else {
+                    Flag = "2";
+                }
+                $("#orderList").css('display', 'block');
+                $(".table-content").css('display', 'none');
+                GetOrderBillList(refeId, business, tabTypeId, Flag);
+            })
+
+        })
+
+        function GetTimeHtml(refeId)
+        {
+            $.ajax({
+                url: '@Url.Action("_TimeList", "PosReserve")',
+                type: "post",
+                data: { refeId: refeId },
+                dataType: "html",
+                success: function (data) {
+
+                    $("#right_table1").html(data);
+                  //  onLoad("right_table1");
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+
+        function GetTabHtml(refeId, business,tabTypeId,Flag)
+        {
+            $.ajax({
+                url: '@Url.Action("_TabList", "PosReserve")',
+                type: "post",
+                data: { refeId: refeId, business: business, tabTypeId: tabTypeId, flag: Flag},
+                dataType: "html",
+                success: function (data) {
+                    $("#left_table2").html(data);
+                  //  onLoad("right_table1");
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+
+        //获取餐台状态
+        function GetTabStatusHtml(refeId, business, tabTypeId, Flag) {
+
+              $.ajax({
+                url: '@Url.Action("_TabStatusList", "PosReserve")',
+                type: "post",
+                data: { refeId: refeId, business: business, tabTypeId: tabTypeId, flag: Flag},
+                dataType: "html",
+                  success: function (data) {
+                      $("#right_table2").html(data);
+                      $("#right_table2 td").bind("click", function () {
+                          clickTab($(this));
+                      })
+
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+        //点击事件
+        function clickTab(obj)
+        {
+            if (isOpen == "0") {
+                isOpen = 1;
+                var orderData = $("#depDate").data("kendoDatePicker").value().ToDateTimeString();
+                if ($(".date-name span").text() == "预订日期") {
+                    Flag = "1";
+                }
+                else {
+                    Flag = "2";
+                } 
+                var model = {
+                    tabId: $(obj).attr("data-id"),
+                    refeId: $("#refeId").val(),
+                    date: orderData,
+                    time: $(obj).attr("data-time"),
+                    flag: Flag
+                };
+              
+                var tabClass = $(obj).attr("class");    //用于区分点击的时间段是否有预订账单
+                if (tabClass == "reservation") {
+                    //存在预订账单
+                    $.ajax({
+                     url: '@Url.Action("_UpdateOrderBill", "PosReserve")',
+                     type: "post",
+                     data: model,
+                     dataType: "html",
+                     success: function (data) {
+                        isOpen = 0;
+                        layer.open({
+                            type: 1,
+                            title: "预订",
+                            skin: 'layui-layer-addres', //样式类名
+                            closeBtn: 0, //不显示关闭按钮
+                            area: ['auto', 'auto'], //宽高
+                            content: data
+                        });
+
+                    },
+                    error: function (data) {
+                        layer.alert(data.responseText, { title: "快点云Pos提示" });
+                    }
+                  });
+
+                }
+                else {
+                    //不存在进入添加预订账单界面
+                    $.ajax({
+                     url: '@Url.Action("_AddReserve", "PosReserve")',
+                     type: "post",
+                     data: model,
+                     dataType: "html",
+                     success: function (data) {
+                        isOpen = 0;
+                        layer.open({
+                            type: 1,
+                            title: "预订",
+                            skin: 'layui-layer-addres', //样式类名
+                            closeBtn: 0, //不显示关闭按钮
+                            area: ['auto', 'auto'], //宽高
+                            content: data
+                        });
+
+                    },
+                    error: function (data) {
+                        layer.alert(data.responseText, { title: "快点云Pos提示" });
+                    }
+                  });
+                }
+            }             
+        }
+
+        function GetOrderBillList(refeId, business, tabTypeId, Flag)
+        {
+            $.ajax({
+                url: '@Url.Action("_BillOrderList", "PosReserve")',
+                type: "post",
+                data: { refeId: refeId, business: business, tabTypeId: tabTypeId, flag: Flag},
+                dataType: "html",
+                success: function (data) {
+                    $("#orderList").html(data)
+
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+
+        //修改预订账单
+        function updateOrderBill() {
+            //layer.alert("功能正在开发中", { title: "快点云Pos提示" });
+            //return false;
+            var grid = $("#gridServer").data("kendoGrid");
+            var selectedRows = grid.select();
+            if (selectedRows.length == 0) {
+                layer.alert("请选择要修改的数据", { title: "快点云Pos提示" });
+                return false;
+            }
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+            var billId = data["Billid"];
+            $.ajax({
+                url: '@Url.Action("_UpdateOrderBill", "PosReserve")',
+                type: "post",
+                data: { billId: billId, refeId: $("#refeId").val() },
+                dataType: "html",
+                success: function (data) {
+                    layer.open({
+                        type: 1,
+                        title: "修改预订账单",
+                        skin: 'layui-layer-addres', //样式类名
+                        closeBtn: 0, //不显示关闭按钮
+                        area: ['auto', 'auto'], //宽高
+                        content: data
+                    });
+
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+
+        //取消预订账单
+        function DeleteOrderBill()
+        {
+            var grid = $("#gridServer").data("kendoGrid");
+            var selectedRows = grid.select();
+            if (selectedRows.length == 0) {
+                layer.alert("请选择要修改的数据", { title: "快点云Pos提示" });
+                return false;
+            }
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+            var billId = data["Billid"];
+            var status = data["Status"];
+            if (status!="0") {
+                layer.alert("只能取消预订状态的账单", { title: "快点云Pos提示" });
+                return false;
+            }
+             $.ajax({
+                url: '@Url.Action("DeleteBillOrder", "PosReserve")',
+                type: "post",
+                data: { billId: billId },
+                dataType: "json",
+                 success: function (data) {
+                     if (data.Success) {
+                         layer.alert("取消预订成功！", { title: "快点云Pos提示" });
+                         $("#btnQuery2").trigger("click");
+                     }
+                     else {
+                         layer.alert(data.Data, { title: "快点云Pos提示" });
+                     }                     
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+
+        //添加定金
+        function _AddPrepay()
+        {
+            layer.alert("请选择要预订账单", { title: "快点云Pos提示" });
+            return false;
+            var grid = $("#gridServer").data("kendoGrid");
+            var selectedRows = grid.select();
+            if (selectedRows.length == 0) {
+                layer.alert("请选择要预订账单", { title: "快点云Pos提示" });
+                return false;
+            }
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+            var billId = data["Billid"];
+            $.ajax({
+                url: '@Url.Action("_AddPrepay", "PosReserve")',
+                type: "post",
+                data: { billId: billId },
+                dataType: "html",
+                 success: function (data) {
+                     layer.open({
+                         type: 1,
+                         title: "添加定金",
+                         skin: 'layui-layer-addres', //样式类名
+                         closeBtn: 0, //不显示关闭按钮
+                         area: ['auto', 'auto'], //宽高
+                         content: data
+                     });
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+
+        function addPrepay()
+        {
+
+            var f = $("#fromAddPrepay");
+                //$("#addPrepay2")[0].form;
+            var validator = $(f).validate();
+            if (validator.form()) {
+                $.post(
+                    $(f).attr("action"),
+                    $(f).serialize(),
+                    function (data) {
+                        console.log(data);
+                    },
+                    "html");
+            }
+        }
+     
+
+
+        //$('.dining-type-select').click(function () {
+        //    $('.dining-type-list').slideToggle();
+        //})
+        //$('.dining-type-list em').click(function () {
+        //    var text = $(this).text();
+        //    $('.dining-type-select p').text(text);
+        //});
+        $(".date-name").click(function () {
+            $('.date-select').slideToggle();
+        });
+        $(".date-select p").click(function () {
+            var text = $(this).text();
+            $('.date-name span').text(text);
+        });
+        //$(document).click(function () {
+        //    $('.date-select').slideUp();
+        //    $('.dining-type-list').slideUp();
+        //});
+        //$('.cancel').click(function () {
+        //    $(this).parents('.shade-box').hide();
+        //})
+
+        //固定和滚动
+        var right_div2 = document.getElementById("right_div2");
+        right_div2.onscroll = function () {
+            var right_div2_top = this.scrollTop;
+            var right_div2_left = this.scrollLeft;
+            document.getElementById("left_div2").scrollTop = right_div2_top;
+            document.getElementById("right_div1").scrollLeft = right_div2_left;
+        }
+
+
+
+
+    </script>
+    <script src="~/Scripts/layer-v3.1.1/layer.js"></script>
+    <style>
+        .k-state-selected {
+            background-color: #99CAFF
+        }
+
+        .house-state-list .house-state-bg {
+            width: 60px;
+            height: 60px;
+            border: 1px solid #000;
+            margin: 2px;
+        }
+
+        .house-state-bg .icon-all {
+            padding-top: 10px;
+        }
+
+        .house-state-list .house-state-default {
+            background-color: white;
+        }
+
+        .house-state-list .house-state-selected {
+            background-color: cornflowerblue;
+        }
+
+        .house-state-list .house-state-bg .default {
+            padding-left: 6px;
+            float: left;
+            color: black;
+            font-weight: bold;
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,66 @@
+**********【18:05:40】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】System.Management
+【信息提示】找不到 
+【堆栈跟踪】   在 System.Management.ManagementException.ThrowWithExtendedInfo(ManagementStatus errorCode)
+   在 System.Management.ManagementObject.Get()
+   在 GsBrowser.CommonHelp.GetPrintsProperties(String printerName) 位置 D:\work\Pos\GsBrowser\Handler\CommonHelp.cs:行号 289
+【目标位置】Void ThrowWithExtendedInfo(System.Management.ManagementStatus)
+【异常实例】
+
+**********【18:05:40】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos系统
+【信息提示】未将对象引用设置到对象的实例。
+【堆栈跟踪】   在 GsBrowser.JavaScriptObject.<>c__DisplayClass58_0.<PrintReport>b__0() 位置 D:\work\Pos\GsBrowser\Handler\JavaScriptObject.cs:行号 150
+【目标位置】Void <PrintReport>b__0()
+【异常实例】
+
+**********【18:05:40】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】System.Management
+【信息提示】找不到 
+【堆栈跟踪】   在 System.Management.ManagementException.ThrowWithExtendedInfo(ManagementStatus errorCode)
+   在 System.Management.ManagementObject.Get()
+   在 GsBrowser.CommonHelp.GetPrintsProperties(String printerName) 位置 D:\work\Pos\GsBrowser\Handler\CommonHelp.cs:行号 289
+【目标位置】Void ThrowWithExtendedInfo(System.Management.ManagementStatus)
+【异常实例】
+
+**********【18:05:40】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】快点云Pos系统
+【信息提示】未将对象引用设置到对象的实例。
+【堆栈跟踪】   在 GsBrowser.JavaScriptObject.<>c__DisplayClass58_0.<PrintReport>b__0() 位置 D:\work\Pos\GsBrowser\Handler\JavaScriptObject.cs:行号 219
+【目标位置】Void <PrintReport>b__0()
+【异常实例】
+
+**********【18:06:20】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】System.Data.DataSetExtensions
+【信息提示】数据源中没有 DataRow。
+【堆栈跟踪】   在 System.Data.DataTableExtensions.LoadTableFromEnumerable[T](IEnumerable`1 source, DataTable table, Nullable`1 options, FillErrorEventHandler errorHandler)
+   在 System.Data.DataTableExtensions.CopyToDataTable[T](IEnumerable`1 source)
+   在 GsBrowser.JavaScriptObject.<>c__DisplayClass58_0.<PrintReport>b__0() 位置 D:\work\Pos\GsBrowser\Handler\JavaScriptObject.cs:行号 223
+【目标位置】System.Data.DataTable LoadTableFromEnumerable[T](System.Collections.Generic.IEnumerable`1[T], System.Data.DataTable, System.Nullable`1[System.Data.LoadOption], System.Data.FillErrorEventHandler)
+【异常实例】
+
+**********【18:08:37】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】System.Data.DataSetExtensions
+【信息提示】数据源中没有 DataRow。
+【堆栈跟踪】   在 System.Data.DataTableExtensions.LoadTableFromEnumerable[T](IEnumerable`1 source, DataTable table, Nullable`1 options, FillErrorEventHandler errorHandler)
+   在 System.Data.DataTableExtensions.CopyToDataTable[T](IEnumerable`1 source)
+   在 GsBrowser.JavaScriptObject.<>c__DisplayClass58_0.<PrintReport>b__0() 位置 D:\work\Pos\GsBrowser\Handler\JavaScriptObject.cs:行号 223
+【目标位置】System.Data.DataTable LoadTableFromEnumerable[T](System.Collections.Generic.IEnumerable`1[T], System.Data.DataTable, System.Nullable`1[System.Data.LoadOption], System.Data.FillErrorEventHandler)
+【异常实例】
+
+**********【18:08:46】**********
+【异常数据】System.Collections.ListDictionaryInternal
+【资源来源】System.Data.DataSetExtensions
+【信息提示】数据源中没有 DataRow。
+【堆栈跟踪】   在 System.Data.DataTableExtensions.LoadTableFromEnumerable[T](IEnumerable`1 source, DataTable table, Nullable`1 options, FillErrorEventHandler errorHandler)
+   在 System.Data.DataTableExtensions.CopyToDataTable[T](IEnumerable`1 source)
+   在 GsBrowser.JavaScriptObject.<>c__DisplayClass58_0.<PrintReport>b__0() 位置 D:\work\Pos\GsBrowser\Handler\JavaScriptObject.cs:行号 223
+【目标位置】System.Data.DataTable LoadTableFromEnumerable[T](System.Collections.Generic.IEnumerable`1[T], System.Data.DataTable, System.Nullable`1[System.Data.LoadOption], System.Data.FillErrorEventHandler)
+【异常实例】
+

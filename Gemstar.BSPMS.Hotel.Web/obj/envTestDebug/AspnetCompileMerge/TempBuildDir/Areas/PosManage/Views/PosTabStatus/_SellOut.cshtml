@@ -1,0 +1,880 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+
+<style>
+    .mainLeft1 {
+        width: 24rem;
+        left: 0;
+        z-index: 9;
+        height: 100%;
+        padding-top: 0rem;
+        position: absolute;
+        background: #b2bcc8;
+    }
+
+    .mainRight1 {
+        right: 0;
+        height: 100%;
+        position: absolute;
+        width: calc(100% - 24rem);
+        background-color: #373741;
+    }
+
+    .mainRight1-list {
+        margin: 0.5rem;
+        height: calc(100% - 2.3rem);
+        background-color: #2d2d2d;
+        border-radius: 1rem;
+    }
+
+    .right-top-depart {
+        position: relative;
+        height: 6.5rem;
+    }
+
+        .right-top-depart ul {
+            float: left;
+            display: block;
+            position: absolute;
+            background: #111;
+            width: calc(100% - 3rem);
+            padding: 0.5rem 0 0.5rem 0.5rem;
+            border-radius: 0.5rem;
+            margin: 0.5rem 0 0.5rem 0.5rem;
+            padding-right: 1.2rem;
+        }
+
+        .right-top-depart li {
+            float: left;
+            display: block;
+            width: 4.5rem;
+            height: 4.5rem;
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            background-color: #eeb900;
+            /*box-shadow: 1px 1px 1px rgba(255, 255, 230, 0.25);*/
+        }
+
+        .right-top-depart a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            margin-top: 0.2rem;
+            position: relative;
+            text-align: center;
+        }
+
+    .mainRight1-list span {
+        width: 100%;
+        display: block;
+        line-height: 1.4rem;
+        text-align: center;
+        font-size: 1rem;
+    }
+
+    .right-top-content {
+        padding-top: 2px;
+    }
+
+    .top-content-list ul:first-child {
+        position: relative;
+        overflow: hidden;
+        padding-left: 0.5rem;
+        padding-right: 1.2rem;
+        width: calc(100% - 1.7rem);
+        height: calc(100% - 5.5rem);
+    }
+
+    .content-list-detail, .content-list-return {
+        height: 5.6rem;
+        width: 5.6rem;
+        float: left;
+        padding: 0.2rem;
+        border: 2px solid #111;
+        margin-right: 0.3rem;
+        margin-bottom: 0.3rem;
+        border-radius: 0.5rem;
+        background-color: #f3f3f3;
+    }
+
+    .content-list-unit {
+        height: 4.5rem;
+        width: 4.5rem;
+        float: left;
+        font-size: 1.1rem;
+        margin-left: 0.5rem;
+        margin-bottom: 0.5rem;
+        border-radius: 0.5rem;
+        background-color: #e8bdff;
+    }
+
+        .content-list-unit a {
+            text-align: center;
+        }
+
+        .content-list-unit img {
+            margin-top: 0.3rem;
+        }
+
+    .content-list-paging {
+        border: 0;
+        float: left;
+        padding: 0.2rem;
+        border-radius: 0.5rem;
+        height: calc(5.6rem + 4px);
+        width: calc(5.6rem + 8px);
+        background-color: rgba(0, 0, 0, 0);
+    }
+
+        .content-list-paging a {
+            margin: 0;
+            padding: 0;
+            color: #FFF;
+            margin-bottom: 4%;
+            font-size: 1.2rem;
+            line-height: 2.7rem;
+            border-radius: 0.5rem;
+            border: 2px solid #111;
+            text-align: center;
+            width: calc(100% - 4px);
+            height: calc(48% - 4px);
+            background-color: #009fc5;
+        }
+
+    .left-bottom-list {
+        left: 0;
+        padding: 0.3rem;
+        position: absolute;
+        border-radius: 0.2rem;
+        background-color: #a26e37;
+        height: 100%;
+    }
+
+    .bottom-list-detail {
+        margin-top: 0.6rem;
+        padding-top: 1.6rem;
+        height: calc(100% - 7rem);
+        border-radius: 0.3rem;
+        background-color: #fff;
+    }
+
+    .itemClassSelect {
+        background-image: linear-gradient(to bottom,#14d492,#00dcaa);
+    }
+
+    .content-list-detail a span:nth-child(3) {
+        color: #ff374a;
+        padding-left: 0.1rem;
+        text-align: left;
+    }
+
+    .mainRight1-list span:nth-child(2) {
+        height: 3rem;
+    }
+
+    .content-list-detail a span:nth-child(4) i, .content-list-tabStatus a span:nth-child(4) i {
+        position: absolute;
+        right: 0rem;
+        bottom: 0rem;
+        font-size: 1.5rem;
+        color: #0099ff;
+    }
+
+    .content-list-return a {
+        color: #fff;
+        font-size: 1.5rem;
+        line-height: 2rem;
+        text-align: center;
+        background-color: #e94c48;
+    }
+
+    .content-list-return {
+        line-height: 1.5rem;
+        text-align: center;
+        background-color: #e94c48;
+    }
+
+    .top-content-list ul:nth-child(2) {
+        height: 4.9rem;
+        position: absolute;
+        padding-top: 0.5rem;
+        margin-left: 0.5rem;
+        border-radius: 1rem;
+        background: #222;
+        padding-right: 1.1rem;
+        width: calc(100% - 3.2rem);
+        overflow: hidden;
+    }
+
+    .content-list-unit a span:nth-child(3) {
+        position: relative;
+        display: none;
+    }
+
+    .sellTips {
+        color: red;
+        font-size: 1.7rem;
+        padding: 0.5rem;
+        position: absolute;
+        z-index: 1;
+        right: 0;
+    }
+
+    .layui-layer layui-layer-page layui-layer-demo {
+        padding: 0px;
+    }
+
+    .layui-layer-content {
+        padding: 0px;
+    }
+</style>
+
+<!--大类分页-->
+<input id="pageIndexClass" type="hidden" value="1" />
+<input id="pageTotalClass" type="hidden" value="@ViewBag.PageTotal" />
+
+<input id="itemClassid" type="hidden" value="" />
+<input id="itemLevel" type="hidden" value="{}" />
+
+<!--分页查询-->
+<input id="pageIndexItem" type="hidden" value="1" />
+<input id="pageTotalItem" type="hidden" value="1" />
+
+<!--单位-->
+<input id="unitid" type="hidden" value="" />
+<input id="rowIndex" type="hidden" value="-1" />
+
+<!-- 单位分页 -->
+<input id="pageIndexPrice" type="hidden" value="1" />
+<input id="pageTotalPrice" type="hidden" value="1" />
+
+<!--消费项目-->
+<input type="hidden" id="itemid" value="" />
+<input type="hidden" id="itemCode" value="" />
+<input type="hidden" id="itemName" value="" />
+<div class="mainLeft1">
+    <div class="sellTips" style="display:none" data-id="#lblData" data-position="2" data-msg="单击状态可以恢复沽清，单击项目名称可以在单位栏修改沽清的单位" onmouseover="tipShow(this)" onmouseout="tipHide(this)" onclick="tipMsg(this)"><i class="fa fa-question-circle-o" aria-hidden="true"></i></div>
+
+    <div class="mainLeft-bottom">
+        <div class="left-bottom-list">
+            <div class="mainLeft-bottom-top"></div>
+            <div class="bottom-list-detail">
+                @(Html.Kendo().Grid<up_list_positemBySellOutResult>()
+                                                        .Name("grid")
+                                                        .Columns(columns =>
+                                                        {
+                                                            columns.Bound(m => m.Id).Hidden();
+                                                            columns.Bound(m => m.UnitId).Hidden();
+                                                            columns.Bound(m => m.ItemCode).Title("代码").HtmlAttributes(new { @style = "white-space: nowrap;" });
+                                                            columns.Bound(m => m.ItemName).Title("名称").HtmlAttributes(new { @style = "white-space: nowrap;" });
+                                                            columns.Bound(m => m.unitName).Title("单位").ClientTemplate("<a  href='javascript:void(0);' data-position='2' onmouseover='showtipsForSell(this)' onmouseout='hidtipsForSell(this)' data-msg='#: unitName #' style = 'white-space: nowrap;overflow: hidden;text-overflow: ellipsis;' data-id='#: Id #' >#: unitName #</a>");
+                                                            columns.Bound(m => m.StatusText).Title("状态").ClientTemplate("<a href='javascript:void(0);' data-position='2' onmouseover='showtipsForSell(this)' onmouseout='hidtipsForSell(this)' data-msg='点击单位恢复沽清' style = 'white-space: nowrap;overflow: hidden;text-overflow: ellipsis;' data-id='#: Id #' onclick = \"updatePosSellout('#: Id #')\">#: StatusText #</a>");
+                                                        })
+                                                        .HtmlAttributes(new { style = "height:100%;", onclick = "selectRow()" })
+                                                        .Scrollable()
+                                                        .Resizable(r => r.Columns(true))
+                                                        .Selectable(s => s.Mode(GridSelectionMode.Single))
+                                                        .DataSource(dataSource => dataSource
+                                                        .Ajax()
+                                                        .Read(read => read.Action("ListPosSellOut", "PosTabStatus").Data(ViewBag.refeId))
+                                                        ))
+            </div>
+            <div style="color:black;font-size:1.2rem;margin-top:3px">
+                <span>单击状态可以恢复沽清</span>
+                <span>单击项目名称可以在单位栏修改沽清的单位</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mainRight1">
+    <div class="mainRight1-list">
+        <div class="right-top-depart">
+            <ul>
+                <li style="background-color:#ffad3d">
+                    <a>
+                        <img src="~/Images/posInSingle/fanye.png" />
+                        <span>翻页</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="right-top-content">
+            <div class="top-content-list">
+                <ul>
+
+                    <li class="content-list-paging" style="margin-right: 20.6px; margin-bottom: 21.55px;">
+                        <a href="javascript:void(0)" onclick="getListPage(this,'1','/PosManage/PosInSingle/_ItemList','/PosManage/PosInSingle/GetItemTotal')">上一页</a>
+                        <a href="javascript:void(0)" onclick="getListPage(this,'2','/PosManage/PosInSingle/_ItemList','/PosManage/PosInSingle/GetItemTotal')">下一页</a>
+                    </li>
+                    <li class="content-list-return" style="margin-right: 20.6px; margin-bottom: 21.55px;"><a href="javascript:void(0)" onclick="returnParent()"><img src="/Images/posInSingle/fanh.png"><br>返回</a></li>
+                </ul>
+                <ul>
+                    <li class="content-list-unit">
+                        <a>
+                            <img src="/Images/posInSingle/fany.png" />
+                            <span>翻页</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //提示
+    function showtipsForSell(obj) {
+        layer.tips($(obj).attr("data-msg"), $(obj), {
+            tips: [$(obj).attr("data-position"), "#111"], //还可配置颜色
+        });
+    }
+    //关闭提示
+    function hidtipsForSell(obj) {
+        layer.closeAll('tips');
+    }
+    //读取单位
+    function selectRow() {
+        var grid = $("#grid").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length <= 0) {
+            return false;
+        }
+        var row = selectedRows[0];
+        var data = grid.dataItem(row);
+        var itemid = data["ItemId"];
+
+        $("#itemid").val(data["ItemId"]);
+
+        $("#itemCode").val(data["ItemCode"]);
+        $("#itemName").val(data["ItemName"]);
+
+        var listWidth = $(".top-content-list ul:nth-child(2)").width() - 1;
+        var liWidth = $(".top-content-list ul:nth-child(2) li").first().outerWidth(true);
+        var unitsize = parseInt(listWidth / liWidth) - 1;
+
+        $("#pageIndexPrice").val(1);
+
+        isHandle = true;
+
+        var model = {
+            Itemid: itemid,
+            PageIndex: $("#pageIndexPrice").val(),
+            PageSize: unitsize
+        };
+        $.ajax({
+            url: '@Url.Action("_ItemPriceList", "PosInSingle")',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#pageIndexPrice").val(model.PageIndex);
+                $(".top-content-list ul:nth-child(2)").remove();
+                $(".top-content-list ul").first().after(data);
+
+                getItemPriceTotal(model);
+                setItemPriceNull(model);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+                if (isHandle == true) {
+                    isHandle = false;
+                    setTimeout(function () { layer.closeAll('dialog'); }, 200);
+                }
+            }
+        });
+    }
+    var size = 22;
+    var refeId = $("#refeid").val();
+    $(function () {
+        initItemClass();
+    })
+    //初始化大类列表
+    function initItemClass() {
+        var listWidth = $(".right-top-depart ul").width() - 1;
+
+        var liWidth = $(".right-top-depart li").first().outerWidth(true);
+        var size = parseInt(listWidth / liWidth) - 1;
+        var model = {
+            Refeid: refeId,
+            PageIndex: 1,
+            PageSize: size
+        };
+
+        queryItemClass(model);
+        //$("#pageIndexClass").val(1);
+    }
+    //查询项目大类
+    function queryItemClass(model) {
+        $.ajax({
+            url: '@Url.Action("_ItemClassList", "PosInSingle")',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#pageIndexClass").val(model.PageIndex);
+                $(".right-top-depart ul").remove();
+                $(".right-top-depart").html(data);
+
+                $(".right-top-depart ul li:nth-child(1) a").first().click();
+                //填充空白部分
+                setItemClassNull(model);
+                //avgClassSpacing();
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //填充空白部分
+    function setItemClassNull(model) {
+        var html = "";
+        var liCount = $(".right-top-depart").find("li").length - 1;
+        if (parseInt(liCount) > 0 && parseInt(liCount) < parseInt(model.PageSize)) {
+            var count = parseInt(model.PageSize) - liCount;
+            for (var i = 0; i < count; i++) {
+                html += '<li style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+            }
+            if (liCount == 0) {
+                $(".right-top-depart li:nth-child(1)").before(html);
+            }
+            else {
+                $(".right-top-depart li:nth-child(" + liCount + ")").after(html);
+            }
+        }
+        else if (parseInt(liCount) <= 0) {
+            var count = parseInt(model.PageSize) - liCount;
+            for (var i = 0; i < count; i++) {
+                html += '<li style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+            }
+            if (liCount <= 0) {
+                $(".right-top-depart li:nth-child(1)").before(html);
+            }
+            else {
+                $(".right-top-depart li:nth-child(" + liCount + ")").after(html);
+            }
+        }
+    }
+    //大类翻页
+    function classPage() {
+        var listWidth = $(".right-top-depart ul").width() - 1;
+        var liWidth = $(".right-top-depart li").first().outerWidth(true);
+        var size = parseInt((listWidth - liWidth) / liWidth);
+
+        var index = parseInt($("#pageIndexClass").val());
+        
+        var total = parseInt($("#pageTotalClass").val());
+        var number = (total % size) > 0 ? parseInt(total / size) + 1 : parseInt(total / size);
+
+        
+        if (index < number) {
+            index += 1;
+            $("#pageIndexClass").val(index);
+        } else {
+            $("#pageIndexClass").val(1);
+        }
+        var model = {
+            Tabid: $("#tabid").val(),
+            Refeid: $("#refeid").val(),
+            PageIndex: $("#pageIndexClass").val(),
+            PageSize: size
+        };
+        queryItemClass(model);
+    }
+
+    //初始化消费项目
+    function initItem(itemClassid) {
+        $("#itemLevel").val("{}");
+        $(".right-top-depart li").removeClass("itemClassSelect");
+        var aTag = $(".right-top-depart a");
+        aTag.each(function () {
+            if ($(this).attr("data-id") == itemClassid) {
+                $(this).parents("li").addClass("itemClassSelect");
+            }
+        });
+
+        $("#itemClassid").val(itemClassid);
+        var model = {
+            Itemid: itemClassid,
+            Refeid: $("#refeid").val(),
+            PageIndex: 1,
+            PageSize: size
+        };
+        $("#itemLevel").val($("#itemLevel").val() + "|" + JSON.stringify(model));
+        queryList(model, '@Url.Action("_ItemList", "PosInSingle")', '@Url.Action("GetItemTotal", "PosInSingle")');
+
+        //  initItemPrice(0);
+    }
+
+    //通用列表查询
+    function queryList(model, listUrl, totalUrl) {
+        $.ajax({
+            url: listUrl,
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#pageIndexItem").val(model.PageIndex);
+                $(".top-content-list ul").first().remove();
+                $(".top-content-list ul").first().before(data);
+                getListTotal(model, totalUrl);
+
+                $(".top-content-list a span:nth-child(4)").hide();  //隐藏勾选状态
+                var liCount = $(".top-content-list ul").first().find("li").length - 2;
+
+                var html = "";  //填充空白部分
+                if (parseInt(liCount) >= 0 && parseInt(liCount) < parseInt(model.PageSize)) {
+                    count = Number(model.PageSize) - Number(liCount);
+                    for (var i = 0; i < count; i++) {
+                        html += '<li class="content-list-detail" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+                    }
+                    if (Number(model.Istagtype) === 0 || $(".tabStatusList").length > 0) {
+                        $(".top-content-list ul:first-child li:nth-last-child(2)").before(html);
+                    }
+                    else {
+                        $(".top-content-list ul:first-child li:nth-child(" + liCount + ")").after(html);
+                    }
+                }
+                else if (parseInt(liCount) <= 0) {
+                    var count = parseInt(model.PageSize) - liCount;
+
+                    for (var i = 0; i < count; i++) {
+                        html += '<li class="content-list-detail" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+                    }
+
+                    if (liCount <= 0) {
+                        $(".top-content-list ul:first-child li:nth-child(1)").before(html);
+                    }
+                    else {
+                        $(".top-content-list ul:first-child li:nth-child(" + liCount + ")").after(html);
+                    }
+                }
+
+                //  setItemStyle();
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //通用获取列表分页数据
+    function getListPage(obj, operation, listUrl, totalUrl) {
+        var index = parseInt($("#pageIndexItem").val());
+        var total = parseInt($("#pageTotalItem").val());
+        var number = (total % size) > 0 ? parseInt(total / size) + 1 : parseInt(total / size);
+
+        if (Number(operation) === 1) {
+            index -= 1;
+        }
+        else {
+            index += 1;
+        }
+        if (index < 1 || index > number) {
+            return false;
+        }
+        var itemClassid = $("#itemClassid").val();
+        var model = {
+            Itemid: itemClassid,
+            PageIndex: index,
+            Refeid: refeId,
+            PageSize: size
+        };
+        $("#itemLevel").val($("#itemLevel").val() + "|" + JSON.stringify(model));
+        queryList(model, listUrl, totalUrl);
+    }
+
+    //获取消费项目总数
+    function getItemTotal(model) {
+        $.ajax({
+            url: '@Url.Action("GetItemTotal", "PosInSingle")',
+            type: "post",
+            data: model,
+            dataType: "text",
+            success: function (data) {
+                $("#pageTotalItem").val(data);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+    //通用获取列表总数
+    function getListTotal(model, totalUrl) {
+        $.ajax({
+            url: totalUrl,
+            type: "post",
+            data: model,
+            dataType: "text",
+            success: function (data) {
+                $("#pageTotalItem").val(data);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //返回
+    function returnParent() {
+        var current = $("#itemLevel").val();
+        $("#pageIndexItem").val(parseInt($("#pageIndexItem").val()) - 1);
+        var levels = current.split('|');
+
+        if (levels.length > 2) {
+            var model = JSON.parse(levels[levels.length - 2]);
+            queryItem(model);
+
+            var value = "{}";
+            for (var i = 1; i < levels.length - 1; i++) {
+                value += "|" + levels[i];
+            }
+            current = $("#itemLevel").val(value);
+        }
+        else {
+            initItemClass();
+        }
+    }
+    //查询消费项目
+    function queryItem(model) {
+        $.ajax({
+            url: '@Url.Action("_ItemList", "PosInSingle")',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#pageIndexItem").val(model.PageIndex);
+                $(".top-content-list ul").first().remove();
+                $(".top-content-list ul").first().before(data);
+                getItemTotal(model);
+
+                var html = "";
+                var liCount = $(".top-content-list ul").first().find("li").length - 2;
+
+                if (parseInt(liCount) > 0 && parseInt(liCount) < parseInt(model.PageSize)) {
+
+                    var count = parseInt(model.PageSize) - liCount;
+
+                    for (var i = 0; i < count; i++) {
+                        html += '<li class="content-list-detail" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+                    }
+
+                    if (liCount == 0) {
+                        $(".top-content-list ul:first-child li:nth-child(1)").before(html);
+                    }
+                    else {
+                        $(".top-content-list ul:first-child li:nth-child(" + liCount + ")").after(html);
+                    }
+                }
+                else if (parseInt(liCount) <= 0) {
+                    var count = parseInt(model.PageSize) - liCount;
+
+                    for (var i = 0; i < count; i++) {
+                        html += '<li class="content-list-detail" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+                    }
+
+                    if (liCount <= 0) {
+                        $(".top-content-list ul:first-child li:nth-child(1)").before(html);
+                    }
+                    else {
+                        $(".top-content-list ul:first-child li:nth-child(" + liCount + ")").after(html);
+                    }
+                }
+
+                if (liCount == 1) {
+                    $(".top-content-list ul:first-child li:first-child a:first-child").trigger("click");
+
+                }
+               // avgItemSpacing();
+                $(".top-content-list a span:nth-child(4)").hide();
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //是否是分类
+    function isSubclass(obj) {
+        $("#unitid").val("");
+        var id = $(obj).attr("data-id");    //项目ID
+        var code = $(obj).attr("data-code");    //项目编码
+        var name = $(obj).attr("data-name");    //项目名称
+        $("#rowIndex").val(id);
+        var isClass = $(obj).attr("data-isclass");
+
+        if (Boolean(isClass) === true) {
+            $("#itemClassid").val(id);
+            var model = {
+                Itemid: id,
+                Refeid: refeId,
+                PageIndex: 1,
+                PageSize: size
+            };
+
+            $("#itemLevel").val($("#itemLevel").val() + "|" + JSON.stringify(model));
+            queryItem(model);
+            // setItemStyle();
+        }
+        else {
+            $("#itemid").val(id);
+
+            $("#itemCode").val(code);
+            $("#itemName").val(name);
+          //  initItemAction(id);
+            initItemPrice(id);
+            // setItemStyle();
+        }
+    }
+    function isSuite(obj)
+    {
+        isSubclass(obj);
+    }
+
+    //初始化单位价格
+    function initItemPrice(itemid) {
+        var listWidth = $(".top-content-list ul:nth-child(2)").width() - 1;
+        var liWidth = $(".top-content-list ul:nth-child(2) li").first().outerWidth(true);
+        var unitsize = parseInt(listWidth / liWidth) - 1;
+
+        $("#pageIndexPrice").val(1);
+
+        isHandle = true;
+
+        var model = {
+            Itemid: itemid,
+            PageIndex: $("#pageIndexPrice").val(),
+            PageSize: unitsize
+        };
+        $.ajax({
+            url: '@Url.Action("_ItemPriceList", "PosInSingle")',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#pageIndexPrice").val(model.PageIndex);
+                $(".top-content-list ul:nth-child(2)").remove();
+                $(".top-content-list ul").first().after(data);
+
+                getItemPriceTotal(model);
+                setItemPriceNull(model);
+                AddPosSellOut();
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+                if (isHandle == true) {
+                    isHandle = false;
+                    setTimeout(function () { layer.closeAll('dialog'); }, 200);
+                }
+            }
+        });
+    }
+    //填充空白部分
+    function setItemPriceNull(model) {
+        var html = "";
+        var liCount = $(".top-content-list ul:nth-child(2)").find("li").length - 1;
+
+        if (parseInt(liCount) > 0 && parseInt(liCount) < parseInt(model.PageSize)) {
+            var count = parseInt(model.PageSize) - liCount;
+            for (var i = 0; i < count; i++) {
+                html += '<li class="content-list-unit" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+            }
+            if (liCount == 0) {
+                $(".top-content-list ul:nth-child(2) li:nth-child(1)").before(html);
+            }
+            else {
+                $(".top-content-list ul:nth-child(2) li:nth-child(" + liCount + ")").after(html);
+            }
+        }
+        else if (parseInt(liCount) <= 0) {
+            var count = parseInt(model.PageSize) - liCount;
+            for (var i = 0; i < count; i++) {
+                html += '<li class="content-list-unit" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+            }
+            if (liCount <= 0) {
+                $(".top-content-list ul:nth-child(2) li:nth-child(1)").before(html);
+            }
+            else {
+                $(".top-content-list ul:nth-child(2) li:nth-child(" + liCount + ")").after(html);
+            }
+        }
+    }
+    //获取单位价格总数
+    function getItemPriceTotal(model) {
+        $.ajax({
+            url: '@Url.Action("GetItemPriceTotal", "PosInSingle")',
+            type: "post",
+            data: model,
+            dataType: "text",
+            success: function (data) {
+                $("#pageTotalPrice").val(data);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //添加沽清表
+    function AddPosSellOut() {
+        var model = {
+            itemId: $("#itemid").val(),
+            refeId: refeId,
+            unitId: $("#unitid").val(),
+            itemCode: $("#itemCode").val(),
+            itemName: $("#itemName").val()
+        };
+        $.ajax({
+            url: '@Url.Action("AddPosSellOut", "PosTabStatus")',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    $("#grid").data("kendoGrid").dataSource.read();
+                }
+                else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+    //点击单位增加数据
+    function selectUnit(obj) {
+        $("#unitid").val($(obj).attr("data-id"));
+        AddPosSellOut();   //往沽清表添加数据
+    }
+    //修改沽清表数据
+    function updatePosSellout(id) {
+        layer.confirm('是否恢复沽清?', { icon: 3, title: '提示', id: "removeSellout" },
+        function (index) {
+            $.ajax({
+                url: '@Url.Action("updatePosSellout", "PosTabStatus")',
+                type: "post",
+                data: { Id: id },
+                dataType: "json",
+                success: function (data) {
+                    if (data.Success) {
+                        $("#grid").data("kendoGrid").dataSource.read();
+                        layer.close(index);
+                    }
+                    else {
+                        layer.alert(data.Data, { title: "快点云Pos提示" });
+                    }
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        });
+    }
+</script>

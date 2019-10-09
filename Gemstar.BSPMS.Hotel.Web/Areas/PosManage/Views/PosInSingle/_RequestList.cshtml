@@ -1,0 +1,29 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPos.PosRequest>
+<ul>
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            <li id="AddHandWrite" class="content-list-detail">
+                <a href="javascript:void(0)" onclick="AddRequest('@Url.Action("_LetterInput","PosInSingle")')">
+                    <span style="font-size: 5rem;line-height: 5rem;">+</span>
+                </a>
+            </li>
+            foreach (var item in Model)
+            {
+                <li class="content-list-detail">
+                    <a href="javascript:void(0)" onclick="updateRequest(this)" data-id="@item.Id" data-name="@item.Cname" data-iTagOperator="@item.ITagOperator">
+                        <span>@item.Code</span>
+                        <span>@item.Cname</span>
+                        <span></span>
+                        <span></span>
+                    </a>
+                </li>
+            }
+            <li class="content-list-paging">
+                <a href="javascript:void(0)" onclick="getListPage(this,'1','@(Url.Action("_RequestList", "PosInSingle"))','@(Url.Action("GetRequestTotal", "PosInSingle"))')">上一页</a>
+                <a href="javascript:void(0)" onclick="getListPage(this,'2','@(Url.Action("_RequestList","PosInSingle"))','@(Url.Action("GetRequestTotal","PosInSingle"))')">下一页</a>
+            </li>
+        }
+        <li class="content-list-return" style=""><a href="javascript:void(0)" onclick="getRequestList(this,'@(Url.Action("_RequestList", "PosInSingle"))','@(Url.Action("GetRequestTotal", "PosInSingle"))')"><img src="~/Images/posInSingle/fanh.png" /><br />返回</a></li>
+    }
+</ul>

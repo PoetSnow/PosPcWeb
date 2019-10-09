@@ -1,0 +1,55 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Models.Account.AuthUserViewModel
+<script type="text/javascript">
+    function save_clicked(e) {
+        if (e) { e.preventDefault(); }
+        //check
+        var beginDate = $("#BeginDate").data("kendoDateTimePicker").value();
+        if (!beginDate) {
+            jAlert("请先选择生效时间");
+            return;
+        }
+        var endDate = $("#EndDate").data("kendoDateTimePicker").value();
+        if (!endDate) {
+            jAlert("请先选择失效时间");
+            return;
+        }
+        //save
+        $.post("@Url.Action("AuthSave")", { BeginDate: beginDate.ToDateTimeString(), EndDate: endDate.ToDateTimeString() }, function (data) {
+            if (data.Success) {
+                $("#AuthCode").text(data.Data);
+            } else {
+                jAlert(data.Data);
+            }
+        }, 'json');
+    }
+</script>
+
+<table id="authUserTable">
+    <tr>
+        <td>@Html.LabelFor(w=>w.BeginDate)</td>
+        <td>@Html.Kendo().DateTimePickerFor(w=>w.BeginDate).Min(DateTime.Now).Format("yyyy-MM-dd HH:mm:ss")</td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(w=>w.EndDate)</td>
+        <td>@Html.Kendo().DateTimePickerFor(w=>w.EndDate).Min(DateTime.Now).Format("yyyy-MM-dd HH:mm:ss")</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>@Html.Kendo().Button().Name("save").Content("生成登录授权码").Events(e=>e.Click("save_clicked"))</td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(w=>w.AuthCode)</td>
+        <td><span id="AuthCode" style="color:red"></span></td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(w=>w.UserName)</td>
+        <td>@Html.DisplayTextFor(w=>w.UserName)</td>
+    </tr>
+    <tr>
+        <td colspan="2">请将上述登录授权码给工程师远程协助解决问题</td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+</table>

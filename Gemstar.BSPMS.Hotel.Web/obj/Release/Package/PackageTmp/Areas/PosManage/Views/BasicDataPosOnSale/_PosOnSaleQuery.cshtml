@@ -1,0 +1,89 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosOnSale._PosonSaleQueryViewModel
+<div style="width:450px;height:auto;max-height:530px;margin-bottom:20px;overflow:auto;">
+    <table id="commonQueryTable">
+        <tr>
+            <td class="textright"> @Html.LabelFor(u => u.itemname, "项目名称")</td>
+            <td> @Html.Kendo().TextBoxFor(u => u.itemname).HtmlAttributes(new { style = "width:100%;" })</td>
+        </tr>
+
+        <tr>
+            <td class="textright"> @Html.LabelFor(u => u.unitid, "单位")</td>
+            <td> @Html.Kendo().DropDownListFor(u => u.unitid).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosUnitByModules", "BasicDataPosUnit", new { rnd = new Random().NextDouble() })); }).HtmlAttributes(new { style = "width:100%;" }).OptionLabel("请选择单位")</td>
+        </tr>
+
+        <tr>
+            <td class="textright"> @Html.LabelFor(u => u.refeid, "营业点")</td>
+            <td> @Html.Kendo().DropDownListFor(u => u.refeid).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosRefeByModules", "BasicDataPosRefe", new { rnd = new Random().NextDouble() })); }).HtmlAttributes(new { style = "width:100%;" }).OptionLabel("请选择营业点")</td>
+        </tr>
+
+        <tr>
+            <td class="textright"> @Html.LabelFor(u => u.tabid, "餐台类型")</td>
+            <td> @Html.Kendo().DropDownListFor(u => u.tabid).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListTab", "BasicDataPosOnSale", new { rnd = new Random().NextDouble() })); }).HtmlAttributes(new { style = "width:100%;" }).OptionLabel("请选择餐台类型")</td>
+        </tr>
+
+        <tr>
+            <td class="textright"> @Html.LabelFor(u => u.customerid, "客人类型")</td>
+            <td> @Html.Kendo().DropDownListFor(u => u.customerid).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("CustomerTypeList", "BasicDataPosOnSale", new { rnd = new Random().NextDouble() })); }).HtmlAttributes(new { style = "width:100%;" }).OptionLabel("请选择客人类型")</td>
+        </tr>
+
+
+        <tr>
+            <td class="textright"> @Html.LabelFor(u => u.iTagperiod, "日期类型")</td>
+            <td> @Html.Kendo().DropDownListFor(u => u.iTagperiod).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListiTagperiod", "BasicDataPosOnSale", new { rnd = new Random().NextDouble() })); }).HtmlAttributes(new { style = "width:100%;" }).OptionLabel("请选择日期类型")</td>
+        </tr>
+
+        <tr>
+            <td class="textright">  @Html.LabelFor(u => u.CmpType, "计算类型")</td>
+            <td> @Html.Kendo().DropDownListFor(u => u.CmpType).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListICmpType", "BasicDataPosOnSale", new { rnd = new Random().NextDouble() })); }).HtmlAttributes(new { style = "width:100%;" }).OptionLabel("请选择计算类型")</td>
+        </tr>
+
+        <tr>
+            <td class="textright"> @Html.LabelFor(u => u.StartTime, "开始时间")</td>
+            <td> @Html.Kendo().MaskedTextBoxFor(e => e.StartTime).Mask("00:00").Name("StartTime").Value(Model.StartTime).HtmlAttributes(new { style = "width:100%;" })</td>
+        </tr>
+
+        <tr>
+            <td class="textright">  @Html.LabelFor(u => u.Endtime, "结束时间")</td>
+            <td> @Html.Kendo().MaskedTextBoxFor(e => e.Endtime).Mask("00:00").Name("Endtime").Value(Model.Endtime).HtmlAttributes(new { style = "width:100%;" })</td>
+        </tr>
+
+        
+
+    </table>
+</div>
+@Html.ValidationSummary()
+<div style="text-align:center;margin-bottom:20px;">
+    <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+    <input type="button" class="k-primary k-button" id="closeEditFormButton" value="返回" />&nbsp; &nbsp;
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+       
+
+        $("#saveEditFormButton").click(function (e) {
+            $("#q_itemname").val($("#itemname").val());
+            $("#q_unitid").val($("#unitid").val())
+            $("#q_refeid").val($("#refeid").val())
+            $("#q_tabid").val($("#tabid").val())
+            $("#q_customerid").val($("#customerid").val())
+            
+            $("#q_iTagperiod").val($("#iTagperiod").val());
+            $("#q_CmpType").val($("#CmpType").val())
+            $("#q_StartTime").val($("#StartTime").val())
+            $("#q_Endtime").val($("#Endtime").val())
+           
+
+            isfirst = 0;
+
+
+            var grid = $("#gridItem").data("kendoGrid");
+            grid.dataSource.read();
+            closeGeneralWindow();
+        });
+        $("#closeEditFormButton").click(function () {
+            closeGeneralWindow();
+        })
+
+    });
+
+</script>

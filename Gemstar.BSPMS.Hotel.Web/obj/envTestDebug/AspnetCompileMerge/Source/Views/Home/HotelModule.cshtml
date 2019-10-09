@@ -1,0 +1,66 @@
+﻿@model String
+<ul style="display: table-cell;vertical-align: middle;">
+    @if (Model != null && Model.Contains("A1"))
+    {
+        <li>
+            <a href="javascript:void(0);" onclick="setSelectedValue(1)">
+                <img src="~/images/selectPos/lm.png" /><br /><br />
+                <span>楼面</span>
+            </a>
+        </li>
+    }
+    @if (Model != null && Model.Contains("A2"))
+    {
+        <li>
+            <a href="javascript:void(0);" onclick="setSelectedValue(2)">
+                <img src="~/images/selectPos/rd.png" /><br /><br />
+                <span>菜谱</span>
+            </a>
+        </li>
+    }
+    @if (Model != null && Model.Contains("A3"))
+    {
+        <li>
+            <a href="javascript:void(0);" onclick="setSelectedValue(3)">
+                <img src="~/images/selectPos/sy.png" /><br /><br />
+                <span>收银</span>
+            </a>
+        </li>
+    }
+    @if (Model != null && Model.Contains("A4"))
+    {
+        <li>
+            <a href="javascript:void(0);" onclick="setSelectedValue(4)">
+                <img src="~/images/selectPos/hx.png" /><br /><br />
+                <span>海鲜池</span>
+            </a>
+        </li>
+    }
+    @if (Model != null && Model.Contains("A5"))
+    {
+        <li>
+            <a href="javascript:void(0);">
+                <img src="~/images/selectPos/cc.png" /><br /><br />
+                <span>传菜</span>
+            </a>
+        </li>
+    }
+    @if (Model != null && Model.Contains("A6"))
+    {
+        <li>
+            <a href="javascript:void(0);" >
+                <img src="~/images/selectPos/pd.png" /><br /><br />
+                <span>排队</span>
+            </a>
+        </li>
+    }
+    @if (ViewBag.IsSystemSetup)
+    {
+        <li>
+            <a href="javascript:void(0);" onclick="setSelectedValue(7)">
+                <img src="~/images/selectPos/sz.png" /><br /><br />
+                <span>系统</span>
+            </a>
+        </li>
+    }
+</ul>

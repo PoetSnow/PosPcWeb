@@ -1,0 +1,93 @@
+﻿@model Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_query_cleaningMachineResult
+
+@{
+    ViewBag.Title = "Pos清机";
+}
+<link href="~/Content/Pos/posPublic.css?version=@ViewBag.Version" rel="stylesheet" />
+
+<style type="text/css">
+    table.editFormTable {
+        padding: 20px;
+        font-size: 16px;
+        position: relative;
+    }
+
+        table.editFormTable tr {
+            line-height: 40px;
+        }
+
+        table.editFormTable .textleft, table.editFormTable .textright {
+            width: auto;
+        }
+
+    form .formButtons {
+        margin: 0;
+        height: 47px;
+        position: relative;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.PosId)
+    <div style="color:#f20000;margin:10px 10px -10px 15px;font-size:16px;padding:0 10px">当前收银点下各营业点的餐台均已买单才能进行清机操作</div>
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.PosName)：</td>
+            <td class="textleft">@Model.PosName</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Business)：</td>
+            <td class="textleft">@Model.Business</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.NextBusiness)：</td>
+            <td class="textleft">@Model.NextBusiness</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <input type="button" value="确定" onclick="UpdateBusiness()" />
+        <input type="button" value="关闭" onclick="closeAllLayer()" />
+    </div>
+}
+<script type="text/javascript">
+
+    function closeAllLayer()
+    {
+        layer.closeAll();
+    }
+    //清机
+    function UpdateBusiness() {
+        var model = {
+            Id: '@Model.PosId',
+            Business: '@Model.Business',
+            NextBusiness: '@Model.NextBusiness',
+            PosName:'@Model.PosName'
+        };
+
+        $.ajax({
+            url: '@Url.Action("UpdateBusiness", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    layer.alert("清机成功", {
+                        title: "快点云Pos提示", btn: ['确定', '关闭'], btn1: function () {
+                            logout();
+                        }
+                    });
+                } else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+</script>

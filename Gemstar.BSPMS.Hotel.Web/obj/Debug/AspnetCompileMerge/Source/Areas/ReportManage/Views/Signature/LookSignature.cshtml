@@ -1,0 +1,203 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.Entities
+@{
+    Layout = "~/Areas/ReportManage/Views/Shared/_Layout.cshtml";
+}
+    <style type="text/css">
+        .leftdiv {
+            margin-left: 10px;
+            width: 30%;
+            display: inline-block;
+            height: 600px;
+            margin-top: 10px;
+        }
+
+        .rightdiv {
+            width: 64%;
+            float: right;
+        }
+        @@media print {
+            .leftdiv {
+                display:none;
+            }
+     } 
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            $("#sTypeList").val("@ViewBag.sType");
+            $("#grid").on("dblclick", ".k-grid-content tr", function (e) {
+                signatureClick(this);
+            });
+            if (window.screen) {
+                var myw = screen.availWidth;
+                var myh = screen.availHeight;
+                window.moveTo(0, 0);
+                window.resizeTo(myw, myh);
+            }
+            $(document).keyup(function (event) {
+
+                switch (event.keyCode) {
+                    case 27:
+                    case 96:
+                        colseSignature();
+                        break;
+
+                }
+            });
+            $("#regid,#roomid").keydown(function (e) {
+                if (e.keyCode == 13) {
+                    refreshSignatureList();
+                }
+            })
+            $("#sTypeList").change(function () {
+                refreshSignatureList();
+            })
+        })
+        function getRoomStatusQueryPara() {
+            var stype = $("#sTypeList").val();
+            var regid = $("#regid").val();
+            var roomid = $("#roomid").val();
+            var timeBegin = $("#depBeginDate").data("kendoDateTimePicker").value();
+            var timeEnd = $("#depEndDate").data("kendoDateTimePicker").value();
+            return {
+                sType: stype,
+                hid: "@ViewBag.hid",
+                userName: "@ViewBag.userName",
+                regid: regid,
+                roomid: roomid,
+                timeBegin: timeBegin,
+                timeEnd: timeEnd
+            };
+        }
+        function signatureClick(data) {
+            var select = $("#grid").data("kendoGrid").select();
+            var gridData = $("#grid").data("kendoGrid").dataItem(select);
+            var url = '@Url.Action("PdfSignature")' + "?url=" + gridData.Url;
+            var embed = '<iframe id="embedSignature" width="800" height="600" src="' + url + '" />';
+            $(".rightdiv").html(embed);
+
+        }
+        function grid_dataBound() {
+            var length = $("#grid").data("kendoGrid").dataSource.data().length
+            if (length > 0) {
+                var tr = $("#grid .k-grid-content tr:first");
+                $(tr).addClass("k-state-selected");
+                $(tr).attr("aria-selected", "true");
+                $(tr).trigger("dblclick");
+            }
+            else {
+                $(".rightdiv").hide();
+            }
+
+        }
+        function refreshSignatureList() {
+            var list = $("#grid").data("kendoGrid");
+            list.dataSource.page(1);
+        }
+        function colseSignature() {
+            window.open('', '_self', '');
+            window.close();
+        }
+        function deletePdf() {
+            var length = $("#grid").data("kendoGrid").dataSource.data().length
+            if (length > 0) {
+                var select = $("#grid").data("kendoGrid").select();
+                var gridData = $("#grid").data("kendoGrid").dataItem(select);
+                console.log(gridData.Id);
+                var gnl = confirm("确定要删除此签名?");
+                if (gnl == true) {
+                    $.post("@Url.Action("DeletePdf")", { url: gridData.Url, hid: "@ViewBag.hid", userName: "@ViewBag.userName", id: gridData.Id }, function (data) {
+                        if (data.Success) {
+                            alert("删除成功");
+                            refreshSignatureList();
+                        }
+                        else {
+                            alert("删除失败：此签名不存在");
+                        }
+                    })
+                }
+            }
+            else
+                alert("没有可以删的数据");
+        }
+        function printPdf() {
+            //$("#embedSignature")[0].contentWindow.print();
+            var url = document.getElementById("embedSignature").src + "&isPrint=1";
+            win = window.open(url);
+            //win .location = url;
+            //setTimeout(function () {
+            //    win.print();
+            //}, 500)
+           
+        }
+    </script>
+    <div style="margin:10px;z-index:999">
+        <span class="orderCondition">
+            <label for="depBeginDate">签名时间从</label>
+            @(Html.Kendo().DateTimePicker().Name("depBeginDate"))
+            <label for="depEndDate">至</label>
+            @(Html.Kendo().DateTimePicker().Name("depEndDate"))
+        </span>
+        <span class="orderCondition">
+            <label for="orderNo">签名类型</label>
+            @(Html.Kendo().DropDownList().Name("sTypeList").OptionLabel("全部").DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetIsSelectList", "Signature", new { rnd = new Random().NextDouble() })); }))
+        </span>
+        <span class="orderCondition">
+            <label for="orderNo">账号</label>
+            @(Html.Kendo().TextBox().Name("regid"))
+        </span>
+        <span class="orderCondition">
+            <label for="orderNo">房号</label>
+            @(Html.Kendo().TextBox().Name("roomid"))
+        </span>
+        
+        <input type="button" class="k-button" onclick="refreshSignatureList()" value="查询" />
+        <input type="button" class="k-button" onclick="printPdf()" value="打印" />
+        @if (ViewBag.signature == "True")
+        {
+            <input type="button" value="删除"  class="k-button" onclick="deletePdf()" />
+        }
+        @if (!string.IsNullOrWhiteSpace(ViewBag.sType))
+        {
+        <input type="button" value="关闭" class="k-button" onclick="colseSignature()" />
+        }
+       
+    </div>
+
+
+    <div class="leftdiv">
+       
+        @(Html.Kendo().Grid<SignatureLog>()
+          .Name("grid")
+           .Pageable(pageable => pageable.PageSizes(Gemstar.BSPMS.Common.Tools.CommonHelper.PageSizes))
+           .Pageable(pageable => pageable.Messages(c => c.ItemsPerPage("")))
+           .HtmlAttributes(new { style="height:580px;"})
+           .Sortable()
+           .Filterable()
+           .ColumnMenu()
+           .Selectable(s => s.Mode(GridSelectionMode.Single))
+           .DataSource(c =>
+           {
+               c.Ajax().Read(r => r.Action("GetLookSignature", "Signature", new { area = "ReportManage" }).Data("getRoomStatusQueryPara")).PageSize(10);
+           })
+   .Columns(c =>
+   {
+
+       c.Bound(w => w.Regid).Title("账号").Width("20%");
+       c.Bound(w => w.RoomNo).Title("房号").Width("20%");
+       c.Bound(w => w.SDate).Title("时间").ClientTemplate("#:SDate.ToDateTimeString()#");
+       c.Bound(w => w.Url).Hidden();
+       c.Bound(w => w.Id).Hidden();
+   })
+   //.HtmlAttributes(new { @class = "leftdiv" })
+   .Scrollable(c => c.Height("100%").Enabled(true))
+    .Events(e => e.DataBound("grid_dataBound"))
+        )
+     <div>
+         <span class="red-color">双击显示电子签名</span>
+     </div>
+    </div>
+    
+    <div class="rightdiv">
+      
+    </div>
+    

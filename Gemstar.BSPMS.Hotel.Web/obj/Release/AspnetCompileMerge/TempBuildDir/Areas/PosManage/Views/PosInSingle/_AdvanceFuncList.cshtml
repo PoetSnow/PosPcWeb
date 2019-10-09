@@ -1,0 +1,25 @@
+﻿
+@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPos.PosAdvanceFunc>
+<ul>
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <li class="content-list-detail" onclick="advanced('@item.FuncCode')">
+                    <a href="javascript:void(0)"  >
+                        <span>@item.FuncCode</span>
+                        <span>@item.Name1</span>
+                        <span>&nbsp;</span>
+                        <span><i class="fa fa-check"></i></span>
+                    </a>
+                </li>
+            }
+            <li class="content-list-paging">
+                <a href="javascript:void(0)" onclick="getListPage(this,'1','@(Url.Action("_AdvanceFuncList", "PosInSingle"))','@(Url.Action("GetActionTotal", "PosInSingle"))')" data-id="@ViewBag.ActionTypeId">上一页</a>
+                <a href="javascript:void(0)" onclick="getListPage(this,'2','@(Url.Action("_AdvanceFuncList","PosInSingle"))','@(Url.Action("GetActionTotal","PosInSingle"))')" data-id="@ViewBag.ActionTypeId">下一页</a>
+            </li>
+        }
+        <li class="content-list-return" style=""><a href="javascript:void(0)" onclick="getActionTypeList(this,'@(Url.Action("_ActionTypeList", "PosInSingle"))','@(Url.Action("GetActionTypeTotal", "PosInSingle"))')"><img src="~/Images/posInSingle/fanh.png" /><br />返回</a></li>
+    }
+</ul>

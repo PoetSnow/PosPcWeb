@@ -1,0 +1,226 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+
+    .xmdl {
+        background-color: #eeb900;
+    }
+
+    .xmfl {
+        background-color: rgb(255, 200, 0);
+    }
+
+    .k-link.k-state-selected, .k-state-selected {
+        color: #333;
+    }
+</style>
+<script type="text/javascript">
+
+    function grid_dataBoundEnded() {
+
+        var grid = $("#grid").data("kendoGrid");
+        var dataRows = grid.items();
+        for (var i = 0; i < dataRows.length; i++) {
+            var row = grid.tbody.find(">tr:not(.k-grouping-row)").eq(i);
+            var dataRow = grid.dataItem(dataRows[i]);
+            //根据状态修改背景色
+            if (dataRow["isSubClass"] ==="是" ) {
+                row.addClass("xmfl");
+            }
+
+        }
+    }
+   
+</script>
+@{
+    ViewBag.Title = "Pos库存物品";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var colsDefault = new List<GridColumnSetting>
+    {
+        new GridColumnSetting {Name = "Code", Title = "项目代码", Hidden = false, Order = 1, Width = 0 },
+        new GridColumnSetting {Name = "Cname", Title = "中文名称", Hidden = false, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "Ename", Title = "英文名称", Hidden = false, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "Oname", Title = "名称三", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "IndexNo", Title = "检索码", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "PYCode", Title = "拼音码", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "Barcode", Title = "条形码", Hidden = false,Order = 1, Width = 0},
+
+        new GridColumnSetting {Name = "ItemClassName", Title = "项目大类", Hidden = false,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "SubClassName", Title = "项目分类", Hidden = false,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isSubClass", Title = "是否分类", Hidden = false, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "DeptClassName", Title = "部门类别", Hidden = false, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "RequestName", Title = "默认要求", Hidden = false, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "PreferDiscount", Title = "优先折扣", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "CookID", Title = "默认厨师", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "prodName", Title = "出品名称", Hidden = false,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "Unit", Title = "单位名称", Hidden = false,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "Price", Title = "价格", Hidden = false,Order = 1, Width = 0},
+
+        new GridColumnSetting {Name = "taxRate", Title = "增值税率", Hidden = true, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "statusName", Title = "状态", Hidden = false, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "itemTaxid", Title = "发票开票项目", Hidden = true, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isAvoidOpenItem", Title = "免开台项目", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isLimit", Title = "是否计最低消费", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isAvoidLimit", Title = "免全单最低消费", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isService", Title = "是否收服务费", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isDiscount", Title = "是否可折", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isLargess", Title = "是否可赠送", Hidden = true,Order = 1, Width = 0},
+
+        new GridColumnSetting {Name = "isLgService", Title = "赠送服务费", Hidden = true, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isQuan", Title = "数量", Hidden = true, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isHandWrite", Title = "是否手写单", Hidden = true, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isInput", Title = "是否可手工录入手写菜名", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isSuite", Title = "是否套餐", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isFeast", Title = "是否酒席", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isUserDefined", Title = "套餐或酒席自定义", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isSeaFood", Title = "是否海鲜", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isWeight", Title = "是否称重", Hidden = true,Order = 1, Width = 0},
+
+        new GridColumnSetting {Name = "isSort", Title = "上榜", Hidden = true, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isAutoAction", Title = "显示作法", Hidden = true, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "orderActionName", Title = "点作法选项", Hidden = true, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isCurrent", Title = "时价菜", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isTea", Title = "是否茶位费", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isAutoSellout", Title = "自动沽清", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isSelfhelp", Title = "是否自助餐", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isFreq", Title = "主打菜", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isCash", Title = "收银台商品", Hidden = true,Order = 1, Width = 0},
+
+        new GridColumnSetting {Name = "isNosh", Title = "是否点心", Hidden = true, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isOrderPrt", Title = "是否打点菜单", Hidden = true, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isDiy", Title = "自选菜", Hidden = true, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isStock", Title = "减库存", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isMbrBaseamt", Title = "会员本金", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isWineBar", Title = "酒水", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isSale", Title = "推销员", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isEra", Title = "代收", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isSplit", Title = "是否分摊金额", Hidden = true,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isPresent", Title = "是否计提成", Hidden = true,Order = 1, Width = 0},
+
+        new GridColumnSetting {Name = "isScore", Title = "是否积分", Hidden = true, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isWxShow", Title = "微信显示", Hidden = true, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "isPaidShow", Title = "IPAD显示", Hidden = true, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "moduleName", Title = "模块", Hidden = false,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "Seqid", Title = "排列顺序", Hidden = false,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "Remark", Title = "备注", Hidden = false,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "OperName", Title = "操作员", Hidden = false,Order = 1, Width = 0},
+        new GridColumnSetting {Name = "ModifiedDate", Title = "修改时间", Hidden = false,Order = 1, Width = 0}
+
+    };
+    var gridViewModel = new KendoGridCustomDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        StatusColumnName = "Status",
+        EnableFunctionForEnable = true,
+        EnableFunctionForDisable = true,
+        EnableScrollable = true,
+        Area = "PosManage",
+        Controller = "BasicDataPosCostItem",
+        Action = "Index",
+        DefaultColumnSettings = colsDefault,
+        CustomToolbar = c =>
+        {
+            c.Template(@<text>
+        <a class="k-button k-button-icontext k-grid-btnManageGridColumns" href="javascript:void(0);" id="btnManageGridColumns" onclick="btnManageGridColumnsClicked('grid')" style="float:right;margin-right:40px;"><span></span>设置列</a>
+        <a class="k-button k-button-icontext k-grid-commonQuery" href="javascript:void(0);" onclick="showCommonQueryWindow()"><span class="k-icon k-i-search"></span>查询</a><a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addGridItem()"><span class="k-icon k-add"></span>增加</a>
+        <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="batchDelete('grid', 'id', '/PosManage/BasicDataPosCostItem/BatchDelete')"><span class="k-icon k-i-unpin"></span>删除</a>
+        @*<a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addOtherItems('grid', 'id', '/PosManage/BasicDataPosCostItem/AddPosItemOther')"><span class="k-icon k-add"></span>增加其他属性</a>*@
+        <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="copyOtherItems('grid', 'id')"><span class="k-icon k-add"></span>复制</a>
+        <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="editAllItem()"><span class="k-icon k-add"></span>批量修改</a>
+        <a class="k-button k-button-icontext k-grid-enable" href="javascript:void(0);" onclick="enable('grid', 'id', '/PosManage/BasicDataPosCostItem/Enable')"><span class="k-icon k-i-unlock"></span>启用</a>
+       <a class="k-button k-button-icontext k-grid-disable" href="javascript:void(0);" onclick="disable('grid', 'id', '/PosManage/BasicDataPosCostItem/Disable')"><span class="k-icon k-i-lock"></span>禁用</a>
+        <a class="k-button-icontext k-grid-comfirmtextone" href="javascript:void(0);" id="comfirmtextone" style="color:red;margin-top:9px;margin-left:10px;cursor:default;"><span></span>双击可修改</a>
+            </text>);
+        }
+    };
+
+}
+<script src="~/Scripts/layer-v3.1.1/layer.js"></script>
+@Html.Partial("_KendoGridCustomDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+    $(function () {
+        window.onresize = onResize; onResize();
+        $("#comfirmtext").removeClass("k-button");
+        $("#comfirmtextone").removeClass("k-button");
+    });
+    function gridread() {
+        $("#grid").data("kendoGrid").dataSource.read();
+    }
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 145;
+        $("#grid .k-grid-content").height(allHeight - showHeight);
+    }
+
+    function addOtherItems(gridId, keyName, url) {
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要增加的数据行");
+        } else if (selectedRows.length == 1) {
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+            top.openKendoWindow("增加其他属性", url + "?id=" + data[keyName]);
+        }
+        else {
+            jAlert("请选择一行数据行");
+        }
+    }
+    //复制数据
+    function copyOtherItems(gridId, keyName, url) {
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要复制的数据行");
+        }
+        else if (selectedRows.length == 1) {
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+            console.log(data[keyName]);
+            var model = {
+                id: data[keyName]
+            }
+            $.ajax({
+                url: 'BasicDataPosCostItem/CopyPostItemOther',
+                type: "post",
+                data: model,
+                dataType: "json",
+                success: function (rDate) {
+                    if (rDate.Success) {
+                        if (rDate.Data != "") {
+                            top.openKendoWindow("修改" + "Pos库存物品", "/PosManage/BasicDataPosCostItem/Edit", { id: rDate.Data.Id });
+
+                        }
+                    } else {
+                        jAlert(rDate.Data, { title: "快点云Pos提示" });
+                    }
+                },
+                error: function (rDate) {
+                    jAlert(rDate.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+        else {
+            jAlert("请选择一行数据行");
+        }
+    }
+    //批量修改
+    function editAllItem()
+    {
+        top.openKendoWindow("批量修改库存物品", "/PosManage/BasicDataPosCostItem/_EditAll");
+    
+    }
+</script>

@@ -1,0 +1,396 @@
+﻿@model Gemstar.BSPMS.Hotel.Services.Entities.MbrCard
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@{
+    ViewBag.Title = "会员详情";
+    MbrCardBalance BalanceModel = ViewBag.CardBalance as MbrCardBalance;
+    if (BalanceModel == null) { BalanceModel = new MbrCardBalance(); }
+}
+
+@section headerContent{
+    <style type="text/css">
+        .k-pager-info {
+            color: black;
+            float: none;
+        }
+
+        .k-grouping-header {
+            color: #004793;
+            font-size: 14px;
+            text-align: center;
+            padding: 0px;
+        }
+
+        .k-pager-wrap {
+            background-color: #ffffff;
+            border-top: 0px;
+        }
+
+        th.k-header {
+            background-color: #ffffff;
+        }
+
+        .k-button {
+            width: 90px;
+        }
+
+        table td {
+            padding-top: 3px;
+            padding-bottom: 3px;
+        }
+
+        .k-grid td {
+            padding-top: 7px;
+            padding-bottom: 7px;
+        }
+
+        .k-grid-header th.k-header {
+            padding-bottom: 8px;
+            padding-top: 9px;
+        }
+
+        .td {
+            width: 200px;
+        }
+    </style>
+}
+
+<div id="@(ViewBag.viewType ? "dataDiv" : "")">
+    @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
+    {
+        <h2>@ViewBag.Message</h2>
+    }
+    @if (Model != null)
+    {
+        @Html.HiddenFor(m => m.Id)
+        <table style="width:100%;">
+            <tr>
+                <td style="vertical-align:top;">
+                    <form>
+                        <fieldset>
+                            <legend>会员信息</legend>
+                            <table class="editFormTable">
+                                <tr>
+                                    <td class="textright">姓名:</td>
+                                    <td class="td">@Model.GuestName</td>
+                                    <td class="textright">性别:</td>
+                                    <td class="td">
+                                        @{var GenderList = (ViewBag.GenderSelectList as List<SelectListItem>);}
+                                        @if (GenderList != null)
+                                        {
+                                            foreach (SelectListItem item in GenderList)
+                                            {
+                                                if (item.Value == Model.Gender)
+                                                {
+                                                    @item.Text
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                    <td class="textright">手机号:</td>
+                                    <td class="td">@Model.Mobile</td>
+                                    <td class="textright">生日:</td>
+                                    <td class="td">@(Model.Birthday == null ? "" : ((DateTime)Model.Birthday).ToString("yyyy-MM-dd"))</td>
+                                </tr>
+                                <tr>
+                                    <td class="textright">QQ号:</td>
+                                    <td class="td">@Model.Qq</td>
+                                    <td class="textright">微信号:</td>
+                                    <td class="td">@Model.Weixin</td>
+                                    <td class="textright">证件类型:</td>
+                                    <td class="td">@Model.CerType</td>
+                                    <td class="textright">证件号:</td>
+                                    <td class="td">@Model.Cerid</td>
+                                </tr>
+                                <tr>
+                                    <td class="textright">邮箱:</td>
+                                    <td class="td">@Model.Email</td>
+                                    <td class="textright">车牌号:</td>
+                                    <td class="td">@Model.CarNo</td>
+                                    <td class="textright">入会日期:</td>
+                                    <td class="td">@(Model.JoinDate == null ? "" : ((DateTime)Model.JoinDate).ToString("yyyy-MM-dd"))</td>
+                                    <td class="textright">籍贯:</td>
+                                    <td colspan="3">@Model.City</td>
+                                </tr>
+                                <tr>
+                                    @if (ViewBag.isallowOwner)
+                                    {
+                                        <td class="textright">是否业主:</td>
+                                        <td colspan="1">@(Model.IsOwner == true ? "是" : "否")</td>
+                                    }
+                                    <td class="textright">业务员:</td>
+                                    <td class="td" colspan="1">@Model.Sales</td>
+                                    <td class="textright">地址:</td>
+                                    <td colspan="3">@Model.Address</td>
+                                </tr>
+                                <tr>
+                                    <td class="textright">兴趣爱好:</td>
+                                    <td colspan="3">@Model.Interest</td>
+                                    <td class="textright">备注:</td>
+                                    <td colspan="3">@Model.Remark</td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                        <fieldset>
+                            <legend>卡信息</legend>
+                            <table class="editFormTable">
+                                <tr>
+                                    <td class="textright">卡类型:</td>
+                                    <td class="td">
+                                        @{var MbrCardTypeList = (ViewBag.MbrCardTypeSelectList as SelectList);}
+                                        @if (MbrCardTypeList != null)
+                                        {
+                                            foreach (KeyValuePair<string, string> item in MbrCardTypeList.Items)
+                                            {
+                                                if (item.Key == Model.MbrCardTypeid)
+                                                {
+                                                    @item.Value
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                    <td class="textright">卡号:</td>
+                                    <td class="td">@Model.MbrCardNo</td>
+                                    <td class="textright">感应卡号:</td>
+                                    <td class="td">@Model.InductionCar</td>
+                                    <td class="textright">主卡号:</td>
+                                    <td class="td">@Model.MasterCardNo</td>
+
+                                </tr>
+                                <tr>
+                                    <td class="textright">有效期:</td>
+                                    <td class="td">@(Model.ValidDate == null ? "" : ((DateTime)Model.ValidDate).ToString("yyyy-MM-dd"))</td>
+                                    <td class="textright">审核状态:</td>
+                                    <td class="td">@(Model.IsAudit == true ? "已审核" : "未审核")</td>
+
+                                    <td class="textright">卡状态:</td>
+                                    <td class="td">
+                                        @{var StatusList = (ViewBag.StatusSelectList as List<SelectListItem>);}
+                                        @if (StatusList != null)
+                                        {
+                                            foreach (SelectListItem item in StatusList)
+                                            {
+                                                if ((byte.Parse(item.Value)) == Model.Status)
+                                                {
+                                                    @item.Text
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                    <td class="textright">发展来源:</td>
+                                    <td>@Model.Source</td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                        <fieldset>
+                            <legend>发票信息</legend>
+                            <table class="editFormTable">
+                                <tr>
+                                    <td class="textright">发票类型:</td>
+                                    <td class="td">
+                                        @if (Model.TaxType == (byte)Gemstar.BSPMS.Common.Enumerator.InvoiceType.Nomal)
+                                        {
+                                            @Gemstar.BSPMS.Common.Extensions.EnumExtension.GetDescription(Gemstar.BSPMS.Common.Enumerator.InvoiceType.Nomal)
+                                        }
+                                        else if (Model.TaxType == (byte)Gemstar.BSPMS.Common.Enumerator.InvoiceType.Special)
+                                        {
+                                            @Gemstar.BSPMS.Common.Extensions.EnumExtension.GetDescription(Gemstar.BSPMS.Common.Enumerator.InvoiceType.Special)
+                                        }
+                                    </td>
+                                    <td class="textright">税务登记号:</td>
+                                    <td class="td">@Model.TaxNo</td>
+                                    <td class="textright">发票抬头:</td>
+                                    <td class="td">@Model.TaxName</td>
+                                    <td class="textright"></td>
+                                    <td class="td"></td>
+                                </tr>
+                                <tr>
+                                    <td class="textright">发票银行和账号:</td>
+                                    <td colspan="3">@Model.TaxBankAccount</td>
+                                    <td class="textright">发票地址和电话:</td>
+                                    <td colspan="3">@Model.TaxAddTel</td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                        <fieldset>
+                            <legend>短信信息</legend>
+                            <table class="editFormTable">
+                                <tr>
+                                    <td class="textright">接收交易短信:</td>
+                                    <td colspan="3" style="padding-top:8px">@Html.CheckBoxFor(m => m.IsTransactionMsg, new { @disabled = "disabled" })</td>
+                                    <td class="textright">接收营销短信:</td>
+                                    <td colspan="3" style="padding-top:8px">@Html.CheckBoxFor(m => m.IsAdvertisementMsg, new { @disabled = "disabled" })</td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                        <div class="formButtons">
+                            <button class="k-primary k-button" id="changeCardNoFormButton" type="button" onclick="editMbrCard(this, 'MbrCardNo','@Url.Action("ChangeCardNum")')">换卡号</button>
+                            <button class="k-primary k-button" id="changeCardTypeFormButton" type="button" onclick="editMbrCardNew(this,'@Url.Action("ChangeLevel")')">升级卡类型</button>
+                            <button class="k-primary k-button" id="changeCardStatusFormButton" type="button" onclick="editMbrCard(this, 'Status','@Url.Action("UpdateCardStatus")')">变更卡状态</button>
+                            <button class="k-primary k-button" id="changeCardAuditFormButton" type="button" onclick="editMbrCard(this, 'IsAudit','@Url.Action("Inspect")')">审核</button>
+                            <button class="k-primary k-button" id="validDateFormButton" type="button" onclick="editMbrCard(this, 'ValidDate','@Url.Action("BatchDelay")')">延期</button>
+                            <button class="k-primary k-button" id="changeCardSalesFormButton" type="button" onclick="editMbrCard(this, 'Sales','@Url.Action("ReplaceSalesman")')">更换业务员</button>
+                            <button class="k-primary k-button" id="editFormButton" type="button" onclick="editGridItem()">修改</button>
+                            <button class="k-primary k-button" id="selectChangeRecordFormButton" type="button" onclick="editMbrCardRecord(this,'@Url.Action("Index", "MbrCardLogManage")')">变更记录</button>
+                        </div>
+                    </form>
+                </td>
+                <td style="width:8px;"></td>
+                <td style="vertical-align:top;padding-top:15px;width:487px;">
+                    <form>
+                        <div class="k-grid k-widget">
+                            <div class="k-grouping-header" style="background-color:#3D73CD;color:#ffffff;padding-top:4px;padding-bottom:4px;">账务信息</div>
+                            <div class="k-grid-header" style="padding-right:0px;">
+                                <div class="k-grid-header-wrap k-auto-scrollable">
+                                    <table>
+                                        <colgroup>
+                                            <col style="width:63px;">
+                                            <col style="width:40px;">
+                                            <col style="width:127px;">
+                                            <col style="width:127px;">
+                                            <col style="width:127px;">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th class="k-header">项目</th>
+                                                <th class="k-header">单位</th>
+                                                <th class="k-header" style="text-align:center;">累计充值/获得</th>
+                                                <th class="k-header" style="text-align:center;">累计使用</th>
+                                                <th class="k-header" style="text-align:center;">可用余额/数量</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="k-grid-content" style="overflow-y:hidden;">
+                                <table>
+                                    <colgroup>
+                                        <col style="width:63px;">
+                                        <col style="width:40px;">
+                                        <col style="width:127px;">
+                                        <col style="width:127px;">
+                                        <col style="width:127px;">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <td>储值金额</td>
+                                            <td>元</td>
+                                            <td style="text-align:right;">@BalanceModel.BalanceGet</td>
+                                            <td style="text-align:right;">@BalanceModel.BalanceUse</td>
+                                            <td style="text-align:right;">@BalanceModel.Balance</td>
+                                        </tr>
+                                        <tr>
+                                            <td>增值金额</td>
+                                            <td>元</td>
+                                            <td style="text-align:right;">@BalanceModel.FreeGet</td>
+                                            <td style="text-align:right;">@BalanceModel.FreeUse</td>
+                                            <td style="text-align:right;">@BalanceModel.Free</td>
+                                        </tr>
+                                        <tr>
+                                            <td>积分</td>
+                                            <td>分</td>
+                                            <td style="text-align:right;">@BalanceModel.ScoreGet</td>
+                                            <td style="text-align:right;">@BalanceModel.ScoreUse</td>
+                                            <td style="text-align:right;">@BalanceModel.Score</td>
+                                        </tr>
+                                        <tr>
+                                            <td>业主分</td>
+                                            <td>分</td>
+                                            <td style="text-align:right;">@BalanceModel.scoreOwnerGet</td>
+                                            <td style="text-align:right;">@BalanceModel.scoreOwnerUse</td>
+                                            <td style="text-align:right;">@BalanceModel.scoreOwner</td>
+                                        </tr>
+                                        <tr>
+                                            <td>现金券</td>
+                                            <td>元</td>
+                                            <td style="text-align:right;">@BalanceModel.CashTicketGet</td>
+                                            <td style="text-align:right;">@BalanceModel.CashTicketUse</td>
+                                            <td style="text-align:right;">@BalanceModel.CashTicket</td>
+                                        </tr>
+                                        <tr>
+                                            <td>项目券</td>
+                                            <td>张</td>
+                                            <td style="text-align:right;">@BalanceModel.ItemTicketGet</td>
+                                            <td style="text-align:right;">@BalanceModel.ItemTicketUse</td>
+                                            <td style="text-align:right;">@BalanceModel.ItemTicket</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="k-pager-wrap k-grid-pager k-widget k-floatwrap" style="padding-top:6px; padding-bottom:6px;">
+                                <a class="k-link k-pager-nav k-state-disabled k-pager-first" style="height:34px;line-height:34px;width:193.250px;text-align: left;">
+                                    <span class="k-pager-info k-label">最近离店：@(BalanceModel.LastIn == null || BalanceModel.LastIn == DateTime.MinValue ? "" : BalanceModel.LastIn.Value.ToString(Gemstar.BSPMS.Common.Extensions.DateTimeExtension.DateTimeWithoutSecondFormatStr))</span>
+                                </a>
+                                <a class="k-link k-pager-nav k-state-disabled" style="height:34px;line-height:34px;width:120.125px;text-align: left;">
+                                    <span class="k-pager-info k-label">入住次数：@(BalanceModel.Nigths == null ? "" : BalanceModel.Nigths.Value.ToString("F0"))</span>
+                                </a>
+                                <a class="k-link k-pager-nav k-state-disabled k-pager-last" style="height:34px;line-height:34px;width:158.203px;text-align: left;">
+                                    <span class="k-pager-info k-label">累计消费：@BalanceModel.Amounts</span>
+                                </a>
+                            </div>
+
+                        </div>
+                        <div>
+                            <span class="red-color">双击账务信息进入交易详情</span>
+                        </div>
+                        <div class="formButtons">
+                            <button class="k-primary k-button" id="rechargeFormButton" type="button" onclick="editMbrCardNew(this,'@Url.Action("Recharge")')">会员充值</button>
+                            <button class="k-primary k-button" id="deductMoneyFormButton" type="button" onclick="editMbrCardNew(this,'@Url.Action("SubtractMoney")')">会员扣款</button>
+                            <button class="k-primary k-button" id="changeScoreFormButton" type="button" onclick="editMbrCardNew(this,'@Url.Action("ChangeScore")')">积分调整</button>
+                            <button class="k-primary k-button" id="scoreUseFormButton" type="button" onclick="editMbrCardNew(this,'@Url.Action("ScoreUse")')">积分兑换</button>
+                            <br />
+                            <button class="k-primary k-button" id="selectTransactionRecordFormButton" type="button" onclick="editMbrCardRecord(this,'@Url.Action("Index", "MbrCardCaManage")')" style="margin-top:4px;">交易记录</button>
+                            <button class="k-primary k-button" id="selectConsumptionRecordFormButton" type="button" onclick="editMbrCardRecord(this,'@Url.Action("Index", "MbrCardTransManage")')" style="margin-top:4px;">消费记录</button>
+                            <button class="k-primary k-button" id="scoreUseRecordFormButton" type="button" onclick="editMbrCardRecord(this,'@Url.Action("Index", "MbrCardScoreUseManage")')" style="width:auto;margin-top:4px;">积分兑换记录</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        </table>
+
+                                            }
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        function editMbrCard(obj, type, url) {
+            top.openKendoWindow($(obj).text(), url, { id: $("#Id").val(), type: type });
+        }
+        function editMbrCardNew(obj, url) {
+            top.openKendoWindow($(obj).text(), url, { id: $("#Id").val() });
+        }
+        function editMbrCardRecord(obj, url) {
+            var text = $(obj).text();
+            var menuId = "", menuName = "";
+            if (text == "交易记录") {
+                menuId = "30001_8589934592";
+            }
+            else if (text == "消费记录") {
+                menuId = "30001_17179869184";
+            }
+            else if (text == "积分兑换记录") {
+                menuId = "30001_34359738368";
+            }
+            else if (text == "变更记录") {
+                menuId = "30001_4294967296"
+            }
+            menuName = text;
+            top.openIframeKendoWindow(text, url, { profileId: $("#Id").val() }, menuId, menuName);
+        }
+        function editGridItem() {
+            top.openKendoWindow("修改会员", "@Url.Action("Edit")", { id: $("#Id").val() });
+        }
+        $(document).on("dblclick", ".k-grid-content tr", function (e) {
+            e.preventDefault();
+            var name = $(this).find("td:first").text();
+            $.post('@Url.Action("GetProfileType", "MbrCardCaManage")', { name: name }, function (data) {
+                if (data.Success) {
+                    top.openIframeKendoWindow("交易记录", '@Url.Action("Index", "MbrCardCaManage")', { profileId: $("#Id").val(), profileType: data.Data.code }, "30001_8589934592", "交易记录");
+                }
+                else {
+                    ajaxErrorHandle(data);
+                }
+            }, 'json')
+
+        });
+    </script>
+}

@@ -1,0 +1,118 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosAction.ActionEditViewModel
+
+@(Html.Kendo().Grid<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_ActionMultisubByActionidResult>()
+            .Name("gridActionMultisub")
+            .Columns(columns =>
+            {
+                columns.Bound(m => m.Id).Hidden();
+                columns.Bound(m => m.Actionid).Hidden();
+                columns.Bound(m => m.Actionid2).Hidden();
+                columns.Bound(m => m.ActionName2).Title("同组作法").Width(90);
+                columns.Bound(m => m.Remark).Title("备注").Width(90);
+                columns.Bound(m => m.ModifiedStr).Title("修改时间").Width(90);
+            })
+            .HtmlAttributes(new { ondblclick = "editGridItemOther('gridActionMultisub', 'Id', '" + Url.Action("_EditActionMultisub", "BasicDataPosAction") + "', '修改消费项目作法')" })
+            .Pageable()
+            .Sortable()
+            .Scrollable()
+            .Filterable()
+            .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(7)
+            .Read(read => read.Url("/BasicDataPosAction/ListActionMultisubByActionId?id=" + ViewBag.id))
+            )
+            .ToolBar(toolbar =>
+            {
+                toolbar.Template(
+    @<text>
+        <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addGridItemOther('@Url.Action("_AddActionMultisub", "BasicDataPosAction")','@ViewBag.id','增加消费项目作法')"><span class="k-icon k-add"></span>增加</a>
+        <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="editGridItemOther('gridActionMultisub', 'Id', '@Url.Action("_EditActionMultisub", "BasicDataPosAction")', '修改消费项目作法')"><span class="k-icon k-add"></span>修改</a>
+        <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="batchDelete('gridActionMultisub', 'Id', '@Url.Action("BatchDeleteActionMultisub", "BasicDataPosAction")' )"><span class="k-icon k-i-unpin"></span>删除</a>
+        @*<a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="hideItemOther('itemActionMultisub')">隐藏编辑框</a>*@
+    </text>);
+                    })
+)
+<script type="text/javascript">
+    function addGridItemOther(url, id, title) {
+
+        $.ajax({
+            url: url + "?id=" + id,
+            type: "post",
+            dataType: "html",
+            success: function (result) {
+                $("#posMaskWindow").html(result);
+                $("#posMaskWindow_wnd_title").text(title);
+                $(".k-i-close").click(function () {
+                    closeGeneralWindow();
+                });
+                openGeneralWindow();
+            },
+            error: function (result) {
+                alert(result.responseText);
+            }
+        });
+    }
+
+    function editGridItemOther(gridId, keyName, url, title) {
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            layer.msg("请选择要修改的数据行");
+        } else if (selectedRows.length == 1) {
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+
+            $.ajax({
+                url: url + "?id=" + data[keyName],
+                type: "post",
+                dataType: "html",
+                success: function (result) {
+                    $("#posMaskWindow").html(result);
+                    $("#posMaskWindow_wnd_title").text(title);
+                    $(".k-i-close").click(function () {
+                        $("#posMaskWindow").html("");
+                        closeGeneralWindow();
+                    });
+                    openGeneralWindow();
+                },
+                error: function (result) {
+                    alert(result.responseText);
+                }
+            });
+
+        }
+        else {
+            layer.msg("请选择一行数据行");
+        }
+    }
+
+    //批量 删除
+    function batchDelete(gridId, keyName, url) {
+
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要删除的数据行");
+        } else {
+            jConfirm("确认要删除所有选中的数据行?", "确认", "取消", function (confirmed) {
+                if (confirmed) {
+                    var ids = [];
+                    for (var i = 0; i < selectedRows.length; i++) {
+                        var row = selectedRows[i];
+                        var data = grid.dataItem(row);
+                        ids.push(data[keyName]);
+                    }
+                    $.post(url, { id: ids.join(",") }, function (data) {
+                        if (data.Success) {
+                            grid.dataSource.read();
+                        } else {
+                            //layer.alert(data.Data);
+                            ajaxErrorHandle(data);
+                        }
+                    }, 'json');
+                }
+            });
+        }
+    }
+</script>

@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "批量延期";
+}
+<div>
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">新有效期</td>
+            <td><input type="text" id="validdate" style="width:90%" /></td>
+        </tr>
+        <tr>
+            
+            <td colspan="2" style="padding-top:10px;text-align:center;">
+                <button class="k-primary k-button" id="save" role="button" onclick="aa()" data-role="button">保存</button>&nbsp;&nbsp;
+                <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<input type="text" value="@ViewBag.ids" style="display:none" id="idstr" />
+<script type="text/javascript">
+    $(function () {
+        $("#commonKendoWindow").parent().css("width", "400px");
+        $("#validdate").kendoDatePicker({ culture: "zh-CN", format: "yyyy-MM-dd" });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+    function aa() {
+        var time = $("#validdate").val();
+        var ids = $("#idstr").val();
+        if (!time) {
+            jAlert("请指定新有效期");
+            return;
+        }
+        $.post("@Url.Action("Delays")", { id: ids, validdate: time }, function (data) {
+            if (data.Success) {
+                jAlert("修改成功！");
+                var iframe = top.getContentIfrmae();
+                if (iframe.contentWindow.refreshGrid) {
+                    iframe.contentWindow.refreshGrid();
+                }
+                closeEditFormWindow();
+            } else {
+                //jAlert("修改失败！");
+                ajaxErrorHandle(data);
+            }
+        }, 'json');
+    }
+</script>

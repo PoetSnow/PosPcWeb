@@ -1,0 +1,38 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+
+@model List<up_pos_scan_list_ItemListBySubClassidResult>
+
+<ul class="mui-table-view">
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <li class="mui-table-view-cell mui-media">
+                    <img class="mui-media-object mui-pull-left" src="@(item.Bmp ?? "/images/ScanOrder/noImage.png")" />
+                    <div class="mui-media-body">
+                        <h4>@item.Cname</h4>
+                        <p class='mui-ellipsis'>
+                            <i class="fa fa-rmb price" aria-hidden="true"></i><label class="price">@(item.Price <= 0 ? item.UnitPrice : item.Price)</label>
+                        </p>
+                        @if (item.IsMultiUnit.Value || item.IsAutoAction.Value)
+                        {
+                            <button class="mui-btn" type="button" onclick="selectSpec(this)" data-id="@item.Id" data-code="@item.Code" data-name="@item.Cname" data-isDiscount="@item.IsDiscount" data-isService="@item.IsService" data-unitId="@item.UnitId" data-unitCode="@item.UnitCode" data-UnitName="@item.Unit" data-price="@(item.Price <= 0 ? item.UnitPrice : item.Price)" data-subclassid="@item.SubClassid">选规格</button>
+                        }
+                        else
+                        {
+                            <div style="display:block; flex-flow:row nowrap; float:right ">
+                                <a onclick="reductionQuantity(this)" class="addB" data-id="@item.Id" data-code="@item.Code" data-name="@item.Cname" data-isDiscount="@item.IsDiscount" data-isService="@item.IsService" data-unitId="@item.UnitId" data-unitCode="@item.UnitCode" data-UnitName="@item.Unit" data-price="@(item.Price <= 0 ? item.UnitPrice : item.Price)" data-subclassid="@item.SubClassid"></a>
+
+                                <span class="inputSpan" data-id="@item.Id"></span>
+                                <a onclick="addQuantity(this)" class="addA" data-id="@item.Id" data-code="@item.Code" data-name="@item.Cname" data-isDiscount="@item.IsDiscount" data-isService="@item.IsService" data-unitId="@item.UnitId" data-unitCode="@item.UnitCode" data-UnitName="@item.Unit" data-price="@(item.Price <= 0 ? item.UnitPrice : item.Price)" data-subclassid="@item.SubClassid"></a>
+
+                            </div>
+
+                        }
+                    </div>
+                </li>
+            }
+        }
+    }
+</ul>

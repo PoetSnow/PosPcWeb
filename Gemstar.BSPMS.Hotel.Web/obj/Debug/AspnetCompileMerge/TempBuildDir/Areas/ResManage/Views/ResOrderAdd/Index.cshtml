@@ -1,0 +1,134 @@
+﻿@*订单*@
+@{ 
+    Layout = null;
+}
+<style type="text/css">
+    .k-tabstrip .k-content {
+        margin: 0 auto;
+    }
+
+    .wrap {
+        margin: 0px;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    #tabstripAuth-1, #tabstripAuth-2 {
+        padding: 8px 8px 8px 8px;
+        overflow: hidden;
+        border-bottom: none;
+    }
+
+    .k-tabstrip:focus {
+        box-shadow: none;
+    }
+</style>
+
+<script type="text/javascript">
+        /********客情和客账都会用到的********/
+        //tab页切换后的事件，用于刷新客账内容
+        function tabstrip_Activated(e) {
+            e.preventDefault();
+            //取出对应的tab页的文本，以便进行不同的处理
+            var $item = $(e.item);
+            var tabText = $item.find("a[href='#" + $item.attr("aria-controls") + "']").text();
+            if (tabText == "客账") {
+                folioGuestGrid_refresh();
+            }else if (tabText == "客情") {
+                grid_refresh();
+            }
+            else if (tabText == "日志") {
+                var resOrderLogIframeSrc = "@Url.Action("Log", "ResOrderAdd")";
+                var resOrderLogIframe = $("#resOrderLogIframe");
+                if ($.trim(resOrderLogIframe.attr("src")) == "") {
+                    resOrderLogIframe.attr("src", resOrderLogIframeSrc);
+                }
+                $("#searchLogBtn", $("#resOrderLogIframe")[0].contentWindow.document).click();
+            }
+        }
+        //刷新客账中的客单明细表格
+        function folioGuestGrid_refresh() {
+            var grid = $("#gridFolioGuest").data("kendoGrid");
+            grid.dataSource.read();
+        }
+        //刷新客情
+        function grid_refresh() {
+            OrderCustomer.GetRemote();
+        }
+        //加载页面数据
+        function resOrderAddInitialization() {
+            orderCustomerInitialization();
+            orderFolioInitialization();
+            checkSpecInfo();
+            var roomStatus = $("#hidRoomStatus").val();
+            if (roomStatus == "0" || roomStatus == "4") {
+                $("#tabstripAuth li a:eq(1)").trigger("click");
+            }
+        }
+        //销毁弹框
+        function resOrderWindowDestroy() {
+            try { kendo.destroy($("#orderTabStripDiv")); } catch (e) { }
+            try { $("#resBillSettingWindow").data("kendoWindow").destroy(); } catch (e) { }
+            try { $("#customerInfosWindowDiv").data("kendoWindow").destroy(); } catch (e) { }
+            try { $("#orderDetailRatePlanEditWindow").data("kendoWindow").destroy(); } catch (e) { }
+            try { $("#delayWindow").data("kendoWindow").destroy(); } catch (e) { }
+            try { $("#changeRoomWindow").data("kendoWindow").destroy(); } catch (e) { }
+            try { $("#relationWindow").data("kendoWindow").destroy(); } catch (e) { }
+            try { $("#setRoomWindow").data("kendoWindow").destroy(); } catch (e) { }
+            try { $("#changeRoom_selectRoomWindow").data("kendoWindow").destroy(); } catch (e) { }
+
+            try { $("#folioAddFolioDiv").data("kendoWindow").destroy(); } catch (e) { }
+            try { $("#folioAddItemsWindow").data("kendoWindow").destroy(); } catch (e) { }
+            try { $("#folioCardAuthWindow").data("kendoWindow").destroy(); } catch (e) { }
+            try { $("#folioCheckoutDayChargeWindow").data("kendoWindow").destroy(); } catch (e) { }
+            try { $("#folioDelayPayReasonWindow").data("kendoWindow").destroy(); } catch (e) { }
+            try { $("#commonSelectRegidWindow").data("kendoWindow").destroy(); } catch (e) { }
+            try { $("#folioCancelCheckoutBatchNoSelectWindow").data("kendoWindow").destroy(); } catch (e) { }
+            try { $("#folioInvoiceWindow").data("kendoWindow").destroy(); } catch (e) { }
+            try { $("#adjustFolioWindow").data("kendoWindow").destroy(); } catch (e) { }
+            try { $("#folioMoreDiv").data("kendoWindow").destroy(); } catch (e) { }
+            try { $("#folioRowInfoWindow").data("kendoWindow").destroy(); } catch (e) { }
+            var iframes = $("#mainContent").find("iframe");
+            if (iframes != null && iframes != undefined && iframes.length > 0 && iframes[0] != null && iframes[0] != undefined) {
+                var contentWindow = iframes[0].contentWindow;
+                if (contentWindow != null && contentWindow != undefined) {
+                    if (typeof (contentWindow.reloadData) == "function") {
+                        contentWindow.reloadData();
+                    } else if (typeof (contentWindow.refreshRoomStatus) == "function") {
+                        contentWindow.refreshRoomStatus();
+                    }
+                }
+            }
+        }
+        //检查订单内是否有特殊要求
+        function checkSpecInfo() {
+            var resid = $("#Resid").val();
+            if (resid != null && resid != undefined && resid.length > 0) {
+                $.post('@Url.Action("GetSpecialRequirements", "ResOrderCustomer")', { resid: resid }, function (result) {
+                    if (result != null && result != undefined && result.Success && result.Data.length > 0) {
+                        jAlert(result.Data, "知道了");
+                    }
+                });
+            }
+        }
+</script>
+<div id="orderTabStripDiv" style="overflow: hidden; height: 550px; max-height: 550px; width: 1297px; max-width: 1297px;margin-left:-0.5em;">
+    @(Html.Kendo().TabStrip()
+    .Name("tabstripAuth")
+    .TabPosition(TabStripTabPosition.Top)
+    .Scrollable(false)
+    .Navigatable(false)
+    .Items(c =>
+    {
+        c.Add().Text("客情").Content(@Html.Action("Index", "ResOrderCustomer", new { area = "ResManage", type = ViewBag.Type, id = ViewBag.RegId, parameters = ViewBag.Parameters }).ToHtmlString());
+        c.Add().Text("客账").Content(@Html.Action("Index", "ResOrderFolio", new { area = "ResManage", id = ViewBag.RegId }).ToHtmlString());
+        c.Add().Text("日志").Enabled(ViewBag.IsLog).Visible(ViewBag.IsLog).Content(ViewBag.IsLog ? "<iframe id=\"resOrderLogIframe\" frameborder=\"0\" style = \"height:550px;\" class=\"k-content-frame\" src=\"\"></iframe>" : "");
+    })
+    .HtmlAttributes(new { style = "height:100%;width:100%;" })
+    .SelectedIndex(0)
+    .Events(e => e.Activate("tabstrip_Activated"))
+    )
+    <input type="hidden" id="hidRoomStatus" value="@ViewBag.IsRoomStatus" />
+    <input id="authorizationSaveContinue" name="authorizationSaveContinue" type="hidden" value="" />
+    @Html.Partial("AuthorizationTemplates/Authorization")
+</div>

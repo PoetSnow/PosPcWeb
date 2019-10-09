@@ -1,0 +1,193 @@
+﻿
+@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+
+@{
+    var hotelItems = new List<SelectListItem>();
+    if (ViewBag.Hotels != null)
+    {
+        hotelItems.Add(new SelectListItem { Value = "", Text = "全部" });
+        foreach (var hotel in ViewBag.Hotels)
+        {
+            hotelItems.Add(new SelectListItem { Value = hotel.Hid, Text = (string.IsNullOrEmpty(hotel.Hotelshortname) ? hotel.Name : hotel.Hotelshortname) });
+        }
+    }
+    ViewBag.Title = "通用代码";
+    //上级列表
+    var gridFatherId = "gridCodeType";
+    var gridFatherKey = "code";
+    var gridFatherName = "name";
+    var gridFatherModel = new KendoGridCommonViewModel()
+    {
+        GridControlId = gridFatherId,
+        KeyColumnName = gridFatherKey,
+        JsFuncForGetAjaxQueryPara = "getFatherQueryParas",
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForEnable = false,
+        EnableFunctionForDisable = false,
+        EnableFunctionForSave = false,
+        EnableFunctionForEdit = false,
+        EnableFunctionForQuery = false
+    };
+    var gridFatherHelper = new KendoGridEditInCellHtmlHelper<CodeType>(
+        Html,
+        Url,
+        gridFatherModel,
+        c =>
+        {
+            c.Bound(w => w.name).Title("代码类型");
+            c.Command(e => e.Custom("下级列表").HtmlAttributes(new { onclick = "selectFatherRow(this)", Href = "javascript:void(0);" }))
+            .Width("110px")
+            .Title("操作");
+        },
+        c => c.Id(w => w.code),
+        c =>
+        {
+            c.Custom().Name("Title").Text("通用代码设置").HtmlAttributes(new { style = "visibility:hidden;" });
+        },
+        pageable => pageable.Enabled(false),
+        "CodeType"
+        );
+
+    //下级列表
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "pk";
+    var columnName = "@h99typeCode";
+    var btnShowId = "TitleMemberId";
+    var btnShowName = "代码类型：";
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForPage = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForAdd = false,//!ViewBag.isgrouphotel
+        EnableCustomToolbarForFirst = true,
+        EnableFunctionForEnable = true,
+        EnableFunctionForDisable = true,
+        EnableFunctionForEdit = false,//!ViewBag.isgrouphotel
+        EnableFunctionForQuery = false,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("hotelname").Title("分店");
+            c.Bound("code").Title("代码");
+            c.Bound("name").Title("名称");
+            c.Bound("seqid").Title("排序号");
+        },
+        RowTemplate = @"<tr style=#: status!=1?'text-decoration:line-through;color:red;':'' #>
+                                        <td>#: hotelname #</td>
+                                        <td>#: code #</td>
+                                        <td>#: name #</td>
+                                        <td>#: seqid==null?'':seqid #</td>
+                                   </tr>",
+        CustomToolbar = c =>
+        {
+            c.Template(@<text>
+        <span id=@btnShowId> 　代码类型：</span>
+        <span id="comfirmtext" class="k-grid-comfirmtext" style="cursor:default;margin-right:30px;"> <font style='color:red'>双击可修改</font></span>
+
+        分店
+        @(Html.Kendo().DropDownList().Name("Hotelname").DataTextField("Text").DataValueField("Value").BindTo(hotelItems))
+        代码名称 <input id='fname' style='height:25px;border:1px solid #ccc;width:90px;' /> <input type='button' value='查询' class='k-button k-button-icontext k-grid-commonQuery' onclick='queryData()' />
+        <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addGridItemNew()"><span class="k-icon k-add"></span>增加</a>
+        <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="batchDelete('grid','pk','/SystemManage/CommonCodeManage/BatchDelete')"><span class="k-icon k-i-unpin"></span>删除</a>
+        <a class="k-button k-button-icontext k-grid-enable" href="javascript:void(0);" onclick="enable('grid','pk','/SystemManage/CommonCodeManage/Enable')"><span class="k-icon k-i-unlock"></span>启用</a>
+        <a class="k-button k-button-icontext k-grid-disable" href="javascript:void(0);" onclick="disable('grid','pk','/SystemManage/CommonCodeManage/Disable')"><span class="k-icon k-i-lock"></span>禁用</a>
+            </text>);
+        }
+    };
+}
+<div style="width:30%; float:left;">
+    @(gridFatherHelper.KendoGridEditInCell())
+</div>
+<div style="width:68%; float:right;">
+    @Html.Partial("_KendoGridDataRowView", gridViewModel)
+</div>
+<input type="hidden" id="typecode" />
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+
+<script type="text/javascript">
+
+    function queryData() {
+        var Hotelname = $("#Hotelname").val(); var fname = $("#fname").val();
+        var result = "&@@s23分店=" + Hotelname + "&@@t00关键字=" + fname + "&@@h99typeCode=" + $("#typecode").val();
+        GetControl("#commonQueryParameterValues").val(result);
+        var grid = $("#" + "@gridId").data("kendoGrid");
+        grid.dataSource.read();
+    }
+
+    $(function () {
+        $("#" + "@btnShowId").removeClass("k-button");
+        $("#comfirmtext").removeClass("k-button");
+        $("#querytext").removeClass("k-button");
+        var c = $("#grid").width() - 890;
+        $("#comfirmtext").css("margin-left", c);
+        $("#comfirmtxt").removeClass("k-button");
+        $("#querytext").removeClass("k-button");
+    });
+    function getFatherQueryParas() {
+        return {
+            QueryProcedureName: "up_list_pmsCodeType",
+            QueryParameterValues: "@@isDirtyLog=" + "@ViewBag.isDirtyLog"
+        };
+    }
+    function gridCodeType_dataBoundEnded() {
+        var firstBtn = $("[onclick='selectFatherRow(this)']:first");
+        firstBtn.click();
+    }
+    function selectFatherRow(column) {
+        var grid = $("#" + "@gridFatherId").data("kendoGrid"); 
+        var data = grid.dataItem($(column).parent().parent());
+        $("#typecode").val(data["@gridFatherKey"]);
+        selectDoCommonQuery(data["@gridFatherKey"], data["@gridFatherName"]);
+    }
+    function selectDoCommonQuery(id, name) {
+        var grid = $("#" + $("#commonQueryGridId").val()).data("kendoGrid"); 
+         if (id == "04" || id == "05") {
+           $(".k-grid-batchDelete").css("display", "");
+        } else {
+           $(".k-grid-batchDelete").css("display", "none");
+        }
+        if (id == "18") {//服务员列表为分店自主型，集团不可增删改，只可以查询分店的数据
+            $("#grid").off("dblclick");
+            $(".k-grid-addGridItem").css("display", "none");
+            $(".k-grid-comfirmtext").html("");
+            var c = $("#grid").width() - 600;
+            $("#comfirmtext").css("margin-left", c);
+            $(".k-grid-enable").css("display", "none");
+            $(".k-grid-disable").css("display", "none");
+            //$(".k-grid-batchDelete").css("display", "none");
+        } else {
+            $("#grid").on("dblclick", "tr.k-state-selected", function (e) {
+                e.preventDefault();
+                editGridItem(this);
+            });
+            $(".k-grid-addGridItem").css("display", "");
+            $(".k-grid-comfirmtext").html("<font style='color:red'>双击可修改</font>");
+            var c = $("#grid").width() - 890;
+            if (id == "13") {
+                c = c - 30;
+            }
+            if (id == "04" || id == "05") {
+                c = c -60;
+            }
+            $("#comfirmtext").css("margin-left", c);
+            $(".k-grid-enable").css("display", "");
+            $(".k-grid-disable").css("display", "");
+            //$(".k-grid-batchDelete").css("display", "");
+        }
+        document.getElementById('commonQueryParameterValues').value = ("@columnName" + "=" + id);
+        $("#" + "@btnShowId").html("<span></span>" + "@btnShowName" + name);
+        grid.dataSource.read();
+
+    }
+    function addGridItemNew() {
+        top.openKendoWindow("增加" + "@ViewBag.Title", "/SystemManage/CommonCodeManage/Add?typeCode=" + $("#typecode").val());
+    }
+</script>

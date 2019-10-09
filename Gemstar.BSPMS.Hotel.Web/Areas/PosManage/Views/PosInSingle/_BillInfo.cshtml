@@ -1,0 +1,39 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EnumsPos;
+@model Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_billByRefeidAndTabidResult
+
+@if (Model != null)
+{
+    <ul class="mainLeft-top">
+        <li title="@Model.RefeName">营业点：@Model.RefeName</li>
+        <li title="@(Model.TabFlag != null && Model.TabFlag == (byte)PosBillTabFlag.物理台 ? Model.TabNo : "＋" + Model.TabNo)">餐台名：@(Model.TabFlag != null && Model.TabFlag == (byte)PosBillTabFlag.物理台 ? Model.TabName : "＋" + (string.IsNullOrEmpty(Model.TabName) ? "" : Model.TabName))</li>
+        <li title="@Model.BillBsnsDate.Value.ToString("yyyy-MM-dd")">营业日：@Model.BillBsnsDate.Value.ToString("yyyy-MM-dd")</li>
+        <li title="@Model.ShuffleName">市别：@Model.ShuffleName</li>
+        <li title="@Model.ShiftName">班次：@Model.ShiftName</li>
+        <li title="@Model.InputUser">营业经理：@Model.InputUser</li>
+        <li title="@Model.Name">客人姓名：@Model.Name</li>
+        <li title="@Model.IGuest">人数：@Model.IGuest</li>
+        <li title="@Model.InputUser">操作员：@Model.InputUser</li>
+    </ul>
+    <script type="text/javascript">
+        $("#billid").val("@(Model.Billid)");
+        $("#mBillid").val("@(Model.MBillid)");
+        $("#iGuest").val("@(Model.IGuest)");
+        $("#tabFlag").val("@(Model.TabFlag ?? 0)");
+        $("#openInfo").val("@(Model.OpenInfo)");
+        $("#isoutsell").val("@(Model.Isoutsell.ToString())");
+    </script>
+}
+else
+{
+    <ul class="mainLeft-top">
+        <li>营业点：</li>
+        <li>台号：</li>
+        <li>营业日：</li>
+        <li>市别：</li>
+        <li>班次：</li>
+        <li>营业经理：</li>
+        <li>客人姓名：</li>
+        <li>人数：</li>
+        <li>操作员：</li>
+    </ul>
+}

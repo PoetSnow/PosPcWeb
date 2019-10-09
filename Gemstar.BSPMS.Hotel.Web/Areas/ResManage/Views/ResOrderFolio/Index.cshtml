@@ -1,0 +1,101 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.ResFolioManage
+@model ResFolioMainInfo
+@{
+    Layout = null;
+    ViewBag.Title = "客账";
+}
+@*******客账操作按钮相关js代码开始*********@
+<div style="display:none;">
+    @Html.Partial("_CommonSelectRegidWindow")
+    @Html.Partial("_AddFolioJs", Model)
+    @Html.Partial("_checkoutJs", Model)
+    @Html.Partial("_cardAuthJs", Model)
+    @Html.Partial("_cancelCheckoutJs", Model)
+    @Html.Partial("_adjustFolio")
+    <div id="folioInvoiceWindow"></div>
+    <div id="folioAddItemsWindow"></div>
+    <div id="folioInAdvanceCheckoutWindow"></div>
+    @Html.Partial("_splitFolio")
+    @Html.Partial("_refundFolio")
+</div>
+<script type="text/javascript">
+    var FolioCommonValues = {
+        AddQueryParaTemp : "@Url.Action("AddQueryParaTemp", "SRBillReportView",new { area = "ReportManage" })",
+        AddFolio : "@Url.Action("AddFolio")",
+        PayCheck : "@Url.Action("Check","Pay",new { area= "PayManage" })",
+        AjaxCheckoutBatchNos : "@Url.Action("AjaxCheckoutBatchNos")",
+        CancelCheckout : "@Url.Action("CancelCheckout")",
+        CancelClear : "@Url.Action("CancelClear")",
+        AjaxCardAuths : "@Url.Action("AjaxCardAuths")",
+        AddCardAuth : "@Url.Action("AddCardAuth")",
+        UpdateCardAuth : "@Url.Action("UpdateCardAuth")",
+        CheckDayCharge : "@Url.Action("CheckDayCharge")",
+        AddDayCharge : "@Url.Action("AddDayCharge")",
+        FreeDayCharge : "@Url.Action("FreeDayCharge")",
+        CheckoutCheck : "@Url.Action("CheckoutCheck")",
+        Checkout : "@Url.Action("Checkout")",
+        ClearCheck : "@Url.Action("ClearCheck")",
+        Clear : "@Url.Action("Clear")",
+        CancelOut : "@Url.Action("CancelOut")",
+        Out : "@Url.Action("Out")",
+        Transfer : "@Url.Action("Transfer")",
+        CurrentUserName: "@Model.CurrentUserName",
+        AddFolioCheckOut : "@Url.Action("AddFolioCheckOut")",
+        AddFolioClear: "@Url.Action("AddFolioClear")",
+        Invoice: "@Url.Action("Index", "ResOrderInvoice")",
+        HotelId: "@ViewBag.HotelId",
+        RemoveDayCharge:"@Url.Action("RemoveDayCharge")",
+        FolioStatus: "noChange",@*客账状态：noChange:没有改变，默认值,addDayCharge:收取了日租或半日租成功，checkout:结账成功,out:迟付成功*@
+        GetCardAuthIds: "@Url.Action("GetCardAuthIds")",
+        AddItems: "@Url.Action("GetItemInfo")",
+        SaveItems: "@Url.Action("SaveItemsInfo")",
+        AddItems: "@Url.Action("AddItems")",
+        CancelAndRecoveryFolio: "@Url.Action("CancelAndRecoveryFolio")",
+        GetFolioByTransid: "@Url.Action("GetFolioByTransid")",
+        AdjustFolio: "@Url.Action("AdjustFolio")",
+        RefundCheck: "@Url.Action("RefundCheck")",
+        Refund: "@Url.Action("Refund")",
+        InAdvanceCheckout: "@Url.Action("InAdvanceCheckout")",
+        InAdvanceCheckout_GetEndDate: "@Url.Action("InAdvanceCheckout_GetEndDate")",
+        WaterAndElectricity_AddFolioDebit: "@Url.Action("WaterAndElectricity_AddFolioDebit")",
+        IsPayPrintDeposit: "@ViewBag.isPayPrintDeposit",
+        SplitFolio: "@Url.Action("SplitFolio")",
+        GetRefundFolios: "@Url.Action("GetRefundFolios")",
+    };
+</script>
+@*******客账操作按钮相关js代码结束*********@
+<table style="width:1290px;">
+    <tr>
+        <td style="width:490px;vertical-align:top;">
+            @Html.Partial("_ResFolioGuesTable",Model)
+        </td>
+        <td style="vertical-align:top;">
+            @Html.Partial("_ResFolioFolioTable",Model)
+        </td>
+        <td width="100" class="folioButtons">
+            <button id="folioAddButton" name="folioAddButton" class="k-button" type="button" data-auto-open="false">入账</button>
+            <button id="folioItmsButton" name="folioItmsButton" class="k-button" type="button" data-auto-open="false">商品录入</button>
+            <button id="folioAuthButton" name="folioAuthButton" class="k-button" type="button">预授权</button><button id="folioInAdvanceCheckoutButton" name="folioInAdvanceCheckoutButton" class="k-button" type="button" style="width:90px;display:none;">预结</button>
+            <button id="folioPrintButton" name="folioPrintButton" class="k-button" type="button">预览账单</button>
+            <span class="split"></span>
+            <button id="folioCheckoutButton" name="folioCheckoutButton" class="k-button" type="button">结账</button>
+            <button id="folioSettleButton" name="folioSettleButton" class="k-button" type="button">清账</button>
+            <button id="folioDelayPayButton" name="folioDelayPayButton" class="k-button" type="button">迟付</button>
+            <button id="folioTransferButton" name="folioTransferButton" class="k-button" type="button">转账</button>
+            <span class="split"></span>
+            <button id="folioCancelClearButton" name="folioCancelClearButton" class="k-button" type="button">取消清账</button>
+            <button id="folioCancelOutButton" name="folioCancelOutButton" class="k-button" type="button">取消离店</button>
+            <button id="folioCancelCheckoutButton" name="folioCancelCheckoutButton" class="k-button" type="button">取消结账</button>
+            <button id="folioInvoiceButton" name="folioInvoiceButton" class="k-button" type="button">发票管理</button>
+            <button id="folioMoreButton" name="folioMoreButton" class="k-button" type="button">更多...</button>
+            <div style="display:none; text-align:center;line-height: 43px;" id="folioMoreDiv">
+                <button id="folioCancelAndRecoveryButton" name="folioCancelAndRecoveryButton" class="k-button" type="button">作废与恢复</button><br />
+                <button id="folioResBillButton" name="folioResBillButton" class="k-button" type="button" style="width:90px">调账</button><br />
+                <button id="folioRefundButton" name="folioRefundButton" class="k-button" type="button" style="width:90px">退款</button><br />
+                <button id="folioSplitFolioButton" name="folioSplitFolioButton" class="k-button" type="button" style="width:90px">拆账</button><br />
+                <button id="folioAuthButtonCopy" name="folioAuthButtonCopy" class="k-button" type="button" style="width:90px;display:none;">预授权</button>
+            </div>
+        </td>
+    </tr>
+</table>
+<div id="folioDynamicScript"></div>

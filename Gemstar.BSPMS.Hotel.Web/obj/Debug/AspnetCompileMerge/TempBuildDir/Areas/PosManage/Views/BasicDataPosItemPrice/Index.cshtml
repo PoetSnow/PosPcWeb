@@ -1,0 +1,73 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+@{
+    ViewBag.Title = "Pos单位价格";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var colsDefault = new List<GridColumnSetting>
+    {
+        new GridColumnSetting {Name = "itemName", Title = "消费项目", Hidden = false, Order = 1, Width = 0},
+        new GridColumnSetting {Name = "Unit", Title = "单位", Hidden = false, Order = 2, Width = 0},
+        new GridColumnSetting {Name = "Price", Title = "价格", Hidden = false, Order = 3, Width = 0},
+        new GridColumnSetting {Name = "Multiple", Title = "倍数", Hidden = false,Order = 4, Width = 0},
+        new GridColumnSetting {Name = "Grossrate", Title = "毛利率", Hidden = false,Order = 5, Width = 0},
+        new GridColumnSetting {Name = "CostPrice", Title = "成本价", Hidden = false,Order = 6, Width = 0},
+        new GridColumnSetting {Name = "OilAmount", Title = "油味", Hidden = false,Order = 7, Width = 0},
+
+        new GridColumnSetting {Name = "Percent", Title = "提成", Hidden = false, Order = 8, Width = 0},
+        new GridColumnSetting {Name = "MemberPrice", Title = "会员价", Hidden = false, Order = 9, Width = 0},
+        new GridColumnSetting {Name = "isDefault", Title = "是否默认单位", Hidden = false, Order = 10, Width = 0},
+        new GridColumnSetting {Name = "tabTypeName", Title = "所属餐台类型", Hidden = false,Order = 11, Width = 0},
+        new GridColumnSetting {Name = "Seqid", Title = "排列序号", Hidden = false,Order = 12, Width = 0},
+        new GridColumnSetting {Name = "Remark", Title = "备注", Hidden = false,Order = 13, Width = 0},
+        new GridColumnSetting {Name = "Modified", Title = "修改时间", Hidden = false,Order = 13, Width = 0}
+    };
+    var gridViewModel = new KendoGridCustomDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        StatusColumnName = "",
+        EnableFunctionForEnable = false,
+        EnableFunctionForDisable = false,
+        EnableScrollable = true,
+        Area = "PosManage",
+        Controller = "BasicDataPosItemPrice",
+        Action = "Index",
+        DefaultColumnSettings = colsDefault,
+        CustomToolbar = c =>
+        {
+            c.Custom().Name("comfirmtextone").Text("双击可修改").HtmlAttributes(new { id = "comfirmtextone", href = "javascript:void(0);", style = "color:red;margin-top:9px;margin-left:10px;cursor:default;" });
+        }
+    };
+
+}
+
+@Html.Partial("_KendoGridCustomDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+    $(function () {
+        window.onresize = onResize; onResize();
+        $("#comfirmtext").removeClass("k-button");
+        $("#comfirmtextone").removeClass("k-button");
+    });
+    function gridread() {
+        $("#grid").data("kendoGrid").dataSource.read();
+    }
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 145;
+        $("#grid .k-grid-content").height(allHeight - showHeight);
+    }
+</script>

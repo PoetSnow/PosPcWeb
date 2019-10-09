@@ -1,0 +1,17 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPos;
+
+@model List<PosMBanner>
+
+@if (Model != null && Model.Count > 0)
+{
+    <!--支持循环，需要重复图片节点-->
+    <div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="@Model[Model.Count -1].FileName" /></a></div>
+
+    foreach (var temp in Model)
+    {
+        <div class="mui-slider-item"><a href="#"><img src="@temp.FileName" /></a></div>
+    }
+
+    <!--支持循环，需要重复图片节点-->
+    <div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="@Model[0].FileName" /></a></div>
+}

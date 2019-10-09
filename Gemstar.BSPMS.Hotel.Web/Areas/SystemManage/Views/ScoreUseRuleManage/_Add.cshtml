@@ -1,0 +1,62 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.ScoreUseRuleManage.ScoreUseRuleAddViewModel
+@using (Html.BeginForm())
+{
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.ItemScoreid)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.ItemScoreid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Value").DataValueField("Key").DataSource(e => { e.Read(r => r.Action("GetItemScoreSelectList", "ItemScoreManage", new { rnd = new Random().NextDouble() })); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.ItemScoreid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.MbrCardTypeid)</td>
+            <td> 
+                @Html.HiddenFor(m => m.MbrCardTypeid)
+                @Html.Kendo().MultiSelect().Name("MbrCardTypeidMultiSelect").HtmlAttributes(new { style = " width:100%" }).DataTextField("Value").DataValueField("Key").DataSource(e => { e.Read(r => r.Action("GetMbrCardTypeSelectList", "MbrCardTypeManage")); }).AutoClose(false).Value(ViewBag.listMbrCardTypeids)
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.MbrCardTypeid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.OnlyScore)</td>
+            <td>@Html.TextBoxFor(m => m.OnlyScore, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.OnlyScore, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.ScoreAndAmount)</td>
+            <td>@Html.TextBoxFor(m => m.ScoreAndAmount, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ScoreAndAmount, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.AmountAndScore)</td>
+            <td>@Html.TextBoxFor(m => m.AmountAndScore, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.AmountAndScore, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+            <td>@Html.TextBoxFor(m => m.Seqid, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () { 
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) { 
+            $("#MbrCardTypeid").val($("#MbrCardTypeidMultiSelect").data("kendoMultiSelect").value());
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        $("#commonKendoWindow").parent().css("width", "500px");
+    });
+
+</script>

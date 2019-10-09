@@ -1,0 +1,118 @@
+﻿@*关联房*@
+@using Gemstar.BSPMS.Hotel.Services.Enums;
+@using Gemstar.BSPMS.Common.Extensions;
+@model Gemstar.BSPMS.Hotel.Services.ResManage.ResMainInfo
+
+<div id="relationWindow" style="width:850px;height:450px;">
+    <div id="relationWindowTabStrip">
+        <ul>
+            <li class="k-state-active">增加关联房</li>
+            <li>取消关联房</li>
+        </ul>
+        <div style="overflow:hidden;">
+            <div class="k-grid k-widget" style="max-height: 392px;overflow:hidden;">
+                <div class="k-header k-grid-toolbar">
+                    <div class="toolbar">
+                        <label class="category-label" for="relationWindow_roomNo">房号：</label><input type="text" class="k-textbox" id="relationWindow_roomNo" style="width:133px;"  />
+                        <label class="category-label" for="relationWindow_GuestName">客人名：</label><input type="text" class="k-textbox" id="relationWindow_GuestName" style="width:133px;"  />
+                        <label class="category-label" for="relationWindow_GuestMobile">手机号：</label><input type="text" class="k-textbox" id="relationWindow_GuestMobile" style="width:133px;"  />
+                        <label class="category-label" for="relationWindow_status">状态：</label>@(Html.Kendo().DropDownList().Name("relationWindow_status").BindTo(EnumExtension.ToSelectList(typeof(ResDetailStatus), EnumValueType.Text, EnumValueType.Description)).Value(ResDetailStatus.I.ToString()))
+                        <button class="k-button" id="relationWindow_search">查询</button>
+                    </div>
+                </div>
+                <div class="k-grid-header" style="padding-right: 17px;">
+                    <div class="k-grid-header-wrap k-auto-scrollable">
+                        <table role="grid">
+                            <colgroup>
+                                <col style="width:58px;">
+                                <col style="width:115px;">
+                                <col style="width:58px;">
+                                <col>
+                                <col style="width:110px;">
+                                <col style="width:135px;">
+                                <col style="width:135px;">
+                                <col style="width:40px">
+                                <col style="width:85px">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="k-header">账号</th>
+                                    <th class="k-header">主单号</th>
+                                    <th class="k-header">房号</th>
+                                    <th class="k-header">入住人</th>
+                                    <th class="k-header">入住人手机</th>
+                                    <th class="k-header">入住时间</th>
+                                    <th class="k-header">离店时间</th>
+                                    <th class="k-header">状态</th>
+                                    <th class="k-header">操作</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div class="k-grid-content k-auto-scrollable" style="max-height: 315px;">
+                    <table style="height: auto;">
+                        <colgroup>
+                            <col style="width:58px;">
+                            <col style="width:115px;">
+                            <col style="width:58px;">
+                            <col>
+                            <col style="width:110px;">
+                            <col style="width:135px;">
+                            <col style="width:135px;">
+                            <col style="width:40px">
+                            <col style="width:85px">
+                        </colgroup>
+                        <tbody id="addRelationTbody">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div style="overflow:hidden;">
+            <div class="k-grid k-widget" style="max-height: 392px;overflow:hidden;">
+                <div class="k-grid-header" style="padding-right: 17px;">
+                    <div class="k-grid-header-wrap k-auto-scrollable">
+                        <table role="grid">
+                            <colgroup>
+                                <col style="width:58px;">
+                                <col style="width:100px;">
+                                <col>
+                                <col style="width:58px;">
+                                <col style="width:50px;">
+                                <col style="width:75px;">
+                                <col>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="k-header">账号</th>
+                                    <th class="k-header">房型</th>
+                                    <th class="k-header">客人名</th>
+                                    <th class="k-header">房号</th>
+                                    <th class="k-header">房数</th>
+                                    <th class="k-header">状态</th>
+                                    <th class="k-header">操作</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div class="k-grid-content k-auto-scrollable" style="max-height: 365px;">
+                    <table style="height: auto;">
+                        <colgroup>
+                            <col style="width:58px;">
+                            <col style="width:100px;">
+                            <col>
+                            <col style="width:58px;">
+                            <col style="width:50px;">
+                            <col style="width:75px;">
+                            <col>
+                        </colgroup>
+                        <tbody id="cancelRelationTbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

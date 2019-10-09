@@ -1,0 +1,77 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "提成政策";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "PolicyId";
+
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("AmountSourceName").Title("提成内容");
+            c.Bound("AmountSumTypeName").Title("计算类型");
+
+            c.Bound("IsInPlanName").Title("内容类型");
+            c.Bound("AmountBegin").Title("开始值（包含）");
+            c.Bound("AmountEnd").Title("结束值（包含）");
+            c.Bound("IsAllAmountName").Title("是否全额");
+
+            c.Bound("CalcTypeName").Title("提成类型");
+            c.Bound("calcValue").Title("提成值");
+
+            c.Bound("PolicyDesciption").Title("政策说明");
+        },
+        CustomToolbar = c =>
+        {
+            c.Custom().Name("edit_IsAllAmountName_Btn").Text("修改[是否全额]").HtmlAttributes(new { id = "edit_IsAllAmountName_Btn", href = "javascript:;", style = "cursor:pointer;" }); ;
+            c.Custom().Name("comfirmtext").Text("<span style='float:right;display:inline-block;color:red;margin-right:50px;padding-top:8px;'>双击可修改</span>").HtmlAttributes(new { id = "comfirmtext", href = "javascript:void(0);", style = "cursor:default;" });
+        }
+    };
+}
+
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+        $(function () {
+            $("#comfirmtext").removeClass("k-button");
+            //修改 是否全额
+            $("#edit_IsAllAmountName_Btn").click(function () {
+                var grid = $("#grid").data("kendoGrid");
+                var selectedRows = grid.select();
+                if (selectedRows.length <= 0) {
+                    jAlert("请选择要修改[是否全额]的数据行"); return;
+                }
+                var data = grid.dataItem(selectedRows[0]);
+                if (data == null) {
+                    jAlert("请选择要修改[是否全额]的数据行"); return;
+                }
+                var msg = "在[" + data.AmountSourceName + "+" + data.AmountSumTypeName + "+" + data.IsInPlanName + "]相同的记录中，是否全额的值 全部改为 " + (data.IsAllAmount ? "阶梯" : "全额") + "？";
+
+                jConfirm(msg, "确认", "取消", function (confirmed) {
+                    if (confirmed) {
+                        $.post("@Url.Action("EditIsAllAmount")", { id: data.PolicyId }, function (data) {
+                            if (data.Success) {
+                                grid.dataSource.read();
+                            } else {
+                                //jAlert(data.Data);
+                                ajaxErrorHandle(data);
+                            }
+                        });
+                    }
+                });
+
+
+
+            });
+        });
+</script>

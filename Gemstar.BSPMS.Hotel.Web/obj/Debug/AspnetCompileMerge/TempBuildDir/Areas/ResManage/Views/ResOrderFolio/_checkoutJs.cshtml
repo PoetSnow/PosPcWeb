@@ -1,0 +1,89 @@
+﻿@* 结账 *@
+<!--结账收取日租半日租窗口-->
+@*<div id="folioCheckoutDayChargeWindow" style="display:none;">
+    <div class="k-widget k-grid" role="grid">
+        <table role="grid">
+            <thead class="k-grid-header" role="rowgroup">
+                <tr role="row">
+                    <th class="k-header">房号</th>
+                    <th class="k-header">客人名</th>
+                    <th class="k-header">房型</th>
+                    <th class="k-header">收取类型</th>
+                    <th class="k-header">收取金额</th>
+                </tr>
+            </thead>
+            <tbody role="rowgroup">                
+            </tbody>
+        </table>
+    </div>
+    <div style="margin-top:15px;">
+        <label for="folioDayChargeFreeReason">免收原因：</label>
+        <input type="text" class="k-textbox" id="folioDayChargeFreeReason" />
+        <button type="button" class="k-button" id="folioDayChargeFreeButton">免收</button>
+        <button type="button" class="k-button" id="folioDayChargeAddButton">收取</button>
+    </div>
+</div>*@
+
+<div id="folioCheckoutDayChargeWindow" style="display:none;">
+    <div class="k-grid k-widget" style="max-height: 450px;overflow:hidden;">
+        <div class="k-grid-header" style="padding-right: 17px;">
+            <div class="k-grid-header-wrap k-auto-scrollable">
+                <table role="grid">
+                    <colgroup>
+                        <col style="width:60px;">
+                        <col style="width:60px;">
+                        <col style="width:60px;">
+                        <col style="width:70px;">
+                        <col style="width:80px;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="k-header">房号</th>
+                            <th class="k-header">客人名</th>
+                            <th class="k-header">房型</th>
+                            <th class="k-header">收取类型</th>
+                            <th class="k-header">收取金额</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="k-grid-content k-auto-scrollable" style="max-height: 357px;">
+            <table style="height: auto;">
+                <colgroup>
+                    <col style="width:60px;">
+                    <col style="width:60px;">
+                    <col style="width:60px;">
+                    <col style="width:70px;">
+                    <col style="width:80px;">
+                </colgroup>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="k-header k-grid-toolbar">
+            <div class="toolbar">
+                <label for="folioDayChargeFreeReason">免收原因：</label>
+                <input type="text" class="k-textbox" id="folioDayChargeFreeReason" />
+                <button type="button" class="k-button" id="folioDayChargeFreeButton">免收</button>
+                <button type="button" class="k-button" id="folioDayChargeAddButton">收取</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="folioCheckoutAddedTransIds" />
+<input type="hidden" id="folioCheckoutAddedOrigin" />
+<!--迟付确认和原因窗口-->
+<div id="folioDelayPayReasonWindow" style="display:none;">
+    <div>迟付:共<span id="folioDelayPayTotalRoomQty"></span>间</div>
+    <div id="folioDelayPayRoomNosDiv">房号:<span id="folioDelayPayRoomNos"></span></div>
+    <div>
+        <label for="folioDelayPayReason">请录入迟付原因</label>
+        <textarea id="folioDelayPayReason" class="k-textbox"></textarea>
+    </div>
+    <div style="text-align:center;">
+        <button type="button" class="k-button" id="folioDelayPayConfirmButton">确定</button>
+        <button type="button" class="k-button" id="folioDelayPayCancelButton">取消</button>
+    </div>
+</div>

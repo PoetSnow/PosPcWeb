@@ -1,0 +1,229 @@
+﻿/*---------- Pos公共样式 ----------*/
+
+/* layer 自定义样式 */
+.layui-layer {
+    border-radius: 1rem;
+    border: 1px solid #777;
+}
+
+.layui-layer-title {
+    font-size: 24px;
+    color: #fff;
+    overflow: hidden;
+    text-align: center;
+    padding: 0 20px;
+    background-color: #8a8a8a;
+    border-radius: 1rem 1rem 0 0;
+}
+
+
+.layui-layer-btn {
+    margin-top: 50px;
+}
+
+
+.layui-layer-btn .layui-layer-btn0 {
+    border-color: #1E9FFF;
+    background-color: #f55858;
+    width: calc(50% - 20px);
+    color: #fff;
+    border: 0;
+    padding: 10px;
+    font-size: 20px;
+    border-top: 1px solid #ccc;
+    left: 0;
+    bottom: 0;
+    clear: both;
+    text-align: center;
+    position: absolute;
+    border-bottom-left-radius: 1rem;
+}
+.err .layui-layer-btn0 {
+    width: calc(100% - 20px) !important;
+    border-bottom-right-radius: 1rem;
+    
+}
+    .layui-layer-btn a {
+        margin: 0 0 0 0;
+    }
+
+    .layui-layer-btn .layui-layer-btn1 {
+        border: 0;
+        width: calc(50% - 20px);
+        padding: 10px;
+        font-size: 20px;
+        border-top: 1px solid #ccc;
+        right: 0;
+        bottom: 0;
+        clear: both;
+        text-align: center;
+        position: absolute;
+        border-bottom-right-radius: 1rem;
+    }
+
+.layui-layer-ico {
+    background: url('../../Scripts/layer-v3.1.1/theme/default/icon_1.png') no-repeat;
+}
+
+.layui-layer-content {
+    background: #fff;
+    padding: 0;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+}
+
+.layui-layer-dialog .layui-layer-padding {
+    border-radius: 0.5rem;
+}
+
+.layui-layer-page .layui-layer-content {
+    overflow: hidden;
+}
+
+.layui-layer-setwin .layui-layer-min cite {
+    background-color: #dedede;
+}
+
+/* 按钮 */
+.formButtons {
+    left: 0;
+    bottom: 0;
+    clear: both;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+}
+
+    .formButtons button, div .formButtons input {
+        border: 0;
+        width: 50%;
+        float: left;
+        padding: 10px;
+        font-size: 20px;
+        border-top: 1px solid #ccc;
+    }
+
+        .formButtons button:first-child {
+            color: #fff;
+            background: #f55858;
+            border-bottom-left-radius: 1rem;
+        }
+
+        .formButtons button:last-child {
+            border-bottom-right-radius: 1rem;
+        }
+
+        div .formButtons input:first-child {
+            color: #fff;
+            background: #f55858;
+        }
+
+        div .formButtons input:nth-child(2) {
+            color: #333;
+            background: #fafafa;
+        }
+
+/*---------- Pos图例 ----------*/
+/* 套餐明细 */
+.package-state {
+    background: #d1c9ff;
+}
+/* 海鲜称重标记 */
+.seafood-state {
+    background: #47c8be;
+}
+/* 楼面新点菜 */
+.neworder-state {
+    background: #dffe7b;
+}
+/* 正常菜式 */
+.normal-state {
+    background: #82fe7b;
+}
+/* 传菜 */
+.dish-state {
+    background: #33cd33;
+}
+/* 返传菜 */
+.returndish-state {
+    background: #2baf59;
+}
+/* 超时未上菜 */
+.overtime-state {
+    background: #ff8384;
+}
+/* 例送 */
+.case-state {
+    background: #fa861f;
+}
+/* 赠送 */
+.give-state {
+    background: #fead67;
+}
+/* 取消 */
+.cancel-state {
+    background: #d1d1d1;
+}
+/* 入单/开台项目 */
+.original-state {
+    background: #3eeef0;
+}
+/* 已打单 */
+.intimidate-state {
+    background: #39c8de;
+}
+/* 已买单 */
+.check-state {
+    background: #2b9cac;
+}
+
+/* foot */
+.foot-red {
+    color: #323232;
+    background: #ffffff;
+}
+
+.foot-white {
+    color: #fafafa;
+    background: #f55858;
+}
+
+/* 收银 */
+table.editFormTable {
+    padding: 20px;
+    font-size: 16px;
+    position: relative;
+}
+
+    table.editFormTable tr {
+        line-height: 40px;
+    }
+
+    table.editFormTable .textleft, table.editFormTable .textright {
+        width: auto;
+    }
+
+form .formButtons {
+    margin: 0;
+    height: 47px;
+    position: relative;
+}
+
+.selectRowBorder {
+    width: 0;
+    height: 0;
+    border-top: 7px solid red;
+    border-right: 7px solid transparent;
+    border-bottom: 0px solid transparent;
+    border-left: 0px solid red;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display:none;
+}
+
+tr.k-state-selected span.selectRowBorder{
+    display:block;
+}

@@ -1,0 +1,109 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.ResFolioManage;
+@using Gemstar.BSPMS.Common.Extensions;
+<div class="toolbar">
+    <table class="editFormTable" style="width:100%">
+        <tr>
+            <td class="textright"><label for="folioQueryDateBegin">发生时间:</label></td>
+            <td style="width:290px;">从@(Html.Kendo().DatePicker().Name("folioQueryDateBegin").Format(DateTimeExtension.DateFormatStr).Events(e => e.Change("folioQueryButton_clicked")).HtmlAttributes(new { style = "width: 130px;" }))至@(Html.Kendo().DatePicker().Name("folioQueryDateEnd").Format(DateTimeExtension.DateFormatStr).Events(e => e.Change("folioQueryButton_clicked")).HtmlAttributes(new { style = "width: 130px;" }))</td>
+            <td class="textright"><label for="txtRoomNo">房号:</label></td>
+            <td>
+                <input type="text" name="txtRoomNo" id="txtRoomNo" class="k-textbox" style="width:102px" />
+                @(Html.Kendo().DropDownList().Name("folioQueryResBillId").OptionLabel("全部账单").DataSource(d => d.Read(c=>c.Action("ListItemForResBillId", "ResOrderFolio", new { rnd = new Random().Next() }).Data("setQueryResBillIdPara"))).DataTextField("Value").DataValueField("Key").Events(e => e.Change("folioQueryButton_clicked")).HtmlAttributes(new { style = "width: 150px;" }).AutoBind(false))
+            </td>
+        </tr>
+        <tr>
+            <td class="textright"><label for="folioStatu10">账务状态:</label></td>
+            <td><input class="k-radio" type="radio" name="folioStatu" id="folioStatu1" value="1" checked="checked" /><label class="k-radio-label" for="folioStatu1">未结</label><input class="k-radio" type="radio" name="folioStatu" id="folioStatu2" value="2" /><label class="k-radio-label" for="folioStatu2">已结</label><input class="k-radio" type="radio" name="folioStatu" id="folioStatu51" value="51" /><label class="k-radio-label" for="folioStatu51">作废</label><input class="k-radio" type="radio" name="folioStatu" id="folioStatu0" value="0" /><label class="k-radio-label" for="folioStatu0">转出</label><input class="k-radio" type="radio" name="folioStatu" id="folioStatu10" value="10" /><label class="k-radio-label" for="folioStatu10">全部</label></td>
+            <td class="textright"><label for="folioQueryItemTypes">项目类型:</label></td>
+            <td>
+                @(Html.Kendo().MultiSelect().Name("folioQueryItemTypes").DataSource(d => d.Read("ListItemForFolioItemType", "ResOrderFolio", new { rnd = new Random().Next() })).DataTextField("Text").DataValueField("Value").AutoClose(false).Events(e => e.Change("folioQueryButton_clicked")).HtmlAttributes(new { style = "width: 254px;" }).AutoBind(false))
+            </td>
+        </tr>
+    </table>
+</div>
+<style type="text/css">
+    .printDeposit{
+        display:inline-block;
+        float:right;
+        width:14px;
+        height:18.5px;
+        background-image:url(../../../../images/dy.png);
+        background-position: bottom;
+        background-repeat:no-repeat;
+        cursor:pointer;
+    }
+    #folioCreditSumSpan,#folioDebitSumSpan{color:#0E4995;}
+    #folioBalanceSumSpan{color:red;}
+    .toolbar table.editFormTable .textright,#folioAddFolioDiv table.editFormTable .textright{width:60px;}
+    .toolbar .editFormTable,#folioAddFolioDiv .editFormTable{padding-right:0px;}
+    .k-radio{padding-left:0px;}
+    .k-radio-label{padding-right:10px;}
+    #gridFolioFolioRowInfo{margin-bottom:10px;}
+    #gridFolioFolioRowInfo_info .textright,#gridFolioFolioRowInfo_folio .textright,#gridFolioFolioRowInfo_settle .textright,#gridFolioFolioRowInfo_CancelAndRecoveryFolio .textright{width:120px;}
+    #gridFolioFolioRowInfo td{height:28px; line-height:28px;vertical-align:top;}
+    .folio_textright_value{width:200px;word-wrap:break-word;word-break:break-all;}
+</style>
+@(
+Html.Kendo().Grid<ResFolioFolioInfo>()
+.Name("gridFolioFolio")
+.Columns(c=>{
+    c.Bound(w => w.Transid).Width(37).Sortable(false)
+    .ClientTemplate("<input type='checkbox' class='k-checkbox folioFolioRowCheck' value='#: Transid #' checked='checked' id='folioFolioRowCheck_#: Transid #' style=\"padding-left:0px;\" /><label class=\"k-checkbox-label\" for='folioFolioRowCheck_#: Transid #'></label>")
+    .HeaderTemplate(" <input type='checkbox' class='k-checkbox folioFolioAllCheck' checked='checked' id='folioFolioAllCheck' style=\"padding-left:0px;\" /><label class=\"k-checkbox-label\" for='folioFolioAllCheck'></label>");
+
+    c.Bound(w => w.RoomNo).Title("房号").Width(50).ClientFooterTemplate("小计:");
+
+    c.Bound(w => w.ItemName).Title("项目").HtmlAttributes(new { style = "white-space: nowrap" })
+    .ClientTemplate("#:ItemName# # if(CreditAmount>0&&(Paymentdesc=='A' || Paymentdesc=='E') && Remark!='预授权完成时自动插入的付款'){#<span class=\"printDeposit\"></span>#}#")
+    .ClientFooterTemplate("<div class='columsAlign'>#=data.Transid.count#笔</div>");
+
+    c.Bound(w => w.Quantity).Title("数量").Width(45).HtmlAttributes(new { style = "text-align: center;" });
+
+    c.Bound(w => w.DebitAmount).Title("消费金额").HtmlAttributes(new { @class = "columsAlign" }).Format("{0:0.00}")
+    .ClientFooterTemplate("<div class='columsAlign'><span id='folioDebitSumSpan'>#=sum.toFixed(2)#</span></div>")
+    .HeaderHtmlAttributes(new { @class = "columsAlign" }).Width(70);
+
+    c.Bound(w => w.CreditAmount).Title("支付金额").HtmlAttributes(new { @class = "columsAlign" }).Format("{0:0.00}")
+    .ClientFooterTemplate("<div class='columsAlign'><span id='folioCreditSumSpan'>#=sum.toFixed(2)#</span></div>")
+    .HeaderHtmlAttributes(new { @class = "columsAlign" }).Width(70);
+
+    c.Bound(w => w.TransDate).Title("发生时间").Width(120)
+    .ClientFooterTemplate("余额：<span id='folioBalanceSumSpan'>#=(data.CreditAmount.sum - data.DebitAmount.sum).toFixed(2)#</span>")
+    .FooterHtmlAttributes(new { style = "overflow:hidden;white-space:nowrap;" });
+
+    c.Bound(w=>w.Remark).Title("备注").HtmlAttributes(new { style = "white-space: nowrap", title = "#=Remark#" });
+
+    c.Bound(w => w.RegidFrom).Title("原账号").ClientTemplate("#= RegidFrom!=null ? (RegidFrom.replace('" + ViewBag.HotelId + "','')) : '' #");
+
+    c.Bound(w => w.InputUser).Title("操作员").HtmlAttributes(new { style= "white-space: nowrap" });
+})
+.Sortable()
+.Scrollable()
+.DataSource(d=>d.Ajax().Read(c=>c.Action("AjaxQueryFolios", "ResOrderFolio").Data("setQueryFolioPara")).Aggregates(a=> { a.Add(w => w.DebitAmount).Sum();a.Add(w => w.CreditAmount).Sum();a.Add(w=>w.Transid).Count(); }).Model(m => m.Id("Transid")))
+.HtmlAttributes(new { style = "height: 425px;max-height: 425px;" })
+.Events(e => e.DataBound("folioFolioTable_dataBound"))
+.AutoBind(false)
+.Selectable(c=>c.Mode(GridSelectionMode.Single).Type(GridSelectionType.Row))
+)
+<div style="display:none;">
+    <div id="folioRowInfoWindow">
+        <div id="gridFolioFolioRowInfo">
+            <fieldset>
+                <legend>账务信息</legend>
+                <table class="editFormTable" id="gridFolioFolioRowInfo_info"></table>
+            </fieldset>
+            <fieldset>
+                <legend id="gridFolioFolioRowInfo_folio_legend">消费付款</legend>
+                <table class="editFormTable" id="gridFolioFolioRowInfo_folio"></table>
+            </fieldset>
+            <fieldset id="gridFolioFolioRowInfo_settle_fieldset">
+                <legend>结账信息</legend>
+                <table class="editFormTable" id="gridFolioFolioRowInfo_settle"></table>
+            </fieldset>
+            <fieldset id="gridFolioFolioRowInfo_CancelAndRecoveryFolio_fieldset">
+                <legend>作废与恢复信息</legend>
+                <table class="editFormTable" id="gridFolioFolioRowInfo_CancelAndRecoveryFolio"></table>
+            </fieldset>
+        </div>
+    </div>
+</div>

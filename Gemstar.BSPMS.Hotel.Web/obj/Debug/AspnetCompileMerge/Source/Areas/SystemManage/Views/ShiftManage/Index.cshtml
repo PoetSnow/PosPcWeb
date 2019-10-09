@@ -1,0 +1,54 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+
+
+@{
+    ViewBag.Title = "班次";
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "Id";
+
+    var gridModel = new KendoGridCommonViewModel()
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForEnable = true,
+        EnableFunctionForDisable = true,
+        EnableFunctionForAdd=ViewBag.isCanAdd,
+        EnableFunctionForDelete = ViewBag.isCanAdd
+    };
+    var gridHelper = new KendoGridEditInCellHtmlHelper<Shift>(
+        Html,
+        Url,
+        gridModel,
+        c =>
+        {
+            c.Bound("Code").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: Code    #</div>").Title("班次代码");
+            c.Bound("ShiftName").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: ShiftName    #</div>").Title("班次名");
+            c.Bound("BeginTime").ClientTemplate(@" <div name='bt' style=#: Status==51?'text-decoration:line-through;color:red;':'' #>  #: BeginTime #</div>").Title("开始时间");//<input type='text' value=#: BeginTime # id='begint' style='height:30px;'/>  
+            c.Bound("EndTime").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: EndTime    #</div>").Title("结束时间");
+            c.Bound("LoginStatus").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: LoginStatus=='0'?'未开':(LoginStatus=='1'?'已开':'已关闭') #</div>").Title("登录状态");
+            c.Bound("Seqid").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: Seqid==null?'':Seqid  #</div>").Title("排序号");
+        }
+        ,
+        c =>
+        {
+            c.Id(w => w.Id);
+            c.Field(w => w.LoginStatus).Editable(false);
+            c.Field(w => w.Status).Editable(false);
+        }
+        );
+}
+@(gridHelper.KendoGridEditInCell())
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridModel)
+}
+<script type="text/javascript">
+    $(function () {
+        $("#grid .k-grid-header th:eq(5) .k-link").click();
+        //$("#begint").kendoTimePicker()
+        $("#begint").eq(0).kendoTimePicker();
+    });
+</script>
+

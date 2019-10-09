@@ -1,0 +1,15 @@
+﻿@using Gemstar.BSPMS.Hotel.Web.Areas.ScanOrder.Models
+
+@model List<ActionGroup>
+
+@{
+    if (Model != null && Model.Count > 0)
+    {
+        foreach (var temp in Model)
+        {
+            <a class="mui-btn" onclick="setGroup(this)" data-id="@temp.Igroupid" data-ids="@temp.ActionIds" data-names="@temp.ActionNames">@temp.ActionNames</a>
+        }
+    }
+
+    <a id="addIgroupid" class="mui-btn" onclick="addGroup()" data-id="" data-ids="" data-names="">+</a>
+}

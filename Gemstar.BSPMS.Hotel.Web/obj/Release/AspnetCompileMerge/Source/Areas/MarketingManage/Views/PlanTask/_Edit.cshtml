@@ -1,0 +1,42 @@
+﻿
+@model Gemstar.BSPMS.Hotel.Web.Areas.MarketingManage.Models.PlanTask.PlanTaskEditViewModel
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.Hid)
+    @Html.HiddenFor(m => m.cDate)
+    <table class="editFormTable">
+        <tr>
+          
+
+
+            <td class="textright">客房收入</td>
+            <td>@Html.TextBoxFor(m => m.Amount, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Amount, "*")</td>
+
+
+        </tr>
+
+    </table>
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+     
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+</script>

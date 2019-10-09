@@ -1,0 +1,209 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntityProcedures;
+@using Gemstar.BSPMS.Common.Extensions;
+@using Gemstar.BSPMS.Common.Enumerator;
+@using Gemstar.BSPMS.Common.Services.Enums;
+@{
+    ViewBag.Title = "操作日志";
+}
+<style type="text/css">
+    .div {
+        margin-bottom: 10px;
+        margin-top: 20px;
+    }
+
+    .collapse {
+        position: relative;
+        height: 0;
+        overflow: hidden;
+        -webkit-transition: height 0.35s ease;
+        -moz-transition: height 0.35s ease;
+        -o-transition: height 0.35s ease;
+        transition: height 0.35s ease;
+    }
+
+        .collapse.in {
+            height: auto;
+        }
+
+    .span {
+        visibility: hidden;
+    }
+
+    .input {
+        border:none;
+        outline:medium;
+        color:#333;
+        background-color: inherit;
+        width:95%;
+        padding-left:0px!important;
+    }
+    .span5 {
+      margin-right:5px;
+    }
+    .span6 {
+        margin-left:5px;
+    }
+    body {
+        overflow-y:hidden;
+    }
+</style>
+<div class="div">
+    <table>
+        <tr>
+            <td style="text-align:right;">操作时间从</td>
+            <td>@(Html.Kendo().DateTimePicker().Name("opeartionDateBegin").Value(ViewBag.currentbsday + " 00:00:00").Format(DateTimeExtension.DateTimeFormatStr))</td>
+            <td style="text-align:right;">操作类型</td>
+            <td>@(Html.Kendo().DropDownList().Name("opeartionType").Filter("contains").OptionLabel("全部(可模糊查询)").BindTo(EnumExtension.ToSelectList(typeof(OpLogType), EnumValueType.Text, EnumValueType.Text).Where(m => m.Text.Contains("Pos"))).Events(e => e.Change("editControl_changed")))</td>
+            <td style="text-align:right;">操作内容</td>
+            <td>@(Html.Kendo().TextBox().Name("opeartionContent"))</td>
+            <td style="text-align:right;">客账号</td>
+            <td>@(Html.Kendo().TextBox().Name("billno"))</td>
+            @if (!string.IsNullOrEmpty(ViewBag.SaveOpLogDays))
+            {
+                <td id="logsave" style="color:red;float:right;">
+                    操作日志将保留 @ViewBag.SaveOpLogDays 天
+
+                </td>
+            }
+        </tr>
+        <tr>
+            <td style="text-align:right;">至</td>
+            <td>@(Html.Kendo().DateTimePicker().Name("opeartionDateEnd").Format(DateTimeExtension.DateTimeFormatStr).Events(e => e.Change("data_change")))</td>
+            <td style="text-align:right;">操作员</td>
+            <td>
+                @(Html.Kendo().DropDownList().Name("opeartionUser").DataTextField("Text").DataValueField("Text").Filter("contains")
+                                 .OptionLabel("全部")
+                                 .DataSource(s => { s.Read(r => r.Url(Url.Action("ListItemForPmsUser"))); })
+                                  .Events(e => e.Change("editControl_changed")))
+        </td>
+        <td style="text-align:right;">IP地址</td>
+        <td>@(Html.Kendo().TextBox().Name("ip"))</td>
+        <td></td>
+        <td>@(Html.Kendo().Button().Name("query").Content("查询").Events(e => e.Click("editControl_changed")))</td>
+
+        </tr>
+    </table>
+</div>
+@(Html.Kendo().Grid<UpQueryOperationLog>()
+  .Name("grid")
+   .Pageable(pageable => pageable.PageSizes(Gemstar.BSPMS.Common.Tools.CommonHelper.PageSizes))
+   .Pageable(pageable => pageable.Messages(c => c.ItemsPerPage("")))
+   .Sortable()
+   .Filterable()
+   .ColumnMenu()
+   .Selectable(s => s.Mode(GridSelectionMode.Single))
+   .DataSource(c =>
+   {
+       c.Ajax().Read(r => r.Action("IndexAjax", "OperationLog").Data("setQueryPara")).PageSize(Gemstar.BSPMS.Common.Extensions.UrlHelperExtension.GetPageSizeForCookies(Request));
+   })
+   .Columns(c =>
+   {
+
+       c.Bound(w => w.cDate).Title("操作时间").Width("10%");
+       c.Bound(w => w.xType).Title("操作类型").Width("10%");
+       c.Bound(w => w.cText).Title("操作内容").Width("62%");
+       c.Bound(w => w.cUser).Title("操作员").Width("10%");
+       c.Bound(w => w.ip).Title("ip地址").Width("8%");
+   }) 
+   .Scrollable(c => c.Height("100%").Enabled(true))
+   .Events(e => e.DataBound("grid_dataBound"))
+)
+<span id="hidspan" class="span"></span>
+
+<script type="text/javascript">
+
+    function setQueryPara() {
+        var opeartionDateBegin = $("#opeartionDateBegin").data("kendoDateTimePicker").value();
+        var opeartionDateEnd = $("#opeartionDateEnd").data("kendoDateTimePicker").value();
+        var opeartionContent = $("#opeartionContent").val();
+        var operators = $("#opeartionUser").data("kendoDropDownList").value();
+
+        var opeartionType = $("#opeartionType").val();
+        var text = $("#opeartionType").parent("span").find(".k-input").text();
+        if (opeartionType == "" && text.indexOf("全部") < 0)
+            opeartionType = text;
+        var opeartionNo = $("#opeartionNo").val();
+        var ip = $("#ip").val();
+        var billno = $("#billno").val();
+        return {
+            operationDateBegin: opeartionDateBegin,
+            operationDateEnd: opeartionDateEnd,
+            operationContent: opeartionContent,
+            operators: operators,
+            ip: ip,
+            opeartionType:opeartionType,
+            opeartionNo:opeartionNo,
+            billNo: billno
+        }
+    }
+    function editControl_changed() {
+        var grid = $("#grid").data("kendoGrid");
+        grid.dataSource.page(1);
+    }
+    function grid_dataBound() {
+        var width = $("#grid th:eq(2)").width();
+        var grid = $("#grid tr:not(:first)");
+        for (var i = 0; i <grid.length; i++) {
+            var td = $(grid[i]).find("td:eq(2)");
+            var text = $(td).text();
+            var textWidth =text.visualLength();
+            if (textWidth > width - 10) {
+                var uid = $(grid[i]).attr("data-uid");
+                var div = "<div id='accordion"+uid+"'>" +
+                          "<div>" +
+                             " <div class='accordion-heading'>" +
+                                 " <a href='#collapse"+uid+"'>" +
+                                      "<input class='input'  type='text' value='" + text + "' />" +
+                                      "<span style='color:red'>展开</span>" +
+                                  "</a>" +
+                              "</div>" +
+                             " <div id='collapse"+uid+"' class='collapse'>" +
+                                  "<div>" +
+                                    text + "<a href='javascript:void(0)' style='color:red;float: right;'>收起</a>"
+                                  "</div>" +
+                              "</div>" +
+                          "</div>" +
+                      "</div>"
+                $(td).html(div);
+            }
+        }
+        $(".accordion-heading").click(function (e) {
+            e.preventDefault();
+            $(this).css("display", "none");
+            $(this).next().css("height", "auto");
+
+        })
+        $(".collapse").click(function (e) {
+            e.preventDefault();
+            $(this).prev().css("display", "block");
+            $(this).css("height", "0px");
+        })
+    }
+    String.prototype.visualLength = function () {
+        var ruler = $("#hidspan");
+        ruler.text(this);
+        return ruler[0].offsetWidth;
+    }
+    function data_change(e) {
+        var hours = this.value().getHours();
+        if (hours == 0) {
+            var data = this.value().ToDateString()+" 23:59:59";
+            $("#opeartionDateEnd").data("kendoDateTimePicker").value(data);
+        }
+    }
+    $(function () {
+        $("#logsave").css("margin-left", $(".div").width() - 1050);
+        window.onresize = onResize; onResize();
+        $("#opeartionType-list input").change(function () {
+            var text = $(this).val();
+            $("#opeartionType").parent("span").find(".k-input").text(text);
+            $("#opeartionType").val(text);
+        })
+
+    });
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 145;
+        $("#grid .k-grid-content").height(allHeight - showHeight);
+    }
+</script>

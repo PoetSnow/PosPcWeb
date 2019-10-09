@@ -1,0 +1,18 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PaymentViewModel
+@{
+    if (Model != null && Model.PayWayList != null && Model.PayWayList.Count > 0)
+    {
+        foreach (var temp in Model.PayWayList)
+        {
+            <input type="button" value="@temp.Cname" onclick="selectPayment(this)" data-id="@temp.Id" data-PayType="@temp.PayType" data-isChange="@temp.IsChange" data-checked="false" />
+        }
+        if (Model.PayWayList.Count < 6)
+        {
+            for (int i = 0; i < 6 - Model.PayWayList.Count; i++)
+            {
+                <input type="button" style="background: rgba(255,255,255,0);outline-color:rgba(255,255,255,0);" value="@(" ")"/>
+            }
+        }
+    }
+}
+<input type="button" value="翻页" onclick="itemPageing()" />

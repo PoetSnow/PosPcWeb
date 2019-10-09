@@ -1,0 +1,76 @@
+﻿
+body, h1, h2, h3, h4, h5, h6, div, dl, dt, dd, ul, ol, li, pre, code, form, fieldset, legend, input, button, textarea, p, blockquote, th, td {
+    margin: 0;
+    padding: 0;
+}
+
+.tabstatus {
+    display: flex;
+    justify-content: space-around;
+    flex-flow: row wrap;
+}
+
+.tabstatus li {
+    float: left;
+    padding: 0.3rem;
+    width: calc(5rem);
+    height: calc(5rem);
+    /*margin-right: 0.5rem;*/
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+    border: 2px solid #111;
+}
+
+
+
+.mainRight {
+    margin-top: 2.5rem;
+}
+
+
+.btn {
+    border: 1px solid #aaa;
+    background: #eee;
+    border-radius: 5px;
+    padding: 7px;
+    margin: 0;
+    width: 100%;
+    margin-top: 2px;
+    color: #333;
+}
+
+.refe {
+    z-index: 99999;
+    position: absolute;
+    width: 94%;
+    text-align: center;
+    background-color: #1d4666;
+    color: #eee;
+    display: none
+}
+
+.refe li {
+    border-bottom: 1px solid;
+    line-height: 35px;
+}
+
+.refe li a {
+    color: #eee;
+}
+
+.settlement {
+    bottom: 0;
+    width: 100%;
+    position: fixed;
+    z-index: 99999999;
+    height: 3rem;
+}
+
+.downOrder {
+    height: 3rem;
+}
+
+#showShopCart {
+    height: 3rem;
+    width: 100%;
+}

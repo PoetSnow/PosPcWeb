@@ -1,0 +1,110 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "酒店日历";
+
+    //上级列表
+    var gridFatherId = "gridHotelDay";
+    var gridFatherKey = "Id";
+    var gridFatherName = "Name";
+    var gridController = "HotelDayManage";
+
+    //下级列表
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var columnName = "@h99hotelDayid";
+    var btnShowId = "TitleMemberId";
+    var btnShowName = "日历名称：";
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForPage = false,
+        EnableFunctionForDelete = true,
+        EnableFunctionForQuery = false,
+        EnableCustomToolbarForFirst = true,
+        EnableFunctionForAdd = false,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("name").Title("说明");
+            c.Bound("beginDay").Title("开始日期");
+            c.Bound("endDay").Title("结束日期");
+        },
+        CustomToolbar = c =>
+        {
+            c.Custom().Name(btnShowId).Text(btnShowName).HtmlAttributes(new { id = @btnShowId, href = "javascript:void(0);" });
+            c.Custom().Name("addGridItem").Text("增加").HtmlAttributes(new { onclick = "addGridItemNew()", href = "javascript:void(0);" });
+        }
+    };
+}
+<div style="width:30%; float:left;">
+    @(Html.Kendo().Grid<HotelDay>()
+    .Name(gridFatherId)
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Name).Title("日历名称");
+        columns.Bound(p => p.Seqid).Title("优先级").Width(60);
+        columns.Command(command => { command.Edit(); command.Destroy(); }).Title("操作");
+    })
+    .Events(e => { e.DataBound("onDataBound"); })
+    .ToolBar(toolbar => toolbar.Create())
+    .Editable(editable => editable.Mode(GridEditMode.InLine))
+    .Pageable(pageable => pageable.Enabled(false))
+    .Scrollable(c => c.Height("100%"))
+    .Selectable(s => s.Mode(GridSelectionMode.Single))
+    .Scrollable()
+    .Events(e => { e.Change("onChange"); })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .ServerOperation(false)
+        .Model(c => c.Id(w => w.Id))
+        .Read(read => read.Action("AjaxQuery", gridController).Data("getFatherQueryParas"))
+        .Update(update => update.Action("Update", gridController).Data("getUpdatedOriginValues"))
+        .Create("Add", gridController)
+        .Destroy(update => update.Action("Destroy", gridController))
+        .Events(e => { e.RequestEnd("gridDatasourceRequestEnded"); e.Sync("gridDataSourceSynced"); e.Error("gridDatasourceRequestError"); })
+    )
+    )
+</div>
+<div style="width:70%; float:left;">
+    @Html.Partial("_KendoGridDataRowView", gridViewModel)
+</div>
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+
+<script type="text/javascript">
+    function getFatherQueryParas() {
+        return {
+            QueryProcedureName: "up_list_hotelDay",
+            QueryParameterValues: ""
+        };
+    }
+    function gridHotelDay_dataBoundEnded() {
+        var grid = $("#" + "@gridFatherId").data("kendoGrid");
+        var rowItems = grid.tbody.find("tr");
+        if(rowItems!=null && rowItems.length > 0){
+            grid.select(rowItems[0]);
+        }
+    }
+    function selectDoCommonQuery(id, name) {
+        document.getElementById('commonQueryParameterValues').value = ("@columnName" + "=" + id);
+        $("#" + "@btnShowId").html("<span></span>" + "@btnShowName" + name);
+        var grid = $("#" + $("#commonQueryGridId").val()).data("kendoGrid");
+        grid.dataSource.read();
+    }
+    function addGridItemNew() {
+        var value = document.getElementById('commonQueryParameterValues').value;
+        value = value.replace(("@columnName" + "="), "");
+        top.openKendoWindow("增加" + "@ViewBag.Title", "/SystemManage/HotelDayDetailManage/Add?hotelDayId=" + value);
+    }
+    function onChange(arg) {
+        var grid = $("#" + "@gridFatherId").data("kendoGrid");
+        var data = grid.dataItem(this.select());
+        selectDoCommonQuery(data.@gridFatherKey, data.@gridFatherName);
+    }
+</script>

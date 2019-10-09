@@ -1,0 +1,172 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.RoomTypeManage.RoomTypeGroupAddViewModel
+@using (Html.BeginForm(new { action = "AddGroup" }))
+{
+                Model.IsClose = true;
+                Model.Count = 2;
+                Model.MaxCount = 2;
+                Model.IsAdd = false;
+                Model.IsNotRoom = false;
+                Model.ChanelValid = false;
+                Model.OverQauntity = 0;
+    <div style="height:508px;overflow-y:scroll">
+        <table class="editFormTable">
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Code)</td>
+                <td colspan="4">@Html.TextBoxFor(m => m.Code, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Name)</td>
+                <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.ShortName)</td>
+                <td>@Html.TextBoxFor(m => m.ShortName, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.ShortName, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Price)</td>
+                <td colspan="1">@Html.TextBoxFor(m => m.Price, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Price, "*")</td>
+                <td class="textright"> </td>
+                <td>
+                    @Html.Kendo().CheckBoxFor(e => e.isChangeDirty).HtmlAttributes(new { id = "isChangeDirty" }).Checked(true)
+                    @Html.Kendo().CheckBoxFor(e => e.isDepChangeDirty).HtmlAttributes(new { id = "isDepChangeDirty" }).Checked(true)
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Count)</td>
+                <td>@Html.TextBoxFor(m => m.Count, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Count, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.MaxCount)</td>
+                <td>@Html.TextBoxFor(m => m.MaxCount, new { @class = "k-textbox", style = "width:100%;" }) </td>
+                <td>@Html.ValidationMessageFor(m => m.MaxCount, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.IsAdd)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.IsAdd).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetIsSelectList", "RoomTypeManage", new { rnd = new Random().NextDouble() })); })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.IsAdd, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.IsNotRoom)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.IsNotRoom).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetIsSelectList", "RoomTypeManage", new { rnd = new Random().NextDouble() })); })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.IsNotRoom, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.ChanelValid)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.ChanelValid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetIsSelectList", "RoomTypeManage", new { rnd = new Random().NextDouble() })); })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.ChanelValid, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.IsClose)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(e => e.IsClose).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetIsSelectList", "RoomTypeManage", new { rnd = new Random().NextDouble() })); })
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.IsClose, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.OverQauntity)</td>
+                <td>@Html.TextBoxFor(m => m.OverQauntity, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.OverQauntity, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+                <td>@Html.TextBoxFor(m => m.Seqid, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Cdescribe)</td>
+                <td colspan="4">@Html.TextAreaFor(m => m.Cdescribe, new { @class = "k-textbox", style = "width:100%;height:50px;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Cdescribe, "*")</td>
+            </tr>
+
+            @Html.Partial("_QiniuPictureUploadmulti")
+
+            @foreach (var roompara in ViewBag.roomtypepara)
+{
+                <tr>
+
+                    <td class="textright">@roompara.ParaName</td>
+                    @if (roompara.ParaCode == "rt1")
+{
+                        <td>@Html.TextBoxFor(m => m.Rt1, new { @class = "k-textbox", style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Rt1, "*")</td>
+                    }
+                    else if (roompara.ParaCode == "rt2")
+                    {
+                        <td>@Html.TextBoxFor(m => m.Rt2, new { @class = "k-textbox", style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Rt2, "*")</td>
+                    }
+                    else if (roompara.ParaCode == "rt3")
+                    {
+                        <td>@Html.TextBoxFor(m => m.Rt3, new { @class = "k-textbox", style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Rt3, "*")</td>
+                    }
+                    else if (roompara.ParaCode == "rt4")
+                    {
+                        <td>@Html.TextBoxFor(m => m.Rt4, new { @class = "k-textbox", style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Rt4, "*")</td>
+                    }
+                    else if (roompara.ParaCode == "rt5")
+                    {
+                        <td>@Html.TextBoxFor(m => m.Rt5, new { @class = "k-textbox", style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Rt5, "*")</td>
+                    }
+                    else if (roompara.ParaCode == "rt6")
+                    {
+                        <td>@Html.TextBoxFor(m => m.Rt6, new { @class = "k-textbox", style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Rt6, "*")</td>
+                    }
+                    else if (roompara.ParaCode == "rt7")
+                    {
+                        <td>@Html.TextBoxFor(m => m.Rt7, new { @class = "k-textbox", style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Rt7, "*")</td>
+                    }
+                    else if (roompara.ParaCode == "rt8")
+                    {
+                        <td>@Html.TextBoxFor(m => m.Rt8, new { @class = "k-textbox", style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Rt8, "*")</td>
+                    }
+                    @if (roompara.dataType == "percent")
+{
+                        <td>
+                            <label>%</label>
+                        </td>
+                    }
+                </tr>
+            }
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.DataControlName)</td>
+                <td>@Html.TextBoxFor(m => m.DataControlName, new { @class = "k-textbox", style = "width:100%;", @readonly = "readonly" })</td>
+                <td>@Html.ValidationMessageFor(m => m.DataControlName, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.SelectedResortHids)</td>
+                <td>@Html.DropDownListFor(m => m.SelectedResortHids, Model.ResortItems, new { @class = "box", multiple = "multiple", style = "width:100%;height:200px;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.SelectedResortHids, "*")</td>
+            </tr>
+        </table>
+        @Html.HiddenFor(m => m.DataControlCode)
+    </div>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        var controlType = "@Model.DataControlCode";
+        if (controlType != "@Gemstar.BSPMS.Common.Services.BasicDataControls.DataControlType.SelectedResorts.Code") {
+            $("#SelectedResortHids").attr("disabled", "disabled");
+        }
+        $("#saveEditFormButton").click(function (e) {
+        e.preventDefault();
+        Savadelimg();
+        saveFormData($("#saveEditFormButton"));
+    });
+        $("#closeEditFormButton").click(function (e) {
+        e.preventDefault();
+        closeEditFormWindow();
+    });
+});
+</script>

@@ -1,0 +1,80 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.CouponManage.CouponAddViewModel
+@using (Html.BeginForm())
+{
+
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">优惠券类型</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.ItemTypeid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForCoupon", "CouponManage")); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.ItemTypeid, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.Code)</td>
+            <td>@Html.TextBoxFor(m => m.Code, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Name)</td>
+            <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.CouponMoney)</td>
+            <td>
+                @Html.TextBoxFor(m => m.CouponMoney, new { @class = "k-textbox", style = "width:50%;",type="number" }) (元)
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.CouponMoney, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+            <td>@Html.TextBoxFor(m => m.Seqid, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.ValidDate)</td>
+            <td>
+                @Html.TextBoxFor(m => m.ValidDate, new { @class = "k-textbox", style = "width:50%;", type = "number" }) (天)
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.ValidDate, "*")</td>
+            
+        </tr>
+        @*<tr>
+            <td class="textright">@Html.LabelFor(m => m.RoomTypeids)</td>
+            <td colspan="4">
+                @Html.HiddenFor(m => m.RoomTypeids)
+                @Html.Kendo().MultiSelect().Name("RoomTypeidsMultiSelect").HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("listItemForRoomType", "CouponManage")); }).Value(ViewBag.rtp)
+                
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.RoomTypeids, "*")</td>
+               
+        </tr>*@
+        
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td colspan="4">
+                @Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;" })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $(".k-input").css("text-indent", "1em");
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            //$("#RoomTypeids").val($("#RoomTypeidsMultiSelect").data("kendoMultiSelect").value());
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+
+    });
+
+</script>

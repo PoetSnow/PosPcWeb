@@ -1,0 +1,27 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_itemByPosOnSaleResult>
+<ul id="itemTJC">
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <li class="content-list-detail">
+                    <a href="javascript:void(0)" onclick="PosOnSaleItemCheck(this)" data-itemId="@item.itemId" data-code="@item.code" data-name="@item.Cname" data-unit="@item.unitid" data-itagperiod="@item.itagperiod"  >
+                        <span style="display:@(item.isshowcode == null || item.isshowcode.Value == false ? "none" : "");">@item.code</span>
+                        <span>@item.Cname</span>
+                        
+                        <span style="display:@(item.isshowprice == null || item.isshowprice.Value == false ? "none" : "");">@(Convert.ToDecimal(item.price == null ? 0 : item.price).ToString("C"))</span>
+                        
+                        <span><i class="fa fa-check"></i></span>
+                    </a>
+                </li>
+            }
+
+            <li class="content-list-paging">
+                <a href="javascript:void(0)" onclick="getListPage(this,'1','@(Url.Action("_ItemListTJC", "PosInSingle"))','@(Url.Action("GetPosOnSaleItemTotal", "PosInSingle"))')">上一页</a>
+                <a href="javascript:void(0)" onclick="getListPage(this,'2','@(Url.Action("_ItemListTJC","PosInSingle"))','@(Url.Action("GetPosOnSaleItemTotal","PosInSingle"))')">下一页</a>
+            </li>
+        }
+        <li class="content-list-return"><a href="javascript:void(0)" onclick="returnParent()"><img src="~/Images/posInSingle/fanh.png" /><br />返回</a></li>
+    }
+</ul>

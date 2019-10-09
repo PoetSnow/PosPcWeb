@@ -1,0 +1,52 @@
+﻿<div id="refundfolioWindow">
+    <div class="k-grid k-widget" style="max-height: 450px;overflow:hidden;">
+        <div class="k-grid-header" style="padding-right: 17px;">
+            <div class="k-grid-header-wrap k-auto-scrollable">
+                <table role="grid">
+                    <colgroup>
+                        <col style="width:70px;">
+                        <col style="width:70px;">
+                        <col style="width:100px;">
+                        <col style="width:80px;">
+                        <col style="width:135px;">
+                        <col>
+                        <col style="width:90px;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="k-header">账号</th>
+                            <th class="k-header">房号</th>
+                            <th class="k-header">项目</th>
+                            <th class="k-header">金额</th>
+                            <th class="k-header">发生时间</th>
+                            <th class="k-header">备注</th>
+                            <th class="k-header">操作员</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="k-grid-content k-auto-scrollable" style="max-height: 357px;">
+            <table style="height: auto;">
+                <colgroup>
+                    <col style="width:70px;">
+                    <col style="width:70px;">
+                    <col style="width:100px;">
+                    <col style="width:80px;">
+                    <col style="width:135px;">
+                    <col>
+                    <col style="width:90px;">
+                </colgroup>
+                <tbody id="refundfolioWindow_Tbody"></tbody>
+            </table>
+        </div>
+        <div class="k-header k-grid-toolbar">
+            <div class="toolbar">
+                <label>退款金额：</label><input id="refundfolioWindow_Amount" />
+                <button type="button" class="k-button" id="refundfolioWindow_submit">退款</button>
+                <label>支持（支付宝刷卡支付、支付宝扫码支付、微信刷卡支付、微信扫码支付）退款</label>
+                <button type="button" class="k-button" id="refundfolioWindow_close">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>

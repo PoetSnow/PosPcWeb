@@ -1,0 +1,355 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StiSerializer version="1.02" type="Net" application="StiReport">
+  <Dictionary Ref="1" type="Dictionary" isKey="true">
+    <BusinessObjects isList="true" count="0" />
+    <Databases isList="true" count="0" />
+    <DataSources isList="true" count="1">
+      <TheMenu Ref="2" type="DataTableSource" isKey="true">
+        <Alias>TheMenu</Alias>
+        <Columns isList="true" count="71">
+          <value>客人姓名,System.String</value>
+          <value>结账状态,System.String</value>
+          <value>人数,System.Nullable`1[System.Int32]</value>
+          <value>餐台号,System.String</value>
+          <value>餐台名,System.String</value>
+          <value>开台卡号,System.String</value>
+          <value>会员卡号,System.String</value>
+          <value>合约单位名称,System.String</value>
+          <value>消费人,System.String</value>
+          <value>金额折,System.Nullable`1[System.Decimal]</value>
+          <value>状态,System.String</value>
+          <value>服务费率,System.Nullable`1[System.Decimal]</value>
+          <value>最低消费时长,System.Nullable`1[System.Int32]</value>
+          <value>账单打单次数,System.Nullable`1[System.Int32]</value>
+          <value>埋脚单打单次数,System.Nullable`1[System.Int32]</value>
+          <value>开台备注,System.String</value>
+          <value>收银备注,System.String</value>
+          <value>客账号,System.String</value>
+          <value>手机号码,System.String</value>
+          <value>登记营业日,System.Nullable`1[System.DateTime]</value>
+          <value>登记时间,System.Nullable`1[System.DateTime]</value>
+          <value>模块,System.String</value>
+          <value>业务员,System.String</value>
+          <value>关联号,System.String</value>
+          <value>最低消费,System.Nullable`1[System.Decimal]</value>
+          <value>自动备注,System.String</value>
+          <value>项目代码,System.String</value>
+          <value>消费项目,System.String</value>
+          <value>单位代码,System.String</value>
+          <value>单位,System.String</value>
+          <value>数量,System.Nullable`1[System.Decimal]</value>
+          <value>称重条只,System.Nullable`1[System.Decimal]</value>
+          <value>扣钝倍数,System.Nullable`1[System.Decimal]</value>
+          <value>单价,System.Nullable`1[System.Decimal]</value>
+          <value>作法加价,System.Nullable`1[System.Decimal]</value>
+          <value>折前金额,System.Nullable`1[System.Decimal]</value>
+          <value>税额,System.Nullable`1[System.Decimal]</value>
+          <value>客位,System.String</value>
+          <value>作法,System.String</value>
+          <value>要求,System.String</value>
+          <value>消费还是付款,System.String</value>
+          <value>计费状态,System.String</value>
+          <value>求和套餐,System.Boolean</value>
+          <value>求和套餐明细,System.Boolean</value>
+          <value>套餐分摊金额,System.Nullable`1[System.Decimal]</value>
+          <value>单道折扣,System.Nullable`1[System.Decimal]</value>
+          <value>单道金额折,System.Nullable`1[System.Decimal]</value>
+          <value>批次,System.String</value>
+          <value>原价,System.Nullable`1[System.Decimal]</value>
+          <value>会员价,System.Nullable`1[System.Decimal]</value>
+          <value>会员折扣,System.Nullable`1[System.Decimal]</value>
+          <value>备注,System.String</value>
+          <value>取消原因,System.String</value>
+          <value>班次,System.String</value>
+          <value>市别,System.String</value>
+          <value>折后金额,System.Nullable`1[System.Decimal]</value>
+          <value>折扣金额,System.String</value>
+          <value>折扣率,System.String</value>
+          <value>毛利率,System.String</value>
+          <value>服务费,System.Nullable`1[System.Decimal]</value>
+          <value>消费余额,System.String</value>
+          <value>自动标志,System.String</value>
+          <value>序号,System.String</value>
+          <value>已付金额,System.Nullable`1[System.Decimal]</value>
+          <value>未付金额,System.Nullable`1[System.Decimal]</value>
+          <value>折前总金额,System.Nullable`1[System.Decimal]</value>
+          <value>折后总金额,System.Nullable`1[System.Decimal]</value>
+          <value>应付金额,System.Nullable`1[System.Decimal]</value>
+          <value>计费状态备注,System.String</value>
+          <value>点菜人,System.String</value>
+          <value>开台人,System.String</value>
+        </Columns>
+        <Dictionary isRef="1" />
+        <Name>TheMenu</Name>
+        <NameInSource>DataTable</NameInSource>
+      </TheMenu>
+    </DataSources>
+    <Relations isList="true" count="0" />
+    <Report isRef="0" />
+    <Variables isList="true" count="7">
+      <value>,HotelName,酒店,,System.String,,False,False,False,True</value>
+      <value>,HotelPhone,电话,,System.String,,False,False,False,True</value>
+      <value>,HotelFax,传真,,System.String,,False,False,False,True</value>
+      <value>,HotelAddress,地址,,System.String,,False,False,False,True</value>
+      <value>,UserName,操作员,,System.String,,False,False,False,True</value>
+      <value>,Explain,补打说明,,System.String,,False,False,False,True</value>
+      <value>,IsOrder,点菜单_x002F_取消单,,System.String,,False,False,False,True</value>
+    </Variables>
+  </Dictionary>
+  <EngineVersion>EngineV2</EngineVersion>
+  <GlobalizationStrings isList="true" count="0" />
+  <MetaTags isList="true" count="0" />
+  <Pages isList="true" count="1">
+    <Page1 Ref="3" type="Page" isKey="true">
+      <Border>None;Black;2;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <Components isList="true" count="3">
+        <ReportTitleBand1 Ref="4" type="ReportTitleBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <CanShrink>True</CanShrink>
+          <ClientRectangle>0,0.4,6,2</ClientRectangle>
+          <Components isList="true" count="4">
+            <Text5 Ref="5" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,1.2,6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,12</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text5</Name>
+              <Page isRef="3" />
+              <Parent isRef="4" />
+              <Text>  {TheMenu.点菜人}  {Format("{0:MM/dd HH:mm:ss}", Time)}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+            </Text5>
+            <Text3 Ref="6" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,0.6,6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,12</Font>
+              <Guid>f5478c1aea9340b38bac194abd7c6a31</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text3</Name>
+              <Page isRef="3" />
+              <Parent isRef="4" />
+              <Text>  {TheMenu.餐台号}-{TheMenu.餐台名}({TheMenu.人数}人)</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+            </Text3>
+            <Text6 Ref="7" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,0,6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,12</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text6</Name>
+              <Page isRef="3" />
+              <Parent isRef="4" />
+              <Text>{IsOrder}{Explain}{IsOrder == "取消单" ? Format(" {0}", TheMenu.自动备注) : ""}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+            </Text6>
+            <HorizontalLinePrimitive1 Ref="8" type="HorizontalLinePrimitive" isKey="true">
+              <ClientRectangle>0,2,6,0.0254</ClientRectangle>
+              <Color>Black</Color>
+              <EndCap Ref="9" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </EndCap>
+              <Name>HorizontalLinePrimitive1</Name>
+              <Page isRef="3" />
+              <Parent isRef="4" />
+              <StartCap Ref="10" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </StartCap>
+              <Style>Dot</Style>
+            </HorizontalLinePrimitive1>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Name>ReportTitleBand1</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+        </ReportTitleBand1>
+        <DataBand1 Ref="11" type="DataBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <BusinessObjectGuid isNull="true" />
+          <CanShrink>True</CanShrink>
+          <ClientRectangle>0,3.2,6,1.4</ClientRectangle>
+          <Components isList="true" count="2">
+            <Text1 Ref="12" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,0,6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,12</Font>
+              <Guid>541e5bddfdb8418c8b93bfc0f5de3905</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text1</Name>
+              <Page isRef="3" />
+              <Parent isRef="11" />
+              <Text>{TheMenu.数量} {TheMenu.单位} {TheMenu.消费项目}{TheMenu.取消原因 != "" ? Format("({0})", TheMenu.取消原因):""} {Format("{0:C2}", TheMenu.折前金额)}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+            </Text1>
+            <Text4 Ref="13" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,0.6,6,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,12</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>3c9780060ece41d3a41a8b2286dd1dee</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text4</Name>
+              <Page isRef="3" />
+              <Parent isRef="11" />
+              <Text>{TheMenu.作法}{TheMenu.要求} </Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+            </Text4>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <DataRelationName isNull="true" />
+          <DataSourceName>TheMenu</DataSourceName>
+          <Filters isList="true" count="0" />
+          <Name>DataBand1</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Sort isList="true" count="0" />
+        </DataBand1>
+        <FooterBand1 Ref="14" type="FooterBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,5.4,6,0.8</ClientRectangle>
+          <Components isList="true" count="3">
+            <Text8 Ref="15" type="Text" isKey="true">
+              <Border>None;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,0,2.8,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,12</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Guid>73b4b220a9754d1ba137ea698d1bfe47</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text8</Name>
+              <Page isRef="3" />
+              <Parent isRef="14" />
+              <Text>小计：{Sum(DataBand1,TheMenu.数量)}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+            </Text8>
+            <Text2 Ref="16" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>3.2,0,2.8,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,12</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text2</Name>
+              <Page isRef="3" />
+              <Parent isRef="14" />
+              <Text>  {TheMenu.餐台号}-{TheMenu.餐台名}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>,,,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+            </Text2>
+            <HorizontalLinePrimitive2 Ref="17" type="HorizontalLinePrimitive" isKey="true">
+              <ClientRectangle>0,0.8,6,0.0254</ClientRectangle>
+              <Color>Black</Color>
+              <EndCap Ref="18" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </EndCap>
+              <Name>HorizontalLinePrimitive2</Name>
+              <Page isRef="3" />
+              <Parent isRef="14" />
+              <StartCap Ref="19" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </StartCap>
+              <Style>Dash</Style>
+            </HorizontalLinePrimitive2>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Name>FooterBand1</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+        </FooterBand1>
+      </Components>
+      <Conditions isList="true" count="0" />
+      <Guid>1987d1d4df1e4568a5ce246f61bae47e</Guid>
+      <Margins>0.5,0.5,0.5,0.5</Margins>
+      <Name>Page1</Name>
+      <PageHeight>30</PageHeight>
+      <PageWidth>7</PageWidth>
+      <PaperSize>Letter</PaperSize>
+      <Report isRef="0" />
+      <Watermark Ref="20" type="Stimulsoft.Report.Components.StiWatermark" isKey="true">
+        <Font>Arial,100</Font>
+        <TextBrush>[50:0:0:0]</TextBrush>
+      </Watermark>
+    </Page1>
+  </Pages>
+  <PrinterSettings Ref="21" type="Stimulsoft.Report.Print.StiPrinterSettings" isKey="true" />
+  <ReferencedAssemblies isList="true" count="8">
+    <value>System.Dll</value>
+    <value>System.Drawing.Dll</value>
+    <value>System.Windows.Forms.Dll</value>
+    <value>System.Data.Dll</value>
+    <value>System.Xml.Dll</value>
+    <value>Stimulsoft.Controls.Dll</value>
+    <value>Stimulsoft.Base.Dll</value>
+    <value>Stimulsoft.Report.Dll</value>
+  </ReferencedAssemblies>
+  <ReportAlias>Report</ReportAlias>
+  <ReportChanged>11/27/2018 4:47:39 PM</ReportChanged>
+  <ReportCreated>12/25/2017 11:11:27 AM</ReportCreated>
+  <ReportDescription>TheMenu</ReportDescription>
+  <ReportFile>D:\BSPMS\GsBrowser\report\PosTheMenu.mrt</ReportFile>
+  <ReportGuid>57e6783943bc4c318e4de30bb4a7dab0</ReportGuid>
+  <ReportName>Report</ReportName>
+  <ReportUnit>Centimeters</ReportUnit>
+  <ReportVersion>2016.1.0</ReportVersion>
+  <Script>using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Data;
+using Stimulsoft.Controls;
+using Stimulsoft.Base.Drawing;
+using Stimulsoft.Report;
+using Stimulsoft.Report.Dialogs;
+using Stimulsoft.Report.Components;
+
+namespace Reports
+{
+    public class Report : Stimulsoft.Report.StiReport
+    {
+        public Report()        {
+            this.InitializeComponent();
+        }
+
+        #region StiReport Designer generated code - do not modify
+		#endregion StiReport Designer generated code - do not modify
+    }
+}
+</Script>
+  <ScriptLanguage>CSharp</ScriptLanguage>
+  <Styles isList="true" count="0" />
+</StiSerializer>

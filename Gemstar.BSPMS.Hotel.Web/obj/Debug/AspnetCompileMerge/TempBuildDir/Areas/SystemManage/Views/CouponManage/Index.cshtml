@@ -1,0 +1,139 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "优惠券";
+
+    //上级列表
+    var gridFatherId = "gridCouponClassify";
+    var gridFatherKey = "Id";
+    var gridFatherName = "Name";
+    var gridFatherModel = new KendoGridCommonViewModel()
+    {
+        GridControlId = gridFatherId,
+        KeyColumnName = "Pk",
+        JsFuncForGetAjaxQueryPara = "getFatherQueryParas",
+        EnableFunctionForEdit = false,
+        EnableFunctionForQuery = false,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForEnable = false,
+        EnableFunctionForDisable = false,
+        EnableFunctionForSave = false
+    };
+    var gridFatherHelper = new KendoGridEditInCellHtmlHelper<CodeList>(
+        Html,
+        Url,
+        gridFatherModel,
+        c =>
+        {
+            c.Bound(w => w.Code).Title("优惠券代码").Width(100);
+            c.Bound(w => w.Name).Title("优惠券类型").Width(100);
+            c.Bound(w => w.Seqid).Title("排序号").Width(82);
+            c.Command(e => e.Custom("下级").HtmlAttributes(new { onclick = "selectFatherRow(this)", Href = "javascript:;" }))
+            .Width("110px")
+            .Title("操作");
+        },
+        c => c.Id(w => w.Id),
+        c =>
+        {
+        },
+       null,
+        "CouponClassifyManage"
+        );
+
+    //下级列表
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var columnName = "@s23优惠券类型";
+    var btnShowId = "TitleMemberId";
+    var btnShowName = "优惠券类型：";
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForPage = true,
+        EnableFunctionForDelete = true,
+        EnableFunctionForQuery = false,
+        EnableFunctionForAdd = false,
+        EnableCustomToolbarForFirst = true,
+        EnableFunctionForEnable = true,
+        EnableFunctionForDisable = true,
+        EnableScrollable = true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("code").Title("项目代码");
+            c.Bound("name").Title("名称");
+            c.Bound("couponMoney").Title("金额");
+            c.Bound("validDate").Title("有效时长");
+            //c.Bound("roomTypeids").Title("适用房型");
+            c.Bound("remark").Title("优惠券说明");
+            c.Bound("seqid").Title("排序号");
+        },
+        RowTemplate = @"<tr style=#: status==51?'text-decoration:line-through;color:red;':'' #>
+                                        <td>#: code #</td>
+                                        <td>#: name #</td>
+                                        <td>#: couponMoney==null?'':couponMoney #</td>
+                                        <td>#: validDate==null?'':validDate #</td>
+                                        <td>#: remark==null?'':remark #</td>
+                                        <td>#: seqid==null?'':seqid  #</td>
+                                   </tr>",
+        CustomToolbar = c =>
+        {
+            c.Custom().Name("paywaytype").Text("　优惠券类型：　").HtmlAttributes(new { id = @btnShowId, href = "javascript:void(0);", style = "cursor:default" });
+            c.Custom().Name("comfirmtext").Text("<font style='color:red'>双击可修改</font>").HtmlAttributes(new { id = "comfirmtext", href = "javascript:void(0);", style = "cursor:default;margin-right:5px;" });
+            c.Custom().Name("commonQuery").Text("查询").HtmlAttributes(new { id = "queryGridItems", onclick = "showCommonQueryWindow()", href = "javascript:void(0);" });
+            c.Custom().Name("addGridItem").Text("增加").HtmlAttributes(new { id = "addGridItems", onclick = "addGridItemNew()", href = "javascript:void(0);" });
+        }
+    };
+}
+<div style="width:30%; float:left;">
+    @(gridFatherHelper.KendoGridEditInCell())
+</div>
+<div style="width:68%; float:right;">
+    @Html.Partial("_KendoGridDataRowView", gridViewModel)
+</div>
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#gridCouponClassify .k-grid-header th:eq(2) .k-link").click();
+        $("#" + "@btnShowId").removeClass("k-button");
+        $("#comfirmtext").removeClass("k-button");
+        var c = $("#grid").width() - 620;
+        $("#comfirmtext").css("margin-left", c);
+        $("#comfirmtxt").removeClass("k-button");
+    });
+    function getFatherQueryParas() {
+        return {
+            QueryProcedureName: "up_list_pmsCodeList_group",
+            QueryParameterValues: "@@h99typeCode=28"
+        };
+    } 
+    function gridCouponClassify_dataBoundEnded() {
+        var firstBtn = $("[onclick='selectFatherRow(this)']:first");
+        firstBtn.click();
+    }
+    function selectFatherRow(column) {
+
+        var grid = $("#" + "@gridFatherId").data("kendoGrid");
+        var data = grid.dataItem($(column).parent().parent());
+        selectDoCommonQuery(data["@gridFatherKey"], data["@gridFatherName"], data["Code"]);
+    }
+    function selectDoCommonQuery(id, name, code) {
+        document.getElementById('commonQueryParameterValues').value = ("@columnName" + "=" + id);
+        $("#" + "@btnShowId").html("<span></span>" + "@btnShowName" + code + " " + name); 
+        var grid = $("#" + $("#commonQueryGridId").val()).data("kendoGrid");
+        grid.dataSource.read();
+    }
+    function addGridItemNew() {
+        var value = document.getElementById('commonQueryParameterValues').value;
+        value = value.replace(("@columnName" + "="), "");
+        top.openKendoWindow("增加" + "@ViewBag.Title", "/SystemManage/CouponManage/Add?cid=" + value);
+    }
+</script>

@@ -1,0 +1,50 @@
+﻿@using System.Data;
+@model Gemstar.BSPMS.Hotel.Web.Models.KendoGridForDataRowViewModel
+
+@(Html.Kendo().Grid<DataRowView>()
+        .Name(Model.GridControlId)
+        .Columns(Model.ColumnConfigurator)
+        .ColumnMenu()
+        .Events(e => { e.DataBound("onDataBound"); })
+        .Filterable()
+        .Reorderable(c => c.Columns(true))
+        .Resizable(c => c.Columns(true))
+        .Scrollable(c => c.Height("100%").Enabled(Model.EnableScrollable))
+        .Sortable()
+        .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+        .Pageable(pageable => pageable.PageSizes(Gemstar.BSPMS.Common.Tools.CommonHelper.PageSizes))
+        .Pageable(pageable => pageable.Enabled(Model.EnableFunctionForPage))
+        .Pageable(pageable => pageable.Messages(c => c.ItemsPerPage("")))
+        .DataSource(dataSource =>
+        {
+            dataSource.Ajax()
+            .Read(read => read.Action("AjaxQuery", "Query", new { area = "" }).Data(Model.JsFuncForGetAjaxQueryPara))
+            .ServerOperation(Model.ServerOperation).PageSize(Gemstar.BSPMS.Common.Extensions.UrlHelperExtension.GetPageSizeForCookies(Request));
+            if (Model.Aggregates != null)
+            {
+                dataSource.Ajax().Aggregates(Model.Aggregates);
+            }
+        })
+        .ToolBar(c =>
+        {
+            if (Model.CustomToolbar != null && Model.EnableCustomToolbarForFirst)
+            {
+                Model.CustomToolbar(c);
+            }
+            if (Model.EnableFunctionForQuery) c.Custom().Name("commonQuery").Text("查询").HtmlAttributes(new { onclick = "showCommonQueryWindow()", href = "javascript:void(0);" });
+            if (Model.EnableFunctionForAdd) c.Custom().Name("addGridItem").Text("增加").HtmlAttributes(new { onclick = "addGridItem()", href = "javascript:void(0);" });
+            if (Model.EnableFunctionForDelete) c.Custom().Name("batchDelete").Text("删除").HtmlAttributes(new { onclick = "batchDelete('" + Model.GridControlId + "','" + Model.KeyColumnName + "','" + Url.Action("BatchDelete") + "')", href = "javascript:void(0);" });
+            if (Model.EnableFunctionForEnable) c.Custom().Name("enable").Text("启用").HtmlAttributes(new { onclick = "enable('" + Model.GridControlId + "','" + Model.KeyColumnName + "','" + Url.Action("Enable") + "')", href = "javascript:void(0);" });
+            if (Model.EnableFunctionForDisable) c.Custom().Name("disable").Text("禁用").HtmlAttributes(new { onclick = "disable('" + Model.GridControlId + "','" + Model.KeyColumnName + "','" + Url.Action("Disable") + "')", href = "javascript:void(0);" });
+            if (Model.UpdateScores) c.Custom().Name("updateScore").Text("批量积分调整").HtmlAttributes(new { onclick = "updateScore('" + Model.GridControlId + "','" + Model.KeyColumnName + "','" + Url.Action("UpdateScore") + "')", href = "javascript:void(0);", style = "float:right;margin-right:10px;" });
+            if (Model.UpdateSales) c.Custom().Name("updatesales").Text("更换业务员").HtmlAttributes(new { onclick = "updateSale('" + Model.GridControlId + "','" + Model.KeyColumnName + "','" + Url.Action("UpdateSales") + "')", href = "javascript:void(0);", style = "float:right;" });
+            if (Model.DelayValidDate) c.Custom().Name("delay").Text("批量延期").HtmlAttributes(new { onclick = "delayValidDate('" + Model.GridControlId + "','" + Model.KeyColumnName + "','" + Url.Action("Delay") + "')", href = "javascript:void(0);", style = "float:right;" });
+            if (Model.CustomToolbar != null && !Model.EnableCustomToolbarForFirst)
+            {
+                Model.CustomToolbar(c);
+            }
+        })
+        .ClientRowTemplate(Model.RowTemplate)
+        .ClientAltRowTemplate(Model.RowTemplate.Replace("<tr ", "<tr class=\"k-alt\" ").Replace("<tr>", "<tr class=\"k-alt\">"))
+        .HtmlAttributes(Model.HtmlAttributes)
+)

@@ -1,0 +1,52 @@
+﻿
+@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+@{
+    ViewBag.Title = "业主房间委托";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "RoomInfoId";
+
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableScrollable = true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("ProfileId").Title("业主名");
+            c.Bound("RoomNo").Title("房号"); 
+            c.Bound("roomTypeName").Title("房型"); 
+            c.Bound("feature").Title("房间特色");
+            c.Bound("TypeName").Title("分成类型");
+            c.Bound("remark").Title("备注");
+            c.Bound("StartDate").Title("生效日期");
+            c.Bound("EndDate").Title("失效日期");
+        }
+
+    };
+}
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+
+<script type="text/javascript">
+    $(function () {
+        window.onresize = onResize; onResize();
+    });
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#grid .k-grid-toolbar").height() + 195;
+        $("#grid .k-grid-content").height(allHeight - showHeight);
+    }
+</script>

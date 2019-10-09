@@ -1,0 +1,45 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosItem.PosItemEditViewModel
+
+@(Html.Kendo().Grid<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_list_ItemActionByItemidResult>()
+.Name("gridItemPosItemAction")
+.Columns(columns =>
+{
+    columns.Bound(m => m.id).Hidden();
+    columns.Bound(m => m.Itemid).Hidden();
+    columns.Bound(m => m.actionid).Hidden();
+    columns.Bound(m => m.ActionName).Title("作法").Width(90);
+    columns.Bound(m => m.isByQuanStr).Title("数量相关").Width(90);
+    columns.Bound(m => m.limitQuan).Title("数量相关最低数量").Width(90);
+    columns.Bound(m => m.isByGuestStr).Title("人数相关").Width(90);
+    columns.Bound(m => m.isCommonStr).Title("常用作法").Width(90);
+    columns.Bound(m => m.isNeedStr).Title("必选作法").Width(90);
+    columns.Bound(m => m.addPrice).Title("作法加价").Width(90);
+    columns.Bound(m => m.multiple).Title("加价倍数").Width(90);
+    columns.Bound(m => m.prodPrinter).Title("出品打印机").Width(90);
+    columns.Bound(m => m.seqID).Title("排列序号").Width(90);
+    columns.Bound(m => m.Remark).Title("备注").Width(90);
+    columns.Bound(m => m.ModifiedStr).Title("修改时间").Width(150);
+})
+.HtmlAttributes(new { ondblclick = "editGridItemOther('gridItemPosItemAction', 'id', '" + Url.Action("_EditPosItemAction", "BasicDataPosItem") + "', '修改消费项目作法')" })
+.Pageable()
+.Sortable()
+.Scrollable()
+.Filterable()
+.Selectable(s => s.Mode(GridSelectionMode.Multiple))
+.DataSource(dataSource => dataSource
+    .Ajax()
+    .PageSize(7)
+    .Read(read => read.Action("ListPosItemActionByItemId", "BasicDataPosItem", new { id = ViewBag.id }))
+    )
+    .ToolBar(toolbar =>
+    {
+        toolbar.Template(
+        @<text>
+            <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addGridItemOther('@Url.Action("_AddPosItemAction", "BasicDataPosItem")','@ViewBag.id','增加消费项目作法')"><span class="k-icon k-add"></span>增加</a>
+            <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="editGridItemOther('gridItemPosItemAction', 'id', '@Url.Action("_EditPosItemAction", "BasicDataPosItem")', '修改消费项目作法')"><span class="k-icon k-add"></span>修改</a>
+            <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="batchDelete('gridItemPosItemAction', 'id', '@Url.Action("BatchDeleteItemAction", "BasicDataPosItem")' )"><span class="k-icon k-i-unpin"></span>删除</a>
+            @*<a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="hideItemOther('itemPosItemAction')">隐藏编辑框</a>*@
+        </text>
+                                        );
+            })
+)

@@ -1,0 +1,220 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+<style type="text/css">
+    .cancellation-tr {
+        background-color:#ccc!important;
+    }
+     .cancellation-tr:hover td {
+        background-color:#ccc !important;
+    }
+    .disable-tr {
+        text-decoration:line-through;color:red;
+    }
+    body {
+        overflow-y:hidden;
+    }
+</style>
+@{
+    ViewBag.Title = "合约单位";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableScrollable=true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("code").Title("代码");
+            c.Bound("name").Title("名称");
+            c.Bound("sales").Title("业务员");
+            c.Bound("limitAmount").Title("挂账限额");
+            c.Bound("beginDate").Title("生效日期");
+            c.Bound("validDate").Title("有效日期");
+            c.Bound("statusName").Title("合约状态");
+            c.Bound("companyTypeName").Title("合约单位类型");
+            c.Bound("rateName").Title("价格代码");
+        },
+        RowTemplate = @"<tr data-status=#:status# style=#: status==60? 'background-color:rgb(204,204,204)!important':status==51?'text-decoration:line-through;color:red;':''# >
+                            <td>#: code #</td>
+                            <td>#: name #</td>
+                            <td>#: sales #</td>
+                            <td>#: limitAmount==null?'':limitAmount #</td>
+                            <td>#: beginDate==null?'':beginDate #</td>
+                            <td>#: validDate==null?'':validDate #</td>
+                            <td>#: statusName #</td>
+                            <td>#: companyTypeName==null?'':companyTypeName #</td>
+                            <td>#: rateName==null?'':rateName #</td>
+                        </tr>",
+        CustomToolbar = c =>
+        {
+        //c.Custom().Name("comfirmtext").Text("<font style='color:red;margin-top: 8px;float: right; margin-right: 10px;'>双击详情操作</font>").HtmlAttributes(new { id = "comfirmtext", href = "javascript:void(0);", style = "cursor:default;" });
+
+        c.Template(@<text>
+            <input class="k-textbox" id="txtCondition" type="text" placeholder="代码/名称" style="height:31px;">
+            <a class="select-icon" href="javascript:vagueSelect();"></a>
+            <a class="k-button k-button-icontext k-grid-commonQuery" id="selectbnt" href="javascript:void(0);" onclick="showCommonQueryWindow()"><span class="k-icon k-i-search"></span>综合查询</a>
+            <a class="k-button k-button-icontext k-grid-addGridItem" href="javascript:void(0);" onclick="addGridItem()"><span class="k-icon k-add"></span>增加</a>
+            <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="cancellation('grid','id','@Url.Action("Cancellation")')"><span class="k-icon k-i-unpin"></span>销户</a>
+            <a class="k-button k-button-icontext k-grid-enable" href="javascript:void(0);" onclick="enable('grid','id','@Url.Action("Enable")')"><span class="k-icon k-i-unlock"></span>启用</a>
+            <a class="k-button k-button-icontext k-grid-disable" href="javascript:void(0);" onclick="disable('grid','id','@Url.Action("Disable")')"><span class="k-icon k-i-lock"></span>禁用</a>
+            <a class="k-button-icontext k-grid-edittext" href="javascript:void(0);" id="edittext" style="cursor:default;"><span></span><font style="color:red;margin-top: 8px;">双击进入详情操作</font></a>
+            <a class='k-button k-button-icontext k-grid-updatesales' href='javascript:void(0);' onclick="MarketSms('@Url.Action("MarketSms")')" style='float:right;margin-right:10px;'><span></span>营销短信</a>
+            <a class="k-button k-button-icontext k-grid-updatesales" href="javascript:void(0);" onclick="updateSale('grid','id','@Url.Action("UpdateSales")')" style="float:right;"><span></span>更换业务员</a>
+            <a class="k-button k-button-icontext k-grid-delay" href="javascript:void(0);" onclick="delayValidDate('grid','id','@Url.Action("Delay")')" style="float:right;"><span></span>批量延期</a>
+            <a class="k-button-icontext k-grid-comfirmtext" href="javascript:void(0);" id="comfirmtext" style="cursor:default;"><span></span><font style="color:red;margin-top: 8px;float: right; margin-right: 10px;">按[Ctrl]或者[Shift]多选</font></a>
+          
+        </text>);
+     }
+    };
+}
+
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+
+@section scripts{
+        @Html.Partial("_KendoGridEvents", gridViewModel)
+}
+<script type="text/javascript">
+    var load = { num: 0 };
+    $(function () {
+        window.onresize = onResize; onResize();
+        $("#comfirmtext").removeClass("k-button");
+      $("#grid").on("dblclick", "tr.k-state-selected", function (e) {
+        e.preventDefault();
+        editGridItem(this);
+      });
+      if ("@ViewBag.IsFast" == 0) {
+          $("#selectbnt").hide();
+      }
+ });
+
+//双击编辑订单
+ function editGridItem(row) {
+     var gridId = "grid";
+     var keyName = "RegId";
+     var grid = $("#" + gridId).data("kendoGrid");
+     var data = grid.dataItem($(row));
+     editGridItemInIframe(data.id);
+ }
+ function editGridItemInIframe(id) {
+     var url = "@Url.Action("Detail")"+"?id="+id;
+     top.openKendoWindow("合约单位详情", url, null);
+ }
+ function addGridItem() {
+        top.openKendoWindow("增加" + "@ViewBag.Title", "@Url.Action("Add")");
+ }
+//这里是添加后的回调
+function saveFormData(e) {
+    top.saveKendoWindowFormData(e, function () {
+        refreshGrid();
+    });
+}
+function refreshGrid() {
+    var grid = $("#grid").data("kendoGrid");
+    grid.dataSource.page(1);
+    grid.dataSource.read();
+}
+//批量延期
+function delayValidDate(gridId, keyName, url) {
+    var grid = $("#" + gridId).data("kendoGrid");
+    var selectedRows = grid.select();
+    if (selectedRows.length == 0) {
+        jAlert("请选择要延期的数据行");
+    } else {
+        var ids = [];
+        for (var i = 0; i < selectedRows.length; i++) {
+            var row = selectedRows[i];
+            var data = grid.dataItem(row);
+            ids.push(data[keyName]);
+        }
+        top.openKendoWindow("批量延期", "@Url.Action("Delay")", { id: ids.join(",") });
+}
+}
+//批量更改业务员
+function updateSale(gridId, keyName, url) {
+    var grid = $("#" + gridId).data("kendoGrid");
+    var selectedRows = grid.select();
+    if (selectedRows.length == 0) {
+        jAlert("请选择要更换业务员的数据行");
+    } else {
+        var ids = [];
+        for (var i = 0; i < selectedRows.length; i++) {
+            var row = selectedRows[i];
+            var data = grid.dataItem(row);
+            ids.push(data[keyName]);
+        }
+        top.openKendoWindow("批量更换业务员", "@Url.Action("UpdateSales")", { id: ids.join(",") });
+}
+}
+    function MarketSms(url)
+    {
+        var param = $("#commonQueryParameterValues").val();
+        //jAlert(para);
+        jConfirm("请确认：查询条件已筛选？", "回去选择", "已选好", function (flag) {
+            if (!flag) {
+                top.openIframeKendoWindow("合约单位发送营销短信", url, { para: encodeURIComponent(param) });
+            }
+        });
+
+    }
+//三级菜单点击刷新
+    function gridread() {
+        refreshGrid();
+    }
+    //模糊查询
+    function vagueSelect() {
+       var condition = $("#txtCondition").val();
+       var result = "@@h99condition=" + condition + "&@@h99IsFast=" + "@ViewBag.IsFast";
+       GetControl("#commonQueryParameterValues").val(result);
+       refreshGrid();
+    }
+    $("#txtCondition").keydown(function (e) {
+        if (e.keyCode == 13) {
+            vagueSelect();
+        }
+    })
+ //销户
+ function cancellation(gridId, keyName, url) {
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要销户的数据行");
+        } else {
+            jConfirm("确认要销户所有选中的数据行?", "确认", "取消", function (confirmed) {
+                if (confirmed) {
+                    var ids = [];
+                    for (var i = 0; i < selectedRows.length; i++) {
+                        var row = selectedRows[i];
+                        var data = grid.dataItem(row);
+                        ids.push(data[keyName]);
+                    }
+                    $.post(url, { id: ids.join(",") }, function (data) {
+                        if (data.Success) {
+                            grid.dataSource.read();
+                        } else {
+                            //jAlert(data.Data);
+                            ajaxErrorHandle(data);
+                        }
+                    }, 'json');
+
+                }
+            });
+        }
+ } function onResize() {
+     var allHeight = $("#mainContent", window.top.document).height();
+     var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 150;
+     $("#grid .k-grid-content").height(allHeight - showHeight);
+ }
+ function grid_dataBoundEnded() {
+     var grid = $("#grid").data("kendoGrid");
+     console.log(load.num)
+     if ("@ViewBag.IsFast" == 0 && grid.dataSource._data.length <= 0 && load.num != 0) {
+         jAlert("你没有模糊查询的权限", "知道了");
+     }
+     load.num++;
+ }
+</script>

@@ -1,0 +1,79 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosInSingle.BillDetailEditPlaceModel
+<style>
+    .billDetail {
+        margin: 2rem;
+        width: 20rem;
+        padding-bottom: 5rem;
+    }
+
+    .txtLable {
+        font-size: 1rem;
+    }
+</style>
+<input id="Ids" type="hidden" value="@(Model.Ids)" />
+<table class="billDetail">
+
+    <tr class="txtLable">
+        <td class="textright">@Html.LabelFor(m => m.Place)</td>
+        <td>@Html.Kendo().TextBoxFor(m => m.Place).HtmlAttributes(new { style = "width:80%;" })</td>
+        <td>@Html.ValidationMessageFor(m => m.Place, "*")</td>
+
+    </tr>
+
+
+</table>
+@Html.ValidationSummary()
+<div class="formButtons">
+    <button id="saveEditFormButton" onclick="SavePlace()" role="button" data-role="button" style="padding:0.8rem">确定</button>
+    <button id="closeEditFormButton" onclick="closeKeWei()" role="button" data-role="button" style="padding:0.8rem">关闭</button>
+</div>
+<script>
+    $(document).ready(function () {
+        if ("undefined" != typeof jsObject) //如果是封装程序
+        {
+            $("#Place").focus(function () {
+                if (jsObject.EnableKeyboard) {
+                    jsObject.ScreenKeyboard();  //调用屏幕键盘
+                }
+            });
+            $("#Place").blur(function () {
+                if (jsObject.EnableKeyboard) {
+                    jsObject.ScreenKeyboardClose(); //关闭屏幕键盘
+                }
+            });
+        }
+    });
+
+    var index = layer.index;
+    function closeKeWei() {
+        layer.close(index);
+    }
+    function SavePlace() {
+        var value = $("#Place").val();
+        var ids = $("#Ids").val();
+        if (value.indexOf("_") > 0) {
+            var reg = /_/g;
+            value = value.replace(reg, "");
+        }
+        $.ajax({
+            url: "PosInSingle/BillDetailPlace",
+            data: { billDetailIds: ids, place: value },
+            type: "post",
+            dataType: "json",
+            success: function (result) {
+                if (result.Success == true) {
+                    // layer.alert("添加成功！", { title: "快点云Pos提示" })
+                    $("#gridBillDetailA").data("kendoGrid").dataSource.read();
+                    $("#gridBillDetailA").data("kendoGrid").refresh();
+                    layer.close(index);
+                }
+                else {
+                    layer.alert(result.Data, { title: "快点云Pos提示" })
+                }
+            },
+            error: function (result) {
+                layer.alert(result.responseText, { title: "快点云Pos提示" })
+            }
+        });
+    }
+</script>

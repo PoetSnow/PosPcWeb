@@ -1,0 +1,23 @@
+﻿@{
+    Layout = null;
+}
+@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_SeafoodPoolListResult>
+<ul class="tabstatus">
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            foreach (var billDetailList in Model)
+            {
+                <li class="staus-empty">
+                    <a href="javascript:void(0);" onclick="weigh(this)" data-id="@billDetailList.id">
+                        <span>@billDetailList.tabNo</span>
+                        <span>@billDetailList.itemName</span>
+                        <span>@((billDetailList.oriQuan ?? 0).ToString() + billDetailList.unitName+(billDetailList.piece.ToString()==""?"": "/"+billDetailList.piece.ToString()))</span>
+                        <span>@string.Format("{0: HH:mm:ss}", billDetailList.transDate) </span>
+
+                    </a>
+                </li>
+            }
+        }
+    }
+</ul>

@@ -1,0 +1,135 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosShuffleChange.ShuffleChangeViewModel
+<link href="~/Content/Pos/posPublic.css?version=@ViewBag.Version" rel="stylesheet" />
+@{
+    ViewBag.Title = "Pos换班次";
+}
+
+<style type="text/css">
+    table.editFormTable {
+        padding: 20px;
+        font-size: 16px;
+        position: relative;
+    }
+
+        table.editFormTable tr {
+            line-height: 40px;
+        }
+
+        table.editFormTable .textleft, table.editFormTable .textright {
+            width: auto;
+        }
+
+    form .formButtons {
+        margin: 0;
+        height: 47px;
+        position: relative;
+    }
+</style>
+
+<script type="text/javascript">
+    function refeChanged() {
+        var Shuffleid = $("#Shuffleid").data("kendoDropDownList");
+        Shuffleid.dataSource.read();
+
+        var Refeid = $("#Refeid").data("kendoDropDownList");
+        var refeid = Refeid.value();
+
+        $.ajax({
+            url: '@Url.Action("GetShuffleChange", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: { refeid: refeid },
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    $("#Business").text(data.Data.Business);
+                    $("#ShuffleName").text(data.Data.ShuffleName);
+                } else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+
+    }
+
+    function posCode_paras() {
+        var Refeid = $("#Refeid").data("kendoDropDownList");
+        var refeid = Refeid.value();
+        return {
+            refeid: refeid
+        };
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Refeid)：</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Refeid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosRefeByPos", "BasicDataPosRefe", new { rnd = new Random().NextDouble() })); }).Events(e => e.Change("refeChanged"))</td>
+            <td>@Html.ValidationMessageFor(m => m.Refeid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Shuffleid)：</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Shuffleid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosShuffleByRefe", "BasicDataPosShuffle", new { rnd = new Random().NextDouble() }).Data("posCode_paras")).ServerFiltering(true); })</td>
+            <td>@Html.ValidationMessageFor(m => m.Shuffleid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Business)：</td>
+            <td class="textleft"><span id="Business">@Model.Business</span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.ShuffleName)：</td>
+            <td class="textleft"><span id="ShuffleName">@Model.ShuffleName</span></td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <input type="button" value="确定" onclick="UpdateShuffle()" />
+        <input type="button" value="关闭" onclick="closeAllLayer()" />
+        @*<a href="javascript:void(0)" onclick="UpdateShuffle()">确定</a>&nbsp;&nbsp;
+            <a href="javascript:void(0)" onclick="closeAllLayer()">关闭</a>*@
+    </div>
+}
+<script>
+    $(function () {
+        setTimeout(function () {
+            refeChanged();
+        }, 250)
+    });
+
+    //更换班次
+    function UpdateShuffle() {
+        var Refeid = $("#Refeid").data("kendoDropDownList");
+        var shuffleid = $("#Shuffleid").data("kendoDropDownList");
+        var model = {
+            Id: Refeid.value(),
+            ShuffleId: shuffleid.value()
+        };
+
+        $.ajax({
+            url: '@Url.Action("UpdateShuffle", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    layer.closeAll();
+                    window.location.reload();
+                } else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+    function closeAllLayer() {
+        layer.closeAll();
+    }
+</script>

@@ -1,0 +1,7 @@
+--------------------------
+2018/12/18 14:17:31 错误信息:SocketFailure on HGETALL
+调用堆栈:   在 StackExchange.Redis.ConnectionMultiplexer.ExecuteSyncImpl[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\ConnectionMultiplexer.cs:行号 1935
+   在 StackExchange.Redis.RedisBase.ExecuteSync[T](Message message, ResultProcessor`1 processor, ServerEndPoint server) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisBase.cs:行号 80
+   在 StackExchange.Redis.RedisDatabase.HashGetAll(RedisKey key, CommandFlags flags) 位置 c:\TeamCity\buildAgent\work\3ae0647004edff78\StackExchange.Redis\StackExchange\Redis\RedisDatabase.cs:行号 132
+   在 RedisSessionProvider.RedisSessionStateStoreProvider.GetItemFromRedis(String redisKey, HttpContextBase context, TimeSpan expirationTimeout)
+内部异常错误信息：远程主机强迫关闭了一个现有的连接。

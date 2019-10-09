@@ -1,0 +1,39 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosHoliday.HolidayAddViewModel
+    @using (Html.BeginForm())
+    {
+        <table class="editFormTable">
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.VDate)</td>
+                <td>@Html.Kendo().MaskedTextBoxFor(m => m.VDate).Mask("00-00").HtmlAttributes(new { style = "width:100%;", placeholder = "请输入日期" })</td>
+                <td>@Html.ValidationMessageFor(m => m.VDate, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.DaysName)</td>
+                <td>@Html.Kendo().TextBoxFor(m => m.DaysName).HtmlAttributes(new { style = "width:100%;", placeholder = "请输入节日名称" })</td>
+                <td>@Html.ValidationMessageFor(m => m.DaysName, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+                <td>@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+
+            </tr>
+        </table>
+        @Html.ValidationSummary()
+        <div class="formButtons">
+            <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+            <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+        </div>
+    }
+    <script type="text/javascript">
+        $(function () {
+            $.validator.unobtrusive.parse(document);
+            $("#saveEditFormButton").click(function (e) {
+                e.preventDefault();
+                saveFormData($("#saveEditFormButton"));
+            });
+            $("#closeEditFormButton").click(function (e) {
+                e.preventDefault();
+                closeEditFormWindow();
+            });
+        });
+
+    </script>

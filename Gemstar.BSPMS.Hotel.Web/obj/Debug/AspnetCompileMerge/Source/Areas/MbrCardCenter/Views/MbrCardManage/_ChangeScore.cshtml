@@ -1,0 +1,74 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MbrCardCenter.Models.MbrCardManage.MbrCardChangeScoreViewModel
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.Id)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.MbrCardNo)</td>
+            <td>@Html.DisplayTextFor(m => m.MbrCardNo)</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.GuestName)</td>
+            <td>@Html.DisplayTextFor(m => m.GuestName)</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.CurrentScore)</td>
+            <td>@Html.DisplayTextFor(m => m.CurrentScore)</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.CurrentOwnerScore)</td>
+            <td>@Html.DisplayTextFor(m => m.CurrentOwnerScore)</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.AccountType)</td>
+            <td>@Html.Kendo().DropDownListFor(m => m.AccountType).HtmlAttributes(new { style = " width:100%" }).BindTo(new List<DropDownListItem>() { new DropDownListItem { Text = "--请选择--" }, new DropDownListItem { Text = "积分", Value = "11" }, new DropDownListItem { Text = "业主分", Value = "12" } })</td>
+            <td>@Html.ValidationMessageFor(m => m.AccountType, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Score)</td>
+            <td>@Html.TextBoxFor(m => m.Score, new { @class = "k-textbox", style = "width:100%;", Value = "正数调增，负数调减" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Score, "*")</td>
+        </tr>
+       
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.InvNo)</td>
+            <td>@Html.TextBoxFor(m => m.InvNo, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td>@Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#Score").focus(function () {
+            if (this.value == '正数调增，负数调减') this.value = '';
+        });
+        $("#Score").blur(function () {
+            if (this.value == '') this.value = '正数调增，负数调减';
+        });
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"), function () { $("#dataDiv", $("#mainContent iframe")[0].contentWindow.document).load($("#mainContent iframe")[0].src + "?viewType=false"); });
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+</script>

@@ -1,0 +1,151 @@
+﻿@{
+    Layout = null;
+
+}
+<html>
+<head>
+    <title>开始签名</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <script  type="text/javascript" src="~/Scripts/commonOcx/AIP_MAIN.js" charset="gbk"></script>
+    <script src="~/Scripts/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript">
+
+        window.onresize = function () {
+            var data = $("#selectonchange option:selected").val().split('*');
+            var width = data[0];
+            var height = data[1];
+            var widths = (window.screen.width - height) / 2;
+            window.moveTo(widths, 0);
+            self.resizeTo(height,width);
+            console.log(height + "=" + width);
+        }
+        function bntSaveFile() {
+            var path = "C:\\Windows\\Temp\\ignature.pdf";
+            var AipObj = document.getElementById("HWPostil1");
+            var saveUr = "@Url.Action("SvaeOcxFile")";
+            var key = "@ViewBag.pdfUrl".split('com/').pop();
+            var regid="@ViewBag.regid";
+            var roomNo = "@ViewBag.roomNo";
+            var hid = "@ViewBag.hid";
+            var userName = "@ViewBag.userName";
+            var saveUrl = "@Request.Url.Host" + saveUr + "?sType=" + "@ViewBag.sType" + "&pdfKey=" + key+"&regid="+regid+"&roomNo="+roomNo+"&hid="+hid+"&userName="+userName;
+            var a= AipObj.DeleteLocalFile(path);
+            var data = AipObj.SaveTo(path, "pdf", 0);
+            if (data != 0) {
+                var result = SaveToS(1, saveUrl, "pmsJxd");
+                if (!result) {
+                    alert("保存失败");
+                }
+                else {
+                    var url = "@Url.Action("LookSignature")" + "?par=" + "@ViewBag.sType" + "=" + hid + "=" + encodeURI(userName) + "=" + "@ViewBag.signature";
+                    bntClose();
+                    window.open(url, "", "top=0,left=0,width=" + window.screen.width + ",height=" + window.screen.height + ",toolbar=yes,menubar=yes,scrollbars =yes,resizable=yes,location=yes");
+                }
+            }
+            else {
+                alert("保存失败");
+            }
+        }
+        function bntRevoke() {
+            var AipObj = document.getElementById("HWPostil1");
+            AipObj.UndoAll();
+        }
+        $(function () {
+            $("#selectonchange").change(function () {
+               var data= $(this).val().split('*');
+               var width = data[0];
+               var height = data[1];
+               loadFile(height, width);
+            })
+            $(document).keyup(function (event) {
+
+                switch (event.keyCode) {
+                    case 27:
+                    case 96:
+                        bntClose();
+                        break;
+
+                }
+            });
+        })
+        function loadFile(width, height) {
+            ShowToolBar(0);
+            ShowDefMenu(0);
+            ShowScrollBarButton(1);
+
+            var AipObj = document.getElementById("HWPostil1");
+            AipObj.JSEnv = 1;
+
+            var url = "@ViewBag.pdfUrl";
+            var type = "@ViewBag.IsText" == "True" ? "4" : "2";
+            AipObj.CurrPenColor = 264;
+            AipObj.CurrPenWidth = 6;
+            OpenFile(url);
+            OcxLogin(type);
+            Signature();
+            var widths = (window.screen.width - width) / 2;
+            window.moveTo(widths, 0);
+             if ("@ViewBag.width" > width)
+                    AipObj.SetPageMode(1, 70);//缩放
+            window.resizeTo(width = width, height = height);
+           
+            AipObj.ShowFullScreen = 1;
+        }
+        function bntClose() {
+            window.open('', '_self', '');
+            window.close();
+        }
+    </script>
+   
+    <!-- 此js写法只支持ie -->
+    <!--该事件在AIP引擎初始化完毕之后触发-->
+    <SCRIPT LANGUAGE=javascript FOR=HWPostil1 EVENT=NotifyCtrlReady>
+
+
+        ShowToolBar(0);
+       ShowDefMenu(0);
+       ShowScrollBarButton(1);
+
+        var AipObj = document.getElementById("HWPostil1");
+        AipObj.JSEnv = 1;
+
+        var url = "@ViewBag.pdfUrl";
+        var type = "@ViewBag.IsText" == "True" ? "4" : "2";
+        AipObj.CurrPenColor = 264;
+        AipObj.CurrPenWidth = 6;
+        OpenFile(url);
+        OcxLogin(type);
+        Signature();
+        var pageCount = AipObj.PageCount;
+        AipObj.CurrPage = pageCount-1;
+        if ("@ViewBag.width">600)
+            AipObj.SetPageMode(1, 70);//缩放
+        var width = (window.screen.width - 600) / 2;
+        window.moveTo(width, 0);
+        window.resizeTo(width = 600, height = 1024);
+        AipObj.ShowFullScreen = 1;
+        </SCRIPT>
+    <!--保存-->
+
+</head>
+<body style="background: #ccc;">
+    <div id="signatureDiv">
+        <div style="text-align:center">
+            数位板像素：
+            <select id="selectonchange">
+                <option>1024*600</option>
+                <option>1280*600</option>
+                <option>1280*768</option>
+                <option>1920*1080</option>
+            </select>
+            <input type="button" value="保存签名" id="bntSave" onclick="bntSaveFile()"/>
+            <input type="button" value="撤销签名" id="bntRevoke" onclick="bntRevoke()"/>
+            <input type="button" value="关闭页面" id="bntClose" onclick="bntClose()" />
+        </div>
+        <!-- -----------------------------== 装载AIP控件 ==--------------------------------- -->
+        <script src="~/Scripts/commonOcx/LoadAip.js" charset="gbk"></script>
+        <!-- --------------------------------== 结束装载控件 ==----------------------------------- -->
+        @*<object id="HWPostil1" height='100%' width='100%' style='LEFT: 0px; TOP: 0px' classid='clsid:FF1FE7A0-0578-4FEE-A34E-FB21B277D561'></object>*@
+    </div>
+</body>
+</html>

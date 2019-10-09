@@ -1,0 +1,71 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.ResManage.Models.ResOrderFolio.ResFolioAddViewModel
+<style type="text/css">.addFolioTable tr td{padding: 3px 0px 3px 0px;margin: 3px 0px 3px 0px;height:32px;line-height:32px;}</style>
+<table class="editFormTable addFolioTable" style="width:450px;">
+    <tr>
+        <td class="textright" style="height:22px;line-height:22px;"></td>
+        <td colspan="3" style="height:22px;line-height:22px;">
+        @(Html.Kendo().RadioButton().Name("folioAddTypeDCFlag").Value("d").Checked(true).Label("消费").HtmlAttributes(new { onchange = "folioAddTypeDCFlag_changed()" }))&nbsp;&nbsp;&nbsp;&nbsp;@(Html.Kendo().RadioButton().Name("folioAddTypeDCFlag").Value("c").Label("付款").HtmlAttributes(new { onchange = "folioAddTypeDCFlag_changed()", onclick = "folioCFlagToRefresh()" }))&nbsp;&nbsp;&nbsp;&nbsp;<span id="folioAddTypeDCFlag_cardAuth_radio" style="display:none;">@(Html.Kendo().RadioButton().Name("folioAddTypeDCFlag").Value("cardAuth").Label("预授权").HtmlAttributes(new { onchange = "folioAddTypeDCFlag_changed()" }))</span></td>
+    </tr>
+    <tr>
+        <td class="textright">账单</td>
+        <td colspan="3">@(Html.Kendo().DropDownList().Name("folioAddRegId").HtmlAttributes(new { style="width:100%;"}).BindTo(Model.RegIds).DataTextField("RegName").DataValueField("Regid").Value(Model.FolioRegId))</td>
+    </tr>
+    <tr>
+        <td class="textright">项目</td>
+        <td colspan="3">@(Html.Kendo().DropDownListFor(m=>m.FolioItemId).Name("folioAddItem").HtmlAttributes(new { style="width:100%"})
+                         .OptionLabel("").Filter(FilterType.Contains).DataTextField("CodeName")
+                         .DataValueField("Id").Events(e=>e.Select("folioAddItem_autoCompleteSelected"))
+                         .DataSource(s => s.Read(r => r.Url(Url.Action("AutoCompleteItem")).Data("folioAddItem_autoCompleteSetPara")).ServerFiltering(true)).AutoBind(false)
+                         )
+        @(Html.Hidden("folioAddItemId"))@Html.Hidden("folioAddItemAction")
+        </td>
+    </tr>
+    <tr style="display:none;" class="folioAddQtyInput">
+        <td class="textright">数量</td>
+        <td>@(Html.Kendo().NumericTextBox().Name("folioAddItemQty").Events(e=>e.Change("folioAddItem_calcItemAmount")).HtmlAttributes(new { style = "width:100%;" }).Format("n0").Decimals(0))</td>
+        <td class="textright">单价</td>
+        <td>@(Html.Kendo().NumericTextBox().Name("folioAddItemPrice").Events(e=>e.Change("folioAddItem_calcItemAmount")).HtmlAttributes(new { style = "width:100%;" }))</td>
+    </tr>
+    <tr style="display:none;" class="folioAddAmountForC">
+        <td class="textright">原币金额</td>
+        <td>@(Html.Kendo().NumericTextBox().Name("folioAddItemAmountOriC").Events(e => e.Change("folioAddItem_calcRateAmount")).HtmlAttributes(new { style="width:100%;" }))@Html.Hidden("folioAddItemRate")</td>
+        <td class="textright">金额</td>
+        <td>@(Html.Kendo().NumericTextBox().Name("folioAddItemAmountC").Enable(false).HtmlAttributes(new { style = "width:100%;" }))</td>
+    </tr>
+    <tr class="folioAddAmountForD">
+        <td class="textright">金额</td>
+        <td>@(Html.Kendo().NumericTextBox().Name("folioAddItemAmountD").Events(e=>e.Change("folioAddItem_calcTaxAndNoTaxAmount")).HtmlAttributes(new { style = "width:100%;" }))</td>
+        <td class="textright">税率</td>
+        <td>@(Html.Kendo().NumericTextBox().Name("folioAddItemTax").Enable(false).HtmlAttributes(new { style = "width:100%;" }))</td>
+    </tr>
+    <tr class="folioAddAmountForD">
+        <td class="textright">不含税金额</td>
+        <td>@(Html.Kendo().NumericTextBox().Name("folioAddItemAmountDNoTax").Enable(false).HtmlAttributes(new { style = "width:100%;" }))</td>
+        <td class="textright">税额</td>
+        <td>@(Html.Kendo().NumericTextBox().Name("folioAddItemAmountDTax").Enable(false).HtmlAttributes(new { style = "width:100%;" }))</td>
+    </tr>
+    <tr>
+        <td class="textright">单号</td>
+        <td>@(Html.Kendo().TextBox().Name("folioAddInvNo").HtmlAttributes(new { style = "width:100%;" }))</td>
+        <td class="textright">备注</td>
+        <td>@(Html.Kendo().TextBox().Name("folioAddRemark").HtmlAttributes(new { style = "width:100%;" }))</td>
+    </tr>
+    <tr id="permanentRoomDepositType" style="display:none;">
+        <td class="textright">押金类型</td>
+        <td colspan="3">
+            @(Html.Kendo().DropDownList().Name("permanentRoomDepositTypeList").OptionLabel(" ").DataTextField("Text").DataValueField("Value").DataSource(d => d.Read(r => r.Url(Url.Action("GetPermanentRoomDepositTypeSelectLists")))).HtmlAttributes(new { style = "width:100%;" }).AutoBind(false))
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" style="padding-top:6px;text-align:center;">
+        @(Html.Kendo().CheckBox().Name("folioAddContinue").Label("连续录入").HtmlAttributes(new { style="padding-left:0px;" }))
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        @(Html.Kendo().Button().Name("folioAddSave").Content("确定").Events(e => e.Click("folioAddSave_clicked")))<input type="hidden" id="hidIsCheckout" value="@ViewBag.isCheckout" />
+        </td>
+    </tr>
+</table>
+<div id="folioPayResultDiv">
+
+</div>
+<script type="text/javascript" src="~/Scripts/qrcode.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.qrcode.min.js"></script>

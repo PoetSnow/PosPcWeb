@@ -1,0 +1,259 @@
+﻿body {
+    color: #333;
+}
+/* Index */
+.banner {
+    overflow: hidden;
+    position: relative;
+}
+
+    .banner img {
+        width: 100%;
+        height: 100px;
+    }
+
+.bursting {
+    height: 100px;
+    overflow: hidden;
+    position: relative;
+    padding: 5px 0 5px 0;
+}
+
+    .bursting .swiper-slide {
+        margin-right: 1px;
+    }
+
+    .bursting img {
+        width: 100%;
+        height: 100%;
+    }
+
+.tab {
+    clear: both;
+    position: relative;
+    height: calc(100%);
+}
+
+.settlement {
+    bottom: 0;
+    width: 100%;
+    position: fixed;
+    z-index: 99999999;
+}
+
+.shopCart {
+    background-color: #eaeaea;
+}
+
+    .shopCart .mui-table-view {
+        height: 282px;
+        overflow: auto;
+    }
+
+.shopCart-top {
+    width: 100%;
+    text-align: right;
+    padding: 10px 0;
+}
+
+    .shopCart-top a {
+        color: #666;
+        margin-right: 20px;
+    }
+
+.downOrder button {
+    border: 0;
+    width: 50%;
+    float: left;
+    padding: 15px;
+    border-radius: 0;
+}
+
+.mui-scroll {
+    height: 100%;
+}
+
+.mui-slider-group {
+    height: calc(100% - 52px);
+}
+
+/* 选项卡内容 */
+.mui-control-content {
+    background-color: white;
+    height: 100%;
+}
+
+    .mui-control-content .mui-loading {
+        margin-top: 50px;
+    }
+
+/* 左侧选项卡 */
+.mui-row.mui-fullscreen > [class*="mui-col-"] {
+    height: calc(100%);
+}
+
+.mui-row.mui-fullscreen > .mui-col-xs-3,
+.mui-control-content {
+    overflow-y: auto;
+    height: calc(100% - 50px);
+}
+
+.mui-segmented-control .mui-control-item {
+    line-height: 50px;
+    width: 100%;
+}
+
+#segmentedControls .mui-control-item {
+    display: block;
+    position: relative;
+}
+
+.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+    background-color: #fff;
+}
+
+/* 左侧选项卡列表 */
+.mui-control-content {
+    position: relative;
+}
+
+.title {
+    bottom: calc(100% - 51px);
+    z-index: 100;
+    width: 100%;
+    color: #6d6d72;
+    font-size: 1rem;
+    position: absolute;
+    padding: 15px;
+    background-color: #efeff4;
+}
+
+#segmentedControlContents .mui-table-view {
+    height: 100%;
+    padding-top: 51px;
+}
+
+    #segmentedControlContents .mui-table-view .mui-media-object {
+        line-height: 100px;
+        max-width: 3rem;
+        height: 3rem;
+    }
+
+#segmentedControlContents .mui-table-view-cell {
+    /*padding: 0.5rem;*/
+}
+
+.shopCart .mui-table-view:after {
+    height: 0;
+}
+
+.mui-ellipsis {
+    float: left;
+    font-size: 1rem;
+}
+
+.mui-media-body h4 {
+    float: left;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.mui-media-body > .mui-btn {
+    width: 120px;
+    height: 30px;
+    float: right;
+    background: #f9f9f9;
+}
+
+.mui-ellipsis .price {
+    color: #ff6a00;
+    font-size: 0.6rem;
+}
+
+.mui-numbox {
+    float: right;
+    width: 120px;
+    height: 30px;
+}
+
+    .mui-numbox .mui-btn-numbox-minus, .mui-numbox .mui-btn-numbox-minus {
+        position: absolute !important;
+        z-index: 99 !important;
+    }
+
+.mui-btn-warning:enabled:active, .mui-btn-success:enabled:active {
+    border: 0;
+}
+
+/* 图标 */
+h5 {
+    margin: 10px;
+}
+
+.mui-badge {
+    margin: 1px;
+    padding: 3px;
+    top: 1px;
+    right: 1px;
+    position: absolute;
+}
+
+.selectSpec {
+}
+
+    .selectSpec .mui-table-view-cell {
+        overflow: auto;
+    }
+
+        .selectSpec .mui-table-view-cell > .title {
+            float: left;
+            width: 32px;
+            padding: 10px;
+            background: none;
+            position: relative;
+        }
+
+        .selectSpec .mui-table-view-cell > .list {
+            float: left;
+            overflow: auto;
+            max-height: 130px;
+            width: calc(100% - 55px);
+        }
+
+            .selectSpec .mui-table-view-cell > .list a {
+                margin: 5px;
+                width: 21%;
+            }
+
+            .selectSpec .mui-table-view-cell > .list a {
+                margin: 5px;
+                width: 21%;
+            }
+
+        .selectSpec .mui-table-view-cell > .mui-btn {
+            float: left;
+            top: 0;
+            right: 0;
+            display: block;
+            margin-top: 20px;
+            margin-left: 10px;
+            position: relative;
+        }
+
+.selectSpecSumit {
+}
+
+    .selectSpecSumit button {
+        width: 50%;
+        margin: 0;
+        border: 0;
+        padding: 10px 0;
+    }
+
+        .selectSpecSumit button:first-child {
+            text-align: left;
+        }
+
+.spec-active {
+    border-color: red;
+}

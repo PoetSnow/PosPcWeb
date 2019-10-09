@@ -1,0 +1,174 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntityProcedures;
+@using Gemstar.BSPMS.Common.Extensions;
+@model Gemstar.BSPMS.Hotel.Web.Areas.RoomState.Models.Future.FutureQueryModel
+@{
+    ViewBag.Title = "远期房态";
+}
+@section headerContent{
+    <style type="text/css">
+        html.body, div.wrap, div#grid {
+            height: 100%;
+        }
+
+        .spana {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+}
+@(Html.Kendo().Grid<UpQueryRoomStatusInfoByDateResultForshow>()
+    .Name("grid")
+    .Columns(c =>
+    {
+        c.Bound(w => w.RoomTypeName).Width(160).Title("房间类型").Locked(true).ClientFooterTemplate("合计:");
+        c.Bound(w => w.TotalRooms).Width(60).Title("总房数").Locked(true).ClientFooterTemplate("<span style='display:block; text-align:center' >#=data.TotalRooms.sum #</span>")
+            .HeaderHtmlAttributes(new { style = "text-align:center;" })
+            .HtmlAttributes(new { style = "text-align:center;" });
+        for (int i = 0; i < Model.Days; i++)
+        {
+            var fieldName = string.Format("Day{0}", (i + 1).ToString().PadLeft(2, '0'));
+            var currentDay = Model.BeginDate.Value.AddDays(i);
+            c.Bound(fieldName).Width(80)
+            .Title(string.Format("{0}<br/>{1}", currentDay.ToString("MM月dd日"), currentDay.DayOfWeek.ToChineseString()))
+            .HeaderHtmlAttributes(new { style = "text-align:center;", name = "funtureTH" })
+            .HtmlAttributes(new { style = "text-align:center;", name = "funtureTH", dataday = currentDay.ToString("yyyy-MM-dd HH:mm:ss") })
+             .ClientTemplate(string.Format("<span class='spana' title='预订房数：#=data.{0}.BookingQty#\r\n在住房数：#=data.{0}.LivedQty#\r\n维修房数：#=data.{0}.ServiceQty#\r\n停用房数：#=data.{0}.StopQty#\r\n保留房数：#=data.{0}.QuotaAvailableQty#\r\n可用房数：#=data.{0}.AvailableQty#\r\n预离房数：#=data.{0}.DepQty#\r\n可超预订数：#:data.{0}.OverQauntity#'><a style='color:#:data.{0}.AvailableQty >0 ? 'rgba(66,139,202,1)':'red' #' data-qty='#:data.{0}.OverQauntity#' class='spana' name='qty' href='javascript:void(0)'>#=data.{0}.AvailableQty#</a></span>", fieldName))
+            .ClientFooterTemplate(string.Format("<span style='display:block; text-align:center ; color: #=data['{0}.AvailableQty'].sum >0 ? '': 'red'#'>#=data['{0}.AvailableQty'].sum# </span>", fieldName))
+           ;
+        }
+    })
+    //.DataSource(c =>
+    //{
+    //    c.Ajax().Read(r => r.Action("AjaxQuery", "Future").Data("setQueryPara"));
+    //})
+    .DataSource(d => d.Ajax().Read(c => c.Action("AjaxQuery", "Future").Data("setQueryPara")).Aggregates(a =>
+    {
+        a.Add(w => w.TotalRooms).Sum();
+        a.Add(w => w.Day01.AvailableQty).Sum();
+        a.Add(w => w.Day02.AvailableQty).Sum();
+        a.Add(w => w.Day03.AvailableQty).Sum();
+        a.Add(w => w.Day04.AvailableQty).Sum();
+        a.Add(w => w.Day05.AvailableQty).Sum();
+        a.Add(w => w.Day06.AvailableQty).Sum();
+        a.Add(w => w.Day07.AvailableQty).Sum();
+        a.Add(w => w.Day08.AvailableQty).Sum();
+        a.Add(w => w.Day09.AvailableQty).Sum();
+        a.Add(w => w.Day10.AvailableQty).Sum();
+        a.Add(w => w.Day11.AvailableQty).Sum();
+        a.Add(w => w.Day12.AvailableQty).Sum();
+        a.Add(w => w.Day13.AvailableQty).Sum();
+        a.Add(w => w.Day14.AvailableQty).Sum();
+        a.Add(w => w.Day15.AvailableQty).Sum();
+        a.Add(w => w.Day16.AvailableQty).Sum();
+        a.Add(w => w.Day17.AvailableQty).Sum();
+        a.Add(w => w.Day18.AvailableQty).Sum();
+        a.Add(w => w.Day19.AvailableQty).Sum();
+        a.Add(w => w.Day20.AvailableQty).Sum();
+        a.Add(w => w.Day21.AvailableQty).Sum();
+        a.Add(w => w.Day22.AvailableQty).Sum();
+        a.Add(w => w.Day23.AvailableQty).Sum();
+        a.Add(w => w.Day24.AvailableQty).Sum();
+        a.Add(w => w.Day25.AvailableQty).Sum();
+        a.Add(w => w.Day26.AvailableQty).Sum();
+        a.Add(w => w.Day27.AvailableQty).Sum();
+        a.Add(w => w.Day28.AvailableQty).Sum();
+        a.Add(w => w.Day29.AvailableQty).Sum();
+        a.Add(w => w.Day30.AvailableQty).Sum();
+        a.Add(w => w.Day31.AvailableQty).Sum();
+    }).PageSize(Gemstar.BSPMS.Common.Extensions.UrlHelperExtension.GetPageSizeForCookies(Request)))
+    .Sortable()
+    .Scrollable(s => s.Height("100%"))
+    .Pageable(pageable => pageable.PageSizes(Gemstar.BSPMS.Common.Tools.CommonHelper.PageSizes))
+    .Pageable(pageable => pageable.Messages(c => c.ItemsPerPage("")))
+    .ToolBar(c => c.Template(@<text>
+        <form method="post">
+            <div class="toolbar">
+                <label for="BeginDate">开始日期：</label>
+                @(Html.Kendo().DatePickerFor(m => m.BeginDate).HtmlAttributes(new { style = "width:110px" }).Format("yyyy-MM-dd").Events(e => e.Change("beginDate_change")))
+                <label for="Days" style="margin-left:5px;">天数：</label>
+                @(Html.Kendo().NumericTextBoxFor(m => m.Days).Min(1).Max(31).Format("#").Decimals(0).HtmlAttributes(new { style = "width:60px;" }))
+                @(Html.Kendo().Button().Name("queryButton").Content("查询").HtmlAttributes(new { style = "height:28px" }).Icon("search")) 
+                <input type='button' value='打印报表' class='k-button k-button-icontext' style="height:28px" id='printButton' />
+
+                <div style="display:inline-table;">
+                    <label style="margin-left: 10px; color: #428bca;">可用房数=总房数-在住房数-预订房数-维修房数-停用房数-保留房数</label>
+                </div>
+                <div style="float:right;padding-top:2px;padding-right:20px;"><label style="color: red;">点击进入新预订，鼠标移上显示详情</label></div>
+              
+            </div>
+        </form>
+    </text>))
+
+)
+@section scripts{
+    <script type="text/javascript">
+        function queryButton_clicked() {
+            var grid = $("#grid").data("kendoGrid");
+            grid.dataSource.read();
+        }
+        function setQueryPara() {
+            return {
+                BeginDate: $("#BeginDate").data("kendoDatePicker").value(),
+                Days: $("#Days").data("kendoNumericTextBox").value()
+            };
+        }
+        function grid_dataBound() {
+            var scwidth = screen.width;
+            if (scwidth != null && scwidth != "") {
+                var width = parseInt(((screen.width - 320) / 15) - 14);
+                $('[name = "funtureTH"]').css("width", width + "px");
+            }
+            else {
+                $('[name = "funtureTH"]').css("width", "80px");
+            }
+        }
+
+        function beginDate_change() {
+            var data = this.value().ToDateString();
+            var todata = new Date().ToDateString();
+            if (data < todata) {
+                jAlert("选择的日期不能小于今天");
+                $("#BeginDate").data("kendoDatePicker").value(todata);
+                return;
+            }
+        }
+        $("#grid").on("click", "[name=qty]", function () {
+            editGridItem(this)
+        })
+        function editGridItem(e) {
+            var gridId = "grid";
+            var grid = $("#" + gridId).data("kendoGrid");
+            var row = $(e).closest("tr");
+            var data = grid.dataItem($(row));
+            var typeid = data["RoomTypeId"];
+            var overQauntity = $(e).attr("data-qty");
+            var SelectedNum = $(e).text();
+            if (Number(overQauntity) + Number(SelectedNum) < 0) {
+                jAlert("该房型已经没有可用房了，请重新选择!");
+                return;
+            }
+            var time = $(e).closest("td").attr("dataday");
+            editGridItemInIframe(typeid, time);
+        }
+        function editGridItemInIframe(roomType, dataTime) {
+            var url = encodeURI("@Url.Action("Index", "ResOrderAdd", new { area= "ResManage" })" + "?type=R&parameters=" + encodeURIComponent("roomtypeid=" + roomType + "&arrdate=" + dataTime));
+            top.openResKendoWindow("客单", url, null, "20020", "新预订/入住");
+        }
+        $("#printButton").click(function () {
+            var begindate = $("#BeginDate").data("kendoDatePicker").value();
+            begindate = new Date(begindate).Format("yyyy-MM-dd");
+            var days = $("#Days").data("kendoNumericTextBox").value();
+            var parameterValues = "@@h99hid=@ViewBag.Hotelid^@ViewBag.HotelName&@@p0101_开始日期=" + begindate + "^" + begindate + "&@@t00X15_天数=" + days + "^" + days;
+            var reportCode = "210";
+            $.post("@Url.Action("AddQueryParaTemp", "SRReportView", new { area = "ReportManage" })", { ReportCode: reportCode, ParameterValues: parameterValues, ChineseName: "远期房态", IsOpenSearchWindow: false }, function (result) {
+                if (result.Success) {
+                    window.open(result.Data);
+                } else {
+                    ajaxErrorHandle(result);
+                }
+            }, 'json');
+            });
+    </script>
+}
+    

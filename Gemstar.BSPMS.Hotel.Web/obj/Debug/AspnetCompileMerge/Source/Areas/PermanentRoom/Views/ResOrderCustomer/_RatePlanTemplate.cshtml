@@ -1,0 +1,50 @@
+﻿@using Kendo.Mvc.UI;
+@*价格计划 修改房价 模板*@
+@model Gemstar.BSPMS.Hotel.Services.ResManage.ResMainInfo
+
+<div id="orderDetailRatePlanEditWindow">
+    <div class="k-grid k-widget" style="max-height: 476px;overflow:hidden;">
+        <div class="k-grid-header" style="padding-right: 17px;">
+            <div class="k-grid-header-wrap k-auto-scrollable">
+                <table>
+                    <colgroup>
+                        <col style="width:70px;">
+                        <col style="width:90px;">
+                        <col style="width:75px;">
+                        <col>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="k-header">@(Html.Kendo().CheckBox().Name("checkAllRatePlan").Label("全选").HtmlAttributes(new { onchange = "permanentRoom_OrderDetailRatePlanEditWindow.SelectAll()" }))</th>
+                            <th class="k-header">日期</th>
+                            <th class="k-header">原价格</th>
+                            <th class="k-header">执行价格</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="k-grid-content k-auto-scrollable" style="max-height: 357px;">
+            <table style="height: auto;">
+                <colgroup>
+                    <col style="width:70px;">
+                    <col style="width:90px;">
+                    <col style="width:75px;">
+                    <col>
+                </colgroup>
+                <tbody id="ratePlanTbody"></tbody>
+            </table>
+        </div>
+        <div class="k-header k-grid-toolbar">
+            <div id="editPriceDiv" class="toolbar">
+                <p id="IsRelationUpdateAllRoonTypeRatePlanP" style="padding-bottom:10px;">@(Html.Kendo().CheckBox().Name("IsRelationUpdateAllRoonTypeRatePlan").Label("关联更新价格").HtmlAttributes(new { style = "padding-left:5px;" }))</p>
+                <input type="hidden" id="txtConstructor" />
+                <label for="editedPrice">选中的价格调整为</label>
+                @(Html.Kendo().NumericTextBox<Double>().Name("editedPrice").Min(0).Format("n2").Decimals(2).HtmlAttributes(new { style = "width:147px;height:auto;" }))
+                <button id="editPriceButton" name="editPriceButton" class="k-button" type="button">调整</button>
+                <button id="savePriceButton" name="savePriceButton" class="k-button" type="button">确定</button>
+            </div>
+            <div id="editPriceDivMsg" class="toolbar" style="padding-right: 9.6px;text-align: center;display:none;">本价格代码不允许调价</div>
+        </div>
+    </div>
+</div>

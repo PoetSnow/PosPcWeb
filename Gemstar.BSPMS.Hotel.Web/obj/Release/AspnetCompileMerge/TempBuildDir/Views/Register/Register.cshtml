@@ -1,0 +1,116 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Models.Register.RegInfoForLength20
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>捷信达软件注册信息维护</title>
+    <style type="text/css">
+        <!--
+        .title {
+            font-size: 16pt;
+            color: #00CC00;
+        }
+
+        .message {
+            font-size: 12pt;
+            color: #FF0000;
+        }
+        -->
+    </style>
+</head>
+<body>    
+    @{ 
+        Html.EnableClientValidation();
+        using (Html.BeginForm())
+        {
+    <table width="100%">
+        <tr>
+            <td style="width: 3px"></td>
+        </tr>
+        <tr>
+            <td style="width: 3px; height: 17px"></td>
+        </tr>
+        <tr>
+            <td align="center">
+                <table align="center" width="450" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td colspan="7">
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>用户序列号：</td>
+                        <td colspan="6">@Html.HiddenFor(w => w.UserSeriesNo)<span style="font-size: 16pt; color: #00cc00">@Model.UserSeriesNo</span></td>
+                    </tr>
+                    <tr>
+                        <td "nowrap" ="nowrap">
+                            <span style="font-size: 16pt; color: #00cc00">修复键值：</span>
+                        </td>
+                        <td nowrap="nowrap">
+                            @Html.TextBoxFor(m => m.No1, new { maxlength = "4", size = "4" })
+                        </td>
+                        <td nowrap="nowrap">
+                            -@Html.TextBoxFor(m => m.No2, new { maxlength = "4", size = "4" })
+                        </td>
+                        <td nowrap="nowrap">
+                            -@Html.TextBoxFor(m => m.No3, new { maxlength = "4", size = "4" })
+                        </td>
+                        <td nowrap="nowrap">
+                            -@Html.TextBoxFor(m => m.No4, new { maxlength = "4", size = "4" })
+                        </td>
+                        <td nowrap="nowrap">
+                            -@Html.TextBoxFor(m => m.No5, new { maxlength = "4", size = "4" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            @Html.ValidationMessageFor(m => m.No1)
+                        </td>
+                        <td>
+                            @Html.ValidationMessageFor(m => m.No2)
+                        </td>
+                        <td>
+                            @Html.ValidationMessageFor(m => m.No3)
+                        </td>
+                        <td>
+                            @Html.ValidationMessageFor(m => m.No4)
+                        </td>
+                        <td style="width: 74px">
+                            @Html.ValidationMessageFor(m => m.No5)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">
+                            <input type="submit" name="register" id="register" value="注册" style="border-width:0px;" />&nbsp;&nbsp;
+                            <input type="button" name="close" id="close" value="关闭" onclick="window.opener=null;window.close();" style="border-width:0px;" />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+            }
+        }
+</body>
+</html>

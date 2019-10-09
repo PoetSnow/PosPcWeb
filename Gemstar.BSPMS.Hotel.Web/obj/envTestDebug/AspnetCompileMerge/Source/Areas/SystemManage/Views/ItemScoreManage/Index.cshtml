@@ -1,0 +1,66 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "积分兑换项目";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForEnable = !ViewBag.isgrouphotel,
+        EnableFunctionForDisable = !ViewBag.isgrouphotel,
+        EnableFunctionForAdd = !ViewBag.isgrouphotel,
+        EnableFunctionForEdit = !ViewBag.isgrouphotel,
+        EnableFunctionForDelete = !ViewBag.isgrouphotel,
+        EnableFunctionForSave = !ViewBag.isgrouphotel,
+        EnableScrollable = true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("code").Title("代码");
+            c.Bound("name").Title("名称");
+            c.Bound("remark").Title("文字介绍");
+            c.Bound("picAdd").ClientTemplate("<a title='点击查看大图' onclick=\"preview('#:picAdd#')\"><img src='#: picAdd #' alt='加载失败' style='max-height:100px;cursor:pointer;'></a>").Title("缩略图");
+            c.Bound("hotelname").Title("适用分店").Hidden(!ViewBag.isgroupingroup);
+        },
+        RowTemplate = @"<tr style=#: status==51?'text-decoration:line-through;color:red;':'' #>
+                                    <td>#: code #</td>
+                                    <td>#: name #</td>
+                                    <td>#: remark==null?'':remark #</td>
+                                    <td><a title='点击查看大图' onclick=preview('#:picAdd#')><img src='#: picAdd #' alt='加载失败' style='max-height:100px;cursor:pointer;'></a></td>
+                                   " + (ViewBag.isgroupingroup ? " <td>#: hotelname==null?'':hotelname #</td>" : "") +
+                                    "</tr>",
+        CustomToolbar = c =>
+        {
+
+            c.Custom().Name("comfirmtext").Text("<span style='float:right;display:inline-block;color:red;margin-right:50px;padding-top:8px;'>" + (ViewBag.isgrouphotel ? "在集团会员设置中修改" : "双击可修改") + "</span>").HtmlAttributes(new { id = "comfirmtext", href = "javascript:void(0);", style = "cursor:default;" });
+
+        }
+    };
+}
+
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+    <script type="text/javascript">
+        function preview(arg) {
+            top.openKendoWindow("查看大图", "@Url.Action("Detail")", { picLink: arg, r: Math.random() });
+        }
+        $(function () {
+            window.onresize = onResize; onResize();
+            $("#comfirmtext").removeClass("k-button");
+
+        });
+        function onResize() {
+            var allHeight = $("#mainContent", window.top.document).height();
+            var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 170;
+            $("#grid .k-grid-content").height(allHeight - showHeight);
+        }
+    </script>
+}

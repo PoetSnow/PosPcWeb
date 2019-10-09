@@ -1,0 +1,13 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPos;
+
+@model List<PosItem>
+
+@{
+    if (Model != null && Model.Count > 0)
+    {
+        foreach (var item in Model)
+        {
+            <a id="subClass_@item.Id" class="mui-control-item" href="@("#content" + item.Id.Trim())" data-id="@item.Id.Trim()" data-subClassid="@item.SubClassid" onclick="getItemList(this)">@item.Cname <span class="mui-badge mui-badge-danger" style="display:none;"></span></a>
+        }
+    }
+}

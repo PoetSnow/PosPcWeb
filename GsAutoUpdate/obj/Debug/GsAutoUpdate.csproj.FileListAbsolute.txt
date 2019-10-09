@@ -1,0 +1,16 @@
+D:\work\Pos\GsAutoUpdate\bin\Debug\GsAutoUpdate.exe.config
+D:\work\Pos\GsAutoUpdate\bin\Debug\GsAutoUpdate.exe
+D:\work\Pos\GsAutoUpdate\bin\Debug\GsAutoUpdate.pdb
+D:\work\Pos\GsAutoUpdate\obj\Debug\GsAutoUpdate.MainForm.resources
+D:\work\Pos\GsAutoUpdate\obj\Debug\GsAutoUpdate.Properties.Resources.resources
+D:\work\Pos\GsAutoUpdate\obj\Debug\GsAutoUpdate.UpdateForm.resources
+D:\work\Pos\GsAutoUpdate\obj\Debug\GsAutoUpdate.csproj.GenerateResource.cache
+D:\work\Pos\GsAutoUpdate\obj\Debug\GsAutoUpdate.csproj.CoreCompileInputs.cache
+D:\work\Pos\GsAutoUpdate\obj\Debug\GsAutoUpdate.exe
+D:\work\Pos\GsAutoUpdate\obj\Debug\GsAutoUpdate.pdb
+D:\work\Pos\GsAutoUpdate\obj\Debug\GsAutoUpdate.csprojAssemblyReference.cache
+D:\work\Pos\GsAutoUpdate\bin\Debug\DotNetZip.dll
+D:\work\Pos\GsAutoUpdate\bin\Debug\Newtonsoft.Json.dll
+D:\work\Pos\GsAutoUpdate\bin\Debug\DotNetZip.xml
+D:\work\Pos\GsAutoUpdate\bin\Debug\Newtonsoft.Json.xml
+D:\work\Pos\GsAutoUpdate\obj\Debug\GsAutoUpdate.csproj.CopyComplete

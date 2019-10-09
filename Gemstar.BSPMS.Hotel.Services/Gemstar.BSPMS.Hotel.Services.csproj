@@ -1,0 +1,602 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{ED22AAFF-08E2-4F98-98C0-8BC2E985D613}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Gemstar.BSPMS.Hotel.Services</RootNamespace>
+    <AssemblyName>Gemstar.BSPMS.Hotel.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'envTestDebug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\envTestDebug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'envTestRelease|AnyCPU'">
+    <OutputPath>bin\envTestRelease\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Stimulsoft.Report.Mvc">
+      <HintPath>..\lib\Stimulsoft\Stimulsoft.Report.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AuthManages\AuthAttribute.cs" />
+    <Compile Include="AuthManages\AuthBasicDataAttribute.cs" />
+    <Compile Include="AuthManages\AuthorizationInfo.cs" />
+    <Compile Include="AuthManages\AuthPageAttribute.cs" />
+    <Compile Include="AuthManages\AuthFlag.cs" />
+    <Compile Include="AuthManages\AuthButtonAttribute.cs" />
+    <Compile Include="AuthManages\AuthType.cs" />
+    <Compile Include="AuthManages\IAuthCheck.cs" />
+    <Compile Include="AuthManages\IAuthListService.cs" />
+    <Compile Include="AuthManages\IAuthorizationService.cs" />
+    <Compile Include="AuthManages\IRoleAuthItemConsumeService.cs" />
+    <Compile Include="AuthManages\IRoleAuthReportService.cs" />
+    <Compile Include="AuthManages\NotAuthAttribute.cs" />
+    <Compile Include="AuthManages\ProductType.cs" />
+    <Compile Include="BreakfastManage\IBreakfastService.cs" />
+    <Compile Include="Common\CommonQueryHelperExtension.cs" />
+    <Compile Include="CRMManage\CommpanyBlanceInfo.cs" />
+    <Compile Include="CRMManage\CompanyPayListItem.cs" />
+    <Compile Include="CRMManage\ICompanyCaService.cs" />
+    <Compile Include="CRMManage\ICompanyLogService.cs" />
+    <Compile Include="CRMManage\ICompanyService.cs" />
+    <Compile Include="CRMManage\ICompanySignerService.cs" />
+    <Compile Include="CRMManage\ICompanyTransService.cs" />
+    <Compile Include="CRMManage\IGuestService.cs" />
+    <Compile Include="CRMManage\IGuestTransService.cs" />
+    <Compile Include="EntitiesPosProcedures\MbrCardInfoModel.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_getPrePayInfoResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_DepartResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_MScrollItemListResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_OrderBillListByDateResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_queryBillDetailPositemResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_BatchHandlePosOnSaleResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_ItemActionByItemidResult.cs" />
+    <Compile Include="EntitiesPosProcedures\QueryBillModel.cs" />
+    <Compile Include="EntitiesPosProcedures\up_list_positemBySellOutResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_changeItemListResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_ChangeTabBillDetailListResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_getidnoResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_listTabLogResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_ActionMultisubByActionidResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_itemByPosOnSaleResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_ItemClassBySingleResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_suitItemByRefeidResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_itemSuitByItemIdResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_roleAuthResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_BillDetailResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_cmp_PaymentTotalResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_discTypeList.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_BillDetailByCashierResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_BillDetailByGroupItemClassResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_ReserveTabStatusResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_ReserveTabTypeListResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_scan_list_PosItemByShowSetResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_scan_list_TabListByHidResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_TabStatusResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_cmp_tabStatusResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_cmp_billDetailStatisticsResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_BillDetailActionGroupResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_tabOpenItemByTabTypeResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_billByBillidResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_billByPosidResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_BillDetailByBillidResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_BillDetailForPaymentResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_itemByItemClassidResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_billByRefeidAndTabidResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_ItemRefeByItemidResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_ItemMultiClassByItemidResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_list_ItemPriceByItemidResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_print_billOrderResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_print_billDetailResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_query_shiftChangeResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_query_cleaningMachineResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_Pos_list_ProducelistResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_query_shuffleChangeResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_scan_list_ItemListBySubClassidResult.cs" />
+    <Compile Include="EntitiesPosProcedures\v_codeListPubModel.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_SeafoodPoolListResult.cs" />
+    <Compile Include="EntitiesPosProcedures\up_pos_WeighedListResult.cs" />
+    <Compile Include="EntitiesPosProcedures\v_pos_ItemClassUnionItemResult.cs" />
+    <Compile Include="EntitiesPos\PosBillCost.cs" />
+    <Compile Include="EntitiesPos\PosBillOrder.cs" />
+    <Compile Include="EntitiesPos\PosDepot.cs" />
+    <Compile Include="EntitiesPos\PosMorderList.cs" />
+    <Compile Include="EntitiesPos\PosHoliday.cs" />
+    <Compile Include="EntitiesPos\PosItemAction.cs" />
+    <Compile Include="EntitiesPos\PosAdvanceFunc.cs" />
+    <Compile Include="EntitiesPos\PosBillChange.cs" />
+    <Compile Include="EntitiesPos\PosMscroll.cs" />
+    <Compile Include="EntitiesPos\PosMBanner.cs" />
+    <Compile Include="EntitiesPos\PosItemSuit.cs" />
+    <Compile Include="EntitiesPos\PosOnSale.cs" />
+    <Compile Include="EntitiesPos\PosOperDiscount.cs" />
+    <Compile Include="EntitiesPos\PosPrintBill.cs" />
+    <Compile Include="EntitiesPos\PosProducelistBak.cs" />
+    <Compile Include="EntitiesPos\PosProducelist.cs" />
+    <Compile Include="EntitiesPos\PosBillDetailAction.cs" />
+    <Compile Include="EntitiesPos\PosDiscType.cs" />
+    <Compile Include="EntitiesPos\PosReason.cs" />
+    <Compile Include="EntitiesPos\PosAction.cs" />
+    <Compile Include="EntitiesPos\PosActionType.cs" />
+    <Compile Include="EntitiesPos\PosAcType.cs" />
+    <Compile Include="EntitiesPos\PosBillDetail.cs" />
+    <Compile Include="EntitiesPos\PosCustomerType.cs" />
+    <Compile Include="EntitiesPos\PosDepart.cs" />
+    <Compile Include="EntitiesPos\PosDeptClass.cs" />
+    <Compile Include="EntitiesPos\PosItem.cs" />
+    <Compile Include="EntitiesPos\PosItemClass.cs" />
+    <Compile Include="EntitiesPos\PosItemMultiClass.cs" />
+    <Compile Include="EntitiesPos\PosItemPrice.cs" />
+    <Compile Include="EntitiesPos\PosItemRefe.cs" />
+    <Compile Include="EntitiesPos\PosPordPrinter.cs" />
+    <Compile Include="EntitiesPos\PosPos.cs" />
+    <Compile Include="EntitiesPos\PosRequest.cs" />
+    <Compile Include="EntitiesPos\PosSellout.cs" />
+    <Compile Include="EntitiesPos\PosShift.cs" />
+    <Compile Include="EntitiesPos\PosShowSet.cs" />
+    <Compile Include="EntitiesPos\PosShuffle.cs" />
+    <Compile Include="EntitiesPos\PosRefe.cs" />
+    <Compile Include="EntitiesPos\PosShuffleNews.cs" />
+    <Compile Include="EntitiesPos\PosTab.cs" />
+    <Compile Include="EntitiesPos\PosTabOpenItem.cs" />
+    <Compile Include="EntitiesPos\PosTabService.cs" />
+    <Compile Include="EntitiesPos\PosTabLog.cs" />
+    <Compile Include="EntitiesPos\PosTabtype.cs" />
+    <Compile Include="EntitiesPos\PosTabStatus.cs" />
+    <Compile Include="EntitiesPos\PostCost.cs" />
+    <Compile Include="EntitiesPos\PosUnit.cs" />
+    <Compile Include="EntitiesPos\VoucherSet.cs" />
+    <Compile Include="EntitiesPos\WhVoucher.cs" />
+    <Compile Include="EntitiesPos\WhVoucherdetail.cs" />
+    <Compile Include="EntitiesPos\YtPrepay.cs" />
+    <Compile Include="Entities\AuthList.cs" />
+    <Compile Include="Entities\AuthorizationRecord.cs" />
+    <Compile Include="Entities\BasicDataResortControl.cs" />
+    <Compile Include="Entities\BookingNotes.cs" />
+    <Compile Include="Entities\CardAuth.cs" />
+    <Compile Include="Entities\Channel.cs" />
+    <Compile Include="Entities\ChargeFree.cs" />
+    <Compile Include="Entities\CodeList.cs" />
+    <Compile Include="Entities\Company.cs" />
+    <Compile Include="Entities\CompanyCa.cs" />
+    <Compile Include="Entities\CompanyLog.cs" />
+    <Compile Include="Entities\CompanySigner.cs" />
+    <Compile Include="Entities\CompanySinImg.cs" />
+    <Compile Include="Entities\CompanyTrans.cs" />
+    <Compile Include="Entities\Coupon.cs" />
+    <Compile Include="Entities\GridColumnsSettings.cs" />
+    <Compile Include="Entities\Guest.cs" />
+    <Compile Include="Entities\GuestTrans.cs" />
+    <Compile Include="Entities\HotelDay.cs" />
+    <Compile Include="Entities\HotelDayDetail.cs" />
+    <Compile Include="Entities\HotelStatus.cs" />
+    <Compile Include="Entities\Invoice.cs" />
+    <Compile Include="Entities\InvoiceDetail.cs" />
+    <Compile Include="Entities\InvoiceInfo.cs" />
+    <Compile Include="Entities\Item.cs" />
+    <Compile Include="Entities\CodeType.cs" />
+    <Compile Include="Entities\LockLog.cs" />
+    <Compile Include="Entities\MbrCard.cs" />
+    <Compile Include="Entities\ItemScore.cs" />
+    <Compile Include="Entities\MbrCardBalance.cs" />
+    <Compile Include="Entities\MbrCardLog.cs" />
+    <Compile Include="Entities\MbrCardType.cs" />
+    <Compile Include="Entities\OnlineInterfaceLog.cs" />
+    <Compile Include="Entities\OpLog.cs" />
+    <Compile Include="Entities\PercentagesPlanOperator.cs" />
+    <Compile Include="Entities\PercentagesPlanSalesman.cs" />
+    <Compile Include="Entities\percentagesPlan.cs" />
+    <Compile Include="Entities\PercentagesPolicyCleanRoom.cs" />
+    <Compile Include="Entities\PercentagesPolicyOperator.cs" />
+    <Compile Include="Entities\PercentagesPolicySalesman.cs" />
+    <Compile Include="Entities\PermanentRoomGoodsSet.cs" />
+    <Compile Include="Entities\PermanentRoomGoodsSetTemplete.cs" />
+    <Compile Include="Entities\PermanentRoomPricePlan.cs" />
+    <Compile Include="Entities\PlanTask.cs" />
+    <Compile Include="Entities\PermanentRoomFixedCostSet.cs" />
+    <Compile Include="Entities\PermanentRoomSet.cs" />
+    <Compile Include="Entities\PmsHotel.cs" />
+    <Compile Include="Entities\PmsPara.cs" />
+    <Compile Include="Entities\PmsUser.cs" />
+    <Compile Include="Entities\ProfileCa.cs" />
+    <Compile Include="Entities\ProfileCard.cs" />
+    <Compile Include="Entities\ProfileTrans.cs" />
+    <Compile Include="Entities\Rate.cs" />
+    <Compile Include="Entities\RateDetail.cs" />
+    <Compile Include="Entities\ProfileLog.cs" />
+    <Compile Include="Entities\RegInfo.cs" />
+    <Compile Include="Entities\RentSituation.cs" />
+    <Compile Include="Entities\ReportFormat.cs" />
+    <Compile Include="Entities\ReportQueryParaTemp.cs" />
+    <Compile Include="Entities\Res.cs" />
+    <Compile Include="Entities\ResBillSetting.cs" />
+    <Compile Include="Entities\ResBillSettingTemplete.cs" />
+    <Compile Include="Entities\ResDetail.cs" />
+    <Compile Include="Entities\ResDetailPlan.cs" />
+    <Compile Include="Entities\ResFolio.cs" />
+    <Compile Include="Entities\ResFolioBreakfastInfo.cs" />
+    <Compile Include="Entities\ResFolioLog.cs" />
+    <Compile Include="Entities\ResFolioPayInfo.cs" />
+    <Compile Include="Entities\ResInvoiceInfo.cs" />
+    <Compile Include="Entities\ResLog.cs" />
+    <Compile Include="Entities\Role.cs" />
+    <Compile Include="Entities\RoleAuth.cs" />
+    <Compile Include="Entities\RoleAuthItemConsume.cs" />
+    <Compile Include="Entities\RoleAuthReport.cs" />
+    <Compile Include="Entities\Room.cs" />
+    <Compile Include="Entities\RoomHold.cs" />
+    <Compile Include="Entities\RoomOwnerCalcDispPara.cs" />
+    <Compile Include="Entities\RoomOwnerCalcParaDefine.cs" />
+    <Compile Include="Entities\RoomOwnerCalcResult.cs" />
+    <Compile Include="Entities\RoomOwnerCalcType.cs" />
+    <Compile Include="Entities\RoomOwnerFee.cs" />
+    <Compile Include="Entities\RoomOwnerMonthCalc.cs" />
+    <Compile Include="Entities\RoomOwnerRoomInfos.cs" />
+    <Compile Include="Entities\RoomServiceLog.cs" />
+    <Compile Include="Entities\RoomStatus.cs" />
+    <Compile Include="Entities\RoomStatusLog.cs" />
+    <Compile Include="Entities\RoomType.cs" />
+    <Compile Include="Entities\RoomTypeEquipment.cs" />
+    <Compile Include="Entities\RtEqList.cs" />
+    <Compile Include="Entities\Sales.cs" />
+    <Compile Include="Entities\ScoreUse.cs" />
+    <Compile Include="Entities\ScoreUseRule.cs" />
+    <Compile Include="Entities\SendXml.cs" />
+    <Compile Include="Entities\Shift.cs" />
+    <Compile Include="Entities\SignatureLog.cs" />
+    <Compile Include="Entities\UserReportCollect.cs" />
+    <Compile Include="Entities\UserRole.cs" />
+    <Compile Include="Entities\V_codeListPub.cs" />
+    <Compile Include="Entities\V_codeListReserve.cs" />
+    <Compile Include="Entities\V_dataType.cs" />
+    <Compile Include="Entities\V_itemReserv.cs" />
+    <Compile Include="Entities\V_Nation.cs" />
+    <Compile Include="Entities\V_ReportList.cs" />
+    <Compile Include="Entities\WaitPayList.cs" />
+    <Compile Include="Entities\WakeCall.cs" />
+    <Compile Include="Entities\WakeCallDetil.cs" />
+    <Compile Include="Entities\WeixinTemplateMessage.cs" />
+    <Compile Include="EntityProcedures\up_pos_ProcedureParametersResult.cs" />
+    <Compile Include="EntityProcedures\upCompanyCaInputResult.cs" />
+    <Compile Include="EntityProcedures\UpGetSmsInfoResult.cs" />
+    <Compile Include="EntityProcedures\upJsonResultData.cs" />
+    <Compile Include="EntityProcedures\UpPrintProfileRechargeResult.cs" />
+    <Compile Include="EntityProcedures\UpProfilecaConsumeSendSMSResult.cs" />
+    <Compile Include="EntityProcedures\upProfileCaInputResult.cs" />
+    <Compile Include="EntityProcedures\UpProfilecaRefundCheckResult.cs" />
+    <Compile Include="EntityProcedures\UpQueryAuthListForRoleResult.cs" />
+    <Compile Include="EntityProcedures\UpQueryCancelRecord.cs" />
+    <Compile Include="EntityProcedures\UpQueryCardAuthByResIdResult.cs" />
+    <Compile Include="EntityProcedures\UpQueryGuestTrans.cs" />
+    <Compile Include="EntityProcedures\UpQueryNotifyResult.cs" />
+    <Compile Include="EntityProcedures\UpQueryOperationLog.cs" />
+    <Compile Include="EntityProcedures\UpQueryResDetailResult.cs" />
+    <Compile Include="EntityProcedures\UpQueryResDetailsForCommonResult.cs" />
+    <Compile Include="EntityProcedures\UpQueryResDetailsForFolioAddByResIdResult.cs" />
+    <Compile Include="EntityProcedures\UpQueryResFolioCheckoutBatchNosResult.cs" />
+    <Compile Include="EntityProcedures\UpQueryResortListForOperatorResult.cs" />
+    <Compile Include="EntityProcedures\UpQueryRoomAutoChooseResult.cs" />
+    <Compile Include="EntityProcedures\UpQueryRoomHoldInfosResult.cs" />
+    <Compile Include="EntityProcedures\UpQueryRoomStatuDetailInfoResult.cs" />
+    <Compile Include="EntityProcedures\UpQueryRoomStatusInfoByDateResult.cs" />
+    <Compile Include="EntityProcedures\UpQueryRoomStatusInfosByRoomTypeResult.cs" />
+    <Compile Include="EntityProcedures\UpQueryRoomStatusResult.cs" />
+    <Compile Include="EntityProcedures\UpQueryRoomTypeChooseResult.cs" />
+    <Compile Include="EntityProcedures\upResFolioDayChargeCheckResult.cs" />
+    <Compile Include="EntityProcedures\UpResFolioDayChargeQueryValidResult.cs" />
+    <Compile Include="EntityProcedures\UpResFolioOpCheckResult.cs" />
+    <Compile Include="EntityProcedures\UpResFolioOpResult.cs" />
+    <Compile Include="EntityProcedures\UpRoomEnableCheckResult.cs" />
+    <Compile Include="EnumsPos\PosItemActionType.cs" />
+    <Compile Include="EnumsPos\PosItemIsStock.cs" />
+    <Compile Include="EnumsPos\PosPordPrinterStatus.cs" />
+    <Compile Include="EnumsPos\ModuleCode.cs" />
+    <Compile Include="EnumsPos\PaymentDesc.cs" />
+    <Compile Include="EnumsPos\BalanceType.cs" />
+    <Compile Include="EnumsPos\PosBillChangeStatus.cs" />
+    <Compile Include="EntitiesPos\PosActionMultisub.cs" />
+    <Compile Include="EnumsPos\PosBillIsForce.cs" />
+    <Compile Include="EnumsPos\PosBillTabFlag.cs" />
+    <Compile Include="EnumsPos\PosMorderListIStatus.cs" />
+    <Compile Include="EnumsPos\PosIsOpenBrush.cs" />
+    <Compile Include="EnumsPos\PosItemStatus.cs" />
+    <Compile Include="EnumsPos\PosOrderType.cs" />
+    <Compile Include="EnumsPos\PosPrintBillStatus.cs" />
+    <Compile Include="EnumsPos\PosReasonIstagtype.cs" />
+    <Compile Include="EnumsPos\PosITagperiod.cs" />
+    <Compile Include="EnumsPos\PosTabOpenType.cs" />
+    <Compile Include="EnumsPos\PosTabStatusOpType.cs" />
+    <Compile Include="EnumsPos\PosTabStatusEnum.cs" />
+    <Compile Include="EnumsPos\PosBillDetailIsProduce.cs" />
+    <Compile Include="EnumsPos\PosBillDetailStatus.cs" />
+    <Compile Include="EnumsPos\PosBillDetailIsauto.cs" />
+    <Compile Include="EnumsPos\PosTabLogStatus.cs" />
+    <Compile Include="EnumsPos\PosBillStatus.cs" />
+    <Compile Include="EnumsPos\PosBusinessEnd.cs" />
+    <Compile Include="EnumsPos\PosItemDcFlag.cs" />
+    <Compile Include="EnumsPos\PosOnsaleTime.cs" />
+    <Compile Include="EnumsPos\PosOrderSameItem.cs" />
+    <Compile Include="EnumsPos\PosSection.cs" />
+    <Compile Include="EnumsPos\PosPrintBillss.cs" />
+    <Compile Include="EnumsPos\PosRegType.cs" />
+    <Compile Include="EnumsPos\PosShuffleHideTab.cs" />
+    <Compile Include="EnumsPos\PosRequestCombine.cs" />
+    <Compile Include="EnumsPos\PosRequestProduce.cs" />
+    <Compile Include="EnumsPos\PosRequestProperty.cs" />
+    <Compile Include="EnumsPos\PosRequestOperator.cs" />
+    <Compile Include="EnumsPos\PosTabProduce.cs" />
+    <Compile Include="EnumsPos\PosTagDecend.cs" />
+    <Compile Include="EnumsPos\PosTagLimitDisc.cs" />
+    <Compile Include="EnumsPos\PosTagLimitSrv.cs" />
+    <Compile Include="EnumsPos\PosTagPrintBill.cs" />
+    <Compile Include="EnumsPos\PosTagPromptFoot.cs" />
+    <Compile Include="EnumsPos\PosTagServicesTime.cs" />
+    <Compile Include="EnumsPos\PosTagSrvDisc.cs" />
+    <Compile Include="EnumsPos\PosTagZeroBill.cs" />
+    <Compile Include="EnumsPos\PrePayIType.cs" />
+    <Compile Include="EnumsPos\PrePayStatus.cs" />
+    <Compile Include="Enums\CardAuthStatus.cs" />
+    <Compile Include="Enums\CompanySignType.cs" />
+    <Compile Include="Enums\LockStatus.cs" />
+    <Compile Include="Enums\ResDetailStatus.cs" />
+    <Compile Include="Enums\ResFolioPayStatus.cs" />
+    <Compile Include="Enums\ResFolioStatus.cs" />
+    <Compile Include="Enums\ResGroupFlag.cs" />
+    <Compile Include="Enums\RoomStatusDirtyFlag.cs" />
+    <Compile Include="Enums\ShiftLoginStatus.cs" />
+    <Compile Include="Enums\TaxPrintType.cs" />
+    <Compile Include="Enums\TaxRefType.cs" />
+    <Compile Include="Enums\TaxType.cs" />
+    <Compile Include="OnlineInterfaceManage\IInvoiceService.cs" />
+    <Compile Include="OnlineInterfaceManage\Invoice\InvoiceModel.cs" />
+    <Compile Include="OnlineInterfaceManage\OnlineInterfaceModel.cs" />
+    <Compile Include="PosManage\IPosBillCostService.cs" />
+    <Compile Include="PosManage\IPosBillOrderService.cs" />
+    <Compile Include="PosManage\IPosDepotService.cs" />
+    <Compile Include="PosManage\IPosItemClassDiscountService.cs" />
+    <Compile Include="PosManage\IPosMorderListService.cs" />
+    <Compile Include="PosManage\IPosMScrollService.cs" />
+    <Compile Include="PosManage\IPosMBannerService.cs" />
+    <Compile Include="MarketingManage\IBookingNotesService.cs" />
+    <Compile Include="MarketingManage\IChannelService.cs" />
+    <Compile Include="MarketingManage\IPlanTaskService.cs" />
+    <Compile Include="MarketingManage\IRoomHoldService.cs" />
+    <Compile Include="MarketingManage\IRoomOwnerCalcDispParaService.cs" />
+    <Compile Include="MarketingManage\IRoomOwnerCalcParaDefineService.cs" />
+    <Compile Include="MarketingManage\IRoomOwnerCalcResultService.cs" />
+    <Compile Include="MarketingManage\IRoomOwnerCalcTypeService.cs" />
+    <Compile Include="MarketingManage\IRoomOwnerFeeService.cs" />
+    <Compile Include="MarketingManage\IRoomOwnerRoomInfosService.cs" />
+    <Compile Include="MbrCardCenter\IMbrCardService.cs" />
+    <Compile Include="MbrCardCenter\ProfileAccountType.cs" />
+    <Compile Include="MbrCardCenter\ProfileCaInputPara.cs" />
+    <Compile Include="MbrCardCenter\ProfileCaType.cs" />
+    <Compile Include="MbrCardCenter\RechargeRefundPara.cs" />
+    <Compile Include="NotifyManage\INotifyService.cs" />
+    <Compile Include="PayManage\IPayActionXmlOperate.cs" />
+    <Compile Include="PayManage\IPaymentServices.cs" />
+    <Compile Include="PayManage\IPayQueryService.cs" />
+    <Compile Include="PayManage\IPayServiceBuilder.cs" />
+    <Compile Include="PayManage\IPayService.cs" />
+    <Compile Include="PayManage\IWaitPayListService.cs" />
+    <Compile Include="PayManage\PayAfterResult.cs" />
+    <Compile Include="PayManage\PayResult.cs" />
+    <Compile Include="Percentages\ICleanRoomPolicyService.cs" />
+    <Compile Include="Percentages\IOperatorPlanService.cs" />
+    <Compile Include="Percentages\IOperatorPolicyService.cs" />
+    <Compile Include="Percentages\IpercentagesPlanService.cs" />
+    <Compile Include="Percentages\ISalesmanPlanService.cs" />
+    <Compile Include="Percentages\ISalesmanPolicyService.cs" />
+    <Compile Include="PermanentRoomManage\IPermanentRoomGoodsService.cs" />
+    <Compile Include="PermanentRoomManage\IPermanentRoomPricePlanService.cs" />
+    <Compile Include="PermanentRoomManage\IResService.cs" />
+    <Compile Include="PermanentRoomManage\ResDetailInfo.cs" />
+    <Compile Include="PermanentRoomManage\ResMainInfo.cs" />
+    <Compile Include="PosManage\IPosAdvanceFuncService.cs" />
+    <Compile Include="PosManage\IPosBillChangeService.cs" />
+    <Compile Include="PosManage\IPosHolidayService.cs" />
+    <Compile Include="PosManage\IPosCostItemService.cs" />
+    <Compile Include="PosManage\IPosItemActionService.cs" />
+    <Compile Include="PosManage\IPosActionMultisubService.cs" />
+    <Compile Include="PosManage\IPosItemSuitService.cs" />
+    <Compile Include="PosManage\IPosOnSaleService.cs" />
+    <Compile Include="PosManage\IPosOperDiscountService.cs" />
+    <Compile Include="PosManage\IPosPrintBillService.cs" />
+    <Compile Include="PosManage\IPosProducelistBakService.cs" />
+    <Compile Include="PosManage\IPosProducelistService.cs" />
+    <Compile Include="PosManage\IPosBillDetailActionService.cs" />
+    <Compile Include="PosManage\IPosDiscTypeService.cs" />
+    <Compile Include="PosManage\IPosReasonService.cs" />
+    <Compile Include="PosManage\IPosBillDetailService.cs" />
+    <Compile Include="PosManage\IPosReserveService.cs" />
+    <Compile Include="PosManage\IPosSeaFoodPoolService.cs" />
+    <Compile Include="PosManage\IPosSellOutService.cs" />
+    <Compile Include="PosManage\IPosShuffleNewsService.cs" />
+    <Compile Include="PosManage\IPosTabLogService.cs" />
+    <Compile Include="PosManage\IPosTabOpenItemService.cs" />
+    <Compile Include="PosManage\IPosTabServiceService.cs" />
+    <Compile Include="PosManage\IPosItemMultiClassService.cs" />
+    <Compile Include="PosManage\IPosItemRefeService.cs" />
+    <Compile Include="PosManage\IPosItemService.cs" />
+    <Compile Include="PosManage\IPosItemClassService.cs" />
+    <Compile Include="PosManage\IPosPosDepartService.cs" />
+    <Compile Include="PosManage\IPosActionService.cs" />
+    <Compile Include="PosManage\IPosAcTypeService.cs" />
+    <Compile Include="PosManage\IPosDeptClassService.cs" />
+    <Compile Include="PosManage\IPosItemPriceService.cs" />
+    <Compile Include="PosManage\IPosProdPrinterService.cs" />
+    <Compile Include="PosManage\IPosBillService.cs" />
+    <Compile Include="PosManage\IPosTabStatusService.cs" />
+    <Compile Include="PosManage\IPosCustomerTypeService.cs" />
+    <Compile Include="PosManage\IPosUnitService.cs" />
+    <Compile Include="PosManage\IPosTabService.cs" />
+    <Compile Include="PosManage\IPosPosService.cs" />
+    <Compile Include="PosManage\IPosRequestService.cs" />
+    <Compile Include="PosManage\IPosShiftService.cs" />
+    <Compile Include="PosManage\IPosShuffleService.cs" />
+    <Compile Include="PosManage\IPosRefeService.cs" />
+    <Compile Include="PosManage\IPosActionTypeService.cs" />
+    <Compile Include="PosManage\IPosTabtypeService.cs" />
+    <Compile Include="EntitiesPos\PosBill.cs" />
+    <Compile Include="PosManage\IPosVoucherSetService.cs" />
+    <Compile Include="PosManage\IPosWhVoucherdetailService.cs" />
+    <Compile Include="PosManage\IPosWhVoucherService.cs" />
+    <Compile Include="PosManage\IYtPrepayService.cs" />
+    <Compile Include="ReportManage\IReportService.cs" />
+    <Compile Include="ResFolioManage\IResFolioPayInfoService.cs" />
+    <Compile Include="ResFolioManage\PermanentRoomFolioPara.cs" />
+    <Compile Include="ResFolioManage\ResFolioAbatementInfo.cs" />
+    <Compile Include="ResFolioManage\ResFolioCardAuthAddPara.cs" />
+    <Compile Include="ResFolioManage\ResFolioCreditPara.cs" />
+    <Compile Include="ResFolioManage\ResFolioDayChargeInfo.cs" />
+    <Compile Include="ResFolioManage\ResFolioDebitPara.cs" />
+    <Compile Include="ResFolioManage\IResFolioService.cs" />
+    <Compile Include="ResFolioManage\ResFolioDetailInfo.cs" />
+    <Compile Include="ResFolioManage\ResFolioFolioInfo.cs" />
+    <Compile Include="ResFolioManage\ResFolioMainInfo.cs" />
+    <Compile Include="ResFolioManage\ResFolioOpPara.cs" />
+    <Compile Include="ResFolioManage\ResFolioQueryPara.cs" />
+    <Compile Include="ResFolioManage\ResFolioRefundFolioInfo.cs" />
+    <Compile Include="ResFolioManage\ResFolioSplitInfo.cs" />
+    <Compile Include="ResInvoiceManage\IResInvoiceService.cs" />
+    <Compile Include="ResInvoiceManage\ResInvoiceDetailInfo.cs" />
+    <Compile Include="ResInvoiceManage\ResInvoiceInfo.cs" />
+    <Compile Include="ResInvoiceManage\ResInvoiceMainInfo.cs" />
+    <Compile Include="ResInvoiceManage\ResInvoiceSimple.cs" />
+    <Compile Include="ResManage\IPermanentRoomService.cs" />
+    <Compile Include="ResManage\IResBillSettingService.cs" />
+    <Compile Include="ResManage\IResService.cs" />
+    <Compile Include="ResManage\PermanentRoomInfo.cs" />
+    <Compile Include="ResManage\ResAdjustPriceInfo.cs" />
+    <Compile Include="ResManage\ResBatchAddModel.cs" />
+    <Compile Include="ResManage\ResBillSettingInfo.cs" />
+    <Compile Include="ResManage\ResDetailAllInfo.cs" />
+    <Compile Include="ResManage\ResDetailCustomerInfos.cs" />
+    <Compile Include="ResManage\ResDetailInfo.cs" />
+    <Compile Include="ResManage\ResDetailLockInfo.cs" />
+    <Compile Include="ResManage\ResDetailPlanInfo.cs" />
+    <Compile Include="ResManage\ResDetailQueryPara.cs" />
+    <Compile Include="ResManage\ResDetailRegInfo.cs" />
+    <Compile Include="ResManage\ResDetailsForCommonPara.cs" />
+    <Compile Include="ResManage\ResInvoiceInfo.cs" />
+    <Compile Include="ResManage\ResMainInfo.cs" />
+    <Compile Include="RoomStatusManage\IWakeCallService.cs" />
+    <Compile Include="RoomStatusManage\IRoomStatusService.cs" />
+    <Compile Include="RoomStatusManage\RoomStatusServiceAndStopInfo.cs" />
+    <Compile Include="RoomStatusManage\RoomStatusServiceAndStopPara.cs" />
+    <Compile Include="SMSSendManage\ISMSSendService.cs" />
+    <Compile Include="SystemManage\HotelLogoAndNameInfo.cs" />
+    <Compile Include="SystemManage\HotelWxParas.cs" />
+    <Compile Include="SystemManage\IAccountService.cs" />
+    <Compile Include="ICurrentInfo.cs" />
+    <Compile Include="SystemManage\IBasicDataResortControlService.cs" />
+    <Compile Include="SystemManage\ICancelRuleService.cs" />
+    <Compile Include="SystemManage\IChargeFreeService.cs" />
+    <Compile Include="SystemManage\ICodeListService.cs" />
+    <Compile Include="SystemManage\ICodeTypeService.cs" />
+    <Compile Include="SystemManage\ICouponService.cs" />
+    <Compile Include="SystemManage\IGuaranteeRuleService.cs" />
+    <Compile Include="SystemManage\IHotelDayDetailService.cs" />
+    <Compile Include="SystemManage\IHotelDayService.cs" />
+    <Compile Include="SystemManage\IHotelStatusService.cs" />
+    <Compile Include="SystemManage\IImportExcelService.cs" />
+    <Compile Include="SystemManage\IItemScoreService.cs" />
+    <Compile Include="SystemManage\IItemService.cs" />
+    <Compile Include="SystemManage\IMbrCardTypeService.cs" />
+    <Compile Include="SystemManage\IoperationLog.cs" />
+    <Compile Include="SystemManage\IPmsHotelService.cs" />
+    <Compile Include="SystemManage\IPmsParaService.cs" />
+    <Compile Include="SystemManage\IPmsUserService.cs" />
+    <Compile Include="SystemManage\IRateDetailService.cs" />
+    <Compile Include="SystemManage\IRateService.cs" />
+    <Compile Include="SystemManage\IRoleService.cs" />
+    <Compile Include="SystemManage\IRoomService.cs" />
+    <Compile Include="SystemManage\IRoomTypeService.cs" />
+    <Compile Include="SystemManage\ISalesService.cs" />
+    <Compile Include="SystemManage\IScoreUseRuleService.cs" />
+    <Compile Include="SystemManage\IShiftService.cs" />
+    <Compile Include="SystemManage\IUserRoleGroupService.cs" />
+    <Compile Include="SystemManage\IUserRoleSingleService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WeixinManage\IQrcodeLoginService.cs" />
+    <Compile Include="WeixinManage\IQrCodeService.cs" />
+    <Compile Include="WeixinManage\QrCodeType.cs" />
+    <Compile Include="WeixinManage\TemplateMessageInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Gemstar.BSPMS.Common.Services.EF\Gemstar.BSPMS.Common.Services.EF.csproj">
+      <Project>{0AEC251E-952C-4CDB-AC94-9D2BD28FCB2D}</Project>
+      <Name>Gemstar.BSPMS.Common.Services.EF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Gemstar.BSPMS.Common.Services\Gemstar.BSPMS.Common.Services.csproj">
+      <Project>{00595ed1-611e-43b1-ac43-470b54830b9b}</Project>
+      <Name>Gemstar.BSPMS.Common.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Gemstar.BSPMS.Common\Gemstar.BSPMS.Common.csproj">
+      <Project>{c2a3a84b-8fe4-4b00-9d00-309c740ea855}</Project>
+      <Name>Gemstar.BSPMS.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

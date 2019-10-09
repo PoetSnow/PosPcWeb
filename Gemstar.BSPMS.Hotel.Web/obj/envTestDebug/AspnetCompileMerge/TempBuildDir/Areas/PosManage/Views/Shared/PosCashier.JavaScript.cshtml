@@ -1,0 +1,743 @@
+﻿<script src="~/Scripts/jquery.cookie.js"></script>
+<script type="text/javascript">
+    //查询账单列表
+    function queryBillList() {
+        $.ajax({
+            url: '@Url.Action("_PosBillList", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: { tabNo: $("#txtTabNo").val() },
+            dataType: "html",
+            success: function (data) {
+                $(".mainLeft-billList").html(data);
+                SelectRowAndQuery();
+
+                $("#gridBill").on("click", "tr.k-state-selected", function (e) {
+                    e.preventDefault();
+
+                    var grid = $("#gridBill").data("kendoGrid");
+                    var selectedRows = grid.select();
+                    if (selectedRows.length > 0) {
+                        var row = selectedRows[0];
+                        var data = grid.dataItem(row);
+
+                        var model = {
+                            billid: data["billid"]
+                        };
+                        queryBill(model);
+                        sessionStorage.setItem("PosCashierBillid",data["billid"].toString());
+                    }
+                });
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //选择第一行，并查询账单信息
+    function SelectRowAndQuery() {
+        var isExt = true;
+        var grid = $("#gridBill").data("kendoGrid");
+        var billid = sessionStorage.getItem("PosCashierBillid");
+        if (billid != undefined && billid != "") {
+            var dataRows = grid.items();
+            for (var i = 0; i < dataRows.length; i++) {
+                var row = grid.tbody.find(">tr:not(.k-grouping-row)").eq(i);
+                var dataRow = grid.dataItem(dataRows[i]);
+
+                if (billid === dataRow["billid"]) {
+                    grid.select(row);
+                    isExt = false;
+                    break;
+                }
+            }
+        }
+        else {
+            if (grid.tbody.find(">tr:not(.k-grouping-row)").length > 0) {
+                var row = grid.tbody.find(">tr:not(.k-grouping-row)").eq(0);
+                var data = grid.dataItem(row);
+                if (data != null) {
+                    grid.select(row);
+                }
+            }
+        }
+
+        if (isExt) {
+            if (grid.tbody.find(">tr:not(.k-grouping-row)").length > 0) {
+                var row = grid.tbody.find(">tr:not(.k-grouping-row)").eq(0);
+                var data = grid.dataItem(row);
+                if (data != null) {
+                    grid.select(row);
+                }
+            }
+        }
+
+        //查询账单信息
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0) {
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+
+            var model = {
+                billid: data["billid"]
+            };
+
+            queryBill(model);
+        }
+        else {
+            var model = {
+                billid: 0
+            };
+            queryBill(model);
+        }
+    }
+
+    //查询账单信息
+    function queryBill(model) {
+        $.ajax({
+            url: '@Url.Action("_PosBill", "PosCashier", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $(".mainRight-details").html(data);
+                queryBillDetail(model);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //查询账单明细列表
+    function queryBillDetail(model) {
+        $.ajax({
+            url: '@Url.Action("_PosBillDetailList", "PosCashier", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $(".mainRight-table").html(data);
+                $("#gridBillDetail .k-grid-content").height($(".mainRight").height() - $(".mainRight-details").outerHeight(true) - $("#gridBillDetail .k-grid-header").outerHeight(true) - $("#gridBillDetail .k-grid-footer").outerHeight(true) - 50);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //买单
+    function payBillWindow() {
+        var gridBillDetail = $("#gridBillDetail").data("kendoGrid");
+        var items = gridBillDetail.items();
+        for (var i = 0; i < items.length; i++) {
+            var row = gridBillDetail.tbody.find(">tr:not(.k-grouping-row)").eq(i);
+            var data = gridBillDetail.dataItem(row);
+            if (data != null && data["Status"] == 4) {
+                layer.alert("当前存在未落单的项目，请确认后再进行买单！", { title: "快点云Pos提示" });
+                return false;
+            }
+        }
+
+        var grid = $("#gridBill").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0) {
+            var row = selectedRows[0];
+            var rowData = grid.dataItem(row);
+
+            if (rowData["status"] == 2) {
+                layer.alert("已付款的账单不能重复买单，请先反结！", { title: "快点云Pos提示" });
+                return false;
+            }
+
+            var model = {
+                Tabid: rowData["tabid"],
+                TabNo: rowData["tabno"],
+                Billid: rowData["billid"],
+            };
+
+            $.ajax({
+                url: '@Url.Action("PayCheck", "PosCashier")',
+                type: "post",
+                data: model,
+                dataType: "json",
+                success: function (data) {
+                    model = {
+                        billid: rowData["billid"],
+                        mBillid: rowData["mBillid"],
+                        Callback: "PaymentSuccess('" + rowData["billid"] + "','" + rowData["mBillid"]+"')",
+                        InputCallback: "PaymentSuccess('" + rowData["billid"] + "','" + rowData["mBillid"]+"')",
+                    };
+
+                    if (data.Success == true)
+                    {
+                        paymentByCheckRefe(model);
+                        layer.closeAll();
+                    }
+                    else if (data.Success == false)
+                    {
+                        if (data.ErrorCode == 1)
+                        {
+                            paymentByCheckRefe(model);
+                            layer.closeAll();
+                        }
+                        else if (data.ErrorCode == 2)
+                        {
+                            layer.confirm(data.Data,{
+                                btn: ['继续', '取消'] //按钮
+                                , title: '快点云Pos提示'
+                                , shade: 'rgba(0,0,0,0)'
+                            }, function () {
+                                paymentByCheckRefe(model);
+                                layer.closeAll();
+                            }, function () {
+                                layer.closeAll();
+                            });
+                        }
+                        else {
+                            layer.alert(data.Data, { title: "快点云Pos提示" });
+                        }
+                    }
+                    else
+                    {
+                        layer.alert(data.Data, { title: "快点云Pos提示" });
+                    }
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+    }
+
+    //打单
+    function intimidate() {
+        let printModel = localStorage.getItem("printModel");
+        var grid = $("#gridBill").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0 || printModel != null) {
+
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+
+            if(printModel != null)
+            {
+                model = JSON.parse(printModel);
+            }
+            else
+            {
+                var model = {
+                    ReportCode: "PosBillPrint",
+                    ProcedureName: "up_pos_print_billDetail",
+                    ParameterValues: "@@h99billid=" + data["billid"] + "&@@h99mBillid=" + data["mBillid"] + "",
+                    IsOpenSearchWindow: false,
+                    ChineseName: "账单打印预览",
+                    StyleName: ""
+                };
+            }
+
+            var gridBillDetail = $("#gridBillDetail").data("kendoGrid");
+            var items = gridBillDetail.items();
+            for (var i = 0; i < items.length; i++) {
+                var rowDetail = gridBillDetail.tbody.find(">tr:not(.k-grouping-row)").eq(i);
+                var dataDetail = gridBillDetail.dataItem(rowDetail);
+                if (dataDetail !== null && (dataDetail["Status"] == 4 || (dataDetail["BatchTime"] == null && Number(dataDetail["Isauto"]) < 4))) {
+                    layer.alert("当前存在未落单的项目", { title: "快点云Pos提示", btn: ['确定', '关闭'] });
+                    return false;
+                }
+
+            }
+
+            $.post('@Html.Raw(Url.Action("AddQueryParaTemp", "PosCashier",new { print = 1,Flag="A" }))', model, function (result) {
+                if (result.Success) {
+                    $("#printFrame").attr("src", result.Data);
+                    localStorage.removeItem("printModel");
+                    queryBillList();
+                } else {
+                    layer.alert(result.Data);
+                }
+            }, 'json');
+        }
+        else {
+            layer.msg("请选择要预览的账单");
+        }
+    }
+
+    //打印预览
+    function preview() {
+        var grid = $("#gridBill").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0) {
+
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+
+            var model = {
+                ReportCode: "PosBillPrint",
+                ProcedureName: "up_pos_print_billDetail",
+                ParameterValues: "@@h99billid=" + data["billid"] + "&@@h99mBillid=" + data["mBillid"] + "",
+                IsOpenSearchWindow: false,
+                ChineseName: "账单打印预览",
+                StyleName: ""
+            };
+
+            $.post('@Url.Action("AddQueryParaTempA", "PosCashier")', model, function (result) {
+                if (result.Success) {
+                    layer.open({
+                        type: 2,
+                        title: '账单打印预览',
+                        maxmin: true,
+                        shadeClose: true,
+                        area: ['60rem', '40rem'],
+                        content: result.Data
+                    });
+                    $(".wrap").css({ "margin": 0 });
+                } else {
+                    layer.alert(result.Data);
+                }
+            }, 'json');
+        }
+        else {
+            layer.msg("请选择要预览的账单");
+        }
+    }
+
+    //结账
+    function paymentByCheckRefe(model) {
+        $.ajax({
+            url: '@Url.Action("CheckRefeITagPrintBill", "PosCashier")',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    $("#isPrintBill").val(data.Data);//打印账单
+                    payment(model);
+                }
+                else {
+                    if (data.ErrorCode == 1) {
+                        layer.confirm(data.Data, {
+                            btn: ['继续', '取消'] //按钮
+                         , title: '快点云Pos提示'
+                         , shade: 'rgba(0,0,0,0)'
+                        }, function () {
+                            payment(model);
+
+                        }, function () {
+                            layer.closeAll();
+                        });
+                    }
+                    if (data.ErrorCode == 2) {
+                        layer.confirm(data.Data, {
+                            btn: ['是', '否'] //按钮
+                            , title: '快点云Pos提示'
+                             , shade: 'rgba(0,0,0,0)'
+                        }, function () {
+                            $("#isPrintBill").val(1);//打印账单
+                            payment(model);
+
+                        }, function () {
+                            $("#isPrintBill").val(0);   //不打印账单
+                            payment(model);
+                        });
+                    }
+                    if (data.ErrorCode == 3) {
+                        layer.alert(data.Data, { title: "快点云Pos提示" });
+                    }
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+
+    }
+
+    //买单弹出窗
+    function payment(model) {
+        $.ajax({
+            url: '@Url.Action("_Payment", "Shared", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                layer.open({
+                    type: 1,
+                    closeBtn: 0,
+                    title: '买单',
+                    shadeClose: false,
+                    area: ['55rem', '34rem'],
+                    content: data
+                });
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+    //付款成功
+    function PaymentSuccess(billid, mBillid) {
+        $.post('@Url.Action("OtherPaymentSuccess", "PosCashier", new { rnd = new Random().NextDouble() })', { billid: billid });
+
+        if ($("#isPrintBill").val() != "1") {
+            //不打单
+            queryBillList();
+        }
+        else {
+            var model = {
+                ReportCode: "PosBillPrint",
+                ProcedureName: "up_pos_print_billDetail",
+                ParameterValues: "@@h99billid=" + billid + "&@@h99mBillid=" + mBillid + "",
+                IsOpenSearchWindow: false,
+                ChineseName: "账单打印预览",
+                StyleName: ""
+            };
+
+            localStorage.setItem("printModel",JSON.stringify(model));
+
+            let ajaxTimeOut = $.ajax({    //将网络请求事件赋值给变量ajaxTimeOut
+                url: '@Url.Action("AddQueryParaTempByPaySusses", "PosCashier")?print=1&Flag=A&isPrintBill=' + $("#isPrintBill").val(),
+                type: "post",
+                data: model,
+                dataType: "json",
+                timeout: 5000, //通过timeout属性，设置超时时间
+                success: function (result) {
+                        if (result.Success) {
+                            if ("undefined" != typeof jsObject) {   //封装程序
+                                if (result.Data.ListDetail.length > 0 && result.Data.ListDetail != "") {
+                                    jsObject.UserName = $("#CurrUserName").val();
+                                    jsObject.HotelName = $("#CurrHotelName").val();
+                                    jsObject.PrintReportByPaySusses("PosBillPrintByPay", "up_pos_print_billDetail", result.Data.ListDetail, false, false);
+                                }
+                            }
+                            else {
+                            $("#printFrame").attr("src", result.Data.url);
+                            }
+                            localStorage.removeItem("printModel");
+                        }
+                        else
+                        {
+                            layer.confirm('打单失败，是否重新打印账单？', {
+                            btn: ['重新打印','关闭'] //按钮
+                        }, function(){  //重新打印
+                                intimidate();
+                            }, function(){  //关闭
+                                layer.closeAll();
+                            });
+                        }
+                    }.bind(this),
+                complete: function (XMLHttpRequest, status) { //当请求完成时调用函数
+                        if (status == 'timeout') {//status == 'timeout'意为超时,status的可能取值：success,notmodified,nocontent,error,timeout,abort,parsererror
+                            ajaxTimeOut.abort(); //取消请求
+                            layer.confirm('打单超时，是否重新打印账单？', {
+                            btn: ['重新打印','关闭'] //按钮
+                        }, function(){  //重新打印
+                                intimidate();
+                                layer.closeAll();
+                            }, function(){  //关闭
+                                layer.closeAll();
+                            });
+                        }
+                    }
+                });
+
+            queryBillList();
+        }
+    }
+
+
+    var detailHeight = $(".mainRight-details").outerHeight(true);
+    function showHideDetail(obj) {
+        var remValue = $("#remValue").height();
+
+        if ($(obj).text() == "隐藏明细") {
+            //$(".mainRight-details *").hide();
+            $(".mainRight-details").animate({ height: "0.9rem" });
+            $(".mainRight-table .k-grid-content").animate({ height: $(".mainRight-table .k-grid-content").height() + remValue * 6.9 });
+            $(".mainRight .tips:nth-last-child(1)").animate({ top: $(".mainRight .tips:nth-last-child(1)").position().top - remValue * 6.9 });
+            $(obj).text("展开明细");
+        }
+        else {
+            //$(".mainRight-details *").show();
+            $(".mainRight-details").animate({ height: "7.8rem" });
+            $(".mainRight-table .k-grid-content").animate({ height: $(".mainRight-table .k-grid-content").height() - remValue * 6.9 });
+            $(".mainRight .tips:nth-last-child(1)").animate({ top: $(".mainRight .tips:nth-last-child(1)").position().top + remValue * 6.9 });
+            $(obj).text("隐藏明细");
+        }
+    }
+
+    //显示提示
+    function tipShow(obj) {
+        layer.tips($(obj).attr("data-msg"), $(obj), {
+            tips: [$(obj).attr("data-position"), "#111"], //还可配置颜色
+            time: $("#tipsTime").val(),
+        });
+    }
+
+    //隐藏提示
+    function tipHide(obj) {
+        layer.closeAll('tips');
+    }
+
+    //提示消息
+    function tipMsg(obj) {
+        layer.msg($(obj).attr("data-msg"), {
+            time: $("#tipsTime").val(),
+        });
+    }
+
+    //详细窗口
+    function getPostBillList(openFlag, title) {
+        var grid = $("#gridBill").data("kendoGrid");
+        var selectedRows = grid.select();
+        var id = "";
+
+        if (selectedRows.length > 0) {
+            var row = selectedRows[0];
+            var dataRow = grid.dataItem(row);
+            id = dataRow["billid"];
+        }
+        $("#billid").val(id);
+        if (id == "") {
+            return false;
+        }
+        $.ajax({
+            url: '@Url.Action("_PosBillDetailed", "PosCashier")',
+            type: "post",
+            data: { posBillId: id, openFlag: openFlag },
+            dataType: "html",
+            success: function (data) {
+                var boolJson = isJson(data);
+                if (boolJson) {
+                    var obj = JSON.parse(data);
+                    if (obj.Success == false) {
+                        layer.alert(obj.Data, { title: "快点云Pos提示" });
+                        return false;
+                    }
+                }
+                layer.open({
+                    type: 1,
+                    title: title,
+                    //  skin: 'layui-layer-demo', //样式类名
+                    closeBtn: 0, //不显示关闭按钮
+                    area: ['60%', 'auto'], //宽高
+                    content: data
+                });
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+    function SelectRow() {
+        var grid = $("#gridBillDetailA").data("kendoGrid").dataSource; //获取选中行对象
+        var dataRows = grid.data();
+        var trList = $("#gridBillDetailA").find(".k-grid-content tr");
+        //绑定点击事件
+        $(trList).bind("click", function () {
+            if (beginIndex == -1) {
+                for (var i = 0; i < trList.length; i++) {
+                    $(trList).eq(i).removeClass("k-state-selected");
+                    $(trList).eq(i).attr("aria-selected", false);
+                }
+            }
+            var onIndex = $(this).index();
+            //判断当前点击的行是否选中
+            var selected = $(this).attr("aria-selected");
+            if (selected == undefined || selected == "false") {
+                $(this).addClass("k-state-selected");
+                $(this).attr("aria-selected", true);
+
+            }
+            else {
+                $(this).removeClass("k-state-selected");
+                $(this).attr("aria-selected", false);
+            }
+            //点击基数次给beginIndex赋值为当前选中的index。反之给endIndex赋值
+            if (beginIndex <= -1) {
+                beginIndex = $(this).index();
+            }
+            else {
+
+                endIndex = $(this).index();
+            }
+            //.同时不为-1的时候 批量选中判断beginIndex与endIndex的大小 循环选中.最后把beginIndex与endIndex赋初始值
+            if (beginIndex > -1 && endIndex > -1) {
+                if (beginIndex > endIndex) {
+                    for (var i = endIndex ; i <= beginIndex ; i++) {
+                        var s = $(trList).eq(i).attr("aria-selected");
+                        $(trList).eq(i).addClass("k-state-selected");
+                        $(trList).eq(i).attr("aria-selected", true);
+                    }
+                }
+                else {
+                    for (var i = beginIndex ; i <= endIndex; i++) {
+                        $(trList).eq(i).addClass("k-state-selected");
+                        $(trList).eq(i).attr("aria-selected", true);
+                    }
+                }
+                beginIndex = -1;
+                endIndex = -1;
+            }
+        })
+
+    }
+
+    //取消折扣
+    function CancelDiscount()
+    {
+        var grid = $("#gridBill").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0) {
+            var row = selectedRows[0];
+            var itemdata = grid.dataItem(row);
+
+            $.ajax({
+                url: '@Url.Action("CheckEditForBillRefe", "PosCashierDiscount")',
+                type: "post",
+                data: { BillId: itemdata["billid"] },
+                dataType: "json",
+                success: function (dataJson) {
+                    if (dataJson.Success) {
+                        layer.confirm("是否取消折扣", {
+                            btn: ['是', '否'] //按钮
+                            , title: '快点云Pos提示'
+                            , shade: 'rgba(0,0,0,0)'
+                        }, function () {
+                            $.ajax({
+                                url: '/PosCashierDiscount/CancelDiscount',
+                                type: "post",
+                                data: { billId: itemdata["billid"] },
+                                datatype: "josn",
+                                success: function (data) {
+                                    if (data.Success) {
+
+                                        //刷新主单                     
+                                        var billmodel = {
+                                            billid: itemdata["billid"]
+                                        };
+                                        queryBill(billmodel);
+
+                                        layer.alert("操作成功", { title: "快点云pos提示" });
+                                    }
+                                    else {
+                                        layer.alert(data.Data, { title: "快点云pos提示" });
+                                    }
+                                },
+                                error: function (data) {
+                                    layer.alert(data.responsetext, { title: "快点云pos提示" });
+                                }
+                            });
+                        }, function () {
+                            layer.closeAll();
+                        });
+                    }
+                    else {
+                        layer.alert(dataJson.Data, { title: "快点云Pos提示" });
+                    }
+                },
+                error: function (dataJson) {
+                    layer.alert(dataJson.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+        else {
+            layer.alert("请选择要操作的账单", { title: "快点云Pos提示" });
+        }
+
+    }
+
+    //取消打单
+    function CancelPrint() {
+
+        var grid = $("#gridBill").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0) {
+            var row = selectedRows[0];
+            var data = grid.dataItem(row);
+            $.ajax({
+                url: '@Url.Action("CancelPrint", "PosCashier")',
+                type: "post",
+                data: { billId: data["billid"] },
+                datatype: "josn",
+                success: function (data) {
+                    if (data.Success) {
+                        $("#gridBill").data("kendoGrid").dataSource.read();
+
+                        layer.alert("操作成功", { title: "快点云pos提示" });
+                    }
+                    else {
+                        layer.alert(data.Data, { title: "快点云pos提示" });
+                    }
+                },
+                error: function (data) {
+                    layer.alert(data.responsetext, { title: "快点云pos提示" });
+                }
+            });
+        }
+
+    }
+
+    function saveFormData(btn) {
+        var f = $(btn)[0].form;
+        var validator = $(f).validate();
+        if (validator.form()) {
+            $.post(
+                $(f).attr("action"),
+                $(f).serialize(),
+                function (data) {
+                    $(".mainLeft-billList").html(data);
+                    SelectRowAndQuery();
+
+                    $("#gridBill").on("click", "tr.k-state-selected", function (e) {
+                        e.preventDefault();
+
+                        var grid = $("#gridBill").data("kendoGrid");
+                        var selectedRows = grid.select();
+                        if (selectedRows.length > 0) {
+                            var row = selectedRows[0];
+                            var data = grid.dataItem(row);
+
+                            var model = {
+                                billid: data["billid"]
+                            };
+                            queryBill(model);
+                        }
+                    });
+                    closeGeneralWindow();
+                },
+                "html");
+        }
+    }
+
+    //退出
+    function exitBill() {
+        layer.closeAll();
+    }
+    function exitMsg() {
+        layer.close(layer.index);
+    }
+    $("#printFrame").attr("src", "");
+
+    //刷新界面
+    function refresh() {
+        location.reload();
+    }
+    //验证字符串是否是json格式
+    function isJson(str) {
+        if (typeof str == 'string') {
+            try {
+                var obj = JSON.parse(str);
+                if (typeof obj == 'object' && obj) {
+                    return true;
+                } else {
+                    return false;
+                }
+
+            } catch (e) {
+                return false;
+            }
+        }
+        return true;
+    }
+</script>

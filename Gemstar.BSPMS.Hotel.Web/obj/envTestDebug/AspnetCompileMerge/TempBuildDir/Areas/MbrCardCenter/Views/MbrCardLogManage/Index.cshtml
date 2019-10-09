@@ -1,0 +1,85 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Common.Services;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "会员变更记录";
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForQuery = false,
+        HtmlAttributes = new { style = "height:465px;max-height:465px;" },
+        EnableScrollable =true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("type").Title("变更类型");
+            c.Bound("cdate").Title("变更时间").Width(135);
+            c.Bound("old").Title("变更前").Width(120);
+            c.Bound("new1").Title("变更后").Width(120);
+            c.Bound("score").Title("使用积分");
+            c.Bound("inputUser").Title("操作员");
+            c.Bound("remark").Title("备注");
+        },
+        CustomToolbar = toolbar =>
+        {
+        toolbar.Template(@<text>
+        <div class="toolbar">
+            <label class="category-label" for="category">变更类型:</label>
+            @(Html.Kendo().DropDownList()   
+                            .Name("categories")
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .AutoBind(true)
+                            .Events(e => e.Change("categoriesChange"))
+                            .HtmlAttributes(new { style = "width: 150px;" })
+                            .BindTo(new List<DropDownListItem> {
+                                new DropDownListItem { Text="换卡号", Value="换卡号", Selected = true },
+                                new DropDownListItem { Text="变更卡状态", Value="变更卡状态" },
+                                new DropDownListItem { Text="审核", Value="审核" },
+                                new DropDownListItem { Text="更换业务员", Value="更换业务员" },
+                                new DropDownListItem { Text="延期", Value="延期" },
+                                new DropDownListItem { Text="升级卡类型", Value="升级卡类型" }
+                            })
+            )
+        </div>
+        </text>);
+        }
+    };
+}
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+ 
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+    <script>
+        function categoriesChange() {
+            var value = this.value();
+            var obj = $("#commonQueryParameterValues");
+            var index = obj.val().indexOf("&");
+            if (index == -1) {
+                obj.val(obj.val() + "&@@t00变更类型=" + value);
+            } else {
+                obj.val(obj.val().toString().substring(0, index) + "&@@t00变更类型=" + value);
+            }
+            var grid = $("#" + $("#commonQueryGridId").val()).data("kendoGrid");
+            grid.dataSource.read();
+        }
+    </script>
+}
+@section headerContent{
+    <style type="text/css">
+        html,body{overflow:hidden;width:964px;height:474px;}
+        .wrap {
+            width: 956px;
+            height: 466px;
+            margin:0px;
+            padding:4px;
+            overflow:hidden;
+        }
+    </style>
+}

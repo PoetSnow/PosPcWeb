@@ -1,0 +1,174 @@
+﻿@{
+    Layout = null;
+}
+@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPos.PosBill>
+
+<style>
+    .smear li {
+        float: left;
+        padding: 0.3rem;
+        width: calc(8rem);
+        height: calc(8rem);
+        margin-right: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 0.5rem;
+        border: 2px solid #333;
+    }
+
+        .smear li a {
+            display: block;
+            height: 100%;
+            width: 100%;
+        }
+
+        .smear li span {
+            width: 100%;
+            display: block;
+            font-weight: bold;
+        }
+</style>
+<div style="padding:10px 0px 0px 10px;">
+    <input id="business" type="hidden" value="@(string.Format("{0:yyyy-MM-dd}", ViewBag.Business ?? ""))" />
+    <ul class="smear">
+        @{
+
+            if (Model != null && Model.Count > 0)
+            {
+                foreach (var tabStaus in Model)
+                {
+                    <li class="staus-sit" data-staus="@tabStaus.Status">
+                        <a href="javascript:void(0);" onclick="openInSingle(this)" data-tabid="@tabStaus.Tabid" data-tabno="@tabStaus.TabNo" data-billid="@tabStaus.Billid" data-tabstatus="@tabStaus.Status" data-tabflag="@tabStaus.TabFlag">
+                            <span class="smearbillno">台号：@tabStaus.TabNo</span>
+                            <span class="smeariguest">人数：@tabStaus.IGuest</span>
+                            @*<span class="smearname">@tabStaus.Name</span>*@
+                            <span class="smearbilldate">开台时间：@tabStaus.BillDate.Value.ToString("HH:mm")</span>
+                        </a>
+                    </li>
+                }
+            }
+        }
+    </ul>
+</div>
+<script>
+    function openInSingle(obj) {
+        $("#tabid").val($(obj).attr("data-tabid"));
+        $("#billid").val($(obj).attr("data-billid"));
+        var model = {
+            Tabid: $(obj).attr("data-tabid"),
+            TabNo: $(obj).attr("data-tabno"),
+            Billid: $(obj).attr("data-billid"),
+        };
+        if (Boolean($("#isOpenBrush").val()) == true) {
+            var computerName = "";
+            if ("undefined" != typeof jsObject) {
+                computerName = jsObject.ComputerName;
+            }
+            $.ajax({
+                url: '@Url.Action("AddLockTab", "PosTabStatus")',
+                type: "post",
+                data: model,
+                dataType: "json",
+                success: function (data) {
+                    //没有开台的餐台根据营业点设置的属性是否弹出刷卡界面
+                    if (data.Success == true) {
+                        var cardModel = {
+                            ReturnType: 1,
+                            Message: "请刷卡...",
+                            Callback: "$('#isAutoLogin').val('false');openSmearRedirect(" + $(obj).attr("data-tabflag") + ")",
+                            Tabid: $(obj).attr("data-tabid"),
+                            TabNo: $(obj).attr("data-tabno"),
+                            Billid: $(obj).attr("data-billid"),
+                            ComputerName: computerName
+                        };
+
+                        $.ajax({
+                            url: '@Url.Action("_PayByCard", "Shared")',
+                            type: "post",
+                            data: cardModel,
+                            dataType: "html",
+                            success: function (cardData) {
+                                layer.open({
+                                    type: 1,
+                                    title: "刷卡",
+                                    skin: 'layui-layer-demo', //样式类名
+                                    closeBtn: 0, //不显示关闭按钮
+                                    area: ['auto', 'auto'], //宽高
+                                    content: cardData
+                                });
+                            },
+                            error: function (cardData) {
+                                layer.alert(cardData.responseText, { title: "快点云Pos提示" });
+                            }
+                        });
+
+                    }
+                    else if (data.Success == false) {
+                        //有锁台记录的并且可以多人操作餐台的
+                        if (data.ErrorCode == 2) {
+
+                            layer.confirm(data.Data, {
+                                btn: ['继续', '取消'] //按钮
+                              , title: '快点云Pos提示'
+                              , shade: 'rgba(0,0,0,0)'
+                            }, function () {
+                                var cardModel = {
+                                    ReturnType: 1,
+                                    Message: "请刷卡...",
+                                    Callback: "$('#isAutoLogin').val('false');openSmearRedirect(" + $(obj).attr("data-tabflag") + ")",
+                                    Tabid: $(obj).attr("data-tabid"),
+                                    TabNo: $(obj).attr("data-tabno"),
+                                    Billid: $(obj).attr("data-billid"),
+                                    ComputerName: computerName
+                                };
+                                $.ajax({
+                                    url: '@Url.Action("_PayByCard", "Shared")',
+                                    type: "post",
+                                    data: cardModel,
+                                    dataType: "html",
+                                    success: function (cardData) {
+                                        layer.open({
+                                            type: 1,
+                                            title: "刷卡",
+                                            skin: 'layui-layer-demo', //样式类名
+                                            closeBtn: 0, //不显示关闭按钮
+                                            area: ['auto', 'auto'], //宽高
+                                            content: cardData
+                                        });
+                                    },
+                                    error: function (cardData) {
+                                        layer.alert(cardData.responseText, { title: "快点云Pos提示" });
+                                    }
+                                });
+                            }, function () {
+                                layer.closeAll();
+                            });
+                        }
+                        else {
+                            layer.alert(data.Data, { title: "快点云Pos提示" });
+                        }
+                    }
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+        else {
+            $('#isAutoLogin').val('false');
+            openSmearRedirect($(obj).attr("data-tabflag"));
+        }
+    }
+
+    function openSmearRedirect(tabflag) {
+        var refeid = $("#refeid").val();
+        var tabid = $("#tabid").val();
+        var billid = $("#billid").val();
+
+        if (billid === "") {
+            location.href = '@Url.Action("Index", "PosInSingle", new { rnd = new Random().NextDouble() })' + "&refeid=" + encodeURIComponent(refeid) + "&tabid=" + encodeURIComponent(tabid) + "&billid=" + billid + "&tabFlag=" + tabflag + "&openFlag=A";
+        }
+        else {
+            location.href = '@Url.Action("Index", "PosInSingle", new { rnd = new Random().NextDouble() })' + "&refeid=" + encodeURIComponent(refeid) + "&tabid=" + encodeURIComponent(tabid) + "&billid=" + billid + "&tabFlag=" + tabflag + "&openFlag=A";
+        }
+    }
+</script>

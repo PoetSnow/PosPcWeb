@@ -1,0 +1,398 @@
+﻿/*---------- Pos楼面样式 ----------*/
+html, body {
+    font-size: 12px;
+    overflow: hidden;
+}
+
+a {
+    display: block;
+}
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    color: #b1bbcb;
+}
+
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #b1bbcb;
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #b1bbcb;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: #b1bbcb;
+}
+
+.mainLeft {
+    width: 16rem;
+    left: 0;
+    z-index: 9;
+    height: 100%;
+    padding-top: 1rem;
+    position: absolute;
+    background: #b2bcc8;
+}
+
+.mainLeft-top {
+    margin-bottom: 1rem;
+}
+
+    .mainLeft-top li {
+        font-size: 1rem;
+        padding: 0.5rem;
+    }
+
+        .mainLeft-top li * {
+            border-radius: 2rem;
+            font-size: 20px;
+            text-align: center;
+            border: 0;
+            height: 4rem;
+            width: 100%;
+            background: url(../../images/posTabStatus/aniu.png) center center no-repeat;
+            display: block;
+            color: #fff;
+            line-height: 3.8rem;
+        }
+
+        .mainLeft-top li input:link, .mainLeft-top li input:hover {
+            background: url('../../images/posTabStatus/aniu.png') center center no-repeat;
+        }
+
+        .mainLeft-top li:nth-child(4) input {
+            background-color: #8894a4;
+            display: block;
+            /*box-shadow: inset 1px 1px 1px 1px #777;*/
+            width: calc(100% - 0.6rem);
+            background-image: none;
+            padding: 0;
+            margin: 0;
+            margin-top: 0.1rem;
+            height: 3rem;
+            margin-left: 0.5rem;
+        }
+
+.mainLeft-total {
+    margin-bottom: 1rem;
+    border-top: 1px solid #808080;
+}
+
+.mainLeft-status li {
+    float: left;
+    padding: 0.2rem;
+    text-align: center;
+    width: calc(50% - 2px - 0.4rem);
+    border: 1px solid #aaa;
+    border-bottom: 0;
+}
+
+    .mainLeft-status li span {
+        font-size: 20px;
+    }
+
+    .mainLeft-status li:last-child {
+        border-bottom: 1px solid #aaa;
+    }
+
+    .mainLeft-status li:nth-child(2n) {
+        border-left: 0;
+        width: calc(50% - 1px - 0.4rem);
+    }
+
+.mainLeft-total li {
+    float: left;
+    padding: 0.5rem;
+    font-size: 20px;
+    border-bottom: 0;
+    text-align: left;
+    padding-left: 3rem;
+    background: #ededed;
+    border: 1px solid #aaa;
+    border-top: 0;
+    width: calc(100% - 2px - 3.5rem);
+}
+
+.mainLeft-bottom {
+    bottom: 1rem;
+}
+
+    .mainLeft-bottom li * {
+        background-color: #525866;
+        color: #fff;
+        font-size: 20px;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+
+.mainRight {
+    right: 0;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    background-color: #373741;
+}
+
+.mainRight-top {
+    height: 5rem;
+    padding: 1rem 0;
+}
+
+    .mainRight-top ul {
+        /*height: 100%;*/
+    }
+
+    .mainRight-top li {
+        /*float: left;*/
+        width: 8.5rem;
+        height: 100%;
+        margin: 0 0.5rem;
+        font-size: 20px;
+        line-height: 5rem;
+        text-align: center;
+        border-radius: 0.5rem;
+        /*box-shadow: 0px 0px 2px 1px #111 inset;*/
+    }
+
+.staus-all {
+    background-color: #fea4a1;
+}
+
+.staus-empty {
+    background-color: #e4e4e4;
+}
+
+.staus-beAlone {
+    background-color: #7fdfff;
+}
+
+.staus-repair {
+    background-color: #5efca9;
+}
+
+.staus-sit {
+    background-color: #fff46d;
+}
+
+.staus-reserve {
+    background-color: #b3aefe;
+}
+
+.staus-intimidate {
+    background-color: #89f272;
+}
+
+.staus-clean {
+    background-color: #feb466;
+}
+
+.staus-operation {
+    background-color: #feabec;
+}
+
+.pageing {
+    background: url('../../images/posTabStatus/aniu03.png') center center no-repeat;
+}
+
+.mainRight-list {
+    width: calc(100% - 1.9rem);
+    height: calc(100% - 7rem);
+    overflow: hidden;
+}
+
+    .mainRight-list ul {
+        padding-top: 0.8rem;
+        padding-left: 0.8rem;
+        width: calc(100% - 0.3rem);
+        height: calc(100% - 0.5rem);
+    }
+
+    .mainRight-list li {
+        float: left;
+        padding: 0.3rem;
+        width: calc(8rem);
+        height: calc(8rem);
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+        border-radius: 0.5rem;
+        border: 2px solid #111;
+    }
+
+        .mainRight-list li:hover {
+            box-shadow: rgba(255, 255, 255, 1) 0px 0px 2px 2px;
+        }
+
+    .mainRight-list a {
+        width: 100%;
+        height: 100%;
+        display: block;
+        font-size: 20px;
+        text-align: center;
+    }
+
+        .mainRight-list a span {
+            width: 100%;
+            display: block;
+            text-align: center;
+        }
+
+            .mainRight-list a span:nth-child(2) {
+                font-weight: bold;
+            }
+
+.mainRight-foot {
+    width: 100%;
+    bottom: 0;
+    position: absolute;
+    box-shadow: rgb(35, 35, 35) 0px -3px 7px 0px;
+    background: linear-gradient(rgba(60, 60, 60, 1), rgba(40, 40, 40, 1) 7%);
+}
+
+    .mainRight-foot ul li {
+        float: left;
+        width: 6rem;
+        margin: 0.5rem;
+        text-align: center;
+        line-height: 6rem;
+    }
+
+    .mainRight-foot ul:nth-child(2) {
+        position: absolute;
+        left: 42rem;
+        right: 15rem;
+        color: #ddd;
+        height: 100%;
+        width: calc(100% - 64rem);
+        font-size: 1.1rem;
+        line-height: 7rem;
+        overflow: hidden;
+        text-shadow: 1px 1px 1px #000;
+    }
+
+        .mainRight-foot ul:nth-child(2) li {
+            width: auto;
+        }
+
+    .mainRight-foot ul:nth-child(3) {
+        float: right;
+        font-size: 1rem;
+        text-align: center;
+        margin-right: 1rem;
+    }
+
+    
+
+.mainRight-RightDetails {
+    width: 100%;
+}
+
+.ct {
+    float: left;
+    width: 7rem;
+    height: 7rem;
+    text-align: center;
+    border-radius: 0.4rem;
+    background-color: #cecece;
+}
+
+.sx {
+    color: #fff;
+    background-color: #309e24;
+    background: url('../../images/posTabStatus/aniu01.png') center center no-repeat;
+}
+
+.qt {
+    color: #fff;
+    background-color: #d04337;
+    background: url('../../images/posTabStatus/aniu02.png') center center no-repeat;
+}
+
+#lblTime {
+    color: #333;
+    width: 100%;
+    height: 4rem;
+    line-height: 3rem;
+    font-size: 20px;
+    text-align: center;
+    position: absolute;
+    bottom: 1rem;
+    left: 0;
+}
+
+.mainRight-foot a {
+    color: #fff;
+    font-size: 1.35rem;
+}
+
+.openShrink {
+    top: 47%;
+    z-index: 9;
+    color: #fff;
+    left: 14rem;
+    display: block;
+    font-size: 20px;
+    background: #aaa;
+    line-height: 5rem;
+    position: absolute;
+}
+
+.shrinkOpen {
+    top: 47%;
+    z-index: 9;
+    color: #fff;
+    left: 0rem;
+    display: block;
+    font-size: 20px;
+    background: #aaa;
+    line-height: 5rem;
+    position: absolute;
+}
+
+.tips {
+    color: red;
+    font-size: 28px;
+    padding: 0.5rem;
+    position: absolute;
+}
+
+.mainLeft .tips:last-child {
+    top: -0.5rem;
+    right: -0.1rem;
+}
+
+.mainRight .tips:last-child {
+    top: 0;
+    right: 0;
+}
+
+.layui-layer-tips .layui-layer-content {
+    font-size: 20px;
+    border-radius: 0.5rem;
+}
+
+.layui-layer-hui {
+    border-radius: 0.5rem;
+}
+
+    .layui-layer-hui .layui-layer-content {
+        text-align: left;
+        font-size: 20px;
+        border-radius: 0.5rem;
+        background: rgba(0,0,0,0.75);
+    }
+
+.str_wrap {
+    padding-left: 3em;
+    padding-right: 3em;
+    background: none !important;
+    height: 3em;
+    line-height: 3em;
+    font-size: 1.2em;
+}
+
+.mesage {
+    color: red;
+    word-break: keep-all;
+    white-space: nowrap;
+}

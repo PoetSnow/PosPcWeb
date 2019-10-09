@@ -1,0 +1,49 @@
+﻿
+<style>
+  
+</style>
+<div id="delayPay" style="height:145px">
+    <input type="hidden" value="@ViewBag.BillId" id="billId" />
+    <table class="editFormTable">
+        <tr class="otbName">
+            <td class="textright">迟付原因</td>
+            <td><input type="text" class="k-textbox" id="memo" /></td>
+
+        </tr>
+
+    </table>
+    <div class="formButtons">
+        <button id="saveEditFormButtonForAjax" role="button" data-role="button">确定</button>
+        <button id="closeEditFormButtonA" role="button" data-role="button">关闭</button>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#saveEditFormButtonForAjax").bind("click", function () {
+        var billId = $("#delayPay #billId").val();
+      
+        $.ajax({
+            url: '@Url.Action("DelayedPayment", "PosCashier")',
+            type: "post",
+            data: { billid: billId, memo: $("#delayPay #memo").val()},
+            dataType: "json",
+            success: function (data) {
+                if (data.Success == true) {
+                    layer.alert("迟付成功", { title: "快点云Pos提示" }, function () {
+                        queryBillList();
+                        layer.closeAll();
+                    });
+                }
+                else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    })
+
+    $("#closeEditFormButtonA").bind("click", function () {
+        layer.closeAll();
+    })
+</script>

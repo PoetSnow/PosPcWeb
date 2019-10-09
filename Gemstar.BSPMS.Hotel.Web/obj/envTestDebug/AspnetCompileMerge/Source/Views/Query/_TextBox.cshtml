@@ -1,0 +1,5 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Models.Query.QueryViewModel
+    <tr>
+        <td class="textright">@Html.Label(string.Format("p{0}", Model.ParameterIndex), Model.ParameterName)</td>
+        <td>@Html.Kendo().TextBox().Name(string.Format("p{0}", Model.ParameterIndex)).Value(Model.ParameterValue).HtmlAttributes(new { style="width:100%;"})</td>
+    </tr>

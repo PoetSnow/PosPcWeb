@@ -1,0 +1,168 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.RoomState.Models.Notify.NotifyDeatilViewModel
+
+@Html.HiddenFor(m => m.Id)
+<fieldset>
+    <legend>提醒信息</legend>
+    <table class="editFormTable" id="formTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.RoomNo)</td>
+            <td>@Html.TextBoxFor(m => m.RoomNo, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td class="textright">@Html.LabelFor(m => m.NotifyTime)</td>
+            <td>@Html.TextBoxFor(m => m.NotifyTime, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+        </tr>   
+        <tr>
+
+            <td class="textright">@Html.LabelFor(m => m.Content)</td>
+            <td colspan="4" style="padding-left:.8em;padding-bottom:.8em;">@Model.Content</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Remarks)</td>
+            <td colspan="4" style="padding-left:.8em;">@Model.Remarks</td>
+        </tr>     
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Cteater)</td>
+            <td>@Html.TextBoxFor(m => m.Cteater, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td class="textright">@Html.LabelFor(m => m.CteateTime)</td>
+            <td>@Html.TextBoxFor(m => m.CteateTime, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+        </tr>
+       
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Reader)</td>
+            <td>@Html.TextBoxFor(m => m.Reader, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td class="textright">@Html.LabelFor(m => m.ReadTime)</td>
+            <td>@Html.TextBoxFor(m => m.ReadTime, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.WakeCallTypeName)</td>
+            <td>@Html.TextBoxFor(m => m.WakeCallTypeName, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td class="textright">@Html.LabelFor(m => m.Status)</td>
+            <td>@Html.TextBoxFor(m => m.Status, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+
+        </tr>
+    </table>
+</fieldset>
+
+<fieldset>
+    <legend>处理信息</legend>
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.DealMan)</td>
+            <td>@Html.TextBoxFor(m => m.DealMan, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td class="textright">@Html.LabelFor(m => m.DealTime)</td>
+            <td>@Html.TextBoxFor(m => m.DealTime, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.DealContent)</td>
+            <td colspan="4" style="padding-left:.8em;">@Model.DealContent</td>
+        </tr>
+    </table>
+</fieldset>
+
+<fieldset>
+    <legend>作废信息</legend>
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.InvalidMan)</td>
+            <td>@Html.TextBoxFor(m => m.InvalidMan, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td class="textright">@Html.LabelFor(m => m.InvalidTime)</td>
+            <td>@Html.TextBoxFor(m => m.InvalidTime, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.InvalidReason)</td>
+            <td colspan="4" style="padding-left:.8em;">@Model.InvalidReason</td>
+        </tr>
+    </table>
+</fieldset>
+
+
+@Html.ValidationSummary()
+<div class="formButtons" style="clear: both;text-align: center;margin-top: 30px;">
+    <button class="k-primary k-button" id="notifyReadButton" role="button" data-role="button">接单</button>&nbsp;&nbsp;
+    <button class="k-primary k-button" id="notifyDealButton" role="button" data-role="button">处理</button>&nbsp;&nbsp;
+    <button class="k-primary k-button" id="notifyCancelButton" role="button" data-role="button">作废</button>&nbsp;&nbsp;
+    <button class="k-primary k-button" id="orderSelFormButton" role="button" data-role="button">订单详情</button>&nbsp;&nbsp;
+    <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+
+        @if(Model.Status == "已接单")
+        {
+            <text>
+            $("#notifyReadButton").hide();
+            $("#notifyDealButton").show();
+            $("#notifyCancelButton").show();
+            </text>
+        }
+        else if(Model.Status == "未读")
+        {
+            <text>
+            $("#notifyReadButton").show();
+            $("#notifyDealButton").hide();
+            $("#notifyCancelButton").show();
+            </text>
+        }
+        else
+        {
+            <text>
+            $("#notifyReadButton").hide();
+            $("#notifyDealButton").hide();
+            $("#notifyCancelButton").hide();
+        </text>
+        }
+        @if(Model.WakeCallTypeName == "房间提醒")
+        {
+            <text>
+            $("#orderSelFormButton").hide();
+            </text>
+        }
+        else
+        {
+            <text>
+            $("#notifyCancelButton").hide();
+            </text>
+        }
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            //刷新提醒消息列表
+            refreshGridList();
+            closeEditFormWindow();
+
+        });
+        $("#notifyReadButton").click(function () {
+            $.post("@Url.Action("BatchRead")", { id: $("#Id").val() }, function (data) {
+                if (data.Success) {
+                    jAlert("操作成功", "知道了");
+                    window.top.getNotify();
+                    refreshDetail();
+                    refreshGridList();
+                } else { refreshDetail(); jAlert(data.Data); }
+            }, 'json');
+        });
+        $("#notifyDealButton").click(function () {
+            top.openSecondKendoWindow("处理提醒", "/RoomState/Notify/DealNotify/" + $("#Id").val());
+        });
+        $("#notifyCancelButton").click(function () {
+            top.openSecondKendoWindow("作废提醒", "/RoomState/Notify/BatchCancel/" + $("#Id").val());
+        });
+        $("#orderSelFormButton").click(function () {
+            var url = "@Url.Action("Index","ResOrderAdd", new { area = "ResManage" })" + "?type=R" + "&id=" + "@Model.Refno" + "&IsRoomStatus=1";
+            top.openResKendoWindow("客单", url, null, "20020", "新预订/入住");
+        });
+    });
+    function refreshGridList() {
+        try {
+            $(document).find("iframe[src*='Notify']")[0].contentWindow.gridRead();
+        } catch (e) { }
+    }
+    //刷新详情
+    function refreshDetail() {
+        var detail = $("#commonKendoWindow");
+        var id = $("#Id").val();
+        $.get('@Url.Action("Detail")', { id: id }, function (data) {
+            detail.html(data);
+        }, 'html')
+    }
+</script>

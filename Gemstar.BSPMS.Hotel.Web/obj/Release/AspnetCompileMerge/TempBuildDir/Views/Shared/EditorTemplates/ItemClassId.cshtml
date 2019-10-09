@@ -1,0 +1,13 @@
+﻿
+@(Html.Kendo().DropDownListFor(m => m)
+                  .OptionLabel("请选择")
+                  .DataTextField("Cname")
+                  .DataValueField("Id")
+                  .AutoBind(false)
+                  .DataSource(dataSource =>
+                  {
+                      dataSource.Read(read => read.Action("ListItemsForPosItemAndSubClass", "BasicDataPosItemClass"));
+                      dataSource.Custom().Group(g => g.Add("ItemClassName", typeof(string)));
+                  })
+)
+@Html.ValidationMessageFor(m => m)

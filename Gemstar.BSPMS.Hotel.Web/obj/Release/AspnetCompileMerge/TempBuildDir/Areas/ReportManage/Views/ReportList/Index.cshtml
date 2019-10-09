@@ -1,0 +1,89 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "报表列表";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForAdd = false,
+        EnableFunctionForEdit = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForQuery = false,
+        EnableScrollable = true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("isCollect").Title("收藏");
+            c.Bound("code").Title("报表号");
+            c.Bound("name").Title("报表名称");
+            c.Bound("type").Title("报表类型");
+            c.Bound("templateid").Title("自定义格式");
+        },
+        RowTemplate = @"<tr style=#: status==51?'text-decoration:line-through;color:red;':'' #>
+                                          <td> <input type='checkbox' onclick=reportCollect('#: code #',this) #: isCollect?'checked=checked':'' #  /> </td>
+                                        <td> #: code.replace('pos','') #</td>
+                                        <td><a  class='k-link' href='/ReportManage/SRReportView/Index?ReportCode=#: code #' target='_blank'>#: name #</a></td>
+                                        <td>#: type #</td>
+                                        <td>#: templateid==null?'无':'有' #</td>  
+                                   </tr>",
+        CustomToolbar = c =>
+        {
+            c.Template(ViewBag.tpstring + "　　模糊查询：　<input id='name' style='height:28px;border:1px solid #ccc;color:black' placeholder=\"报表号/名称\"  />   <input type='button' value='查询' class='k-button' onclick = 'queryData()' />  <input type='text' style='display:none;' id='tpval'/><span style='float:right;color:red;margin-right:40px;padding-top:8px;'>点击报表名称可预览/打印</span>");
+        }
+    };
+}
+
+<style type="text/css">
+    tr.k-state-selected td a.k-link {
+        color: #fff;
+    }
+</style>
+
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+    //报表查询
+    function queryData(obj, ts) {
+        if (obj != undefined) {
+            $("span[name='txtbtn']").each(function () {
+                $(this).css("backgroundColor", "white").css("color", "rgb(0,71,147)");
+            });
+            $(ts).css("backgroundColor", "rgb(0,71,147)").css("color", "white");
+        }
+        if (obj != undefined) {
+            $(tpval).val(obj);
+        }
+        var name = $("#name").val();
+        var result = "@@h99用户编号=" + '@ViewBag.Userid' + "&@@t00参数名称=" + name + "&@@t00报表类型=" + $(tpval).val() + "&@@IsHotelInGroup=" +'@ViewBag.IsHotelInGroup';
+        GetControl("#commonQueryParameterValues").val(result);
+        var grid = $("#" + "@gridId").data("kendoGrid");
+        grid.dataSource.page(1);
+        grid.dataSource.read();
+    }
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#grid .k-grid-toolbar").height() + 20 + 30 + 60;
+        $("#grid .k-grid-content").height(allHeight - showHeight);
+    }
+    $(function () {
+        window.onresize = onResize; onResize();
+    });
+  
+    function reportCollect(reportCode, obj) {
+        $.post("@Url.Action("reportCollect")", { reportCode: reportCode, isCollect: obj.checked }, function (data) {
+        if (data.Success) {
+            alert(123);
+        }
+    });
+    }
+</script>

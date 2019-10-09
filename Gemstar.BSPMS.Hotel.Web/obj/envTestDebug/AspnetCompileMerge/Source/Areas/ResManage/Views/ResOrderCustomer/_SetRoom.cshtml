@@ -1,0 +1,54 @@
+﻿@*分房入住*@
+@using Gemstar.BSPMS.Common.Extensions;
+@model Gemstar.BSPMS.Hotel.Services.ResManage.ResMainInfo
+
+<div id="setRoomWindow">
+    <div class="k-grid k-widget" style="max-height: 435px;overflow:hidden;">
+        <div class="k-grid-header" style="padding-right: 17px;">
+            <div class="k-grid-header-wrap k-auto-scrollable">
+                <table>
+                    <colgroup>
+                        <col style="width:75px;">
+                        <col style="width:190px;">
+                        <col style="width:100px;">
+                        <col>
+                        <col>
+                        <col style="width:135px;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="k-header">@(Html.Kendo().CheckBox().Name("checkAllSetRoom").Label("全选").HtmlAttributes(new { onchange = "SetRoomWindow.SelectAll()" }))</th>
+                            <th class="k-header">房号</th>
+                            <th class="k-header">房型</th>
+                            <th class="k-header">房价</th>
+                            <th class="k-header">客人名</th>
+                            <th class="k-header">抵店时间</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="k-grid-content k-auto-scrollable" style="max-height: 345px;">
+            <table style="height: auto;">
+                <colgroup>
+                    <col style="width:75px;">
+                    <col style="width:190px;">
+                    <col style="width:100px;">
+                    <col>
+                    <col>
+                    <col style="width:135px;">
+                </colgroup>
+                <tbody id="setRoomTbody"></tbody>
+            </table>
+        </div>
+        <div class="k-header k-grid-toolbar">
+            <div class="toolbar">
+                <button id="autoSetRoomButton" name="autoSetRoomButton" class="k-button" type="button">自动分房</button>
+                <button id="saveSetRoomButton" name="saveSetRoomButton" class="k-button" type="button">保存留房</button>
+                <button id="clearSetRoomButton" name="clearSetRoomButton" class="k-button" type="button">清除留房</button>
+                <button id="checkInRoomButton" name="checkInRoomButton" class="k-button" type="button" style="float:right;">保存分房并入住</button>
+                <input type="hidden" id="setRoom_selectRoomIds" />
+            </div>
+        </div>
+    </div>
+</div>

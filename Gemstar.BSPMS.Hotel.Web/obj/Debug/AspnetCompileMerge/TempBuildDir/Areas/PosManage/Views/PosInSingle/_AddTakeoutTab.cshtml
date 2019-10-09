@@ -1,0 +1,125 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosInSingle.OpenTakeoutTabAddViewModel
+@using (Html.BeginForm("AddTakeoutBill", "PosInSingle", new { rnd = new Random().NextDouble() }))
+{
+    @Html.HiddenFor(m => m.Tabid)
+    @Html.HiddenFor(m => m.TabNo)
+    @Html.HiddenFor(m => m.Billid)
+    @Html.HiddenFor(m => m.Refeid)
+    @Html.HiddenFor(m => m.BillBsnsDate)
+    @Html.HiddenFor(m => m.OpenInfo)
+    <table class="editFormTable">
+        <tr class="otbName">
+            <td class="textright">@Html.LabelFor(m => m.Tabid)</td>
+            <td>@Model.Tabid - 快餐台</td>
+            <td></td>
+        </tr>
+        <tr class="otbName">
+            <td class="textright">@Html.LabelFor(m => m.Name)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Name).HtmlAttributes(new { style = "width:80%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+        </tr>
+        <tr class="otbIGuest">
+            <td class="textright">@Html.LabelFor(m => m.IGuest)</td>
+            <td>@Html.Kendo().IntegerTextBoxFor(m => m.IGuest).Min(1).HtmlAttributes(new { style = "width:80%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IGuest, "*")</td>
+        </tr>
+        <tr class="otbMobile">
+            <td class="textright">@Html.LabelFor(m => m.Mobile)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Mobile).HtmlAttributes(new { style = "width:80%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Mobile, "*")</td>
+        </tr>
+        <tr class="otbCustomerTypeid">
+            <td class="textright">@Html.LabelFor(m => m.CustomerTypeid)</td>
+            <td>@(Html.Kendo().DropDownListFor(e => e.CustomerTypeid).HtmlAttributes(new { style = " width:80%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosCustomerTypeByModules", "BasicDataPosCustomerType", new { rnd = new Random().NextDouble() })).ServerFiltering(true); }))</td>
+            <td>@Html.ValidationMessageFor(m => m.CustomerTypeid, "*")</td>
+        </tr>
+        <tr class="otbSale">
+            <td class="textright">@Html.LabelFor(m => m.Sale)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Sale).HtmlAttributes(new { style = "width:80%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Sale, "*")</td>
+        </tr>
+        <tr class="otbCardNo">
+            <td class="textright">@Html.LabelFor(m => m.CardNo)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.CardNo).HtmlAttributes(new { style = "width:80%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.CardNo, "*")</td>
+        </tr>
+        <tr class="otbOpenMemo">
+            <td class="textright">@Html.LabelFor(m => m.OpenMemo)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.OpenMemo).HtmlAttributes(new { style = "width:80%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.OpenMemo, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    @*<div class="formButtons">
+            <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+            <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+        </div>*@
+    <div class="formButtons">
+        <input type="button" value="确定" id="saveEditFormButton" />
+        <input type="button" value="返回" id="closeEditFormButton" />
+    </div>
+}
+<link href="~/Content/Pos/posPublic.css?version=@ViewBag.Version" rel="stylesheet" />
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveTakeoutTab($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeGeneralWindow();
+        });
+
+        var openinfo = $("#OpenInfo").val().split(',');
+        $(".editFormTable tr").hide();
+        $(".otbOpenMemo").show();
+        for (var i = 0; i < openinfo.length; i++) {
+            if (openinfo[i] == 'A') {
+                $(".otbIGuest").show();
+            }
+            else if (openinfo[i] == 'B') {
+                $(".otbName").show();
+            }
+            else if (openinfo[i] == 'C') {
+                $(".otbMobile").show();
+            }
+            else if (openinfo[i] == 'D') {
+                $(".otbCustomerTypeid").show();
+            }
+            else if (openinfo[i] == 'E') {
+                $(".otbSale").show();
+            }
+            else if (openinfo[i] == 'F') {
+                $(".otbCardNo").show();
+            }
+            else if (openinfo[i] == 'G') {
+                //$(".").show();
+            }
+            else if (openinfo[i] == 'H') {
+                //$(".").show();
+            }
+        }
+    });
+</script>
+<style>
+    .billDetail {
+        width: 100%;
+        border: 1px solid #aaa;
+        margin-top: 5px;
+    }
+
+    .btn {
+        position: relative;
+        background: #aaa;
+        padding: 5px;
+        color: #fff;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    #changeTab {
+        font-size: 13px;
+    }
+</style>

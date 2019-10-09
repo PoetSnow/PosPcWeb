@@ -1,0 +1,387 @@
+﻿<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<head>
+    <link href="~/Content/ScanOrder/Waiter.css" rel="stylesheet" />
+</head>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        @*<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>*@
+        <h1 class="mui-title">服务员</h1>
+    </header>
+
+    <div class="layout mui-content" style="height:calc(100% - 48px);">
+        <!--选择营业点-->
+
+        <div style="height:2.5rem;padding-left:10px;width:97%;position:fixed">
+            <input id="btnRefe" type="button" value="全部营业点" onclick="showRefeList()" class="btn" />
+            <ul class="refe">
+                <li><a href="javascript:void(0);" onclick="SelectRefe('0')">全部</a></li>
+
+                <li>
+                    <a href="javascript:void(0);" onclick="SelectRefe(this)" data-id="1" data-name="1">1</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" onclick="SelectRefe(this)" data-id="2" data-name="2">2</a>
+                </li>
+
+            </ul>
+        </div>
+        <!--餐台列表-->
+        <div class="mainRight">
+            <div class="mainRight-list">
+                <ul class="tabstatus">
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>22</span>
+                            <span>22</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>33</span>
+                            <span>33</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>44</span>
+                            <span>55</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>66</span>
+                            <span>77</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>88</span>
+                            <span>88</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>88</span>
+                            <span>888</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>8</span>
+                            <span>8</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>8</span>
+                            <span>8</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>8</span>
+                            <span>8</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>8</span>
+                            <span>8</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>8</span>
+                            <span>8</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>8</span>
+                            <span>8</span>
+                        </a>
+                    </li>
+                    <li data-staus="">
+                        <a href="javascript:void(0);" onclick="isLockTab('','','','')">
+
+                            <span>8</span>
+                            <span>8</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <!-- 提示信息 -->
+            @*<div class="tips" data-id=".mainRight .tips:last-child" data-position="3" data-msg="当前收银点对应的餐台显示，餐台状态分为：空净、维修、预订、落单超时、就座、打单超时、清洁中和正在操作。餐台显示可以按不同的分辩率显示，且各行和列的宽度都是根据屏幕的剩余宽度平均算出来的。" onmouseover="tipShow(this)" onmouseout="tipHide(this)" onclick="tipMsg(this)"><i class="fa fa-question-circle-o" aria-hidden="true"></i></div>*@
+        </div>
+
+
+
+    </div>
+    <div class="settlement" >
+        <div class="downOrder">
+            <button id="showShopCart" type="button" class="mui-btn mui-btn-warning" onclick="showShopCart()"><i class="fa fa-shopping-cart" aria-hidden="true"></i> 审核订单 </button>
+
+        </div>
+    </div>
+
+
+</body>
+<script>
+
+    //选择营业点
+    function showRefeList() {
+        $(".refe").attr("style", "display:block");
+    }
+    function SelectRefe(obj) {
+        if (obj == "0") {
+            $("#btnRefe").val("全部");
+            $("#MergeRefeId").val("");
+            $("#MergepageIndex").val(1);
+        }
+        else {
+            var refeName = $(obj).attr("data-name");
+            var refeid = $(obj).attr("data-id");
+            //$("#MergepageIndex").val(1);
+            //$("#MergeRefeId").val(refeid);
+
+            $("#btnRefe").val(refeName);
+        }
+
+        // GetTabList();
+        $(".refe").attr("style", "display:none");
+    }
+
+    function showShopCart() {
+       
+    }
+
+    $(function () {
+        var count = parseInt($(".tabstatus li").length);    //餐台数量
+
+        var width = document.body.clientWidth;  //屏幕宽度
+        var liwidth = $(".tabstatus li").first().outerWidth();  //元素宽度
+        var s = parseInt(width / liwidth);  //每行可以放几个
+        var s1 = count % s; //取余数
+        var html = "";
+        for (var i = 0; i < s - s1; i++) {
+            html += "<li style=\"visibility: hidden;\" > <a href=\"javascript:void (0);\" >";
+            html += " < span > </span >"
+            html += "<span></span>"
+            html += " </a > </li>";
+        }
+
+        $(".tabstatus").append(html);
+    })
+</script>

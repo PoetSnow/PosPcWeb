@@ -1,0 +1,104 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EnumsPos;
+@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosProdPrinter.ProdPrinterEditViewModel
+
+<script type="text/javascript">
+    function itemChange() {
+        var section = $("#Section").data("kendoDropDownList").value();
+        var comno = $("#Comno").data("kendoDropDownList").value();
+
+        $("#Code").removeAttr("readonly");
+        $("#Code").val(section + comno);
+        $("#Code").attr("readonly", "readonly");
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Code)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Code).HtmlAttributes(new { style = "width:100%;" , @readonly = "readonly", placeholder = "请输入代码" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Cname)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Cname).HtmlAttributes(new { style = "width:100%;", placeholder = "请输入中文名称" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Cname, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Ename)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Ename).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Ename, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+            <td>@Html.Kendo().IntegerTextBoxFor(m => m.Seqid).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Section)</td>
+            <td>@Html.Kendo().DropDownListFor(m => m.Section).BindTo(Enum.GetNames(typeof(PosSection))).HtmlAttributes(new { style = "width:100%;" }).OptionLabel("请选择分区号").Events(e => e.Change("itemChange"))</td>
+            <td>@Html.ValidationMessageFor(m => m.Section, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Comno)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Comno).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosComno", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); }).OptionLabel("请选择串口号").Events(e => e.Change("itemChange"))</td>
+            <td>@Html.ValidationMessageFor(m => m.Comno, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Section1)</td>
+            <td>@Html.Kendo().DropDownListFor(m => m.Section1).BindTo(Enum.GetNames(typeof(PosSection))).HtmlAttributes(new { style = "width:100%;" }).OptionLabel("请选择备份分区号")</td>
+            <td>@Html.ValidationMessageFor(m => m.Section1, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Comno1)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Comno1).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosComno", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); }).OptionLabel("请选择备份串口号")</td>
+            <td>@Html.ValidationMessageFor(m => m.Comno1, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Section2)</td>
+            <td>@Html.Kendo().DropDownListFor(m => m.Section2).BindTo(Enum.GetNames(typeof(PosSection))).HtmlAttributes(new { style = "width:100%;" }).OptionLabel("请选择关联分区号")</td>
+            <td>@Html.ValidationMessageFor(m => m.Section2, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Comno2)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Comno2).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosComno", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); }).OptionLabel("请选择关联串口号")</td>
+            <td>@Html.ValidationMessageFor(m => m.Comno2, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.isTabeachbreak)</td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.isTabeachbreak).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.isTabeachbreak, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.isVirtual)</td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.isVirtual).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.isVirtual, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.whid)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.whid).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.whid, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Printer)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Printer).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Printer, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Module)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Module).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosModules", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); })</td>
+            <td>@Html.ValidationMessageFor(m => m.Module, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+
+</script>

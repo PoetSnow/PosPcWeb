@@ -1,0 +1,72 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>快点云Pos系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "微软雅黑","Microsoft YaHei",Arial,Helvetica,sans-serif,"宋体";
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            text-align: center;
+        }
+
+        div {
+            margin-top: 25%;
+            font-size: 2.5rem;
+        }
+
+        .css {
+            -webkit-transform-style: preserve-3d;
+            -webkit-backface-visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="welcome">欢迎使用快点云Pos系统，系统正在启动，请稍候……</div>
+    <script src="~/Scripts/jquery-1.12.3.min.js"></script>
+    <!-- 封装 -->
+    <script type="text/javascript">
+        var mode = getQueryString("mode");
+        localStorage.setItem("posMode", mode);
+
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return r[2]; return '';
+        }
+
+        if ("undefined" != typeof jsObject) {   //封装程序登录
+            if (jsObject.Current != null) {
+                $.ajax({
+                    url: '@Url.Action("AutoLogin")' + window.location.search,
+                    type: "post",
+                    data: { Current: jsObject.Current },
+                    dataType: "text",
+                    success: function (data) {
+                        location.href = data;
+                        setTimeout(function () {
+                            location.href = jsObject.ReturnUrl;
+                        }, 3000); //3秒未跳转，直接请求
+                    },
+                    error: function (data) {
+                        alert(data.responseText);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

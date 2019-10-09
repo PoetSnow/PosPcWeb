@@ -1,0 +1,179 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.CRM.Models.CompanyManage.CompanyEditViewModel
+@using Gemstar.BSPMS.Common.Extensions;
+<style>
+    editFormTable tr {
+        line-height:2.5;
+    }
+     .editFormTable {
+        padding-bottom:8px;
+    }
+    .td260 {
+        width:260px;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+
+    <fieldset>
+        <legend>单位信息</legend>
+        <table class="editFormTable">
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Code)</td>
+                <td>@Html.TextBoxFor(m => m.Code, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.Name)</td>
+                <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+            </tr>
+            <tr>
+
+                <td class="textright">@Html.LabelFor(m => m.Tel)</td>
+                <td>@Html.TextBoxFor(m => m.Tel, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Tel, "*")</td>
+
+                <td class="textright">@Html.LabelFor(m => m.Address)</td>
+                <td>@Html.TextBoxFor(m => m.Address, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Address, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Contact)</td>
+                <td>@Html.TextBoxFor(m => m.Contact, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Contact, "*")</td>
+
+                <td class="textright">@Html.LabelFor(m => m.TaxEmail)</td>
+                <td>@Html.TextBoxFor(m => m.TaxEmail, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.TaxEmail, "*")</td>
+            </tr>
+            <tr>
+
+                <td class="textright">@Html.LabelFor(m => m.ContactMobile)</td>
+                <td>@Html.TextBoxFor(m => m.ContactMobile, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.ContactMobile, "*")</td>
+
+                <td class="textright">@Html.LabelFor(m => m.Position)</td>
+                <td>@Html.TextBoxFor(m => m.Position, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Position, "*")</td>
+
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Bank)</td>
+                <td>@Html.TextBoxFor(m => m.Bank, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Bank, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.BankAccount)</td>
+                <td>@Html.TextBoxFor(m => m.BankAccount, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.BankAccount, "*")</td>
+            </tr>
+
+        </table>
+    </fieldset>
+
+    <fieldset>
+        <legend>发票信息</legend>
+        <table class="editFormTable">
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.TaxType)</td>
+                <td class="td260">
+                    @Html.Kendo().DropDownListFor(m => m.TaxType).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetTaxTypeSelectList", "CompanyManage", new { area = "CRM", rnd = new Random().NextDouble() })); }).OptionLabel("--请选择--")
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.TaxType, "*")</td>
+
+                <td class="textright">@Html.LabelFor(m => m.TaxNo)</td>
+                <td>@Html.TextBoxFor(m => m.TaxNo, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.TaxNo, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.TaxName)</td>
+                <td colspan="4">@Html.TextBoxFor(m => m.TaxName, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.TaxName, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.TaxBankAccount)</td>
+                <td colspan="4">@Html.TextBoxFor(m => m.TaxBankAccount, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.TaxBankAccount, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.TaxAddTel)</td>
+                <td colspan="4">@Html.TextBoxFor(m => m.TaxAddTel, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.TaxAddTel, "*")</td>
+            </tr>
+
+        </table>
+    </fieldset>
+
+    <fieldset>
+        <legend>合约信息</legend>
+        <table class="editFormTable">
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.CompanyTypeid)</td>
+                <td class="td260">
+                    @Html.Kendo().DropDownListFor(e => e.CompanyTypeid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Name").DataValueField("Id").DataSource(e => { e.Read(r => r.Action("GetCompanyTypeSelectList", "CompanyTypeManage", new { rnd = new Random().NextDouble() })); }).OptionLabel("--请选择--")
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.CompanyTypeid, "*")</td>
+
+                <td class="textright">@Html.LabelFor(m => m.Sales)</td>
+                <td>
+                   @Html.TextBoxFor(m=>m.Sales ,new{ @class = "k-textbox", style = "width:70%;background-color:#f5f5f5;", disabled = "disabled" })
+                    <span class="red-color">在列表上更换</span>
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.Sales, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.RateCode)</td>
+                <td>
+                    @Html.Kendo().DropDownListFor(m => m.RateCode).HtmlAttributes(new { style = " width:100%" }).DataTextField("Value").DataValueField("Key").DataSource(e => { e.Read(r => r.Action("GetRateSelectList", "CompanyManage", new { rnd = new Random().NextDouble() })); }).OptionLabel("--请选择--")
+                </td>
+                <td>@Html.ValidationMessageFor(m => m.RateCode, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.LimitAmount)</td>
+                <td>@Html.TextBoxFor(m => m.LimitAmount, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.LimitAmount, "*")</td>
+            </tr>
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.BeginDate)</td>
+                <td>@(Html.Kendo().DatePicker().Name("BeginDate").Format("yyyy-MM-dd").HtmlAttributes(new { style = "width: 100%;margin-bottom:1px" }))</td>
+                <td>@Html.ValidationMessageFor(m => m.BeginDate, "*")</td>
+                <td class="textright">@Html.LabelFor(m => m.ValidDate)</td>
+                <td>@Html.TextBoxFor(m=>m.ValidDate,"{0:yyyy-MM-dd }", new { @class = "k-textbox", style = "width:70%;background-color:#f5f5f5;", disabled = "disabled" })
+                    <span class="red-color">在列表上延期</span>
+                 </td>
+                <td>@Html.ValidationMessageFor(m => m.ValidDate, "*")</td>
+            </tr>
+        </table>
+    </fieldset>
+
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormBnt" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormBnt" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    window.onload = function () {
+        var date = $("#BeginDate").val();
+        if (date != "") {
+            var result = new Date(date).ToDateString();
+            $("#BeginDate").val(result);
+        }
+    }
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormBnt").click(function (e) {
+            e.preventDefault();
+            saveSecondFormData($("#saveEditFormBnt"), refreshDetail);
+        });
+        $("#closeEditFormBnt").click(function (e) {
+            e.preventDefault();
+            closeSecondEditFormWindow();
+        });
+
+    });
+    //刷新详情
+    function refreshDetail() {
+        var detail = $("#commonKendoWindow");
+        var id = $("#Id").val();
+        $.get('@Url.Action("Detail")', { id: id }, function (data) {
+            detail.html(data);
+        },'html')
+    }
+</script>

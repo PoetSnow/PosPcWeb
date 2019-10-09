@@ -1,0 +1,64 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.CommonCodeManage.CodeListAddViewModel
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.TypeCode)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Code)</td>
+            <td>@Html.TextBoxFor(m => m.Code, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Name)</td>
+            <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+        </tr>
+        @if (ViewBag.Name2 != null)
+        {
+            <tr>
+                <td class="textright"><label for="Name2">@ViewBag.Name2</label></td>
+                <td>@Html.TextBoxFor(m => m.Name2, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Name2, "*")</td>
+            </tr>
+        }
+        @if (ViewBag.Name3 != null)
+        {
+            <tr>
+                <td class="textright"><label for="Name3">@ViewBag.Name3</label></td>
+                <td>@Html.TextBoxFor(m => m.Name3, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Name3, "*")</td>
+            </tr>
+        }
+        @if (ViewBag.Name4 != null)
+        {
+            <tr>
+                <td class="textright"><label for="Name4">@ViewBag.Name4</label></td>
+                <td>@Html.TextBoxFor(m => m.Name4, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Name4, "*")</td>
+            </tr>
+        }
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+            <td>@Html.TextBoxFor(m => m.Seqid, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+</script>

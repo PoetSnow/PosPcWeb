@@ -1,0 +1,1100 @@
+﻿@using Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models;
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+@model PaymentViewModel
+
+@{
+    ViewBag.Title = "Pos买单";
+}
+
+<link href="~/Content/Pos/posPayment.css?version=@ViewBag.Version" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/qrcode.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.qrcode.min.js"></script>
+
+<!--合约单位名称-->
+<input type="hidden" id="cttName" />
+<script type="text/javascript">
+    //付款方式改变时
+    function itemChange() {
+        var dropdownlist = $("#selItemid").data("kendoDropDownList");
+        $("#itemidPayment").val(dropdownlist.value());
+
+        //同步付款方式按钮选择的项
+        var inputs = $(".mainBottom-payMethod input");
+        inputs.each(function () {
+            if ($(this).attr("data-id") == dropdownlist.value()) {
+                $(".mainBottom-payMethod input").css({ "color": "" });
+                $(".mainBottom-payMethod input").attr("data-checked", false);
+
+                $(this).attr("data-checked", true);
+                $(this).css({ "color": "yellow" });
+            }
+        });
+
+        //获取付款处理方式
+        if (dropdownlist.value().length > 0) {
+            $.ajax({
+                url: '@Url.Action("GetPayTypeByPayMethod", "PosCashier")',
+                type: "post",
+                data: { id: dropdownlist.value() },
+                dataType: "json",
+                success: function (data) {
+                    var actionValue = data.PayType;
+
+                    if (data.PayType == "no") {
+                        $("#isChange").val("True");
+                    }
+                    else {
+                        $("#isChange").val("False");
+                    }
+
+                    $("#actionValue").val(data.PayType);
+                    checkPay(actionValue);
+                    tailProcessing();   //尾数处理
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+
+        $(".smallChange").val("");
+    }
+
+    //尾数处理
+    function tailProcessing() {
+        var model = {
+            Billid: $("#billidPayment").val(),
+            Itemid: $("#itemidPayment").val(),
+            Amount: $("#unPaid").text(),
+        };
+        $.ajax({
+            url: '@Url.Action("GetTailProcessing", "PosCashier")',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (data) {
+                if (data.Amount != 0) {
+                    $("#txtMoneyPayment").val(data.Amount);
+                    $("#exchangeRate").text(data.Amount);
+                    expectedPaymentg(data.Amount);  //获取相近付款的金额
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //获取相近付款的金额
+    function expectedPaymentg(amount) {
+        $.ajax({
+            url: '@Url.Action("GetExpectedPaymentg", "PosCashier")',
+            type: "post",
+            data: { amount: amount },
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    $("#btnNum1").val(data.Data[0]);
+                    $("#btnNum2").val(data.Data[1] != data.Data[0] ? data.Data[1] : " ");
+                    $("#btnNum3").val(data.Data[2] != data.Data[1] ? data.Data[2] : " ");
+                    $("#btnNum4").val(data.Data[3] != data.Data[2] ? data.Data[3] : " ");
+                } else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //检查付款方式
+    function checkPay(actionValue) {
+        $.ajax({
+            url: '@Url.Action("Check", "../PayManage/Pay")',
+            type: "post",
+            data: { payAction: actionValue },
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    $(".folioAddAmountForC").nextAll().remove();
+                    $("#folioPayResultDiv").html("");
+                    $("#folioAddAmountForC").html("");
+                    var payAction = createPayByAction(actionValue, {
+                        selectorForInit: "tr.folioAddAmountForC"//初始化界面时的定位元素，新元素会加在此元素的后面
+                        , selectorForItem: "#Itemid"//付款方式项目元素，用于获取付款方式信息
+                        , selectorForSaveButton: "#folioAddSave"//保存按钮元素
+                        , selectorForResultDiv: "#folioPayResultDiv"//支付结果显示元素
+                        , selectorForWindow: "#folioAddFolioDiv"//支付窗口元素
+                        , urlForQueryPayStatus: "/PayManage/Pay/QueryFolioPayStatu"//查询支付结果的url地址
+                    });
+                    if (payAction) {
+                        payAction.PayInit();
+                    }
+                } else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //刷新付款金额合计
+    function RefreshAmount() {
+        var model = {
+            MBillid: $("#mBillidPayment").val(),
+            Billid: $("#billidPayment").val()
+        };
+        getPaymentTotal(model);
+    }
+
+    //获取付款金额合计
+    function getPaymentTotal(model) {
+        $.ajax({
+            url: '@Url.Action("GetPaymentTotal", "PosCashier")',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    $("#total").text(data.Data.Total);
+                    $("#paid").text(data.Data.Paid);
+                    $("#unPaid").text(data.Data.UnPaid);
+                    $("#txtMoneyPayment").val(data.Data.UnPaid);
+                    if (data.Data.Consume == data.Data.Paid) {
+                        $("#isSuccess").val(1);
+                    }
+                    else {
+                        $("#isSuccess").val(0);
+                    }
+                }
+                else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+</script>
+@using (Html.BeginForm())
+{
+    <div style="margin:0;padding:10px;">
+        <input id="billidPayment" type="hidden" value="@(Model.Billid)" />
+        <input id="mBillidPayment" type="hidden" value="@(Model.MBillid)" />
+        <input id="itemidPayment" type="hidden" value="@(Model.Itemid)" />
+        <input id="tailDifferencePayment" type="hidden" value="@(Model.TailDifference)" />
+        <input id="actionValue" type="hidden" value="" />
+        <input id="isChange" type="hidden" value="" />
+
+        <input id="pageIndexPayment" type="hidden" value="@(Model.PageIndex)" />
+        <input id="pageSizePayment" type="hidden" value="@(Model.PageSize)" />
+        <input id="pageTotalPayment" type="hidden" value="@(Model.PageTotal)" />
+
+        <input id="PosCompanyQuota" type="hidden" value="@(ViewBag.PosCompanyQuota)" />
+
+        <!--付款方式处理-->
+        <input id="paytype" type="hidden" value="no" />
+
+        @(Html.Kendo().Grid<up_pos_list_BillDetailForPaymentResult>()
+                                                                    .Name("gridPayment")
+                                                                    .Columns(c =>
+                                                                    {
+                                                                        c.Bound(m => m.Id).Hidden();
+                                                                        c.Bound(m => m.Row).Title("序号").HtmlAttributes(new { @style = "white-space: nowrap;" });
+                                                                        c.Bound(m => m.Cname).Title("付款方式").HtmlAttributes(new { @style = "white-space: nowrap;" });
+                                                                        c.Bound(m => m.Dueamount).Title("原币金额").HtmlAttributes(new { @style = "white-space: nowrap;" });
+                                                                        c.Bound(m => m.Rate).Title("汇率").HtmlAttributes(new { @style = "white-space: nowrap;" });
+                                                                        c.Bound(m => m.Amount).Title("本位币金额").HtmlAttributes(new { @style = "white-space: nowrap;" });
+                                                                        c.Bound("").Title("操作").ClientTemplate("<a class='k-button' onclick='deletePayment(this)'>删除</a>").HtmlAttributes(new { @style = "white-space: nowrap;" });
+                                                                    })
+                                                                    .Sortable()
+                                                                    .Scrollable()
+                                                                    .Selectable(s => s.Mode(GridSelectionMode.Single))
+                                                                    .DataSource(dataSource => dataSource
+                                                                    .Ajax()
+                                                                    .Read(read => read.Action("PaymentDetailByBill", "PosCashier", new { Billid = Model.Billid })))
+                                                                    .Events(e => e.DataBound("RefreshAmount"))
+                                                                    .HtmlAttributes(new
+                                                                    {
+                                                                        style = "height:6.8rem;"
+                                                                    })
+        )
+
+        <ul class="TotalAmount">
+            <li>合计：<span id="total"></span></li>
+            <li>已付金额：<span id="paid"></span></li>
+            <li>未付金额：<span id="unPaid"></span></li>
+        </ul>
+        <div style="display:none;">汇率换算：<span id="exchangeRate"></span></div>
+        <div class="mainBottom">
+            <div class="mainBottom-payMethod">
+            </div>
+
+            <div class="mainBottom-payment">
+                <table id="payMethodTable" class="mainBottom-money">
+                    <tr>
+                        <td><div class="folioAddPaymentBg"></div></td>
+                    </tr>
+                    <tr>
+                        <td class="textright">付款方式：</td>
+                        <td>
+                            @Html.Kendo().DropDownListFor(m => m.Itemid).Name("selItemid").DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForItemByDcFlag", "PosCashier", new { rnd = new Random().NextDouble() })); }).Events(e => { e.Change("itemChange"); }).OptionLabel("请选择付款方式").HtmlAttributes(new { @oninput = "itemChange()" })
+                        </td>
+                        <td class="textright">付款金额：</td>
+                        <td>
+                            <input id="txtMoneyPayment" type="text" class="k-textbox" onblur="smallChange()" oninput="setAmount()" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="textright">收银单号：</td>
+                        <td>
+                            <input id="txtAcbillno" type="text" class="k-textbox" value="" />
+                        </td>
+                        <td class="textright">找赎金额：</td>
+                        <td>
+                            <input type="number" class="k-textbox smallChange" style="color:#f55858" value="" disabled readonly />
+                            <input id="isSuccess" type="hidden" value="0" />
+                        </td>
+                    </tr>
+                    <tr class="folioAddAmountForC">
+                        <td class="textright">开台备注：</td>
+                        <td><input type="text" class="k-textbox" style="width:100%;" value="@ViewBag.OpenMemo" disabled readonly /></td>
+                        <td class="textright">收银备注：</td>
+                        <td><input type="text" class="k-textbox" style="width:100%;" value="@ViewBag.CashMemo " id="txtCashMemo" /></td>
+                    </tr>
+                </table>
+                <div id="folioPayResultDiv" style="position: absolute;padding-left:2px;z-index: 1;bottom: 1rem;"></div>
+                <div id="folioAddFolioDiv" style="position: absolute;padding-left:2px;z-index: 1;bottom: 1rem;"></div>
+            </div>
+            <table class="mainBottom-keypad">
+                <tr>
+                    <td><input id="btnNum1" type="button" onclick="fastInput(this)" /></td>
+                    <td><input id="btnNum2" type="button" onclick="fastInput(this)" /></td>
+                    <td><input id="btnNum3" type="button" onclick="fastInput(this)" /></td>
+                    <td><input id="btnNum4" type="button" onclick="fastInput(this)" /></td>
+                </tr>
+                <tr>
+                    <td><input id="Button1" type="button" value="1" onclick="input('1')" /></td>
+                    <td><input id="Button2" type="button" value="2" onclick="input('2')" /></td>
+                    <td><input id="Button3" type="button" value="3" onclick="input('3')" /></td>
+                    <td rowspan="3">
+                        <input id="folioAddSave" type="button" value="确定" style="height:100%;color:#fff;background:#f55858" onclick="addPayment()" />
+                    </td>
+                </tr>
+                <tr>
+                    <td><input id="Button4" type="button" value="4" onclick="input('4')" /></td>
+                    <td><input id="Button5" type="button" value="5" onclick="input('5')" /></td>
+                    <td><input id="Button6" type="button" value="6" onclick="input('6')" /></td>
+                </tr>
+                <tr>
+                    <td><input id="Button7" type="button" value="7" onclick="input('7')" /></td>
+                    <td><input id="Button8" type="button" value="8" onclick="input('8')" /></td>
+                    <td><input id="Button9" type="button" value="9" onclick="input('9')" /></td>
+                </tr>
+                <tr>
+                    <td><input id="Button10" type="button" value="." onclick="input('.')" /></td>
+                    <td><input id="Button11" type="button" value="0" onclick="input('0')" /></td>
+                    <td><input id="Button12" type="button" value="←" onclick="input('←')" /></td>
+                    <td><input id="Button13" type="button" value="退出" onclick="exitPayment()" style="color:#fff;background: #00bf7e;" /></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+        itemPageing();
+    });
+
+    function onResize() {
+    }
+
+    //得到光标最后停留的位置
+    var inputId = "txtMoneyPayment";
+    $("#txtAcbillno").focus(function () {
+        inputId = 'txtAcbillno';
+    });
+    $("#txtMoneyPayment").focus(function () {
+        inputId = 'txtMoneyPayment';
+    });
+    var reg = new RegExp("^[0-9]+([.]{1}[0-9]{1,2})?$");
+    //分页
+    function itemPageing() {
+        var index = parseInt($("#pageIndexPayment").val());
+        var total = parseInt($("#pageTotalPayment").val());
+        var size = parseInt($("#pageSizePayment").val());
+        var number = (total % size) > 0 ? parseInt(total / size) + 1 : parseInt(total / size);
+
+        if (index < number) {
+            index += 1;
+            $("#pageIndexPayment").val(index);
+            var model = {
+                Billid: $("#billidPayment").val(),
+                PageIndex: $("#pageIndexPayment").val(),
+                PageSize: $("#pageSizePayment").val()
+            };
+            queryPayment(model);
+        } else {
+            $("#pageIndexPayment").val(1);
+            var model = {
+                Billid: $("#billidPayment").val(),
+                PageIndex: $("#pageIndexPayment").val(),
+                PageSize: $("#pageSizePayment").val()
+            };
+            queryPayment(model);
+        }
+    }
+
+    //查询付款方式
+    function queryPayment(model) {
+        $.ajax({
+            url: '@Url.Action("_PaymentMethod", "Shared")',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#pageIndexPayment").val(model.PageIndex);
+                $(".mainBottom-payMethod").html(data);
+                getPaymentMethodTotal(model);
+                if (model.Billid != null)
+                {
+                    getPaymentTotal(model);
+                }
+                $("#selItemid").trigger("input");//翻页的时候根据选择的付款方式计算合计金额
+                var itemidPayment = $("#itemidPayment").val();
+                if (itemidPayment != "") {
+                    var inputs = $(".mainBottom-payMethod input:not(:last-child)");
+                    inputs.each(function () {
+                        if ($(this).attr("data-id") == itemidPayment) {
+                            $(".mainBottom-payMethod input:not(:last-child)").css({ "color": "" });
+                            $(".mainBottom-payMethod input:not(:last-child)").attr("data-checked", false);
+
+                            $(this).attr("data-checked", true);
+                            $(this).css({ "color": "yellow" });
+                        }
+                    })
+                }
+                else {
+                    selectPayment($(".mainBottom-payMethod input:not(:last-child)").first());
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示", skin: 'err' });
+            }
+        });
+    }
+
+    //获取付款方式总数
+    function getPaymentMethodTotal(model) {
+        $.ajax({
+            url: '@Url.Action("GetPaymentMethodTotal", "PosCashier")',
+            type: "post",
+            data: model,
+            dataType: "text",
+            success: function (data) {
+                $("#pageTotalPayment").val(data);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示", skin: 'err'});
+            }
+        });
+    }
+
+    //选择付款方式
+    function selectPayment(obj) {
+        $("#itemidPayment").val($(obj).attr("data-id"));
+
+        $(".mainBottom-payMethod input:not(:last-child)").css({ "background": "", "color": "" });
+        $(".mainBottom-payMethod input:not(:last-child)").attr("data-checked", false);
+
+        $(obj).attr("data-checked", true);
+        $(obj).css({ "color": "yellow" });
+
+        var dropdownlist = $("#selItemid").data("kendoDropDownList");
+        dropdownlist.value($(obj).attr("data-id"));
+        $("#selItemid").trigger("input");
+        $("#paytype").val($(obj).attr("data-paytype"));
+    }
+
+    //添加付款
+    function addPayment() {
+        if ($("#txtMoneyPayment").val() == 0) {
+            let giveCount = 0;  //赠送菜的数量
+            let cancelCount = 0;    //取消菜的数量
+            var grid = $("#grid").data("kendoGrid");
+            if (grid == null) {
+                grid = $("#gridBillDetail").data("kendoGrid");
+            }
+            var itemRows = grid.items();
+            if (itemRows.length == 0) {
+                CancelAllItemByNum("买单取消");    //整单取消
+            }
+            else if (itemRows.length > 0) {
+                if (parseFloat($("#unPaid").text())<=0) {
+                    payBill();  //买单
+                }
+
+                //for (var i = 0; i < itemRows.length; i++) {
+                //    var row = itemRows[i];
+                //    var data = grid.dataItem(row);
+                //    if (data["Status"] == 2) {
+                //        giveCount += 1;
+
+                //    }
+                //    if (data["Status"] == 51 || data["Status"] == 52) {
+                //        cancelCount += 1;
+                //    }
+                //}
+
+                //if (giveCount > 0) {
+                //    payBill();  //买单
+                //}
+                //else if (cancelCount > 0) {
+                //    CancelAllItemByNum("买单取消");    //整单取消
+                //}
+            }
+
+            return false;
+        }
+        else if ($("#txtMoneyPayment").val() < 0 && $("#txtCashMemo").val() == "") {
+            layer.alert("负数买单需要填写收银备注", { title: "快点云Pos提示", skin: 'err' });
+            return false;
+        }
+
+        payBill();
+    }
+
+    function CancelAllItemByNum(obj) {
+        var model;
+        //是字符串
+        if (typeof (obj) == 'string') {
+            model = {
+                billId: $("#billidPayment").val(),
+                canReason: obj,
+                isreuse: "false"
+            }
+        }
+        else {
+            model = {
+                billId: $("#billidPayment").val(),
+                canReason: $(obj).attr("data-name"),
+                isreuse: $(obj).attr("data-isreuse")
+            }
+        }
+        $.ajax({
+            url: '/PosInSingle/CancelAllItemByNum',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    queryBillList();
+                    layer.closeAll();
+
+                }
+                else {
+                    layer.alert(data.Data, { title: "快点云Pos提示", skin: 'err' });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示", skin: 'err' });
+            }
+        });
+    }
+
+    var countDown = 60;
+    var setTimer = null;
+    function setTime() {
+        if (countDown == 0) {
+            enableSubmit();
+            return;
+        } else{
+            $("#folioAddSave").css({ "background-color": "#ffaaaa" });
+            $("#folioAddSave").attr("disabled", true);
+            $("#folioAddSave").val("确定(" + countDown + ")");
+            countDown--;
+        }
+
+        if ($("#folioAddSave").prop("disabled") == true) {
+            setTimer = setTimeout(function () {
+                setTime();
+            }, 1000);
+        }
+    } ;
+
+    function enableSubmit() {
+        $("#folioAddSave").css({ "background-color": "#f55858" });
+        $("#folioAddSave").removeAttr("disabled");
+        $("#folioAddSave").val("确定");
+        window.clearInterval(setTimer);
+        countDown = 60;
+    }
+
+
+    function isNumber(val) {
+
+        var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+        var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+        if (regPos.test(val) || regNeg.test(val)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    function payBillFrom()
+    {
+         //保存外部支付信息
+        var _CttName = {};
+        _CttName.MbrCardNo = ($("#folioMbrCardNo").val() == undefined ? "" : $("#folioMbrCardNo").val()); //卡号
+        _CttName.GuestCName = ($("#txtGuestCName").val() == undefined ? "" : $("#txtGuestCName").val());  //会员名称
+        _CttName.CorpAutoComplete = ($("#folioCorpAutoComplete").val() == undefined ? "" : $("#folioCorpAutoComplete").val());//合约单位名称
+        _CttName.CorpSignPerson = ($("#folioCorpSignPerson").val() == undefined ? "" : $("#folioCorpSignPerson").val());//签单人
+        _CttName.roomNo = ($("#roomNo").val() == undefined ? "" : $("#roomNo").val()); //房号
+        _CttName.labelRoom = ($("#labelRoom").val() == undefined ? "" : $("#labelRoom").val());//客人名称
+
+        if (isNumber($("#lblBalance").text())) {
+            _CttName.lblBalance = $("#lblBalance").text();  //当前余额，注意要减掉
+        }
+        else {
+            _CttName.lblBalance = 0;
+        }
+
+
+        if ($("#folioCorpSignPerson").val() != "")
+        {
+
+            var model = {
+                Amount: $("#txtMoneyPayment").val(),
+                MBillid: $("#mBillidPayment").val(),
+                Billid: $("#billidPayment").val(),
+                Itemid: $("#itemidPayment").val(),
+                Acbillno: $("#txtAcbillno").val(),
+                ProfileId: $("#lblProfileId").val(),
+                Sign: $("#folioCorpSignPerson").val(),
+                TailDifference: $("#tailDifferencePayment").val(),
+                RoomNo:$("#roomNo").val(),
+                MbrCardNo: $("#folioMbrCardNo").val(),
+                PayBody: "买单",
+                PayItemId: $("#itemidPayment").val(),
+                FolioItemAction: $("#actionValue").val(),
+                FolioAmount: $("#txtMoneyPayment").val(),
+                CashMemo: $("#txtCashMemo").val(),   //收银备注
+                CttName: JSON.stringify(_CttName)
+            };
+        }
+        else
+        {
+            var model = {
+                Amount: $("#txtMoneyPayment").val(),
+                MBillid: $("#mBillidPayment").val(),
+                Billid: $("#billidPayment").val(),
+                Itemid: $("#itemidPayment").val(),
+                Acbillno: $("#txtAcbillno").val(),
+                ProfileId: $("#lblProfileId").val(),
+                Sign: $("#folioCorpSignPersonSelect").data("kendoDropDownList").value(),
+                TailDifference: $("#tailDifferencePayment").val(),
+                RoomNo: $("#roomNo").val(),
+                MbrCardNo: $("#folioMbrCardNo").val(),
+                PayBody: "买单",
+                PayItemId: $("#itemidPayment").val(),
+                FolioItemAction: $("#actionValue").val(),
+                FolioAmount: $("#txtMoneyPayment").val(),
+                CashMemo: $("#txtCashMemo").val(),  //收银备注
+                CttName: JSON.stringify(_CttName)
+            };
+        }
+
+        var actionValue = $("#actionValue").val();
+
+        //检查支付处理方式检验是否成功
+        if (actionValue != "") {
+            var payAction = createPayByAction(actionValue);
+            var beforeFuncResult = true;
+
+            if (payAction) {
+                try {
+                    beforeFuncResult = payAction.PayCheck();
+                } catch (e) { }
+            }
+
+            if (!beforeFuncResult) {
+                enableSubmit(); //启用按钮
+                return;//如果方法返回false，则不继续保存
+            }
+            //设置处理方式提交到后台的参数
+            try {
+                payAction.PaySetPara(model);
+            } catch (e) { }
+        }
+
+        $("#folioAddSave").attr("disabled", true);  //禁用按钮
+        $("#folioAddSave").css({ "background-color": "#ffaaaa" });
+
+        model.sendindex = Math.ceil(Math.random() * 100000);
+
+        $.ajax({
+            url: '@Url.Action("AddPayment", "PosCashier")',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (data) {
+
+                printMcard(model);
+               
+                if (data.Success) {
+                    //如果是待支付，并且有返回回调函数，则调用回调函数进行处理
+                    if (data.Data.Statu == "WaitPay" && data.Data.Callback != "" && actionValue != "") {
+                        data.Data.Callback = function () {
+                            enableSubmit(); //启用按钮
+                            getPaymentTotal(model);
+                            @Html.Raw(Model.Callback)
+                            layer.closeAll();
+                        };
+                        var payAction = createPayByAction(actionValue);
+                        try {
+
+                            payAction.PayAfterSave(data);
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    } else {
+                        enableSubmit(); //启用按钮
+                        $("#gridPayment").data("kendoGrid").dataSource.read();
+                        setTimeout(function () {
+                            if (parseFloat($("#txtMoneyPayment").val()) <= 0 || parseFloat($("#isSuccess").val()) == 1) {
+                                layer.alert('买单成功！', {
+                                    time: 0 //不自动关闭
+                                    , title: "快点云Pos提示"
+                                    , btn: ['确定']
+                                    , yes: function (index) {
+                                        @Html.Raw(Model.Callback)
+                                        layer.closeAll();
+                                    }
+                                    , skin:"err"
+                                });
+                            }
+
+
+                        }, 500);
+                    }
+                } else if (data.ErrorCode == 1) {
+                    enableSubmit(); //启用按钮
+                    $("#gridPayment").data("kendoGrid").dataSource.read();
+                } else if (data.ErrorCode == 2) {
+                    //如果是待支付，并且有返回回调函数，则调用回调函数进行处理
+                    if (data.Data.Statu == "WaitPay" && data.Data.Callback !== "" && actionValue) {
+                        data.Data.Callback = function () {
+                            enableSubmit(); //启用按钮
+                            @Html.Raw(Model.Callback)
+                            
+                        };
+                        
+                        var payAction = createPayByAction(actionValue);
+                        try {
+                            payAction.PayAfterSave(data);
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    } else {
+                        enableSubmit(); //启用按钮
+                        $("#gridPayment").data("kendoGrid").dataSource.read();
+                        setTimeout(function () {
+                            if (parseFloat($("#txtMoneyPayment").val()) <= 0 || parseFloat($("#isSuccess").val()) == 1) {
+                                layer.alert('买单成功！', {
+                                    time: 0 //不自动关闭
+                                    , title: "快点云Pos提示"
+                                    , btn: ['确定']
+                                    , yes: function (index) {
+                                        @Html.Raw(Model.Callback)
+                                        layer.closeAll();
+                                    }
+                                });
+                            }
+                        }, 500);
+                    }
+                }
+                else {
+                    enableSubmit(); //启用按钮
+                    layer.alert(data.Data, { title: "快点云Pos提示", skin: 'err'  });
+                }
+            },
+            error: function (data) {
+                enableSubmit(); //启用按钮
+                layer.alert(data.responseText, { title: "快点云Pos提示", skin: 'err'  });
+            }
+        });
+    }
+
+    function payBill() {
+        setTime();
+        var total=$("#total").html();   //总金额
+        var paid = $("#paid").html(); //已付金额
+        if (parseFloat(paid) >= parseFloat(total) && total > 0) {
+            enableSubmit(); //启用按钮
+            layer.alert('买单失败，已买单', { title: "快点云Pos提示", skin: 'err' });
+            return false;
+        }
+        //挂账处理
+        if ($("#paytype").val() == "corp") {
+            if ($("#folioCorpSignPerson").val() == "" && $("#folioCorpSignPersonSelect").data("kendoDropDownList").value() == "") {
+                enableSubmit(); //启用按钮
+                layer.alert('请指定签单人', { title: "快点云Pos提示", skin: 'err' });
+                return false;
+            }
+            else {
+
+                if ($("#PosCompanyQuota").val() == "0") { //不允许挂账合约单位超限额处理
+                    if (parseFloat($("#lblBalance").text()) < parseFloat($("#txtMoneyPayment").val())) {
+                        enableSubmit(); //启用按钮
+                        layer.alert('不允许挂账合约单位超限额', { title: "快点云Pos提示", skin: 'err' });
+                        return false;
+                    }
+                    else {
+                        payBillFrom();
+                    }
+
+                }
+                else if ($("#PosCompanyQuota").val() == "1") { //提示挂账合约单位超限额处理
+                    if (parseFloat($("#lblBalance").text()) < parseFloat($("#txtMoneyPayment").val())) {
+                        var conIndex = layer.confirm("该合约单位剩余额度不足，是否继续", {
+                            btn: ['继续', '取消'] //按钮
+                            , title: '快点云Pos提示'
+                            , shade: 'rgba(0,0,0,0)'
+                        }, function () {
+
+                            payBillFrom();
+                            return false;
+                        }, function () {
+                            enableSubmit(); //启用按钮
+                            layer.close(conIndex);
+                            return false;
+                        });
+                    }
+                    else {
+                        payBillFrom();
+                    }
+
+                }
+                else {
+                    payBillFrom();
+                }
+                return false;
+
+            }
+        }
+        else {
+            payBillFrom();
+        }
+       
+        
+    }
+
+
+
+    //打印会员付款单
+    function printMcard(model) {
+        //打印会员结账单
+        var cookie = $.cookie("McardPayInfo" + model.MBillid + model.sendindex);
+       // console.log(cookie);
+        if (cookie != null) {
+            var data = $.parseJSON(cookie);
+            $.cookie("McardPayInfo" + model.MBillid + model.sendindex, null, { expires: -1, path: '/' });
+          //  console.log($.cookie("McardPayInfo" + model.MBillid + model.sendindex));
+             var model = {
+                    ReportCode: "McardPayBillDetailPrint",
+            ProcedureName: "up_pos_PosMemberCardPrint",
+                 ParameterValues: "@@mbillid=" + model.MBillid + "&@@detailid=" + data["detailid"] + "&@@mcardtype=" + data["mcardtype"] + "&@@oldBaseAmtBalance=" + data["oldBaseAmtBalance"] + "&@@oldIncamount=" + data["oldIncamount"] + "&@@BaseAmtBalance=" + data["BaseAmtBalance"] + "&@@Incamount=" + data["Incamount"] + "",
+                    IsOpenSearchWindow: false,
+                    ChineseName: "会员付款单",
+                    StyleName: ""
+                };
+            $.post('@Html.Raw(Url.Action("AddMardQueryParaTemp", "PosCashier",new { print = 1,Flag="A" }))', model, function (result) {
+                if (result.Success) {
+                    $("#McardprintFrame").attr("src", result.Data);
+                } else {
+                    layer.alert(result.Data);
+                }
+            }, 'json');
+        }
+    }
+
+    //删除付款方式
+    function deletePayment(obj) {
+        //询问框
+        layer.confirm('确认要删除当前选中的付款方式？', {
+            btn: ['确认', '取消'] //按钮
+            , title: "快点云Pos提示"
+        }, function () {
+            var grid = $("#gridPayment").data("kendoGrid");
+            var data = grid.dataItem($(obj).parents("tr"));
+            $.post('@Url.Action("PayWayIsRepay", "PosReverseCheckout", new { rnd = new Random().NextDouble() })', { id: data["Id"] }, function (data1) {
+                 if (data1.Success) {
+                      $.post('@Url.Action("DeletePayment", "PosCashier",new { rnd = new Random().NextDouble() })', { id: data["Id"] }, function (data) {
+                        if (data.Success) {
+                            var model = {
+                                Billid: $("#billidPayment").val()
+                            };
+                            layer.closeAll('dialog');
+                            grid.dataSource.read();
+                        } else {
+                            layer.alert(data.Data, { title: "快点云Pos提示", skin: 'err'  });
+                        }
+                    }, 'json');
+
+                 } else {
+                     layer.alert(data1.Data, { title: "快点云Pos提示", skin: 'err'  });
+                 }
+             }, 'json');
+
+        }, function () {
+            layer.closeAll('dialog');
+        });
+    }
+
+    //找赎金额计算
+    function smallChange() {
+        $(".smallChange").val("");
+
+        if ($("#isChange").val() == "True") {
+            if ($("#txtMoneyPayment").val() != "") {
+                var reg = /^\d+(\.\d{1,2})?%?$/;
+                if (!reg.test($("#txtMoneyPayment").val())) {
+                    $("#txtMoneyPayment").val(0);
+                }
+                if (parseFloat($("#txtMoneyPayment").val()) == parseFloat($("#exchangeRate").text())) {
+                    var result = (parseFloat($("#txtMoneyPayment").val()) - parseFloat($("#unPaid").text())).toFixed(@ViewBag.IDecPlace);
+                    if (result > 0) {
+                        $(".smallChange").val(result);
+                    }
+                }
+                else {
+                    var result = (parseFloat($("#txtMoneyPayment").val()) - parseFloat($("#exchangeRate").text())).toFixed(@ViewBag.IDecPlace);
+                    if (result > 0) {
+                        $(".smallChange").val(result);
+                    }
+                }
+            }
+        }
+        else if (parseFloat($("#txtMoneyPayment").val()) > parseFloat($("#unPaid").text())) {
+            $("#txtMoneyPayment").val($("#unPaid").text());
+        }
+    }
+
+    //获取房账信息
+    function getRommInfo(obj, action)
+    {
+        var event = arguments.callee.caller.arguments[0] || window.event;// 消除浏览器差异
+        if (event.keyCode == 13 || action == 1) {
+            if ($(obj).val() == "") {
+                layer.alert("请输入房号", { title: "快点云Pos提示", skin: 'err' });
+                return false;
+            }
+            $.ajax({
+                url: '@Url.Action("GetRoomAccount", "Shared")',
+                type: "post",
+                data: { roomNo: $(obj).val() },
+                dataType: "json",
+                success: function (data) {
+                    if (data.Success) {
+                        var json = JSON.parse(data.Data);
+                        $("#lblArrDate").text(json.ArrDate);
+                        $("#lblBalance").text(json.Balance);
+                        $("#lblApprovalAmt").text(json.ApprovalAmt);
+                        $("#lblApprovalAdj").text(json.ApprovalAdj);
+                        $("#lblLimitAmount").text(json.LimitAmount);
+                        $("#lblPayment").text(json.Payment);
+                        $("#lblChargeamt").text(json.Chargeamt);
+                        $("#lblExcutiveRate").text(json.ExcutiveRate);
+                        $("#lblEnableAmount").text(json.EnableAmount);
+                        $("#lblRemark").text(json.Remark);
+                        $("#lblCashRemark").text(json.CashRemark);
+                        $("#labelRoom").val(json.GuestCname);
+                        if (json.ApprovalAmt != undefined && json.ApprovalAdj != undefined)
+                        {
+                            $("#lblAvailableBalance").text((json.ApprovalAmt) + (json.ApprovalAdj));
+                        }
+                    }
+                    else
+                    {
+                        layer.alert(data.Data, { title: "快点云Pos提示", skin: 'err'});
+                    }
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示", skin: 'err' });
+                }
+            });
+        }
+    }
+
+    //获取会员卡信息
+    function getMbrCard(obj, action)
+    {
+        var event = arguments.callee.caller.arguments[0] || window.event;// 消除浏览器差异
+        if (event.keyCode == 13 || action == 1) {
+            if ($(obj).val() == "") {
+                layer.alert("请输入会员卡或手机号", { title: "快点云Pos提示", skin: 'err'});
+                return false;
+            }
+
+            $.ajax({
+                url: '@Url.Action("GetMbrCard", "Shared")',
+                type: "post",
+                data: { mbrCardNo: $(obj).val() },
+                dataType: "json",
+                success: function (data) {
+                    if (data.Success) {
+                        var json = JSON.parse(data.Data);
+                        $("#lblProfileId").val(json.ProfileId);
+                        $("#txtGuestCName").val(json.GuestCName);
+                        $("#lblBalance").text(json.Balance);
+                        $("#lblMbrCardTypeName").text(json.MbrCardTypeName);
+                        $("#lblStatus").text(json.Status);
+                        $("#lblGuestType").text(json.GuestType);
+                        $("#lblMbrExpired").text(json.MbrExpired);
+                        $("#lblGuestCName").text(json.GuestCName);
+                        $("#lblContactor").text(json.Contactor);
+                        $("#lblGender").text(json.Gender);
+                        $("#lblBirthday").text(json.Birthday);
+                        $("#lblValidScore").text(json.ValidScore);
+                        $("#lblTotalUsedBalance").text(json.TotalUsedBalance);
+                        $("#lblBaseAmtBalance").text(json.BaseAmtBalance);
+                        $("#lblIncamount").text(json.Incamount);
+                        $("#lblMarket").text(json.Market);
+                        $("#lblMbrCardTypeName").text(json.MbrCardTypeName);
+                        $("#lblCompanyName").text(json.CompanyName);
+                        $("#lblTimes").text(json.Times);
+                    }
+                    else {
+                        layer.alert(data.Data, { title: "快点云Pos提示", skin: 'err' });
+                    }
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示", skin: 'err' });
+                }
+            });
+        }
+    }
+
+    //获取合约单位信息信息
+    function getContractUnit(obj, action) {
+        var event = arguments.callee.caller.arguments[0] || window.event;// 消除浏览器差异
+        if (event.keyCode == 13 || action == 1) {
+            if ($(obj).val() == "") {
+                $("#lblProfileId").val("");
+                $("#labelSigner").val("");
+                $("#lblContactor").text("");
+                $("#lblTel").text("");
+                $("#lblCttno").text("");
+                $("#lblSales").text("");
+                $("#lblMbrexpired").text("");
+                $("#lblBalance").text("");
+                $("#lblCreditlevel").text("");
+                $("#lblApprovalAmt").text("");
+                $("#lblRemark").text("");
+                return false;
+            }
+            else {
+                $.ajax({
+                    url: '@Url.Action("GetContractUnit", "Shared")',
+                    type: "post",
+                    data: { cttName: $(obj).val() },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.Success) {
+                            var json = JSON.parse(data.Data);
+
+                            $("#lblProfileId").val(json.ProfileId);
+                            $("#labelSigner").val(json.Signer);
+                            $("#lblContactor").text(json.Contactor);
+                            $("#lblTel").text(json.Tel);
+                            $("#lblCttno").text(json.Cttno);
+                            $("#lblSales").text(json.Sales);
+                            $("#lblMbrexpired").text(json.Mbrexpired);
+                            $("#lblBalance").text(json.Balance);
+                            $("#lblCreditlevel").text(json.Creditlevel);
+                            $("#lblApprovalAmt").text(json.ApprovalAmt);
+                            $("#lblRemark").text(json.Remark);
+
+                            $("#cttName").val(json.CttName);
+                        }
+                        else {
+                            layer.alert(data.Data, { title: "快点云Pos提示" });
+                        }
+                    },
+                    error: function (data) {
+                        layer.alert(data.responseText, { title: "快点云Pos提示" });
+                    }
+                });
+            }
+        }
+    }
+
+    //输入
+    function input(value) {
+        var val = $("#" + inputId).val();
+        if (value.indexOf("←") == -1) {
+            $("#" + inputId).val(val + value);
+        }
+        else if (value.indexOf("←") > -1) {
+            $("#" + inputId).val(val.replace(/.$/, ''));
+        }
+        //判断小数点出现的次数.出现多次则输入不合法
+        val = $("#" + inputId).val();
+        var valarr = (val.split('.')).length - 1;
+        if (valarr>1) {
+            $("#" + inputId).val(0);
+        }
+
+        smallChange();
+    }
+
+    //找赎
+    function fastInput(obj) {
+        if (inputId == "txtMoneyPayment") {
+            var val = $("#" + inputId).val($(obj).val());
+            smallChange();
+        }
+        else {
+            var val = $("#" + inputId).val();
+            $("#" + inputId).val(val + $(obj).val());
+        }
+    }
+
+    function setAmount() {
+        if ($("#isChange").val() == "False") {
+            if (parseFloat($("#txtMoneyPayment").val()) > parseFloat($("#unPaid").text())) {
+                $("#txtMoneyPayment").val($("#unPaid").text());
+            }
+        }
+    }
+
+    //退出
+    function exitPayment() {
+        if (parseFloat($("#txtMoneyPayment").val()) > 0) {
+            layer.confirm('当前并未买单成功，确定退出？', {
+                btn: ['确认', '取消'] //按钮
+                , title: "快点云Pos提示"
+            }, function () {
+
+                //清除支付结果查询定时器
+                for (var i = 0; i < queryInterval.length; i++) {
+                    window.clearInterval(queryInterval[i]);
+                }
+
+                layer.closeAll();
+            }, function () {
+                layer.closeAll('dialog');
+            });
+        }
+        else {
+            layer.closeAll();
+        }
+    }
+</script>

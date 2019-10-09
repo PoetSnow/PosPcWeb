@@ -1,0 +1,108 @@
+﻿@using Kendo.Mvc.UI
+@model Gemstar.BSPMS.Hotel.Web.Areas.Percentages.Models.OperatorPolicy.OperatorPolicyAddViewModel
+@using (Html.BeginForm())
+{
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.AmountSource)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.AmountSource).HtmlAttributes(new { style = " width:100%;" }).DataTextField("Text").DataValueField("Value").DataSource(e => e.Read(r => { r.Action("ListItemsForSource", "OperatorPolicy", new { area = "Percentages", rnd = new Random().NextDouble() }); }))
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.AmountSource, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.AmountSumType)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.AmountSumType).HtmlAttributes(new { style = " width:100%;" }).DataTextField("Text").DataValueField("Value").DataSource(e => e.Read(r => { r.Action("ListItemsForAmountSumType", "OperatorPolicy", new { area = "Percentages", rnd = new Random().NextDouble() }); }))
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.AmountSumType, "*")</td>
+        </tr>
+        <tr class="Tr_OperatorPolicy_IsInPlan">
+            <td class="textright" style="height:30px;">@Html.LabelFor(m => m.IsInPlan)</td>
+            <td>
+                @(Html.Kendo().RadioButton().Name("IsInPlan").Label("计划内").Value("true").Checked(true))&nbsp;&nbsp;@(Html.Kendo().RadioButton().Name("IsInPlan").Label("计划外").Value("false"))
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.IsInPlan, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.AmountBegin)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.AmountBegin).Min(1).Format("n0").Decimals(0).Value(1).HtmlAttributes(new { style = " width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.AmountBegin, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.AmountEnd)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.AmountEnd).Min(1).Format("n0").Decimals(0).Value(1).HtmlAttributes(new { style = " width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.AmountEnd, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright" style="height:30px;">@Html.LabelFor(m => m.IsAllAmount)</td>
+            <td>
+                @(Html.Kendo().RadioButton().Name("IsAllAmount").Label("全额").Value("true").Checked(true))&nbsp;&nbsp;@(Html.Kendo().RadioButton().Name("IsAllAmount").Label("阶梯").Value("false"))
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.IsAllAmount, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.CalcType)</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.CalcType).HtmlAttributes(new { style = " width:100%;" }).DataTextField("Text").DataValueField("Value").DataSource(e => e.Read(r => { r.Action("ListItemsForCalcType", "OperatorPolicy", new { area = "Percentages", rnd = new Random().NextDouble() }); }))
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.CalcType, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.CalcValue)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.CalcValue).Min(0).Value(0).Format("p0").HtmlAttributes(new { style = " width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.CalcValue, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.PolicyDesciption)</td>
+            <td>@Html.TextAreaFor(m => m.PolicyDesciption, new { style = " width:100%;", @class = "k-textbox" })</td>
+            <td>@Html.ValidationMessageFor(m => m.PolicyDesciption, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+
+        //金额计算类型
+        function AmountSumTypeChange(value) {//金额计算类型：single:单次，month:按月累计
+            var obj = $(".Tr_OperatorPolicy_IsInPlan");
+            if (value == "single") {
+                obj.css("display", "none");
+            }
+            else {
+                obj.css("display", "table-row");
+            }
+        }
+        $("#AmountSumType").data("kendoDropDownList").bind("change", function (e) { AmountSumTypeChange(this.value()); });
+
+        //提成计算类型
+        function CalcTypeChange(value) {//提成计算类型：percent:比例，price:单价，amount:固定金额
+            var calcValue = $("#CalcValue").data("kendoNumericTextBox");
+            if (calcValue) {
+                if (value == "percent") {
+                    calcValue.options.format = "p0";
+                } else {
+                    calcValue.options.format = "n";
+                }
+                calcValue.focus();
+                $("#CalcType").data("kendoDropDownList").focus();
+            }
+        }
+        $("#CalcType").data("kendoDropDownList").bind("change", function (e) { CalcTypeChange(this.value()); });
+
+    });
+</script>

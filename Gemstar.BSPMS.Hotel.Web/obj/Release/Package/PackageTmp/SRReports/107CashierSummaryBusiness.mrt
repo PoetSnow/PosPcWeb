@@ -1,0 +1,429 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StiSerializer version="1.02" type="Net" application="StiReport">
+  <Dictionary Ref="1" type="Dictionary" isKey="true">
+    <BusinessObjects isList="true" count="0" />
+    <Databases isList="true" count="1">
+      <pos Ref="2" type="Stimulsoft.Report.Dictionary.StiSqlDatabase" isKey="true">
+        <Alias>pos</Alias>
+        <ConnectionStringEncrypted>1HD168ZoMZzjaaXcaoQkTtFS2StOXMOJYUWl3GIN40vkbGWD50DzyOJB/eBhhGhO1cJzwsUFMZnCE13g5ARlbsJsT8vEXbvtQxD18WENoC/RYFPPxExpmWFJGYDqJbduxXjJKU8FsqTCFb306kwpP8PuyyvNTTFN6UQh7OsYsWvcavWIxU8=</ConnectionStringEncrypted>
+        <Name>pos</Name>
+      </pos>
+    </Databases>
+    <DataSources isList="true" count="1">
+      <up_pos_rpt_CashierSummaryBusiness Ref="3" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
+        <Alias>up_pos_rpt_CashierSummaryBusiness</Alias>
+        <Columns isList="true" count="4">
+          <value>营业日,System.String</value>
+          <value>项目名称,System.String</value>
+          <value>金额,System.Decimal</value>
+          <value>类型,System.String</value>
+        </Columns>
+        <CommandTimeout>30</CommandTimeout>
+        <Dictionary isRef="1" />
+        <IsCloud>False</IsCloud>
+        <Name>up_pos_rpt_CashierSummaryBusiness</Name>
+        <NameInSource>pos</NameInSource>
+        <Parameters isList="true" count="0" />
+        <SqlCommand>exec  up_pos_rpt_CashierSummaryBusiness '000388','2','2019-03-07','2019-03-07'</SqlCommand>
+      </up_pos_rpt_CashierSummaryBusiness>
+    </DataSources>
+    <Relations isList="true" count="0" />
+    <Report isRef="0" />
+    <Variables isList="true" count="10">
+      <value>,QueryCondition,查询条件,System.String,,False,False</value>
+      <value>,HotelId,HotelId,System.String,_x0030_00629,False,False</value>
+      <value>,HotelName,HotelName,System.String,云POS酒店,False,False</value>
+      <value>,UserCode,UserCode,System.String,admin,False,False</value>
+      <value>,UserName,UserName,System.String,系统管理员,False,False</value>
+      <value>,LogoUrl,LogoUrl,System.Object,,False,False</value>
+      <value>,WeiXinQRCodeUrl,WeiXinQRCodeUrl,System.String,,False,False</value>
+      <value>,ReportCode,ReportCode,System.String,pms203,False,False</value>
+      <value>,HotelPhone,HotelPhone,System.String,_x0031_3725559082,False,False</value>
+      <value>,HotelAddress,HotelAddress,System.String,,False,False</value>
+    </Variables>
+  </Dictionary>
+  <EngineVersion>EngineV2</EngineVersion>
+  <GlobalizationStrings isList="true" count="0" />
+  <MetaTags isList="true" count="0" />
+  <Pages isList="true" count="1">
+    <Page1 Ref="4" type="Page" isKey="true">
+      <Border>None;Black;2;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <Components isList="true" count="2">
+        <PageHeaderBand1 Ref="5" type="PageHeaderBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,0.4,33,2.8</ClientRectangle>
+          <Components isList="true" count="7">
+            <rptTitle Ref="6" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6.2,0.8,6.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,14,Bold</Font>
+              <Guid>e5ea2ace4897408e9c223194da47a457</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>rptTitle</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{ReportName}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>SystemVariables</Type>
+              <VertAlignment>Center</VertAlignment>
+            </rptTitle>
+            <Text1 Ref="7" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0,2.2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,12</Font>
+              <Guid>76ef4f3cb5594416845792a0a1c456b9</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text1</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{ReportCode}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text1>
+            <Text49 Ref="8" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>3.6,0,11.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,12</Font>
+              <Guid>241634655bbf47e3a18ebe630e4acc7c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text49</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{HotelName}</Text>
+              <TextBrush>Black</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Text49>
+            <Text50 Ref="9" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0.8,3.8,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>f82fb9ca35014cb6a251b29dc59f1e8c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text50</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>打印人：{UserName}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text50>
+            <Text51 Ref="10" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>0,2.2,23,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>8adb30ed1dc64aa8a51869195c20ccbd</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text51</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{QueryCondition}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <VertAlignment>Center</VertAlignment>
+            </Text51>
+            <Text3 Ref="11" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>19.8,0,3.2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>d53815e7369a421ea5e40c98cd23558c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text3</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{PageNofM}</Text>
+              <TextBrush>Black</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Text3>
+            <Text52 Ref="12" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>18,1,5,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>7b076d24d456430d968920a1b7690b1c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text52</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>打印时间：{Format("{0:yyyy-MM-dd HH:mm}", Time)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text52>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Guid>7be5f959a97e4e8ebf559560ae5ec25b</Guid>
+          <Name>PageHeaderBand1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </PageHeaderBand1>
+        <CrossTab1 Ref="13" type="Stimulsoft.Report.CrossTab.StiCrossTab" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,3.6,28,4</ClientRectangle>
+          <Components isList="true" count="10">
+            <CrossTab1_RowTotal1 Ref="14" type="CrossRowTotal" isKey="true">
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>[255:255:255]</Brush>
+              <ClientRectangle>0,3.1,5,0.4</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8</Font>
+              <Guid>f1d4af77c8834da4ba3785aeb1dbfa0d</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>CrossTab1_RowTotal1</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>合计</Text>
+              <TextBrush>Black</TextBrush>
+            </CrossTab1_RowTotal1>
+            <CrossTab1_Row1_Title Ref="15" type="CrossTitle" isKey="true">
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>0,0.45,2,1</ClientRectangle>
+              <Font>Arial,8</Font>
+              <Guid>6c6ad6d35b2343a08fe4e1afeb773836</Guid>
+              <Margins>0,0,0,0</Margins>
+              <MaxSize>2,1</MaxSize>
+              <MinSize>2,1</MinSize>
+              <Name>CrossTab1_Row1_Title</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>营业日</Text>
+              <TextBrush>[105:105:105]</TextBrush>
+              <TypeOfComponent>Row:CrossTab1_Row1</TypeOfComponent>
+            </CrossTab1_Row1_Title>
+            <CrossTab1_ColTotal2 Ref="16" type="CrossColumnTotal" isKey="true">
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>[255:255:255]</Brush>
+              <ClientRectangle>7.05,1.05,0.8,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8</Font>
+              <Guid>08e46631fb6d4238ab9d5dbd3f658050</Guid>
+              <Margins>0,0,0,0</Margins>
+              <MinSize>0,0.6</MinSize>
+              <Name>CrossTab1_ColTotal2</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>合计</Text>
+              <TextBrush>Black</TextBrush>
+            </CrossTab1_ColTotal2>
+            <CrossTab1_LeftTitle Ref="17" type="CrossTitle" isKey="true">
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>0,0,5,0.4</ClientRectangle>
+              <Enabled>False</Enabled>
+              <Font>Arial,8</Font>
+              <Guid>0d25c318bf38463fa29b5afb6deab50c</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>CrossTab1_LeftTitle</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>up_pos_rpt_CashierSummaryBusiness</Text>
+              <TextBrush>[105:105:105]</TextBrush>
+              <TypeOfComponent>LeftTitle</TypeOfComponent>
+            </CrossTab1_LeftTitle>
+            <CrossTab1_ColTotal1 Ref="18" type="CrossColumnTotal" isKey="true">
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>[255:255:255]</Brush>
+              <ClientRectangle>7.85,0.45,0,1.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Enabled>False</Enabled>
+              <Font>Arial,8</Font>
+              <Guid>dfbd74520f5b45d3a019c3b242113951</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>CrossTab1_ColTotal1</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>Total</Text>
+              <TextBrush>Black</TextBrush>
+            </CrossTab1_ColTotal1>
+            <CrossTab1_RightTitle Ref="19" type="CrossTitle" isKey="true">
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>5.05,0,2.8,0.4</ClientRectangle>
+              <Enabled>False</Enabled>
+              <Font>Arial,8</Font>
+              <Guid>b9d84712572e45858326df93e63f46f1</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>CrossTab1_RightTitle</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>类型, 项目名称</Text>
+              <TextBrush>[105:105:105]</TextBrush>
+              <TypeOfComponent>RightTitle</TypeOfComponent>
+            </CrossTab1_RightTitle>
+            <CrossTab1_Row1 Ref="20" type="CrossRow" isKey="true">
+              <Alias>营业日</Alias>
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>0,2.1,2,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <DisplayValue>{up_pos_rpt_CashierSummaryBusiness.营业日}</DisplayValue>
+              <Font>Arial,8</Font>
+              <Guid>6f593042f38340689193b2b8fec31c94</Guid>
+              <Margins>0,0,0,0</Margins>
+              <MaxSize>2,1</MaxSize>
+              <MinSize>2,1</MinSize>
+              <Name>CrossTab1_Row1</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>营业日</Text>
+              <TextBrush>[105:105:105]</TextBrush>
+              <TotalGuid>f1d4af77c8834da4ba3785aeb1dbfa0d</TotalGuid>
+              <Value>{up_pos_rpt_CashierSummaryBusiness.营业日}</Value>
+            </CrossTab1_Row1>
+            <CrossTab1_Column1 Ref="21" type="CrossColumn" isKey="true">
+              <Alias>类型</Alias>
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>5.05,0.45,2.8,0.5</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <DisplayValue>{up_pos_rpt_CashierSummaryBusiness.类型}</DisplayValue>
+              <Font>Arial,8</Font>
+              <Guid>b0b65b4986b24eea819e2a8ef9509e63</Guid>
+              <Margins>0,0,0,0</Margins>
+              <MaxSize>0,0.5</MaxSize>
+              <MinSize>0,0.5</MinSize>
+              <Name>CrossTab1_Column1</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <ShowTotal>False</ShowTotal>
+              <Text>类型</Text>
+              <TextBrush>[105:105:105]</TextBrush>
+              <TotalGuid>dfbd74520f5b45d3a019c3b242113951</TotalGuid>
+              <Value>{up_pos_rpt_CashierSummaryBusiness.类型}</Value>
+            </CrossTab1_Column1>
+            <CrossTab1_Column2 Ref="22" type="CrossColumn" isKey="true">
+              <Alias>项目名称</Alias>
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>5.05,1.05,2,0.6</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <DisplayValue>{up_pos_rpt_CashierSummaryBusiness.项目名称}</DisplayValue>
+              <Font>Arial,8</Font>
+              <Guid>9dcee7aae3d74146a1b235aa03b2105d</Guid>
+              <Margins>0,0,0,0</Margins>
+              <MaxSize>0,0.6</MaxSize>
+              <MinSize>2,0.6</MinSize>
+              <Name>CrossTab1_Column2</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>项目名称</Text>
+              <TextBrush>[105:105:105]</TextBrush>
+              <TotalGuid>08e46631fb6d4238ab9d5dbd3f658050</TotalGuid>
+              <Value>{up_pos_rpt_CashierSummaryBusiness.项目名称}</Value>
+            </CrossTab1_Column2>
+            <CrossTab1_Sum1 Ref="23" type="CrossSummary" isKey="true">
+              <Alias>金额</Alias>
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>[255:255:255]</Brush>
+              <ClientRectangle>5.05,2.1,1,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8</Font>
+              <Guid>fcd5b87580d04494a309fff70a0de7d5</Guid>
+              <Margins>0,0,0,0</Margins>
+              <MaxSize>1,0</MaxSize>
+              <MinSize>1,0</MinSize>
+              <Name>CrossTab1_Sum1</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>0</Text>
+              <TextBrush>Black</TextBrush>
+              <Value>{up_pos_rpt_CashierSummaryBusiness.金额}</Value>
+            </CrossTab1_Sum1>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <DataRelationName />
+          <DataSourceName>up_pos_rpt_CashierSummaryBusiness</DataSourceName>
+          <EmptyValue />
+          <Filters isList="true" count="0" />
+          <Name>CrossTab1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+          <Sort isList="true" count="0" />
+        </CrossTab1>
+      </Components>
+      <Conditions isList="true" count="0" />
+      <Guid>5a71a3331abf4965b1d3080032e7eb0d</Guid>
+      <Margins>1,1,1,1</Margins>
+      <Name>Page1</Name>
+      <Orientation>Landscape</Orientation>
+      <PageHeight>21</PageHeight>
+      <PageWidth>35</PageWidth>
+      <Report isRef="0" />
+      <Watermark Ref="24" type="Stimulsoft.Report.Components.StiWatermark" isKey="true">
+        <Font>Arial,100</Font>
+        <TextBrush>[50:0:0:0]</TextBrush>
+      </Watermark>
+    </Page1>
+  </Pages>
+  <PrinterSettings Ref="25" type="Stimulsoft.Report.Print.StiPrinterSettings" isKey="true" />
+  <ReferencedAssemblies isList="true" count="8">
+    <value>System.Dll</value>
+    <value>System.Drawing.Dll</value>
+    <value>System.Windows.Forms.Dll</value>
+    <value>System.Data.Dll</value>
+    <value>System.Xml.Dll</value>
+    <value>Stimulsoft.Controls.Dll</value>
+    <value>Stimulsoft.Base.Dll</value>
+    <value>Stimulsoft.Report.Dll</value>
+  </ReferencedAssemblies>
+  <ReportAlias>收银交班月汇总报表</ReportAlias>
+  <ReportChanged>5/29/2019 5:30:23 PM</ReportChanged>
+  <ReportCreated>12/28/2017 2:57:33 PM</ReportCreated>
+  <ReportDescription>up_pos_rpt_CashierSummaryBusiness</ReportDescription>
+  <ReportFile>D:\work\Pos\Gemstar.BSPMS.Hotel.Web\SRReports\107CashierSummaryBusiness.mrt</ReportFile>
+  <ReportGuid>75eaddd4a71848698ed2c1bfc83440c3</ReportGuid>
+  <ReportName>收银交班月汇总报表</ReportName>
+  <ReportUnit>Centimeters</ReportUnit>
+  <ReportVersion>2014.2.2000</ReportVersion>
+  <Script>
+    using System;
+    using System.Drawing;
+    using System.Windows.Forms;
+    using System.Data;
+    using Stimulsoft.Controls;
+    using Stimulsoft.Base.Drawing;
+    using Stimulsoft.Report;
+    using Stimulsoft.Report.Dialogs;
+    using Stimulsoft.Report.Components;
+
+    namespace Reports
+    {
+    public class Report : Stimulsoft.Report.StiReport
+    {
+    public Report()        {
+    this.InitializeComponent();
+    }
+
+    #region StiReport Designer generated code - do not modify
+		#endregion StiReport Designer generated code - do not modify
+    }
+    }
+  </Script>
+  <ScriptLanguage>CSharp</ScriptLanguage>
+  <Styles isList="true" count="0" />
+</StiSerializer>

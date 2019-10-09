@@ -1,0 +1,69 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.HotelDayDetailManage.HotelDayDetailEditViewModel
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Name)</td>
+            <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.BeginDay)</td>
+            <td>@(Html.Kendo().DatePicker().Name("BeginDay").Value(Model.BeginDay).Format("MM-dd").HtmlAttributes(new { style = "width: 100%" }))</td>
+            <td>@Html.ValidationMessageFor(m => m.BeginDay, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.EndDay)</td>
+            <td>@(Html.Kendo().DatePicker().Name("EndDay").Value(Model.EndDay).Format("MM-dd").HtmlAttributes(new { style = "width: 100%" }))</td>
+            <td>@Html.ValidationMessageFor(m => m.EndDay, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Week)</td>
+            <td>
+                @Html.HiddenFor(m => m.Week)
+                @foreach (var item in ViewBag.WeekList)
+                {
+                    var ischecked = "";
+                    if (Model.Week.Contains(item.Value) || Model.Week == "0")
+                    {
+                        ischecked = "checked='checked'";
+                    }
+                    var Id = "WeekItem" + item.Value;
+                    <input id="@Id" name="WeekItem" type="checkbox" value="@item.Value" @ischecked />
+                    <label for="@Id" style="cursor:pointer; margin-right:6px;">@item.Text</label>
+                }
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.Week, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+
+            var week = "";
+            var list = document.getElementsByName("WeekItem");
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].checked) {
+                    week += list[i].value;
+                }
+            }
+            $("#Week").val(week);
+
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+</script>

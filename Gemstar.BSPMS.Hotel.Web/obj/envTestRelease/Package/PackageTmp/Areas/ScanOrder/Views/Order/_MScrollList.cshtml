@@ -1,0 +1,13 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPos;
+
+@model List<PosMScroll>
+
+@{
+    if (Model != null && Model.Count > 0)
+    {
+        foreach (var temp in Model)
+        {
+            <div class="swiper-slide"><img src="@temp.FileName" /></div>
+        }
+    }
+}

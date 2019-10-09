@@ -1,0 +1,317 @@
+﻿@using Kendo.Mvc.UI;
+<html>
+<head>
+    <link href="~/Content/jqueryMobile/jquery.mobile.datepicker.css" rel="stylesheet" />
+    <script src="~/Content/jqueryMobile/jquery.mobile.datepicker.js"></script>
+    <script src="~/Content/jqueryMobile/jquery.ui.datepicker.js"></script>
+</head>
+<body style="text-align:center;">
+    <input type="hidden" id="openidhidden" value="@ViewBag.openId" />
+    <div id="contents" style="padding-right:3px;padding-bottom:50px;padding-top:10px;padding-left:3px;" class="divclass">
+
+        <div style="text-align:right;margin-bottom:10px;margin-top:10px;"> <a id="aa">切换酒店</a> </div>
+        <div style="font-size:20px;"> @ViewBag.hotelname </div>
+        <div style="margin-top:10px;">
+            <a id="rentsituation" class="ui-btn ui-btn-inline"   style="display:none;">出租情况</a>
+            <a id="monthcalc" class="ui-btn ui-btn-inline">月度分成</a>
+            <div style="margin-top:3px;margin-bottom:20px;">
+                <div style="text-align:left;">
+                    <label id="cl" for="begintime">年月：</label>
+                    <input id="begintime" type="text" data-role="date" data-dateFormat="yy-mm"/> 
+                                       
+                </div>
+                <button id="btnquery">查询</button>
+            </div>
+            <div id="content" class="divclass">
+            </div>
+            <div id="calendarDiv" class="divclass"  >
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
+<style type="text/css">
+    /*.ui-input-text { max-width: 50%; float:left; }*/
+    #contents div {
+        width: 100%;
+    } 
+    .triangle_border_nw_bule {
+        width: 0;
+        border-width: 30px 60px 0 0;
+        border-style: solid;
+        border-color: #004793 transparent transparent transparent;
+    }
+
+    .triangle_border_nw_red {
+        width: 0;
+        border-width: 30px 60px 0 0;
+        border-style: solid;
+        border-color: red transparent transparent transparent;
+    }
+
+    #content table {
+        margin-top: 10px;
+        border-collapse: collapse;
+        border: none;
+    }
+
+    #content td {
+        border: solid rgb(204,204,204) 1px;
+        padding: 0 0 2px 2px;
+        height: 30px;
+    }
+
+    .tr-td-week td {
+        height: 40px !important;
+    }
+
+
+    .table-border {
+        border: 1px solid #aeaeae;
+        border-radius: 12px;
+    }
+
+    .tbc td {
+        height: 40px;
+        width: 40px;
+        border-bottom: 1px solid #aeaeae;
+        border-right: 1px solid #aeaeae;
+    }
+
+    .tbc {
+        margin: 0 auto;
+    }
+
+    .hasrate {
+        background-color: rgb(0,128,0);
+    }
+
+        .hasrate div {
+            color: white;
+        }
+
+    .divroom {
+        margin-top: 20px;
+        padding-bottom: 10px;
+        color: rgb(0,128,0);
+    }
+   
+</style>
+
+<script type="text/javascript">
+
+    $(function () { 
+        if ("@ViewBag.isShowOwnerRoomCalendar"=="True")
+        {
+            $("#rentsituation").css("display","");
+        }
+        $("#begintime").datepicker("option", "dateFormat", "yy-mm");
+        //$('#begintime').datepicker({
+        //    language: "zh-CN",
+        //    todayHighlight: true,
+        //    format: 'yyyy-mm',
+        //    autoclose: true,
+        //    startView: 'months',
+        //    maxViewMode: 'years',
+        //    minViewMode: 'months'
+        //});
+        var oldTime = new Date();
+        var year = oldTime.getFullYear();
+        var month = oldTime.getMonth();
+        var newtime = year + '-' + (month < 10 ? "0" : "") + month;
+        $("#ui-datepicker-div").hide();
+        $("#begintime").val(newtime);
+        $("#monthcalc").click();
+        $("#btnquery").click(function () {
+            if ($("#rentsituation").css("background-color") == "white" || $("#rentsituation").css("background-color") == "rgb(255, 255, 255)" || $("#rentsituation").css("background-color") != "rgb(0, 71, 147)") {
+                $("#monthcalc").click();
+            } else {
+                $("#rentsituation").click();
+            }
+        });
+        $("#aa").click(function () {
+            var openid = $("#openidhidden").val();
+            window.location.href = "@Url.Action("HotelChoose", "OwnerListen")" + "?openid=" + openid;
+        });
+
+    });
+
+    function getdates(oldTime) {
+        var year = oldTime.getFullYear();
+        var month = oldTime.getMonth() + 1;
+        var date = oldTime.getDate();
+        var newtime = year + '-' + month + '-' + date;
+        return newtime;
+    }
+
+
+    $("#rentsituation").click(function () {
+        this.style.background = 'rgb(0,71,147)';
+        this.style.color = 'white';
+        $("#monthcalc").css("background-color", "white");
+        $("#monthcalc").css("color", "rgb(0,71,147)");
+        $("#content").html("");
+        $("#calendarDiv").html("");
+        var oldTime = new Date($("#begintime").val());
+        var newtime = getdates(oldTime);
+        var events = jsonajax("@Url.Action("RentSituation")", { hid: "@ViewBag.hid", profileid: "@ViewBag.profileid", dtime: newtime });
+        var roomnoArray = new Array();
+        var i = 0;
+        var events = events.Data;
+        for (var o = 0; o < events.length; o++) {
+            var event = events[o];
+            if (!contains(roomnoArray, event.Roomno)) {
+                roomnoArray[i] = event.Roomno;
+
+                i++;
+            }
+        }
+        for (var i = 0; i < roomnoArray.length; i++) {
+            showCalendar(roomnoArray[i], events);
+        }
+        removeTr();
+        //showCalendar(events);
+    });
+    $("#monthcalc").click(function () {
+        this.style.background = 'rgb(0,71,147)';
+        this.style.color = 'white';
+        $("#rentsituation").css("background-color", "white");
+        $("#rentsituation").css("color", "rgb(0,71,147)");
+        $("#calendarDiv").html("");
+        $("#content").html("");
+        var oldTime = new Date($("#begintime").val());
+        var newtime = getdates(oldTime);
+        var events = jsonajax("@Url.Action("MonthCalc")", { hid: "@ViewBag.hid", profileid: "@ViewBag.profileid", dtime: newtime });
+        $("#content").html(events);
+
+    });
+
+    //ajax方法
+    function jsonajax(urls, para) {
+        var events = {};
+        var Rand = Math.random();
+        $.ajax({
+            url: urls + "?rand=" + Rand,
+            data: para,
+            success: function (data) {
+                events = data;
+            },
+            async: false
+        });
+        return events;
+    }
+
+    //显示日历以及对应价格
+    function showCalendar(roomno, events) {
+        var sumnight = 0; var sumRate = 0;
+        var my = new Date($("#begintime").val());
+        var now = new Date();
+        var years = my.getFullYear();
+        var months = my.getMonth();
+        var newtime = years + '年' + (months + 1) + '月';
+        var calendStr = "<div class='divroom' ><span style='text-align:left;'>" + newtime + "</span>　房号：" + roomno + "　　　　　　　</div>";
+        var k = 1, j = 1, today, tomonth, theday = 1, max, temp, tempday;
+
+        calendStr += "<table id='tbcalendar' class='tbc' cellspacing='0'><tr class='tr-td-week'><td><font color='red'>日</font></td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td><font color='red'>六</font></td></tr>";//日历表头
+        temp = my.getDate();
+        my.setDate(1);
+        tempday = my.getDay();//返回第一天是星期几
+        my.setDate(temp);
+        today = my.getDay();//返回现在星期几
+        var year = my.getYear();
+        switch ((my.getMonth() + 1)) {
+            case 1:
+            case 3:
+            case 5:
+            case 7:
+            case 8:
+            case 10:
+            case 12:
+                max = 31;
+                break;
+            case 4:
+            case 6:
+            case 9:
+            case 11:
+                max = 30;
+                break;
+            default:
+                max = ((year % 400 == 0) || ((year % 4 == 0) && (year % 100 != 0))) ? 29 : 28;
+        }
+        for (k = 0; k < 6; k++) {
+
+            calendStr += "<tr>";
+            for (j = 0; j <= 6; j++) {
+                var aa = 0;
+                var strcontent = "";
+                if (j >= (tempday)) {
+                    tempday = 0;//设置为最小，相当于取消判断条件
+                    if (theday <= max) {
+                        var Rate = "";
+
+                        for (var o = 0; o < events.length; o++) {
+                            var event = events[o];
+                            var rmno = event.Roomno;
+                            if (rmno == roomno) {
+                                var rdata = event.TransBsnsdate;
+                                var date = new Date(parseInt(rdata.replace("/Date(", "").replace(")/", ""), 10));
+                                var result = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+                                if (result == my.getFullYear() + "-" + (my.getMonth() + 1) + "-" + theday) {
+                                    Rate = (event.Rate == null ? "" : event.Rate);
+                                    aa = 1;
+                                    sumnight += event.nights;
+                                    sumRate += (event.Rate == null ? 0 : event.Rate);
+                                    break;
+                                }
+                            }
+                        }
+
+                        var IsWeekend = j == 0 || j == 6 ? "triangle_border_nw_red" : "triangle_border_nw_bule";
+                        strcontent = "<a title=" + my.getFullYear() + "-" + (my.getMonth() + 1) + "-" + theday + " target='_blank'>";// href=detail.asp?date=" + theday + "
+                        strcontent +=            // "<div class='" + IsWeekend + "'></div>" +
+                                          "<div class='div-day'><span color='red'>" + theday + " </span></div>" +
+                                          "<div class='div-count'><span>" + Rate + "</span></div>" +
+                                           "</a>";
+
+                        theday++;
+                    }
+                }
+                calendStr += "<td " + (aa == 1 ? "class='hasrate'" : "") + "  >" + strcontent;
+
+                calendStr += "</td>";
+
+            }
+            calendStr += "</tr>";
+        }
+        calendStr += "</table>";
+
+        calendStr += "<div>间夜数：" + sumnight + "        总房租：" + sumRate + "</div>"
+        $("#calendarDiv").append(calendStr);
+
+    }
+    function contains(arr, obj) {
+        var i = arr.length;
+        while (i--) {
+            if (arr[i] === obj) {
+                return true;
+            }
+        }
+        return false;
+    }
+    function removeTr() {
+        //移除多余tr
+        var lastTd = $(".tbc tr").last().find("td").first().text();
+        if (lastTd == "") {
+            $(".tbc tr").last().remove();
+        }
+        $(".tbc tr").last().find("td").each(function (i, data) {
+            $(data).css("border-bottom", "0px")
+        })
+        $(".tbc tr").each(function (i, data) {
+            $(data).find("td").last().css("border-right", "0px")
+        })
+        $(".tbc").addClass("table-border");
+    }
+
+</script>

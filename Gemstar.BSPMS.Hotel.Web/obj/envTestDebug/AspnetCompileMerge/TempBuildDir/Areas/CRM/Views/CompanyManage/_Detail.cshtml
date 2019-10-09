@@ -1,0 +1,174 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.CRM.Models.CompanyManage.CompanyDeatilViewModel
+
+@Html.HiddenFor(m => m.Id)
+<fieldset>
+    <legend>单位信息</legend>
+    <table class="editFormTable" id="formTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Code)</td>
+            <td>@Html.TextBoxFor(m => m.Code, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Name)</td>
+            <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+        </tr>
+        <tr>
+            
+            <td class="textright">@Html.LabelFor(m => m.Tel)</td>
+            <td>@Html.TextBoxFor(m => m.Tel, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Tel, "*")</td>
+      
+            <td class="textright">@Html.LabelFor(m => m.Address)</td>
+            <td colspan="4">@Html.TextBoxFor(m => m.Address, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Address, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Contact)</td>
+            <td>@Html.TextBoxFor(m => m.Contact, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Contact, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.ContactMobile)</td>
+            <td>@Html.TextBoxFor(m => m.ContactMobile, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ContactMobile, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Position)</td>
+            <td>@Html.TextBoxFor(m => m.Position, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Position, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.TaxEmail)</td>
+            <td>@Html.TextBoxFor(m => m.TaxEmail, new { @class = "k-textbox-new", style = "width:100%;" , disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.TaxEmail, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Bank)</td>
+            <td>@Html.TextBoxFor(m => m.Bank, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Bank, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.BankAccount)</td>
+            <td>@Html.TextBoxFor(m => m.BankAccount, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.BankAccount, "*")</td>
+        </tr>
+    </table>
+</fieldset>
+
+<fieldset>
+    <legend>发票信息</legend>
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.TaxType)</td>
+            <td>@Html.TextBoxFor(m => m.TaxTypeName, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.TaxType, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.TaxNo)</td>
+            <td>@Html.TextBoxFor(m => m.TaxNo, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.TaxNo, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.TaxName)</td>
+            <td colspan="4">@Html.TextBoxFor(m => m.TaxName, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.TaxName, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.TaxBankAccount)</td>
+            <td colspan="4">@Html.TextBoxFor(m => m.TaxBankAccount, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.TaxBankAccount, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.TaxAddTel)</td>
+            <td colspan="4">@Html.TextBoxFor(m => m.TaxAddTel, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.TaxAddTel, "*")</td>
+        </tr>
+    </table>
+</fieldset>
+
+<fieldset>
+    <legend>合约信息</legend>
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.RateCode)</td>
+            <td>@Html.TextBoxFor(m => m.RateCodeName, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.RateCode, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.LimitAmount)</td>
+            <td>@Html.TextBoxFor(m => m.LimitAmount, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.LimitAmount, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.CompanyTypeid)</td>
+            <td>@Html.TextBoxFor(m => m.CompanyTypename, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.CompanyTypeid, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.Status)</td>
+            <td>@Html.TextBoxFor(m => m.StatusName, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Status, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Amount)</td>
+            <td>@Html.TextBoxFor(m => m.Amount, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Amount, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Nights)</td>
+            <td>@Html.TextBoxFor(m => m.Nights, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Nights, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.BeginDateDetail)</td>
+            <td>@Html.TextBoxFor(m => m.BeginDateDetail, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.BeginDateDetail, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Balance)</td>
+            <td>@Html.TextBoxFor(m => m.Balance, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Balance, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.ValidDate)</td>
+            <td>@Html.TextBoxFor(m => m.ValidDate, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.ValidDate, "*")</td>
+
+            <td class="textright">@Html.LabelFor(m => m.Sales)</td>
+            <td>@Html.TextBoxFor(m => m.Sales, new { @class = "k-textbox-new", style = "width:100%;", disabled = "disabled" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Sales, "*")</td>
+        </tr>
+    </table>
+</fieldset>
+
+
+@Html.ValidationSummary()
+<div class="formButtons" style="clear: both;text-align: center;margin-top: 30px;">
+    <button class="k-primary k-button" id="companyImgButton" role="button" data-role="button">图片附件</button>&nbsp;&nbsp;
+    <button class="k-primary k-button" id="EditFormButton" role="button" data-role="button">修改</button>&nbsp;&nbsp;
+    <button class="k-primary k-button" id="companySignerButton" role="button" data-role="button">签单人</button>&nbsp;&nbsp;
+    <button class="k-primary k-button" id="saveEditFormButton1" role="button" data-role="button">往来明细</button>&nbsp;&nbsp;
+    <button class="k-primary k-button" id="saveEditFormButton2" role="button" data-role="button">消费明细</button>&nbsp;&nbsp;
+    <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            //刷新合约单位列表
+            refreshGridList();
+            closeEditFormWindow();
+            
+        });
+        $("#companyImgButton").click(function () {
+            top.openSecondKendoWindow("导入图片附件", "/CRM/CompanyImgManage/Add/" + $("#Id").val());
+        });
+        $("#saveEditFormButton1").click(function () {
+            top.openSecondKendoWindow("往来明细", "/CRM/CompanyCaManage/Index/" + $("#Id").val());
+        });
+        $("#saveEditFormButton2").click(function () {
+            top.openSecondKendoWindow("消费明细", "/CRM/CompanyTransManage/Index/" + $("#Id").val());
+        });
+        $("#EditFormButton").click(function () {
+            top.openSecondKendoWindow("修改合约单位", "/CRM/CompanyManage/Edit/" + $("#Id").val());
+        });              
+        $("#companySignerButton").click(function () {
+            top.openSecondKendoWindow("合约单位签单人", "@Url.Action("Index", "CompanySignerManage", new { area= "CRM" })" + "?companyId=" + $("#Id").val());
+        });
+        $("#commonKendoWindow").prev().find(".k-i-close").click(function () {
+            refreshGridList();
+        })
+    });
+    function refreshGridList() {
+        try {
+            $(document).find("iframe")[0].contentWindow.$('iframe')[0].contentWindow.refreshGrid();
+        } catch (e) { }
+    }
+</script>

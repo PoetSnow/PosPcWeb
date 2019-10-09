@@ -1,0 +1,132 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.PosInSingle.ChangeTableModel
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures
+
+<style>
+    table {
+        width: 100%;
+    }
+
+    thead {
+        background: #0087ff;
+    }
+
+        thead td {
+            padding: 0 5px;
+            border-radius: 2px;
+        }
+
+    .btn {
+        border: 1px solid #aaa;
+        background: #eee;
+        border-radius: 5px;
+        padding: 7px;
+        margin: 0;
+        width: 100%;
+        margin-top: 2px;
+        color: #333;
+    }
+</style>
+
+@{
+    var oldModel = ViewBag.oldModel as up_pos_list_billByBillidResult;
+    <table class="billDetail">
+        <thead>
+            <tr>
+                <td colspan="2">原餐台资料</td>
+            </tr>
+        </thead>
+        <tr class="txtLable">
+            <td class="textright">@Html.LabelFor(m => m.newRefeName)：</td>
+            <td><span>@oldModel.refeName</span></td>
+        </tr>
+        <tr class="txtLable">
+            <td class="textright">@Html.LabelFor(m => m.newTabName)：</td>
+            <td><span>@oldModel.tabName</span></td>
+        </tr>
+        <tr class="txtLable">
+            <td class="textright">@Html.LabelFor(m => m.newServiceRate)：</td>
+            <td><span>@oldModel.ServiceRate</span></td>
+        </tr>
+        <tr class="txtLable">
+            <td class="textright">@Html.LabelFor(m => m.newLimit)：</td>
+            <td><span>@oldModel.Limit</span></td>
+        </tr>
+    </table>
+
+    <input type="hidden" value="@oldModel.Refeid" id="newRefeId" name="newRefeId" />
+    <input type="hidden" value="@Model.newTabId" id="newTabId" name="newTabId" />
+    <input type="hidden" value="@oldModel.Billid" id="oldBillId" name="oldBillId" />
+    <input type="hidden" value="@oldModel.TabNo" id="newTabNo" name="newTabNo" />
+
+    <input type="hidden" value='@oldModel.Tabid' id="oldTabId" name="oldTabId" />
+
+    <table class="billDetail">
+        <thead>
+            <tr>
+                <td colspan="2">新餐台资料</td>
+            </tr>
+        </thead>
+        <tr class="txtLable">
+            <td class="textright">@Html.LabelFor(m => m.newRefeName)：</td>
+            <td><span>@oldModel.refeName</span></td>
+        </tr>
+        <tr class="txtLable">
+            <td class="textright">@Html.LabelFor(m => m.newTabName)：</td>
+            <td>@Model.newTabName</td>
+            <td></td>
+        </tr>
+        <tr class="txtLable">
+            <td class="textright">@Html.LabelFor(m => m.newServiceRate)：</td>
+            <td>@Model.newServiceRate</td>
+            <td></td>
+        </tr>
+        <tr class="txtLable">
+            <td class="textright">@Html.LabelFor(m => m.newLimit)：</td>
+            <td>@Model.newLimit</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="textright">服务费消费政策：</td>
+            <td style="width:60%">@Html.Kendo().DropDownListFor(e => e.ServiceRateFlag).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListTabFlag", "PosInSingle", new { rnd = new Random().NextDouble() })).ServerFiltering(true); })</td>
+        </tr>
+        <tr>
+            <td class="textright">开台项目：</td>
+            <td style="width:60%">@Html.Kendo().DropDownListFor(e => e.ItemFlag).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListTabFlag", "PosInSingle", new { rnd = new Random().NextDouble() })).ServerFiltering(true); })</td>
+        </tr>
+    </table>
+
+    <div class="formButtons">
+        <input type="button" value="确定" onclick="oepnItemList()" />
+        <input type="button" value="关闭" onclick="layer.closeAll()" />
+    </div>
+}
+
+<script type="text/javascript">
+    //进入到选择菜式的界面
+    function oepnItemList() {
+        localStorage.setItem("MergeTab", $(obj).attr("data-code"));
+
+        $.ajax({
+            url: 'PosInSingle/_PosBillDetailListByMerge',
+            type: "post",
+            data: { billId: $("#billid").val() },
+            datatype: "html",
+            success: function (dataResult) {
+                layer.open({
+                    type: 1,
+                    title: "转菜",
+                    closebtn: 0, //不显示关闭按钮
+                    area: ['660px', '510px'], //宽高
+                    content: dataResult,
+                    id: "TabStatusListByMergeTabList"
+                });
+            },
+            error: function (dataResult) {
+                layer.alert(dataResult.responsetext, { title: "快点云pos提示" });
+            }
+        });
+    }
+
+    //保存转菜相关数据
+    function SaveMergeData() { }
+</script>

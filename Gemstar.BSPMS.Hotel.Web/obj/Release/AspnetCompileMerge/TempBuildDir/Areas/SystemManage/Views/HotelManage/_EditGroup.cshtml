@@ -1,0 +1,130 @@
+﻿
+@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.HotelManage.PmsHotelEditViewModel
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+
+    @Html.HiddenFor(m => m.Hid)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Grpid)</td>
+            <td>
+                <input id="dd" type="text" class="k-textbox" disabled="disabled" style="width:100%;margin-bottom:1px;background-color:rgb(245,245,245)" value="@ViewBag.grpname" />
+                @Html.TextBoxFor(m => m.Grpid, new { @class = "k-textbox", style = "width:100%;display:none;" })
+
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.Grpid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Hid)</td>
+            <td>
+                <input id="dd" type="text" class="k-textbox" disabled="disabled" style="width:100%;margin-bottom:1px;background-color:rgb(245,245,245)" value="@Model.Hid" />
+                @Html.TextBoxFor(m => m.Hid, new { @class = "k-textbox", style = "width:100%;display:none;" })
+
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.Hid, "*")</td>
+
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Name)</td>
+            <td>
+                <input id="dd" type="text" class="k-textbox" disabled="disabled" style="width:100%;margin-bottom:1px;background-color:rgb(245,245,245)" value="@Model.Name" />
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+        </tr>
+        <tr>
+            <td class="td-one tdwidth">@Html.LabelFor(m => m.Hotelshortname)：</td>
+            <td class="td-two">
+                  @Html.TextBoxFor(m => m.Hotelshortname, new { @class = "k-textbox", style = "width:100%;" })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.Hotelshortname)</td>
+        </tr>
+      
+        <tr>
+            <td class="td-one tdwidth">城市选择</td>
+            <td class="td-two">
+                @Html.Kendo().DropDownListFor(m => m.Provinces).HtmlAttributes(new { style = " width:49%;" }).OptionLabel("全部").DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetProvinceSelectList", "HotelManage")); })
+                <script type="text/javascript">
+                    function filterCitys() {
+                        return {
+                            key: $("#Provinces").val(),
+                            r: Math.random()
+                        };
+                    }
+                </script>
+                @Html.Kendo().DropDownListFor(m => m.City).HtmlAttributes(new { style = " width:49%;" }).OptionLabel("全部").DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetCitySelectList", "HotelManage").Data("filterCitys")).ServerFiltering(true); }).Enable(false).AutoBind(false).CascadeFrom("Provinces")
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.Provinces)</td>
+
+        </tr>
+        <tr>
+            <td class="td-one tdwidth">星级：</td>
+            <td class="td-two">
+
+                @Html.Kendo().DropDownListFor(e => e.Star).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("getStarList", "HotelManage")); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.Star)</td>
+
+        </tr>
+        <tr>
+            <td class="td-one tdwidth">@Html.LabelFor(m => m.ManageType)：</td>
+            <td class="td-two">
+
+                @Html.Kendo().DropDownListFor(e => e.ManageType).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("getManageTypeList", "HotelManage")); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.ManageType)</td>
+
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.address)</td>
+            <td>@Html.TextBoxFor(m => m.address, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.address, "*")</td>
+        </tr> 
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Email)</td>
+            <td>@Html.TextBoxFor(m => m.Email, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Email, "*")</td>
+        </tr>
+
+        <tr>
+            <td class="td-one tdwidth">　　手 机 号</td>
+            <td class="td-two">
+                <input id="dd" type="text" disabled="disabled" class="k-textbox" style="width:100%;margin-bottom:1px;background-color:rgb(245,245,245)" value="@Model.Mobile" />
+                @Html.TextBoxFor(m => m.Mobile, new { @class = "k-textbox", style = "width:100%;display:none;" })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.Mobile)</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.tel)</td>
+            <td>@Html.TextBoxFor(m => m.tel, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.tel, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+            <td>@Html.TextBoxFor(m => m.Seqid, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+
+</script>
+

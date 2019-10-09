@@ -1,0 +1,67 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+
+@{
+    ViewBag.Title = "班次";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForEnable = true,
+        EnableFunctionForDisable = true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("hotelname").Title("分店名称");
+            c.Bound("Code").Title("班次代码");
+            c.Bound("ShiftName").Title("班次名");
+            c.Bound("BeginTime").Title("开始时间");
+            c.Bound("EndTime").Title("结束时间");
+            c.Bound("LoginStatus").Title("登录状态");
+            c.Bound("Seqid").Title("排序号"); 
+        },
+        RowTemplate = @"<tr style=#: Status==51?'text-decoration:line-through;color:red;':'' #>
+                                        <td>#: hotelname #</td>
+                                        <td>#: Code #</td>
+                                        <td>#: ShiftName #</td>
+                                        <td>#: BeginTime #</td>
+                                        <td>#: EndTime #</td>
+                                        <td>#: LoginStatus #</td>
+                                        <td>#: Seqid #</td> 
+                                   </tr>",
+        CustomToolbar = c =>
+        {
+            c.Custom().Name("comfirmtext").Text("<span style='float:right;display:inline-block;color:red;margin-right:50px;padding-top:8px;'>双击可修改</span>").HtmlAttributes(new { id = "comfirmtext", href = "javascript:void(0);", style = "cursor:default;" });
+
+        }
+
+    };
+}
+
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+    $(function () {
+        $("#comfirmtext").removeClass("k-button");
+
+    });
+    //刷新房间类型
+    function grid_dataBoundEnded() {
+        var obj = $(window.parent.document).find("a");
+        $(obj).on("click", function (e) {
+            if ($(this).text() == "房间类型") {
+                var grid = $("#grid").data("kendoGrid");
+                grid.dataSource.read();
+                return;
+            }
+        });
+    } 
+</script>

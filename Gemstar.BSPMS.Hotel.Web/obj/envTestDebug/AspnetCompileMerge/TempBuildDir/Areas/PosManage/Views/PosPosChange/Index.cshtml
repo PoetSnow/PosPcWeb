@@ -1,0 +1,87 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Models.Home.SelectPosViewModel
+<link href="~/Content/Pos/posPublic.css?version=@ViewBag.Version" rel="stylesheet" />
+@{
+    ViewBag.Title = "Pos换班次";
+}
+
+<style type="text/css">
+    table.editFormTable {
+        padding: 20px;
+        font-size: 16px;
+        position: relative;
+    }
+
+        table.editFormTable tr {
+            line-height: 40px;
+        }
+
+        table.editFormTable .textleft, table.editFormTable .textright {
+            width: auto;
+        }
+
+    form .formButtons {
+        margin: 0;
+        height: 47px;
+        position: relative;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+
+    <table class="editFormTable">
+
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.CurrentPosNameS)：</td>
+            <td class="textleft">@Model.CurrentPosName</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.CurrentPosName)：</td>
+            <td>
+                @Html.Kendo().DropDownListFor(e => e.CurrentPosId).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosPosByHid", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); })
+            </td>
+            <td>@Html.ValidationMessageFor(m => m.CurrentPosId, "*")</td>
+        </tr>
+    </table>
+    @Html.HiddenFor(m => m.CurrentPosId)
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        @*<a  onclick="UpdatePos()" href="javascript:void(0)" >确定</a>
+            <a  onclick="closeAllLayer()" href="javascript:void(0)" >关闭</a>*@
+        <input type="button" value="确定" onclick="UpdatePos()" />
+        <input type="button" value="关闭" onclick="closeAllLayer()" />
+    </div>
+}
+<script>
+    function closeAllLayer()
+    {
+        layer.closeAll();
+    }
+    //更换收银点
+    function UpdatePos() {
+        var PosId = $("#CurrentPosId").data("kendoDropDownList");
+        var model = {
+            CurrentPosId: $("#CurrentPosId").val(),
+            CurrentPosName: PosId.text()
+        };
+
+        $.ajax({
+            url: '@Url.Action("UpdatePos", new { rnd = new Random().NextDouble() })',
+            type: "post",
+            data: model,
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    layer.closeAll();
+                    window.location.reload();
+                } else {
+                    layer.alert(data.Data, { title: "快点云Pos提示" });
+                }
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+</script>

@@ -1,0 +1,648 @@
+﻿@{
+    Layout = null;
+    var product = ViewBag.product as Gemstar.BSPMS.Common.Services.Entities.M_v_products;
+}
+<!DOCTYPE html>
+<link href="~/Content/liMarquee.css" rel="stylesheet" />
+<style type="text/css">
+    #scrollText {
+        width: 400px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    #notifyC {
+        border-radius: 10px;
+        text-align: center;
+        background-color: #F00;
+        color: #FFF;
+        padding-left: 3px;
+        padding-right: 3px;
+    }
+
+    #systips {
+        background: #E55D40;
+        color: #FFFFFF;
+    }
+
+    #notification {
+    }
+
+    .tab {
+        white-space: nowrap;
+    }
+
+    #secondLevelMenu a {
+        float: none;
+    }
+
+    .move {
+        color: #fff;
+        height: 30px;
+        position: absolute;
+        z-index: 6;
+        line-height: 30px;
+        background-color: #004793;
+        padding: 0 10px 0 10px;
+    }
+
+    #helpspantitle {
+        top: 101px;
+        right: 32px;
+        line-height: 30px;
+    }
+
+    .str_wrap {
+        left: 33rem;
+        right: 33rem;
+        font-size: 1rem;
+        background: none;
+        overflow: hidden;
+        line-height: 3rem;
+        position: absolute;
+        white-space: nowrap;
+        width: calc(100% - 66rem);
+    }
+
+    .mesage {
+        white-space: nowrap;
+        word-break: keep-all;
+    }
+</style>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Html.Partial("_SystemNameInTitle")</title>
+    @Html.Partial("_HeaderCss")
+    @Html.Partial("_HeaderJs")
+    
+    <script src="~/Scripts/layer-v3.1.1/layer.js"></script>
+</head>
+<body style="overflow:hidden">
+    <div class="top" id="topInfo">
+        <div class="hotel-n-b">
+            <span class="hotel-name-first" style="margin-left:30px;">酒店编号：@ViewBag.hotelId</span><span class="hotel-name">@ViewBag.hotelName</span>
+            <span class="hotel-name">收银点：@ViewBag.PosName</span>
+            <span class="hotel-name">营业日：@ViewBag.Business</span>
+            <span class="hotel-name">班次：@ViewBag.shiftName</span>
+            <span class="hotel-name" id="pos_selfshuffle">市别：@ViewBag.shuffleName</span>
+
+            @foreach (var item in ViewBag.AdSet)
+            {
+                <a target="_blank" href="@item.Link" style="margin-left:10px;"><img src="@item.PicLink" alt="" style="vertical-align:middle;max-height:20px;border:0px;padding-bottom:5px;"></a>
+            }
+            <span class="hotel-name">服务热线：<span class="color" style="font-size:14px;font-weight:bold;">400-7755-123</span></span>
+        </div>
+        <div class="hotel-n-f">
+            <span style="color:red;display:none" id="topNotify">
+                未处理提醒:
+                <a href="javascript:openNotify();" id="notifyC" title="点击查看">0</a>
+                条
+            </span>
+            <span>用户名：<span class="user-name" id="userSubMenuSpan">@ViewBag.username▼</span></span>
+            <div id="userSubMenuDiv" style="display:none">
+                <a class="change-password" href="@Url.Action("ChangePassword","Account")">修改密码</a>
+                @if (!ViewBag.isServiceOperator)
+                {
+                    <a class="change-password" href="javascript:showAuthWindow();">授权他人登录</a>
+                }
+
+                <a class="change-password" href="javascript:showBindWeixinWindow();">绑定微信</a>
+            </div>
+            <a class="change-password" href="@Url.Action("Index","Home")">退出</a>
+        </div>
+    </div>
+
+    <div class="header clearfix" id="firstLevelMenu">
+        @Html.Partial("_LogoAndName")
+        <div class="logo" id="NoticeDiv" style="display:none">
+            <div id="scrollText"></div>
+        </div>
+        <div class="nav">
+            <ul class="nav-list">
+                @Html.Action("FirstLevelAuth", "AuthList", new { area = "", hid = ViewBag.hotelId })
+            </ul>
+        </div>
+        <ul class="mesage str_wrap">
+            <li></li>
+        </ul>
+    </div>
+    <div style="width:100%;background-color:#004793; overflow:hidden;height:30px">
+        <span id="leftMove" class="move" style="left:0px;">〈</span>
+        <span id="rightMove" class="move" style="right:0px;">〉</span>
+        <div id="secondLevelMenu" class="tab" style="position:absolute; z-index:5"></div>
+    </div>
+    <div class="divred">
+    </div>
+    <div id="mainContent">
+        <iframe src="" style="width:100%;height:100%;overflow:auto;border:none;" data-contenttype="thirdmenu"></iframe>
+        <div id="helpspantitle" class="helpFilesDiv" onmouseover="MouseOver(0)" onmouseout="MouseOut(0)" style="background-color:#004793; padding: 0 10px 0 10px;">
+            <span>帮助中心&nbsp;<img alt="帮助" style="margin-bottom: -3px" src="/images/auth/w-3.png"></span>
+            <div id="helpinfodiv">
+                <ol></ol>
+            </div>
+        </div>
+    </div>
+
+    <div id="posMaskWindowMask" style="width:100%;height:100%;position:absolute;top:0;left:0;background:rgba(0,0,0,0.1);z-index:999;display:none;">
+        @(Html.Kendo().Window()
+            .Name("posMaskWindow")
+            .Title("")
+            .Content(@<text>
+            </text>)
+                .Draggable()
+                .Resizable()
+                .HtmlAttributes(new { @style = "display:none;" })
+                .Actions(actions => actions.Pin().Close())
+        )
+    </div>
+
+    @Html.Partial("_KendoCommonWindow")
+    @(Html.Kendo().Notification()
+        .Name("notification").AutoHideAfter(0)
+        .Templates(t =>
+        {
+            t.Add().Type("time").ClientTemplate("<div style='padding:1em 1em;width:180px;' id='systips'><table><tr><td style='width:70px;'>房&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号:</td><td>#: roomno #</td></tr><tr><td>提醒时间:</td><td>#: time #</td></tr><tr><td>提醒内容:</td><td>#: content #</td></tr></table></div>");
+        })
+    )
+    <script type="text/javascript">
+        var getNotify = function () {
+            var notification = $("#notification").data("kendoNotification");
+            notification.hide();
+            $.post("@Url.Action("GetNotify")", null, function (data) {
+                if (data.Success) {
+                    $("#notifyC").text(data.Data.Count);
+                    notification.show({ roomno: data.Data.RoomNo, time: data.Data.CallTime, content: data.Data.Content }, "time");
+                } else { $("#notifyC").text(data.Data); }
+            }, 'json');
+            var timesRun = 0;
+            var interval = setInterval(function () {
+                timesRun += 1;
+                if (timesRun === 5) {
+                    clearInterval(interval);
+                }
+                var j = 0;
+                while (j < 2) {
+                    $("#systips").fadeOut(200);
+                    $("#systips").fadeIn(200);
+                    j++;
+                }
+            }, 10000);
+        };
+        var mainLoad = {};
+        $(function () {
+            @if(ViewBag.notify)
+            {
+                <text>
+                    $("#topNotify").css("display", "");
+                    $(".k-notification").css("margin-bottom", "1em");
+                    getNotify();
+                    setInterval(function () { getNotify() }, 60000);
+                </text>
+            }
+            calcIframeHeight();
+            mainLoad.loadCode = 0;
+            window.onresize = function () {
+                calcIframeHeight();
+            };
+            //默认加载第一个菜单
+            var $first = $(".firstLevelAuth:first");
+            //Pos默认加载菜单
+            $(".firstLevelAuth").each(function () {
+                if ($(this).attr("data-authid") == "@ViewBag.AuthCode") {
+                    $first = $(this);
+                    return;
+                }
+            });
+
+            var authCode = $first.data("authid");
+
+            changeAuth(authCode);
+
+            //导航栏左侧小箭头移动效果
+            $("#leftMove").mouseenter(function () {
+                $("#secondLevelMenu").animate({ "left": 0 }, 1500);
+            });
+            //停止左侧动画效果
+            $("#leftMove").mouseout(function () {
+                $("#secondLevelMenu").stop();
+            });
+            //导航栏右侧小箭头移动效果
+            $("#rightMove").mouseenter(function () {
+                var aTagsWidth = 0;
+                var moveValue = 0;
+                var winWidth = $(window).outerWidth(true);
+                var moveWidth = $(".move").outerWidth(true) * 2;
+                var menuWidth = $("#secondLevelMenu").width();
+                var helpWidth = $("#helpspantitle").outerWidth(true);
+                var paddWidth = parseInt($("#secondLevelMenu").outerWidth(true)) - menuWidth;
+                var aTags = $("#secondLevelMenu").find("a");
+
+                $(aTags).each(function () {
+                    aTagsWidth += $(this).outerWidth(true);
+                });
+                if (aTagsWidth - winWidth > 0) {
+                    moveValue = aTagsWidth - winWidth + moveWidth + paddWidth + helpWidth + 20;
+                }
+                if (moveValue < helpWidth) {
+                    moveValue = helpWidth - 20;
+                }
+
+                if (aTags.length < 16) {
+                    $("#secondLevelMenu").animate({ "left": -moveValue }, 1500);
+                }
+                else {
+                    $("#secondLevelMenu").animate({ "left": -moveValue }, (aTags.length - 16) * 500);
+                }
+            });
+            //停止右侧动画效果
+            $("#rightMove").mouseout(function () {
+                $("#secondLevelMenu").stop();
+            });
+        });
+        function openNotify() {
+            top.openIframeKendoWindow("提醒记录表", "@Url.Action("Index", "Notify", new { area = "RoomState" })", { status: 1, endDate: "结束时间" }, "", "公告详情");
+        }
+        function calcIframeHeight() {
+            var docHeight = $(document).height();
+            var windowHeight = $(window).height();
+            docHeight = Math.min(docHeight, windowHeight);
+            var topHeight = $("#topInfo").outerHeight(true);
+            var firstLevelMenuHeight = $("#firstLevelMenu").outerHeight(true);
+            var secondLevelMenuHeight = $("#secondLevelMenu").outerHeight(true);
+            var contentHeight = docHeight - topHeight - firstLevelMenuHeight - secondLevelMenuHeight - 8;
+            $("#mainContent").height(contentHeight);
+        }
+        function logout() {
+            $.post("@Url.Action("Logout","Account",new { area=""})", null, function (data) {
+                if (data.Success) {
+                    top.location.href = data.Data;
+                } else {
+                    //jAlert(data.Data);
+                    ajaxErrorHandle(data);
+                }
+            }, 'json');
+        }
+
+        function closeShift() {
+            jConfirm("是否现在关闭 [ @ViewBag.shiftName ] 班次?", "确定", "取消", function (confirmed) {
+                if (confirmed) {
+                    $.post("@Url.Action("CloseShift", "ShiftManage", new { area="SystemManage"})", null, function (data) {
+                        if (data.Success) {
+                            top.location.href = '@Url.Action("index")';
+                        } else {
+                            ajaxErrorHandle(data);
+                        }
+                    }, 'json');
+                }
+            });
+        }
+
+        function changeAuth(parentCode) {
+            $(".firstLevelAuth").removeClass("active");
+            if (mainLoad.loadCode != parentCode && mainLoad.loadCode != 0) {
+                $(".firstLevelAuth[data-authid='" + mainLoad.loadCode + "']").find("i").removeClass("icon-newauth-" + mainLoad.loadCode + "-1")
+                $(".firstLevelAuth[data-authid='" + mainLoad.loadCode + "']").find("i").addClass("icon-newauth-" + mainLoad.loadCode);
+            }
+            mainLoad.loadCode = parentCode;
+            $(".firstLevelAuth[data-authid='" + parentCode + "']").addClass("active");
+            $(".firstLevelAuth[data-authid='" + parentCode + "']").find("i").removeClass("icon-newauth-" + parentCode);
+            $(".firstLevelAuth[data-authid='" + parentCode + "']").find("i").addClass("icon-newauth-" + parentCode + "-1");
+            $.post("@Url.Action("ChildrenAuth", "AuthList",new { area=""})", { parentCode: parentCode }, function (data) {
+                $("#secondLevelMenu").html(data);
+                //默认加载第一个菜单
+                var $first = $(".secondLevelAuth:first");
+                var url = $first.data("authurl");
+                var text = $first.text();
+                var arr = url.split('/');
+                var mid = arr[arr.length - 1];
+                if (parentCode == "10") {
+
+                    var breakfastUrl = "/ResManage/ResOrderFolioBreakfast/Index/10007";
+                    $("#secondLevelMenu a[data-authurl='" + breakfastUrl + "']").attr("href", breakfastUrl).attr("target", "_blank");
+
+                    if (breakfastUrl == url) {
+                        url = "about:blank";
+                    }
+                }
+                
+                selectAuth(url, text, mid);
+                if (parentCode == "10" || parentCode == "20") { try { IndependLock.LoadMenu(); } catch (e) { console.log(e); } }
+            }, 'html');
+            loadNotice();
+        }
+        function selectAuth(url, authName, mid) {
+            //加载帮助文档
+            LoadHelpFiles(mid, authName, 0);
+            $(".secondLevelAuth").removeClass("active");
+            $(".secondLevelAuth[data-authurl='" + url + "']").addClass("active");
+            if (url.toLowerCase().indexOf("resmanage/resorderadd") > -1) {
+                top.openResKendoWindow("客单", url, null, "20020", authName);
+                return;
+            } else if (url.toLowerCase().indexOf("permanentroom/resorderadd") > -1) {
+                top.openResKendoWindow("客单", url, null, "20020", authName);
+                return;
+            }
+
+            if (url.toLowerCase().indexOf("posshiftchange/index") > -1) {
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    dataType: "html",
+                    success: function (data) {
+                        //$("#posMaskWindow").html(data);
+                        //$("#posMaskWindow_wnd_title").text("更换班次");
+                        //$(".k-i-close").click(function () {
+                        //    closeGeneralWindow();
+                        //});
+                        //openGeneralWindow();
+                        layer.close(layer.index);
+                        layer.open({
+                            type: 1,
+                            title: "更换班次",
+                            skin: 'layui-layer-demo', //样式类名
+                            closeBtn: 0, //不显示关闭按钮
+                            shadeClose: true, //开启遮罩关闭
+                            area: ['auto', 'auto'], //宽高
+                            content: data
+                        });
+                    },
+                    error: function (data) {
+                        alert(data.responseText);
+                    }
+                });
+                return;
+            }
+            else if (url.toLowerCase().indexOf("posshufflechange/index") > -1) {
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    dataType: "html",
+                    success: function (data) {
+                        //$("#posMaskWindow").html(data);
+                        //$("#posMaskWindow_wnd_title").text("更换市别");
+                        //$(".k-i-close").click(function () {
+                        //    closeGeneralWindow();
+                        //});
+                        //openGeneralWindow();
+                        layer.close(layer.index);
+                        layer.open({
+                            type: 1,
+                            title: "更换市别",
+                            skin: 'layui-layer-demo', //样式类名
+                            closeBtn: 0, //不显示关闭按钮
+                            shadeClose: true, //开启遮罩关闭
+                            area: ['auto', 'auto'], //宽高
+                            content: data
+                        });
+                    },
+                    error: function (data) {
+                        alert(data.responseText);
+                    }
+                });
+                return;
+            }
+            else if (url.toLowerCase().indexOf("poscleaningmachine/index") > -1) {
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    dataType: "html",
+                    success: function (data) {
+                        //$("#posMaskWindow").html(data);
+                        //$("#posMaskWindow_wnd_title").text("清机");
+                        //$(".k-i-close").click(function () {
+                        //    closeGeneralWindow();
+                        //});
+                        //openGeneralWindow();
+
+                        layer.close(layer.index);
+                        layer.open({
+                            type: 1,
+                            title: "清机",
+                            skin: 'layui-layer-demo', //样式类名
+                            closeBtn: 0, //不显示关闭按钮
+                            shadeClose: true, //开启遮罩关闭
+                            area: ['auto', 'auto'], //宽高
+                            content: data
+                        });
+                    },
+                    error: function (data) {
+                        alert(data.responseText);
+                    }
+                });
+                return;
+            }
+            else if (url.toLowerCase().indexOf("posposchange/index") > -1) {
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    dataType: "html",
+                    success: function (data) {
+                        //$("#posMaskWindow").html(data);
+                        //$("#posMaskWindow_wnd_title").text("更换收银点");
+                        //$(".k-i-close").click(function () {
+                        //    closeGeneralWindow();
+                        //});
+                        //openGeneralWindow();
+
+                        layer.close(layer.index);
+                        layer.open({
+                            type: 1,
+                            title: "更换收银点",
+                            skin: 'layui-layer-demo', //样式类名
+                            closeBtn: 0, //不显示关闭按钮
+                            shadeClose: true, //开启遮罩关闭
+                            area: ['auto', 'auto'], //宽高
+                            content: data
+                        });
+                    },
+                    error: function (data) {
+                        alert(data.responseText);
+                    }
+                });
+                return;
+            }
+            else if (url.toLowerCase().indexOf("posscanorder/index") > -1) {
+                var urlName = $(".secondLevelAuth[data-authurl='" + url + "']").html();
+                layer.confirm('是否' + urlName + '？', {
+                    btn: ['确定', '取消'], //按钮
+                    title: "",
+                    closeBtn: 0,
+                    shadeClose: false
+                }, function () {
+                    $.ajax({
+                        url: url,
+                        type: "post",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.Success) {
+                                if (urlName == "开启扫码点餐") {
+                                    layer.alert("开启扫码点餐成功", { title: "快点云Pos提示", skin: 'err' });
+                                    $(".secondLevelAuth[data-authurl='" + url + "']").html("关闭扫码点餐");
+                                }
+                                else {
+                                    layer.alert("关闭扫码点餐成功", { title: "快点云Pos提示", skin: 'err' });
+                                    $(".secondLevelAuth[data-authurl='" + url + "']").html("开启扫码点餐");
+                                }
+                            }
+                            else {
+                                if (urlName == "开启扫码点餐") {    
+                                   
+                                    layer.alert("开启扫码点餐失败", { title: "快点云Pos提示", skin: 'err' });
+                                }
+                                else {
+                                    layer.alert("关闭扫码点餐失败", { title: "快点云Pos提示", skin: 'err' });
+                                }
+                            }
+                            //layer.close(layer.index);
+
+                            
+                        },
+                        error: function (data) {
+                            alert(data.responseText);
+                        }
+                    });
+                    
+                    
+                    }, function () {
+                        layer.close(layer.index);
+                });
+                
+                return;
+            }
+            var iframe = $("#mainContent").find("iframe");
+            iframe.attr("scrolling", "auto");
+            iframe.attr("src", url);
+        }
+
+        function LoadHelpFiles(mid, mname, mtype) {//mtype 0:菜单显示 1：iframe显示
+            if (mtype == 0)
+                $("#helpinfodiv ol").html("");
+            else if (mtype == 1)
+                $("#helpinfodiviframe ol").html("");
+            $.post('@Url.Action("GetHelpFiles")', { id: mid }, function (data) {
+                if (data.length <= 0) {
+                    //没有帮助文档
+                    var url = '@Url.Action("index", "HelpFiles", new { area = "" })' + "?menuId=" + mid + "&menuName=" + mname;
+                    var adata = '@ViewBag.hotelId' == "000000" ? '<a href="' + url + '" title="快去添加吧！" target="_blank" >还没有帮助文档？快去添加吧！</a>' : ''
+                    var li = '<li class="most-view">' +
+                        adata +
+                        '</li>';
+                    if (mtype == 0)
+                        $("#helpinfodiv ol").append($(li));
+                    else if (mtype == 1)
+                        $("#helpinfodiviframe ol").append($(li));
+                }
+                else {
+                    for (var i = 0; i < data.length; i++) {
+                        var list = data[i];
+                        var url = '@Url.Action("index", "HelpFiles", new { area = "" })' + "?menuId=" + mid + "&menuName=" + mname + "&helpId=" + list.Id;
+                        var li = '<li class="most-view" style="list-style-type:decimal;">' +
+                            '<a href="' + url + '" title="' + list.Title + '" target="_blank" >' + list.Title + '</a>' +
+                            '</li>';
+                        if (mtype == 0)
+                            $("#helpinfodiv ol").append($(li));
+                        else if (mtype == 1)
+                            $("#helpinfodiviframe ol").append($(li));
+                    }
+                }
+
+            }, 'json');
+        }
+        function MouseOver(e) {
+            if (e == 0)
+                $("#helpinfodiv").css("display", "block");
+            else if (e == 1)
+                $("#helpinfodiviframe").css("display", "block");
+        }
+        function MouseOut(e) {
+            if (e == 0)
+                $("#helpinfodiv").css("display", "none");
+            else if (e == 1)
+                $("#helpinfodiviframe").css("display", "none");
+        }
+        var helpFilesDiv = '<div id="helpspantitleiframe" class="helpFilesDiviframe" onmouseover="MouseOver(1)" onmouseout="MouseOut(1)">' +
+                             '<span>帮助中心&nbsp;<img alt="帮助" style="margin-bottom: -3px" src="/images/auth/w-3.png"></span>' +
+                               '<div id="helpinfodiviframe">' +
+                                 '<ol>' +
+
+                                  '</ol>' +
+                                '</div>' +
+                            '</div>';
+        //显示或隐藏当前用户的修改密码和授权入口
+        $("#userSubMenuSpan,#userSubMenuDiv").hover(
+            function () {
+                $("#userSubMenuDiv").show();
+            },
+            function () {
+                $("#userSubMenuDiv").hide();
+            }
+        );
+        function showAuthWindow() {
+            openKendoWindow("授权他人登录", "@Url.Action("AuthUser","Account")");
+            var obj = $("#commonKendoWindow");
+            var objWindow = obj.parent(".k-widget.k-window");
+            if (objWindow.css("width") != "300px") {
+                objWindow.css("width", "300px");
+            }
+        }
+        function showBindWeixinWindow() {
+            openKendoWindow("绑定微信", "@Url.Action("BindWeixin", "Account")");
+            var obj = $("#commonKendoWindow");
+            var objWindow = obj.parent(".k-widget.k-window");
+            if (objWindow.css("width") != "300px") {
+                objWindow.css("width", "300px");
+            }
+        }
+
+        function loadNotice() {
+            expireNotice();
+        }
+        //到期提醒内容
+        function expireNotice() {
+            $.post('@Url.Action("GetExpirRemind")', function (data) {
+                if (data.Success) {
+                    $("#NoticeDiv").show();
+                    ScrollText($('#scrollText'), 23, 225, data.Data, 'left', 1, 35);//滚动字幕
+                } else {
+                    $("#NoticeDiv").hide();
+                    getNotice();//没有到期提前提醒则显示公告提醒
+                }
+            });
+        }
+        //加载公告提醒
+        function getNotice() {
+            $.post('@Url.Action("GetNoticeData")', function (data) {
+                if (data.Success) {
+                    $("#NoticeDiv").show();
+                    var url = "@Url.Action("Notice")" + "?id=" + data.Data.Id;
+                    ScrollText($('#scrollText'), 23, 165, data.Data.Title, 'left', 1, 35, url);//滚动字幕
+                    $("#ContainerTemp").click(function () {
+                        top.openIframeKendoWindow("公告详情", url, null, "", "公告详情");
+                    });
+                }
+                else {
+                    $("#NoticeDiv").hide();                 
+                }
+            });
+        }
+        //打开遮罩弹窗
+        function openGeneralWindow() {
+            $("#posMaskWindow").data("kendoWindow").center().open();
+            $("#posMaskWindowMask").show();
+        }
+        //关闭遮罩弹窗
+        function closeGeneralWindow() {
+            $("#posMaskWindow").data("kendoWindow").close();
+            $("#posMaskWindowMask").hide();
+        }
+    </script>
+    <div style="display:none;">
+        @Html.Partial("_HardwareIframe")
+        @Html.Partial("~/Areas/ResManage/Views/ResOrderCustomer/_Lock.cshtml")
+        @{try { Html.RenderAction("Lock", "ResOrderCustomer", new { area = "ResManage" }); } catch { }}
+    </div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title</title>
+
+    <!-- Css -->
+    <link href="~/Content/ScanOrder/main.css" rel="stylesheet" />
+    <link href="~/Scripts/ScanOrder/mui/css/mui.min.css" rel="stylesheet" />
+    <link href="~/Scripts/ScanOrder/layer_mobile/need/layer.css" rel="stylesheet" />
+    <link href="~/Scripts/ScanOrder/swiper-4.4.1/css/swiper.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+    @RenderSection("Css", required: false)
+
+    <script type="text/javascript" src="~/Scripts/ScanOrder/mui/js/mui.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/ScanOrder/jquery-3.3.1.min.js"></script>
+
+</head>
+<body>
+    @if (!string.IsNullOrEmpty(ViewBag.RefeName))
+    {
+        <header class="mui-bar mui-bar-nav">
+            @*<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>*@
+            <h1 class="mui-title">@ViewBag.RefeName/@ViewBag.TabName</h1>
+        </header>
+    }
+
+    <div class="layout mui-content">
+        @RenderBody()
+    </div>
+    @if (!string.IsNullOrEmpty(ViewBag.RefeName))
+    {
+        <!-- 购物车 -->
+        <div class="settlement">
+            <div class="downOrder">
+                <button id="showShopCart" type="button" class="mui-btn mui-btn-warning" onclick="showShopCart()"><i class="fa fa-shopping-cart" aria-hidden="true"></i> 购物车 ￥0.00 </button>
+                <button id="downForm" type="button" class="mui-btn mui-btn-success" onclick="downForm()">去下单</button>
+            </div>
+        </div>
+    }
+
+    @RenderSection("Scripts", required: false)
+    <script type="text/javascript" src="~/Scripts/ScanOrder/layer_mobile/layer.js"></script>
+    <script type="text/javascript" src="~/Scripts/ScanOrder/swiper-4.4.1/js/swiper.min.js"></script>
+</body>
+</html>

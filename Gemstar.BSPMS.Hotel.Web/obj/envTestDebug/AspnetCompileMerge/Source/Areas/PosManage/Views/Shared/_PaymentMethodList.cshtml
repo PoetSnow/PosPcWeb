@@ -1,0 +1,33 @@
+﻿@using Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models;
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+@model PaymentViewModel
+
+@{
+    if (Model != null && Model.Billid != null)
+    {
+        @(Html.Kendo().Grid<up_pos_list_BillDetailForPaymentResult>()
+            .Name("gridPaymentMethod")
+            .Columns(c =>
+            {
+                c.Bound(m => m.Id).Hidden();
+                c.Bound(m => m.Row).Title("序号").HtmlAttributes(new { @style = "white-space: nowrap;" });
+                c.Bound(m => m.Cname).Title("付款方式").HtmlAttributes(new { @style = "white-space: nowrap;" });
+                c.Bound(m => m.Dueamount).Title("原币金额").HtmlAttributes(new { @style = "white-space: nowrap;" });
+                c.Bound(m => m.Rate).Title("汇率").HtmlAttributes(new { @style = "white-space: nowrap;" });
+                c.Bound(m => m.Amount).Title("本位币金额").HtmlAttributes(new { @style = "white-space: nowrap;" });
+                c.Bound("").Title("操作").ClientTemplate("<a class='k-button' onclick='deletePayment(this)'>反结</a>").HtmlAttributes(new { @style = "white-space: nowrap;" }).Hidden();
+            })
+            .Sortable()
+            .Scrollable()
+            .Resizable(r => r.Columns(true))
+            .Selectable(s => s.Enabled(true))
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(0)
+                .Read(read => read.Action("ListItemsForBillDetailByBill", "PosReverseCheckout", new { Billid = Model.Billid }))
+             )
+            .HtmlAttributes(new { style = "height:6.8rem;width:100%" })
+        )
+    }
+}
+

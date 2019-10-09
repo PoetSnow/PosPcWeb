@@ -1,0 +1,68 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosUserToRefe.UserToRefeViewModel
+
+<script type="text/javascript">
+    function posPos_paras() {
+        var PosId = $("#PosId").data("kendoMultiSelect");
+        var PosIdCode = PosId.value();
+        return {
+            posId: PosIdCode
+        };
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+<table class="editFormTable">
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Code)：</td>
+        <td style="width:35%">@Html.Kendo().TextBoxFor(m => m.Code).HtmlAttributes(new { style = "width:100%;", @readonly = "readonly"})</td>
+        <td class="textright">@Html.LabelFor(m => m.Name)：</td>
+        <td>@Html.Kendo().TextBoxFor(m => m.Name).HtmlAttributes(new { style = "width:100%;", @readonly = "readonly" })</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Mobile)：</td>
+        <td>@Html.Kendo().TextBoxFor(m => m.Mobile).HtmlAttributes(new { style = "width:100%;", @readonly = "readonly" })</td>
+        <td class="textright">@Html.LabelFor(m => m.Email)：</td>
+        <td>@Html.Kendo().TextBoxFor(m => m.Email).HtmlAttributes(new { style = "width:100%;", @readonly = "readonly" })</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.Qq)：</td>
+        <td>@Html.Kendo().TextBoxFor(m => m.Qq).HtmlAttributes(new { style = "width:100%;", @readonly = "readonly" })</td>
+        <td class="textright">@Html.LabelFor(m => m.Remark)：</td>
+        <td>@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:100%;", @readonly = "readonly" })</td>
+    </tr>
+    <tr>
+        <td class="textright">@Html.LabelFor(m => m.PosId)：</td>
+        <td>
+            @Html.Kendo().MultiSelectFor(e => e.PosId).HtmlAttributes(new { style = "width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosPosByHid", "BasicDataPosPos", new { rnd = new Random().NextDouble() })); }).AutoClose(false).Placeholder("请选择所属收银点").Value(Model.PosIds)
+            @Html.ValidationMessageFor(m => m.PosId, "*")
+        </td>
+
+        <td class="textright">@Html.LabelFor(m => m.RefeId)：</td>
+        <td>
+            @Html.Kendo().MultiSelectFor(e => e.RefeId).HtmlAttributes(new { style = "width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListRefeByPosId", "BasicDataPosRefe", new { rnd = new Random().NextDouble() }).Data("posPos_paras")); }).AutoClose(false).Placeholder("请选择所属营业点").Value(Model.RefeIds)
+            @Html.ValidationMessageFor(m => m.RefeId, "*")
+        </td>
+    </tr>
+</table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+</script>

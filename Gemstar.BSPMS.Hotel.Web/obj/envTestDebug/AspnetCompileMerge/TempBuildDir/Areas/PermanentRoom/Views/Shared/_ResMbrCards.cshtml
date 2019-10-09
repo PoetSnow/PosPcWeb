@@ -1,0 +1,16 @@
+﻿@model Gemstar.BSPMS.Hotel.Services.Entities.MbrCardBalance
+@if (Model != null)
+{
+    <p><span class="span-color">卡类型：</span><span class="black-color">@ViewBag.MbrCardTypeName</span></p>
+    <p><span class="span-color">储值金额：</span><span class="black-color">@Model.Balance</span></p>
+    <p><span class="span-color">增值金额：</span><span class="black-color">@Model.Free</span></p>
+    <p><span class="span-color">积分：</span><span class="black-color">@Model.Score</span></p>
+    <p><span class="span-color">业主分：</span><span class="black-color">@Model.scoreOwner</span></p>
+    <p><span class="span-color">现金券：</span><span class="black-color">@Model.CashTicket</span></p>
+    <p><span class="span-color">项目券：</span><span class="black-color">@Model.ItemTicket</span></p>
+    <p><span class="black-color">双击可查看消费记录</span></p>
+}
+else
+{
+    <p style="text-align:center;"><span class="black-color">暂无信息</span></p>
+}

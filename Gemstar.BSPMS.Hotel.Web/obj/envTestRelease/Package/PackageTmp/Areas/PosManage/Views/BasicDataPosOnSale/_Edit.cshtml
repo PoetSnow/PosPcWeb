@@ -1,0 +1,117 @@
+﻿
+@model Gemstar.BSPMS.Hotel.Web.Areas.PosManage.Models.BasicDataPosOnSale.PosOnSaleEditViewModel
+<script>
+    function posItem_paras() {
+        var module = $("#Itemid").data("kendoDropDownList");
+        var itemId = module.value();
+        return {
+            itemId: itemId
+        };
+    }
+    function ItemChange() {
+        var Unitid = $("#Unitid").data("kendoDropDownList");
+        Unitid.dataSource.read();
+    }
+</script>
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.Hid)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Itemid)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Itemid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").Filter("contains").DataSource(e => { e.Read(r => r.Action("ListItems", "BasicDataPosOnSale", new { rnd = new Random().NextDouble() })).ServerFiltering(true); }).OptionLabel("请选择消费项目").Events(e => e.Change("ItemChange"))</td>
+            <td>@Html.ValidationMessageFor(m => m.Itemid, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Unitid)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Unitid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListUnits", "BasicDataPosOnSale", new { rnd = new Random().NextDouble() }).Data("posItem_paras")).ServerFiltering(true); }).OptionLabel("请选择单位")</td>
+            <td>@Html.ValidationMessageFor(m => m.Unitid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Price)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(m => m.Price).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Price, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Refeid)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Refeid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosRefe", "BasicDataPosRefe", new { rnd = new Random().NextDouble() })); }).OptionLabel("全部营业点")</td>
+            <td>@Html.ValidationMessageFor(m => m.Refeid, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.TabTypeid)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.TabTypeid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosTabtype", "BasicDataPosTabtype", new { rnd = new Random().NextDouble() })); }).OptionLabel("全部餐台类型")</td>
+
+            <td>@Html.ValidationMessageFor(m => m.ITagperiod, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.ITagperiod)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.ITagperiod).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListiTagperiod", "BasicDataPosOnSale", new { rnd = new Random().NextDouble() })); })</td>
+            <td>@Html.ValidationMessageFor(m => m.ITagperiod, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.StartTime)</td>
+            <td> @Html.Kendo().MaskedTextBoxFor(m => m.StartTime).Mask("00:00").HtmlAttributes(new { style = "width:100%;", placeholder = "请输入开始时间" })</td>
+            <td>@Html.ValidationMessageFor(m => m.StartTime, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.EndTime)</td>
+            <td>@Html.Kendo().MaskedTextBoxFor(e => e.EndTime).Mask("00:00").HtmlAttributes(new { style = " width:100%", placeholder = "请输入结束时间" })</td>
+            <td>@Html.ValidationMessageFor(m => m.EndTime, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Discount)</td>
+            <td>@Html.Kendo().NumericTextBoxFor(e => e.Discount).HtmlAttributes(new { style = " width:100%" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Discount, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.Module)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.Module).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListItemsForPosModules", "BasicDataPosOnSale", new { rnd = new Random().NextDouble() })); })</td>
+            <td>@Html.ValidationMessageFor(m => m.Module, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.ICmpType)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.ICmpType).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("ListICmpType", "BasicDataPosOnSale", new { rnd = new Random().NextDouble() })); })</td>
+            <td>@Html.ValidationMessageFor(m => m.ICmpType, "*")</td>
+            <td class="textright">@Html.LabelFor(m => m.CustomerTypeid)</td>
+            <td>@Html.Kendo().DropDownListFor(e => e.CustomerTypeid).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("CustomerTypeList", "BasicDataPosOnSale", new { rnd = new Random().NextDouble() })); }).OptionLabel("全部客人类型")</td>
+            <td>@Html.ValidationMessageFor(m => m.CustomerTypeid, "*")</td>
+
+        </tr>
+        <tr>
+            <td class="textright"></td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsService).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsService, "*")</td>
+            <td class="textright"></td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsDiscount).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.IsDiscount, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright"></td>
+            <td> @(Html.Kendo().CheckBoxFor(m => m.IsLimit).HtmlAttributes(new { style = "width:100%;" }))</td>
+            <td>@Html.ValidationMessageFor(m => m.IsLimit, "*")</td>
+            <td class="textright"></td>
+            <td>@Html.Kendo().CheckBoxFor(m => m.IsUsed).HtmlAttributes(new { style = "width:100%;" }).Checked(true)</td>
+            <td>@Html.ValidationMessageFor(m => m.IsUsed, "*")</td>
+        </tr>
+        <tr>
+
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td>@Html.Kendo().TextBoxFor(m => m.Remark).HtmlAttributes(new { style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>
+
+        </tr>
+
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">确定</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+
+</script>
+

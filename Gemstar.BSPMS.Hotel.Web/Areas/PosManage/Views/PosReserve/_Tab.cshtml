@@ -1,0 +1,10 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_ReserveTabStatusResult>
+
+@{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td data-id="@item.TabId">@item.TabName</td>
+        </tr>
+    }
+}

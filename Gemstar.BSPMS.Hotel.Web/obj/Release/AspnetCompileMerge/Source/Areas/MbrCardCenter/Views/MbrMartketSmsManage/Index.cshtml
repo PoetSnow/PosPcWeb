@@ -1,0 +1,139 @@
+﻿
+@using System.Data;
+@using Gemstar.BSPMS.Common.Extensions;
+<div style="height:600px;max-height:600px;overflow:hidden;padding-left:5px;padding-right:5px;">
+    <div id="selectdiv" style="margin-bottom:5px;margin-top:10px;">
+        <span style="margin-right:5px;">未发短信的日期从</span>@(Html.Kendo().DateTimePicker().Name("dateBegin").Format(DateTimeExtension.DateTimeFormatStr))
+        <button style="margin-left:10px;" class="k-button" id="queryButton" role="button" data-role="button">查询</button>
+        <span style="float:right;color:red">左侧选择会员，右侧填写短信内容(会员已过滤掉没有手机号和未勾选接收营销短信的)</span>
+        <input id="paramStr" type="hidden" value="@ViewBag.Para"/>
+    </div>
+    <div style="width:50%; float:left;" id="grid1">
+        @(Html.Kendo().Grid<DataRowView>()
+                .Name("leftgrid")
+                .Columns(columns =>
+                {
+                    columns.Bound("id").ClientTemplate("<input type=\"checkbox\" name=\"leftids\" onclick=\"leftCheckClick()\"  value=\"#:id#\" />").Title("<input type=\"checkbox\" id=\"selall1\" onclick=\"selallleft();leftCheckClick()\" /><label for='selall1'>全选</label>").ClientFooterTemplate("<span style=\"float:right;\">选中</span>").Sortable(false);
+                    columns.Bound("guestName").Title("会员姓名").ClientFooterTemplate("会员数：<span id=\"leftSelectCount\">0</span>");
+                    columns.Bound("mobile").Title("会员手机号").ClientFooterTemplate("<span style=\"float:right;\">总计</span>");
+                    columns.Bound("MarketSmsDate").Title("发送营销短信时间").ClientFooterTemplate("会员数：<span id=\"count\">#=count#</span>");
+                })
+                .Reorderable(c => c.Columns(true))
+                .Resizable(c => c.Columns(true))
+                .Scrollable(c => c.Height("495px"))
+                .Sortable()
+                .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+                .Pageable(pageable => pageable.Enabled(false))
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("AjaxQuery", "Query", new { area = "" }).Data("getQueryParas"))
+                    .ServerOperation(false)
+                    .Aggregates(aggregates =>
+                    {
+                        aggregates.Add("MarketSmsDate", typeof(string)).Count();
+                    })
+                )
+        )
+    </div>
+    <div style="width:50%; float:left;" id="grid2">
+        @*<span class="span-red" style="padding-top:5px;float:left">左侧选择会员，右侧填写短信内容，短信内容不可和上次发送的一致,超过70字符算2条短信</span><br />*@
+        @Html.TextArea("msg", new { @class = "k-textbox", style = "width:570px;height:480px;font-size:15px;", maxlength = "500", placeholder= "短信内容不可和上次发送的一致，超过60字符算2条短信" })
+        <div style="text-align:center; margin-top:20px;">
+            <button class="k-primary k-button" style="" role="button" data-role="button" onclick="sendMsg()">发送</button>
+        </div>
+    </div>
+
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $("#count").text($('#grid1 [name=leftids]').length);
+        });
+        function selallleft() {
+            $('#grid1 [name=leftids]:checkbox').each(function (e) {
+                if ($('#selall1').is(':checked')) {
+                    this.checked = true;
+                } else {
+                    this.checked = false;
+                }
+            });
+        }
+        function leftCheckClick()
+        {
+            var leftSum = 0;
+            var leftCheckedObj = $("#grid1 [name='leftids']:checked");
+            $("#leftSelectCount").text(leftCheckedObj.length);
+        }
+        function getQueryParas() {
+            return {
+                GridControlId: "leftgrid",
+                QueryProcedureName: "up_list_mbrMarketSmsList",
+                QueryParameterValues: $("#paramStr").val()
+            }
+        }
+        $("#queryButton").click(function () {
+            var begDate = $("#dateBegin").data("kendoDateTimePicker").value();
+            var obj = $("#paramStr");
+            var dateindex = obj.val().lastIndexOf("@@dateBebin=");
+            if (dateindex == -1) {
+                if (begDate != null && begDate != "")
+                {
+                    obj.val(obj.val() + "&@@dateBebin=" + begDate.ToDateTimeString());
+                }
+            } else {
+                if (begDate != null && begDate != "") {
+                    obj.val(obj.val().toString().substring(0, dateindex - 1) + "&@@dateBebin=" + begDate.ToDateTimeString());
+                }
+                else
+                {
+                    obj.val(obj.val().toString().substring(0, dateindex - 1));
+                }
+                
+            }
+            var grid = $("#leftgrid").data("kendoGrid");
+            grid.dataSource.read();
+        });
+        function sendMsg() {
+            var checkedObj = $("[name='leftids']:checked");
+            if (checkedObj.length <= 0) {
+                jAlert("请选择发送的会员！", "知道了");
+                return;
+            }
+            var idarr = [];
+            var mobilearr = [];
+            checkedObj.each(function () {
+                idarr.push($(this).val());
+                mobilearr.push($(this).parent().parent().find("td").eq(2).html());
+            });
+            var ids = idarr.join(",");
+            var mobiles = mobilearr.join(",");
+            if (ids.length <= 0) {
+                jAlert("请选择发送的会员！", "知道了");
+                return;
+            }
+            var sendMsg = $.trim($("#msg").val());
+            if (sendMsg.length <= 0)
+            {
+                jAlert("请填写短信内容！", "知道了");
+                return;
+            }
+            var smsNum = idarr.length;
+            if (sendMsg.length > 60) {
+                smsNum = smsNum * 2;
+            }
+            jConfirm("总计" + smsNum + "条短信，是否发送？", "是", "否", function (flag) {
+                if (flag) {
+                    $.post("@Url.Action("SendSms")", { ids: ids, mobiles: mobiles, content: sendMsg }, function (data) {
+                        if (data.Success) {
+                            jAlert("发送成功！");
+                            $("#leftgrid").data("kendoGrid").dataSource.read();
+                        } else {
+                            ajaxErrorHandle(data);
+                        }
+                    }, "json");
+                }
+            });
+            $.post();
+        }
+    </script>
+
+

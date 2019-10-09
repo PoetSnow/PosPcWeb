@@ -1,0 +1,51 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures.up_pos_discTypeList>
+<ul>
+    @{
+        if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                if (item.Flag == "C")
+                {
+                    <li class="content-list-tabStatus staus-empty ">
+                        <a href="javascript:void(0)" onclick="AddDiscTypeA('@item.discType')">
+                            <span style="font-size: 5rem;line-height: 5rem;">@item.cname</span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    if (item.Flag == "A")
+                    {
+                        <li class="content-list-detail">
+                            <a href="javascript:void(0)" onclick="updateDiscType(this, '@Url.Action("UpdateDiscTypeA", "PosInSingleDiscount")')" data-id="@item.id" data-name="@item.cname" data-discount="@item.discount" data-type="@item.discType">
+                                <span>@item.code</span>
+                                <span>@item.cname</span>
+                                <span>&nbsp;</span>
+                                <span></span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="content-list-detail" style="background-color:rgb(255, 200, 0)">
+                            <a href="javascript:void(0)" onclick="AddDiscTypeA('@item.discType')">
+                                <span></span>
+                                <span>@item.cname</span>
+                                <span>&nbsp;</span>
+                                <span></span>
+                            </a>
+                        </li>
+                    }
+
+                }
+
+            }
+            <li class="content-list-paging" style="background-color: rgba(0, 0, 0, 0);border:0">
+                <a href="javascript:void(0)" onclick="getListPage(this,'1','@(Url.Action("_DiscTypeList", "PosInSingle"))','@(Url.Action("GetDiscTypeTotal", "PosInSingle"))')">上一页</a>
+                <a href="javascript:void(0)" onclick="getListPage(this,'2','@(Url.Action("_DiscTypeList","PosInSingle"))','@(Url.Action("GetDiscTypeTotal","PosInSingle"))')">下一页</a>
+            </li>
+        }
+        <li class="content-list-return" style=""><a href="javascript:void(0)" onclick="getDiscTypeList('@Url.Action("_DiscTypeList", "PosInSingle")','@Url.Action("GetDiscTypeTotal", "PosInSingle")','0')"><img src="~/Images/posInSingle/fanh.png" /><br />返回</a></li>
+    }
+</ul>

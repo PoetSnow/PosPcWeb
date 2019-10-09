@@ -1,0 +1,150 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.MarketingManage.Models.PlanTask.PlanTaskAddViewModel
+@using (Html.BeginForm())
+{
+
+    <div id="dv" style="margin-top:20px;text-align:left;margin-left:55px;">
+        <table style="width:520px;" class="updateroomholdtable"> 
+            <tr>
+                <td>日期从：</td>
+                <td><input id='begintime' />　至　<input id='endtime' /> <span>　　</span></td>
+            </tr>
+        </table>
+    </div>
+    <div id="divDay" style="margin-top:25px;text-align:left;padding-left:52px;">
+        <span style="display: inline-block; width: 103px;"><input type="radio" name="selTimeType" value="1" id="rad1" checked="checked" onclick="enabletext(this)" /> <label for="rad1">每天客房收入：</label></span>
+        <input type="text" id="textday" name="daytext" onblur="checkText(this); filltext(this);" style="width:40px;height:20px;border:1px solid gray;border-radius:3px;" />
+    </div>
+    <div id="divWeek">
+        <table>
+            <tr>
+                <td style="text-align:right;">　　</td>
+                <td>
+                    <div id="divhead" style="margin-top:5px;text-align:center;padding-left:50px;">
+                        <span>　　　　　</span>  <span>周一</span><span>周二</span><span>周三</span><span>周四</span><span>周五</span><span>周六</span><span>周日</span><br />
+                    </div>
+                    <div id="divchage" style="margin-top:1px;padding-left:18px;">
+                        <input type="radio" name="selTimeType" value="2" style="width:13px;height:13px;" id="rad2" onclick="enabletext(this)" /> <label for="rad2">每周客房收入：</label>
+                        <input name="weektext" type="text" id="text1" onblur="checkText(this)" />
+                        <input name="weektext" type="text" id="text2" onblur="checkText(this)" />
+                        <input name="weektext" type="text" id="text3" onblur="checkText(this)" />
+                        <input name="weektext" type="text" id="text4" onblur="checkText(this)" />
+                        <input name="weektext" type="text" id="text5" onblur="checkText(this)" />
+                        <input name="weektext" type="text" id="text6" onblur="checkText(this)" />
+                        <input name="weektext" type="text" id="text7" onblur="checkText(this)" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div> 
+    @*<table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.cDate)</td>
+                        <td>@Html.TextBoxFor(m => m.cDate, new { @class = "k-textbox", style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.cDate, "*")</td>
+                        <td class="textright">客房收入</td>
+                        <td>@Html.TextBoxFor(m => m.Amount, new { @class = "k-textbox", style = "width:100%;" })</td>
+                        <td>@Html.ValidationMessageFor(m => m.Amount, "*")</td> 
+                    </tr> 
+                </table>*@
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+ 
+<style type="text/css">
+    #divchage input {
+        border-radius: 3px;
+        width: 40px;
+        height: 20px;
+        margin-left: 5px;
+        border: 1px solid gray;
+    }
+
+    #divhead span {
+        display: inline-block;
+        width: 55px;
+        margin-left: 5px;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+
+
+        $("input[name=weektext]").attr("readonly", "readonly");
+        $("#begintime").kendoDatePicker({ culture: "zh-CN", format: "yyyy-MM-dd" });
+        $("#endtime").kendoDatePicker({ culture: "zh-CN", format: "yyyy-MM-dd" });
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            addPlanTask();
+
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+    function addPlanTask() {
+        var begintime = new Date($("#begintime").val());
+        var endtime = new Date($("#endtime").val());
+        if ($("#begintime").val() == "") {
+            jAlert("请输入开始日期！", "知道了"); return;
+        }
+        if ($("#endtime").val() == "") {
+            jAlert("请输入结束日期！", "知道了"); return;
+        }
+        if (begintime > endtime) {
+            jAlert("开始日期不能大于结束日期！", "知道了");
+            return;
+        }
+        begintime = begintime.getFullYear() + "-" + (begintime.getMonth() + 1) + "-" + begintime.getDate();
+        endtime = endtime.getFullYear() + "-" + (endtime.getMonth() + 1) + "-" + endtime.getDate();
+        var selval = $('input[name="selTimeType"]:checked ').val();
+        var valarr = "";
+        if (selval == "2") {
+            for (var i = 1; i <= 7; i++) {
+                valarr += ($("#text" + i).val() == "" ? "0" : $("#text" + i).val()) + ",";
+            }
+        } else { 
+            for (var i = 1; i <= 7; i++) {
+                valarr += ($("#textday").val() == "" ? "0" : $("#textday").val()) + ",";
+            }
+        }
+        $.post(
+            "@Url.Action("Add")",
+          { begintime: begintime, endtime: endtime, arr: valarr },
+             function (data) {
+                 if (data.Success) { 
+                     $("iframe[src='/MarketingManage/PlanTask/Index/61090']")[0].contentWindow.refreshGrid();
+                     closeEditFormWindow();
+                 } else { 
+                     ajaxErrorHandle(data);
+                 }
+             },
+             "json");
+    }
+
+    function enabletext(obj) {
+        if ($(obj).val() == "1") {
+            $("input[name=weektext]").attr("readonly", "readonly");
+            $("input[name=daytext]").attr("readonly", false);
+        } else {
+            $("input[name=daytext]").attr("readonly", "readonly");
+            $("input[name=weektext]").attr("readonly", false);
+        }
+    }
+    function checkText(obj) {
+        if (isNaN($(obj).val())) {
+            $(obj).val("");
+        }
+    }
+    function filltext(obj) {
+        var aaa = $("#divchage").children();
+        for (var i = 0; i < aaa.length; i++) {
+            if (aaa[i].value != "2") {//单选按钮
+                aaa[i].value = $(obj).val();
+            }
+        }
+    }
+</script>

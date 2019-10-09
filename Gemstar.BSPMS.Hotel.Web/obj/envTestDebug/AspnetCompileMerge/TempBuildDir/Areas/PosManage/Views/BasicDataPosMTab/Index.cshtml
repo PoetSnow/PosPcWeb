@@ -1,0 +1,131 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+
+<style>
+    html, body {
+        height: 100%;
+        overflow:hidden;
+    }
+
+    .wrap {
+        height: 88%;
+    }
+</style>
+
+<link href="~/Content/Pos/posPublic.css?version=@ViewBag.Version" rel="stylesheet" />
+<div class="k-header k-grid-toolbar k-grid-top"><button class='k-button k-button-icontext k-grid-disable' onclick="packageImages()">导出所有点餐码</button> <span id="status"></span></div>
+@(Html.Kendo().Grid<up_pos_scan_list_TabListByHidResult>()
+    .Name("gridScanTab")
+    .Columns(columns =>
+    {
+        columns.Bound(m => m.Id).Hidden();
+        columns.Bound(m => m.Hid).Hidden();
+        columns.Bound(m => m.TabNo).Title("台号");
+        columns.Bound(m => m.Cname).Title("中文名");
+        columns.Bound(m => m.Ename).Title("英文名");
+        columns.Bound(m => m.RefeName).Title("营业点");
+        columns.Bound(m => m.TabTypeName).Title("餐台类型").HtmlAttributes(new { @style = "white-space: nowrap;" });
+        columns.Bound(m => m.ModuleName).Title("模块").HtmlAttributes(new { @style = "white-space: nowrap;" });
+        columns.Bound(m => m.Remark).Title("备注").HtmlAttributes(new { @style = "white-space: nowrap;" });
+        columns.Bound(m => m.OrderBarcode).Title("点餐码").ClientTemplate("<div id='#= Id #' class='orderBarcode' style='width: 100px; height: 100px;' data-name='#= RefeName #-#= Cname #' data-url='#= OrderBarcode #'></div>");
+        columns.Bound(m => m.PayBarcode).Title("付款码").Hidden();
+        columns.Bound(m => m.PayBarcode).Title("操作").ClientTemplate("<a href='javascript:void(0);' class='k-button k-button-icontext k-grid-disable' onclick='downQrcode(this)' data-name='#= RefeName #-#= Cname #.png' data-url='#= OrderBarcode #'>下载点餐码</a>").HtmlAttributes(new { @style = "white-space: nowrap;" });
+    })
+    .Sortable()
+    .Scrollable()
+    .Resizable(r => r.Columns(true))
+    .Selectable(s => s.Mode(GridSelectionMode.Single))
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .Read(read => read.Action("ListTabByHid", "BasicDataPosMTab", new { rnd = new Random().NextDouble() })))
+    .Events(e => e.DataBound("createQRCode"))
+    .HtmlAttributes(new { @style = "height:100%" })
+)
+
+<!-- 下载二维码 -->
+<div id="downQrcode" style="display:none;"></div>
+<a id="downQrcodeImg" href="" download="" style="display:none;"></a>
+
+<script src="~/Scripts/ScanOrder/qrcode.js"></script>
+<script src="~/Scripts/ScanOrder/jszip.min.js"></script>
+<script src="~/Scripts/ScanOrder/FileSaver.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+
+    var imgNames = [];
+    //创建二维码
+    function createQRCode() {
+        var barcodes = $(document).find(".orderBarcode");
+        barcodes.each(function () {
+            var qrcode = new QRCode(this, { width: 100, height: 100 });
+            imgNames.push($(this).attr("data-name"));
+            qrcode.makeCode($(this).attr("data-url"));
+        });
+    }
+
+    //下载二维码
+    function downQrcode(obj) {
+        $("#downQrcode").html("");
+        var qrcode = new QRCode($("#downQrcode").get(0), { width: 430, height: 430 });
+        qrcode.makeCode($(obj).attr("data-url"));
+
+        setTimeout(function () {
+            //获取图片内容
+            var url = $("#downQrcode").find("img").first().attr("src");
+            //下载图片
+            var triggerDownload = $("#downQrcodeImg").attr("href", url).attr("download", $(obj).attr("data-name"));
+            triggerDownload[0].click();
+        }, 500);
+    }
+
+    function packageImages() {
+        $('#status').text('处理中...');
+
+        var barcodes = $(document).find(".orderBarcode");
+        barcodes.each(function () {
+            var qrcode = new QRCode($("#downQrcode").get(0), { width: 430, height: 430 });
+            qrcode.makeCode($(this).attr("data-url"));
+        });
+
+        setTimeout(function () {
+            var imgs = $('#downQrcode img');
+
+            var imgsSrc = [];
+            var imgBase64 = [];
+            var imageSuffix = [];//图片后缀
+            var zip = new JSZip();
+            zip.file("扫码点餐二维码.txt", "扫码点餐二维码");
+            var img = zip.folder("images");
+
+            for (var i = 0; i < imgs.length; i++) {
+                var src = imgs[i].getAttribute("src");
+                var suffix = "." + src.substring(src.indexOf("/") + 1, src.indexOf(";"));
+                imageSuffix.push(suffix);
+                
+                imgBase64.push(src.substring(22));
+            }
+            function tt() {
+                setTimeout(function () {
+                    if (imgs.length == imgBase64.length) {
+                        for (var i = 0; i < imgs.length; i++) {
+                            img.file(imgNames[i] + imageSuffix[i], imgBase64[i], { base64: true });
+                        }
+                        zip.generateAsync({ type: "blob" }).then(function (content) {
+                            // see FileSaver.js
+                            saveAs(content, "扫码点餐二维码.zip");
+                        });
+                        $('#status').text('处理完成...');
+
+                    } else {
+                        //console.log('imgs.length:'+imgs.length+',imgBase64.length:'+imgBase64.length);
+                        $('#status').text('已完成：' + imgBase64.length + '/' + imgs.length);
+                        tt();
+                    }
+                }, 100);
+            }
+            tt();
+        }, 500);
+    }
+</script>

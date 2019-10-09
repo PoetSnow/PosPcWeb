@@ -1,0 +1,536 @@
+﻿@model List<Gemstar.BSPMS.Hotel.Services.EntitiesPos.PosRefe>
+@using Gemstar.BSPMS.Hotel.Services.EnumsPos;
+
+<input type="hidden" id="MergeRefeId" value="" />
+<input type="hidden" id="MergeTotalTab" />
+<input type="hidden" id="MergepageIndex" />
+<input type="hidden" id="MergePageSize" />
+
+<!--Flag用于区分是并台还是转菜-->
+<input type="hidden" id="MergeFlag" />
+
+<div style="height:2.5rem;padding-left:11px;width:50%">
+    <input id="btnRefe" type="button" value="全部营业点" onclick="showRefeList()" class="btn" />
+    <ul class="refe">
+        @{
+            <li><a href="javascript:void(0);" onclick="SelectRefe('0')">全部</a></li>
+            foreach (var item in Model)
+            {
+                <li>
+                    <a href="javascript:void(0);" onclick="SelectRefe(this)" data-id="@item.Id" data-name="@item.Cname">@item.Cname</a>
+                </li>
+            }
+        }
+    </ul>
+</div>
+
+<!--餐台列表-->
+<div id="TabStatusListByMergeTab" style="padding-left:11px">
+</div>
+
+<style>
+    .refe {
+        z-index: 99999;
+        position: absolute;
+        width: 50%;
+        text-align: center;
+        background-color: #1d4666;
+        color: #eee;
+        display: none
+    }
+
+        .refe li {
+            border-bottom: 1px solid;
+            line-height: 35px;
+        }
+
+            .refe li a {
+                color: #eee;
+            }
+
+    .btn {
+        border: 1px solid #aaa;
+        background: #eee;
+        border-radius: 5px;
+        padding: 7px;
+        margin: 0;
+        width: 100%;
+        margin-top: 2px;
+        color: #333;
+    }
+
+    .tabListMerge {
+        color: #fff;
+        height: 2rem;
+        background-color: #274f7a;
+        margin-bottom: 5px;
+    }
+
+    #tabList {
+        padding-left: 5px;
+    }
+
+    #TabStatusListByMergeTabList {
+        background-color: #454545;
+    }
+
+    #TabStatusListByMergeTab span {
+        font-size: 0.8rem;
+    }
+</style>
+
+<script>
+    $(function () {
+        $("#MergepageIndex").val('@ViewBag.PageIndex');
+        $("#MergePageSize").val('@ViewBag.PageSize');
+        $("#MergeFlag").val('@ViewBag.Flag')
+        GetTabList();
+
+    })
+    //获取餐台列表
+    function GetTabList() {
+        var model = {
+            PageIndex: $("#MergepageIndex").val(),
+            PageSize: $("#MergePageSize").val(),
+            Refeid: $("#MergeRefeId").val()
+        };
+        $.ajax({
+            url: 'PosInSingle/_TabStatusListByMergeTab',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#TabStatusListByMergeTab").html(data);
+                setItemPriceNull();
+                setTabBackClass1();
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+        GetTabStatusTotal();
+    }
+
+    function setTabBackClass1() {
+        var list = $("#tabListMerge").find(".content-list-tabStatus");
+        list.each(function () {
+            var status = $(this).attr("data-staus");
+
+            if (status == '@((byte)PosTabStatusEnum.已买单未离座)') {
+                $(this).addClass("staus-sit");
+            }
+            else if (status == '@((byte)PosTabStatusEnum.已打单超时未买单)') {
+                $(this).addClass("staus-intimidate");
+            }
+            else if (status == '@((byte)PosTabStatusEnum.落单后超时未有再点菜)') {
+                $(this).addClass("staus-beAlone");
+            }
+            else if (status == '@((byte)PosTabStatusEnum.就座)') {
+                $(this).addClass("staus-sit");
+            }
+            else if (status == '@((byte)PosTabStatusEnum.预订)') {
+                $(this).addClass("staus-reserve");
+            }
+            else if (status == '@((byte)PosTabStatusEnum.维修)') {
+                $(this).addClass("staus-repair");
+            }
+            else if (status == '@((byte)PosTabStatusEnum.空净)') {
+                $(this).addClass("staus-empty");
+            }
+        });
+    }
+
+    function setItemPriceNull() {
+        var totalCount = 24;
+        var html = "";
+        var liCount = $("#tabListMerge li").length;
+        for (var i = 0; i < totalCount - liCount; i++) {
+            html += '<li class="content-list-tabStatus staus-empty" style="background-color: rgba(200, 235, 255, 0.1);background-image: none;"></li>';
+        }
+        $("#tabListMerge .content-list-paging").before(html);
+
+    }
+    //翻页 （减）
+    function pageUpMergeTab() {
+        var pageIndex = $("#MergepageIndex").val();
+        var PageSize = $("#MergePageSize").val();
+
+        if (pageIndex > 1) {
+            pageIndex = parseInt(pageIndex) - 1;
+            $("#MergepageIndex").val(pageIndex);
+            var model = {
+                Refeid: $("#MergeRefeId").val(),
+                PageIndex: pageIndex,
+                PageSize: PageSize
+            };
+            $.ajax({
+                url: 'PosInSingle/_TabStatusListByMergeTab',
+                type: "post",
+                data: model,
+                dataType: "html",
+                success: function (data) {
+                    $("#TabStatusListByMergeTab").html(data);
+                    setTabBackClass1();
+                    GetTabStatusTotal();
+                    setItemPriceNull();
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+        }
+    }
+
+    //翻页 （加）
+    function pageDownMergeTab() {
+        var PageTotal = $("#MergeTotalTab").val();
+        var pageIndex = $("#MergepageIndex").val();
+        var PageSize = $("#MergePageSize").val();
+
+        var number = (PageTotal % PageSize) > 0 ? parseInt(PageTotal / PageSize) + 1 : parseInt(PageTotal / PageSize);
+
+        if (parseInt(pageIndex)+1 > number) {
+            return false;
+        }
+        else {
+            pageIndex = parseInt(pageIndex) + 1;
+            $("#MergepageIndex").val(pageIndex);
+        }
+        var model = {
+            Refeid: $("#MergeRefeId").val(),
+            PageIndex: pageIndex,
+            PageSize: PageSize
+        };
+        $.ajax({
+            url: 'PosInSingle/_TabStatusListByMergeTab',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#TabStatusListByMergeTab").html(data);
+                setTabBackClass1();
+                GetTabStatusTotal();
+                setItemPriceNull();
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //获取餐台列表总数
+    function GetTabStatusTotal() {
+        var model = {
+            PageIndex: $("#MergepageIndex").val(),
+            PageSize: $("#MergePageSize").val(),
+            RefeId: $("#MergeRefeId").val()
+        }
+        $.ajax({
+            url: 'PosInSingle/GetTabStatusTotal',
+            type: "post",
+            data: model,
+            dataType: "html",
+            success: function (data) {
+                $("#MergeTotalTab").val(data);
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //关闭
+    function CloseMergeTab() {
+        layer.closeAll();
+    }
+
+    function MergeTab(obj) {
+        //如果状态为B(转菜)
+        if ($("#MergeFlag").val() == "B") {
+            SelectTabByChangeItem(obj);
+            return false;
+        }
+        var tabid = $("#tabid").val();    //当前账单台号
+        var billid = $("#billid").val();      //当前账单ID
+        $.ajax({
+            url: '@Url.Action("GetSmearList", "PosTabStatus")',
+            type: "post",
+            data: { tabid: $(obj).attr("data-id") },
+            dataType: "json",
+            success: function (smear) {
+                if (smear.Success == true) {
+                    //没有抹台的餐台
+                    if (smear.Data == "") {
+                        if (tabid == $(obj).attr("data-id")) {
+                            layer.alert("请勿重复操作餐台", { title: "快点云Pos提示" });
+                            return false;
+                        }
+                        else {
+                            if ($(obj).attr("data-staus") == '@((byte)PosTabStatusEnum.空净)' || $(obj).attr("data-staus") == '@((byte)PosTabStatusEnum.维修)') {
+                                layer.alert("请使用换台功能", { title: "快点云Pos提示" });
+                                return false;
+                            }
+
+                            layer.confirm("是否要合并到" + $(obj).attr("data-name"), {
+                                btn: ['继续', '取消'], //按钮
+                                title: '快点云Pos提示',
+                                shade: 'rgba(0,0,0,0)'
+                            }, function () {
+                                $.ajax({
+                                    url: '@Url.Action("MergeTab", "PosInSingle")',
+                                    type: "post",
+                                    data: { billId: billid, newBillId: "", newTabId: $(obj).attr("data-id") },
+                                    dataType: "json",
+                                    success: function (data) {
+                                        if (data.Success) {
+                                            layer.closeAll();
+                                            //退回到楼面
+                                            if (openFlag == "A") {
+                                                location.href = "/PosManage/PosTabStatus?rnd=" + Math.random();
+                                            }
+                                            else if (openFlag == "B") {
+                                                //退回到收银
+                                                location.href = "/PosManage/PosCashier/Index";
+                                            }
+                                            else {
+                                                if (window.history.length > 1) {
+                                                    window.history.back();
+                                                }
+                                                else {
+                                                    location.href = "../Account/Index";
+                                                }
+                                            }
+
+                                        }
+
+                                    },
+                                    error: function (data) {
+                                        layer.alert(data.responseText, { title: "快点云Pos提示" });
+                                    }
+                                });
+
+                            }, function () {
+                                layer.close(layer.index);
+                            });
+                        }
+                    }
+                    else {
+                        $.ajax({
+                            url: '@Url.Action("_PosSmearList", "PosInSingle")',
+                            type: "post",
+                            data: { model: JSON.stringify(smear.Data) },
+                            dataType: "html",
+                            success: function (data) {
+                                layer.open({
+                                    type: 1,
+                                    title: "账单列表",
+                                    skin: 'layui-layer-demo', //样式类名
+                                    closeBtn: 1, //不显示关闭按钮
+                                    shadeClose: true,
+                                    area: ['auto', 'auto'], //宽高
+                                    content: data
+                                });
+                            },
+                            error: function (data) {
+                                layer.alert(data.responseText, { title: "快点云Pos提示" });
+                            }
+                        });
+                    }
+                }
+                else {
+                    layer.alert(smear.Data, { title: "快点云Pos提示" });
+                }
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    //抹台并台功能
+    function MergeTabBySmear(obj) {
+        var tabid = $("#tabid").val();    //当前账单台号
+        var billid = $("#billid").val();      //当前账单ID
+        if (billid == $(obj).attr("data-billid")) {
+            layer.alert("请勿重复操作", { title: "快点云Pos提示" });
+            return false;
+        }
+        layer.confirm("是否要合并到" + $(obj).attr("data-tabno") + "餐台" + $(obj).attr("data-billNo") + "账单上吗", {
+            btn: ['继续', '取消'], //按钮
+            title: '快点云Pos提示',
+            shade: 'rgba(0,0,0,0)'
+        }, function () {
+            $.ajax({
+                url: '@Url.Action("MergeTab", "PosInSingle")',
+                type: "post",
+                data: { billId: billid, newBillId: $(obj).attr("data-billid"), newTabId: $(obj).attr("data-id") },
+                dataType: "json",
+                success: function (data) {
+                    if (data.Success) {
+                        layer.closeAll();
+                        //退回到楼面
+                        if (openFlag == "A") {
+                            location.href = "/PosManage/PosTabStatus?rnd=" + Math.random();
+                        }
+                        else if (openFlag == "B") {
+                            //退回到收银
+                            location.href = "/PosManage/PosCashier/Index";
+                        }
+                        else {
+                            if (window.history.length > 1) {
+                                window.history.back();
+                            }
+                            else {
+                                location.href = "../Account/Index";
+                            }
+                        }
+
+                    }
+
+                },
+                error: function (data) {
+                    layer.alert(data.responseText, { title: "快点云Pos提示" });
+                }
+            });
+
+        }, function () {
+            layer.close(layer.index);
+        });
+    }
+
+    //选择营业点
+    function showRefeList() {
+        $(".refe").attr("style", "display:block");
+    }
+
+    function SelectRefe(obj) {
+        if (obj == "0") {
+            $("#btnRefe").val("全部");
+            $("#MergeRefeId").val("");
+            $("#MergepageIndex").val(1);
+        }
+        else {
+            var refeName = $(obj).attr("data-name");
+            var refeid = $(obj).attr("data-id");
+            $("#MergepageIndex").val(1);
+            $("#MergeRefeId").val(refeid);
+
+            $("#btnRefe").val(refeName);
+        }
+
+        GetTabList();
+        $(".refe").attr("style", "display:none");
+    }
+
+    //转菜选择餐台
+    function SelectTabByChangeItem(obj)
+    {
+        $.ajax({
+            url: '@Url.Action("GetSmearList", "PosTabStatus")',
+            type: "post",
+            data: { tabid: $(obj).attr("data-id") },
+            dataType: "json",
+            success: function (smear) {
+                if (smear.Success == true) {
+                    //没有抹台的餐台
+                    if (smear.Data == "") {
+                        if ($("#tabid").val() == $(obj).attr("data-id")) {
+                            layer.alert("请勿重复操作餐台", { title: "快点云Pos提示" });
+                            return false;
+                        }
+                        else {
+                            if ($(obj).attr("data-staus") == '@((byte)PosTabStatusEnum.维修)') {
+                                layer.alert("此餐台正在维修，请选择其他餐台", { title: "快点云Pos提示" });
+                                return false;
+                            }
+                            else {
+                                layer.close(layer.index);
+                                //如果是空台 则需要选择服务费率是原台还是新台的
+                                $.ajax({
+                                    url: '@Url.Action("_PosBillDetailListByMerge", "PosInSingle")',
+                                    type: "post",
+                                    data: { newTabId: $(obj).attr("data-id"), billId: $("#billid").val(),newBillId:"" },
+                                    dataType: "html",
+                                    success: function (data) {
+                                        layer.open({
+                                            type: 1,
+                                            title: "转菜",
+                                            skin: 'layui-layer-demo', //样式类名
+                                            closeBtn: 0, //不显示关闭按钮
+                                            shadeClose: false,
+                                            area: ['660px', '540px'], //宽高
+                                            content: data,
+                                            id:"ChangeItemInfo"
+
+                                        });
+                                    },
+                                    error: function (data) {
+                                        layer.alert(data.responseText, { title: "快点云Pos提示" });
+                                    }
+                                });
+                            }
+                        }
+                    }
+                    else {
+                        $.ajax({
+                            url: '@Url.Action("_PosSmearListByChangeItem", "PosInSingle")',
+                            type: "post",
+                            data: { model: JSON.stringify(smear.Data) },
+                            dataType: "html",
+                            success: function (data) {
+                                layer.open({
+                                    type: 1,
+                                    title: "账单列表",
+                                    skin: 'layui-layer-demo', //样式类名
+                                    closeBtn: 1, //不显示关闭按钮
+                                    shadeClose: true,
+                                    area: ['auto', 'auto'], //宽高
+                                    content: data,
+                                    id:"MergeBillList"
+                                });
+                            },
+                            error: function (data) {
+                                layer.alert(data.responseText, { title: "快点云Pos提示" });
+                            }
+                        });
+                    }
+                }
+                else {
+                    layer.alert(smear.Data, { title: "快点云Pos提示" });
+                }
+
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+
+    function ChangeItemBySmear(obj)
+    {
+        layer.closeAll();
+        $.ajax({
+            url: '@Url.Action("_PosBillDetailListByMerge", "PosInSingle")',
+            type: "post",
+            data: { newTabId: $(obj).attr("data-tabid"), billId: $("#billid").val(), newBillId: $(obj).attr("data-billid") },
+            dataType: "html",
+            success: function (data) {
+                layer.open({
+                    type: 1,
+                    title: "转菜",
+                    skin: 'layui-layer-demo', //样式类名
+                    closeBtn: 0, //不显示关闭按钮
+                    shadeClose: false,
+                    area: ['660px', '540px'], //宽高
+                    content: data,
+                    id: "ChangeItemInfo"
+
+                });
+            },
+            error: function (data) {
+                layer.alert(data.responseText, { title: "快点云Pos提示" });
+            }
+        });
+    }
+</script>

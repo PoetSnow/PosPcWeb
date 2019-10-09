@@ -1,0 +1,228 @@
+﻿/*---------- Pos买单样式 ----------*/
+a {
+    display: block;
+}
+
+.k-grid {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+th.k-header {
+    background: #d1e9ff;
+}
+
+.k-dropdown-wrap, .k-textbox {
+}
+
+.k-footer-template td {
+    border-bottom: 0;
+}
+
+.mainTop-table {
+    border: 1px solid #aaa;
+    border-top: 0;
+    border-spacing: 0;
+    width: 100%;
+}
+
+    .mainTop-table td {
+        height: 2rem;
+        line-height: 2rem;
+        text-align: center;
+        border-top: 1px solid #aaa;
+        border-left: 1px solid #aaa;
+    }
+
+        .mainTop-table td:nth-child(7n+1) {
+            border-left: 0;
+        }
+
+        .mainTop-table td input {
+            width: 80%;
+            height: 80%;
+            color: #333;
+            border-radius: 0.3rem;
+            border: 1px solid #333;
+        }
+
+.TotalAmount {
+    width: 100%;
+    height: 2rem;
+}
+
+    .TotalAmount li {
+        float: left;
+        height: 100%;
+        font-size: 1rem;
+        line-height: 2rem;
+        padding-left: 0.5rem;
+        border: 1px solid #aaa;
+        width: calc(33% - 2px - 0.5rem);
+        border-top: 0;
+    }
+
+        .TotalAmount li span {
+            font-weight: bold;
+        }
+
+        .TotalAmount li:first-child {
+            border-right: 0;
+            width: calc(33% - 1px - 0.5rem);
+            border-bottom-left-radius: 4px;
+        }
+
+        .TotalAmount li:last-child {
+            border-left: 0;
+            width: calc(34% - 1px - 0.5rem);
+            border-bottom-right-radius: 4px;
+        }
+
+            .TotalAmount li:last-child span {
+                color: #f55858;
+            }
+
+.mainBottom-payMethod {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.mainBottom-right {
+    width: 28rem;
+    float: left;
+}
+
+.mainBottom-payMethod input {
+    width: calc(13.5%);
+    line-height: 2.5rem;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+    color: #fff;
+    font-size: 1rem;
+    background: #219bcb;
+    padding-left: 0;
+}
+
+    .mainBottom-payMethod input:last-child {
+        background: #b554cf;
+    }
+
+.mainBottom-payment {
+    width: 49.5%;
+    float: left;
+}
+
+tr.folioAddPayment {
+}
+
+    tr.folioAddPayment td {
+    }
+
+        tr.folioAddPayment td:nth-child(even) span {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+.folioAddPaymentBg {
+    z-index: -10;
+    position: absolute;
+    background: #efefef;
+    height: calc(11.8rem - 2px);
+    width: 100%;
+    border: 1px dashed #aaa;
+    bottom: 0.8rem;
+    left: -1px;
+    top: 96px;
+    border-radius: 0.5rem;
+}
+
+.mainBottom-money {
+    z-index: 1;
+    line-height: 17px;
+    position: absolute;
+}
+
+    .mainBottom-money dd:nth-child(odd) {
+        width: 49%;
+        height: 2rem;
+        float: left;
+        line-height: 2rem;
+    }
+
+    .mainBottom-money dd:nth-child(even) {
+        width: 49%;
+        height: 2rem;
+        float: right;
+        line-height: 2rem;
+    }
+
+    .mainBottom-money input[type=button] {
+        float: right;
+        line-height: 1.8rem;
+        margin-top: 0.5rem;
+        width: 5rem;
+        color: #333;
+        padding: 0;
+        border-radius: 0.5rem;
+        border: 1px solid #3d3d3d;
+    }
+
+.mainBottom-fastInput {
+    clear: both;
+    width: 100%;
+}
+
+    .mainBottom-fastInput input[type=button] {
+        width: 22%;
+        float: left;
+        font-size: 1rem;
+    }
+
+.mainBottom-keypad {
+    width: 49.5%;
+    float: right;
+    border-collapse: collapse;
+    position: relative;
+}
+
+    .mainBottom-keypad td {
+        width: 25%;
+        height: 3rem;
+        line-height: 3rem;
+        border: 0.5rem solid rgba(0,0,0,0);
+    }
+
+    .mainBottom-keypad input[type=button] {
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-size: 24px;
+        border-radius: 0.5rem;
+        background: #bfbfbf;
+    }
+
+    .mainBottom-keypad td input[type=button] {
+        color: #333;
+    }
+
+    .mainBottom-keypad tr td:nth-child(4) input[type=button] {
+        color: #333;
+    }
+
+    .mainBottom-keypad tr:nth-child(1) td input[type=button] {
+        color: #fff;
+        background: #fda93e;
+    }
+
+.mainBottom-button {
+    float: right;
+    width: 20%;
+    height: 100%;
+}
+
+.netReceipts, .smallChange {
+    color: red;
+}

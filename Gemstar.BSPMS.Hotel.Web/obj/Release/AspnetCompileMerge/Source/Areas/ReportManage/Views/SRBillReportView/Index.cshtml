@@ -1,0 +1,366 @@
+﻿@using Stimulsoft.Report.Mvc;
+@using Gemstar.BSPMS.Hotel.Web.Areas.ReportManage.Models;
+@model ReportQueryModel
+@{
+    Layout = "~/Areas/ReportManage/Views/Shared/_Layout.cshtml";
+    var hasPermissionToDeleteCustomFormat = true;
+    var hasPermissionToDesign = true;
+    var addNewValue = "增加新格式";
+    var styleItems = ViewBag.styleItems as List<SelectListItem>;
+    var chooseStyleItems = new List<SelectListItem>(styleItems);
+    chooseStyleItems.Add(new SelectListItem { Value = addNewValue, Text = string.Format("({0})", addNewValue) });
+}
+
+@section headerContent{
+    @Html.Stimulsoft().RenderMvcViewerScripts()
+    <script type="text/javascript">
+        try {
+            StiMvcViewer.prototype.showError = function (text) {
+                if (text != null && text.substr(0, 6) == "Error:") {
+                    if (text.length == 7) text += "Undefined";
+                    jAlert(text.substring(6));
+                    return true;
+                }
+                return false;
+            }
+        } catch (e) { }
+    </script>
+    @if (Model.ReportCode == "resRCBill" || Model.ReportCode == "up_print_deposit")
+    {
+        <script type="text/javascript">
+            try {
+                function onloadPrintFrame() {
+                    if ($("#txtOnLoadSuccess").val() == "0") {
+                        printFrame = document.getElementById("htmlPrintFrame");
+                        if (printFrame != null && printFrame != undefined) {
+                            $("#txtOnLoadSuccess").val("1");
+                            printFrame.contentWindow.print();
+                            printFrame.contentWindow.onload = function () { };
+                        }
+                    }
+                }
+                StiMvcViewer.prototype.printAsHtml = function (text, jsObject) {
+                    if (jsObject.showError(text)) return;
+
+                    if (navigator.userAgent.indexOf("Opera") != -1) {
+                        var operaWin = window.open("about:blank");
+                        operaWin.document.body.innerHTML = text;
+                        operaWin.opener.focus();
+                        operaWin.print();
+                        operaWin.close();
+                        operaWin = null;
+                    }
+                    else {
+                        printFrame = document.getElementById("htmlPrintFrame");
+                        if (printFrame == null) {
+                            printFrame = document.createElement("iframe");
+                            printFrame.id = "htmlPrintFrame";
+                            printFrame.name = "htmlPrintFrame";
+                            printFrame.width = "0px";
+                            printFrame.height = "0px";
+                            printFrame.style.position = "absolute";
+                            printFrame.style.border = "none";
+                            document.body.appendChild(printFrame, document.body.firstChild);
+                        }
+
+                        printFrame.contentWindow.document.open();
+                        printFrame.contentWindow.document.write(text);
+                        printFrame.contentWindow.document.close();
+                        printFrame.contentWindow.focus();
+                        //printFrame.contentWindow.print();
+                        $("#txtOnLoadSuccess").val("0");
+                        printFrame.contentWindow.onload = onloadPrintFrame;
+                        setTimeout(function () { onloadPrintFrame(); }, 2000);
+                    }
+                }
+            } catch (e) { }
+        </script>
+    }
+    <script type="text/javascript">
+        $(function () {
+            //监听
+        var $td = "";
+        //将删除自定义格式格式放在工具栏上
+        if ('@hasPermissionToDeleteCustomFormat' == 'True') {
+            $td = $("#delCustTplButtonTableWrapper").wrap("<td style=\"border-width:0px;padding:0px;\"></td>").parent();
+            $td.prependTo($("#MvcViewerButtonDesign").parents("tr:first"));
+            try { jsMvcViewer.AddControl('delCustTplButtonTableWrapper', 'Button'); } catch (e) { }
+        }
+        //将打印按钮放在工具栏上
+        if (true) {
+            $td = $("#printButtonTableWrapper").wrap("<td style=\"border-width:0px;padding:0px;\"></td>").parent();
+            $td.prependTo($("#MvcViewerButtonSave").parents("tr:first"));
+            try { jsMvcViewer.AddControl('printButtonTableWrapper', 'Button'); } catch (e) { }
+        }
+        //将格式选择放在工具栏上
+        if (true) {
+            $td = $("#styleSelectTableWrapper").wrap("<td style=\"border-width:0px;padding:0px;\"></td>").parent();
+            $td.prependTo($("#MvcViewerButtonDesign").parents("tr:first"));
+            try { jsMvcViewer.AddControl('styleSelectTableWrapper', 'Button'); } catch (e) { }
+        }
+        //将电子签名放在工具栏上
+        if ("@ViewBag.print" == "10") {
+            $tdFile = $("#DownloadFileButtonTableWrapper").wrap("<td style=\"border-width:0px;padding:0px;\"></td>").parent();
+            $tdFile.prependTo($("#MvcViewerButtonDesign").parents("tr:first"));
+            try { jsMvcViewer.AddControl('DownloadFileButtonTableWrapper', 'Button'); } catch (e) { }
+
+            $tdSt = $("#StButtonTableWrapper").wrap("<td style=\"border-width:0px;padding:0px;\"></td>").parent();
+            $tdSt.prependTo($("#MvcViewerButtonDesign").parents("tr:first"));
+            try { jsMvcViewer.AddControl('StTableWrapper', 'Text'); } catch (e) { }
+
+            $tdLook = $("#SignatureLookButtonTableWrapper").wrap("<td style=\"border-width:0px;padding:0px;\"></td>").parent();
+            $tdLook.prependTo($("#MvcViewerButtonDesign").parents("tr:first"));
+            try { jsMvcViewer.AddControl('SignatureLookButtonTableWrapper', 'Button'); } catch (e) { }
+
+            $td = $("#SignatureButtonTableWrapper").wrap("<td style=\"border-width:0px;padding:0px;\"></td>").parent();
+            $td.prependTo($("#MvcViewerButtonDesign").parents("tr:first"));
+            try { jsMvcViewer.AddControl('SignatureButtonTableWrapper', 'Button'); } catch (e) { }
+
+        }
+        //添加按钮并控制权限
+        try { if ('@hasPermissionToDesign' != 'True') { $("#MvcViewerButtonDesign").hide(); } } catch (e) { }
+
+        //删除自定义格式
+        $("#delCustTplButtonTableWrapper").click(function (e) {
+            e.preventDefault();
+            jConfirm("确定要删除自定义格式吗？", "确认", "取消", function (flag) {
+                if (flag) {
+                    var ReportCode = $('#ReportCode').val();
+                    if (!ReportCode) {
+                        jAlert("报表号不存在,请关闭页面后重新打开");
+                        return;
+                    }
+                    var styleName = $("#StyleName").val();
+                    $.post('@Url.Action("DelReportTemplate")', { reportCode: ReportCode, styleName:styleName}, function (data) {
+                        if (data.Success) {
+                            jAlert('删除自定义格式成功！', "知道了", function () {
+                                $("#StyleName").val("");
+                                $("form")[0].submit();
+                            });
+                        } else {
+                            //jAlert(data.Data, "知道了");
+                            ajaxErrorHandle(data);
+                        }
+                    }, 'json');
+                }
+            });
+        });
+        //直接打印
+        $("#printButtonTableWrapper").click(function (e) {
+            e.preventDefault();
+            jsMvcViewer.postPrint('PrintWithoutPreview');
+        });
+        //格式更改时提交表单
+        $("#StyleName").change(function (e) {
+            //判断是否是增加新格式选项，是则弹出选择源格式窗口
+            var addNewValue = "@addNewValue";
+            var selectedValue = $("#StyleName").val();
+            console.log(addNewValue + '------' + selectedValue);
+            if (selectedValue == addNewValue) {
+                $("#addNewStyleWindow").data("kendoWindow").center().open();
+            } else {
+                $("form")[0].submit();
+            }
+        });
+        //增加新格式窗口
+        $("#addNewStyleWindow").kendoWindow({
+            width: 300,
+            title: "增加新格式",
+            visible: false,
+            modal: true,
+            resizable: false
+        });
+        //如果当前有传递直接打印参数，则调用打印
+        var print = "@ViewBag.print";
+        if (print == "1") {
+            printBillInTimer();
+        }
+        $("#SignatureButtonTableWrapper").click(function(){
+
+            var ReportCode=$("#ReportCode").val();
+            var ParameterValues=$("#ParameterValues").val();
+            var ChineseName=$("#ChineseName").val();
+            var ProcedureName=$("#ProcedureName").val();
+            var StyleName= $("#StyleName").val();
+            var sType="@ViewBag.sType";
+            var regid="@ViewBag.regid";
+            var roomNo="@ViewBag.roomNo";
+            var hid="@ViewBag.hid";
+            var userName="@ViewBag.userName";
+            var divWidth=$("#MvcViewerReportPanel div").width();
+            $.ajax({
+                type:"post",
+                url:"@Url.Action("GetPdfFileUrl")",
+                data:{ReportCode:ReportCode,ParameterValues:ParameterValues,ChineseName:ChineseName,ProcedureName:ProcedureName,StyleName:StyleName},
+                async:false,
+                success: function (data) {
+                    //这种写法不支持&拼接参数
+                    var url = "@Request.Url.Host" + "@Url.Action("WriteSignature", "Signature")" + "?par=" + data + "=" + sType + "=" + regid + "=" + roomNo + "=" + hid + "=" + encodeURI(userName) + "=" + divWidth + "=" + "@ViewBag.signature";
+                    window.location.href=("openIE:http://"+url);
+                }
+            })
+        });
+          $("#SignatureLookButtonTableWrapper").click(function(){
+            var sType="@ViewBag.sType";
+            var hid="@ViewBag.hid";
+            var userName="@ViewBag.userName";
+              var url = "@Request.Url.Host" + "@Url.Action("LookSignature","Signature")" + "?par=" + sType + "=" + hid + "=" + encodeURI(userName) + "=" + "@ViewBag.signature";
+            window.location.href=("openIE:http://"+url);
+          });
+            $("#DownloadFileButtonTableWrapper").click(function(){
+                $.post("@Url.Action("DownloadFile", "InterfaceSetting",new {area= "SystemManage" })",{versionId:"ocx"},function(data){
+                    if (data.Data == "你没有权限访问此模块，请与系统管理员联系") {
+                        jAlert("你的账号没有权限下载，请与系统管理员联系", "OK");
+                        return;
+                    }
+                    window.open(data);
+                })
+            })
+    });
+        //定时检查报表是否加载完成，加载完成后再进行打印
+        var printTimer;
+        var isReportRecieved = false;
+        function printBillInTimer() {
+            if (printTimer) {
+                clearTimeout(printTimer);
+            }
+            if (isReportRecieved) {
+                jsMvcViewer.postPrint('PrintWithoutPreview');
+            } else {
+                printTimer = setTimeout(printBillInTimer, 1000);
+            }
+        }
+
+        //保存新增加的格式
+        function saveStyle_clicked(e) {
+            if (e) { e.preventDefault(); }
+            //check
+            var styleNewName = $("#styleNewName").val();
+            if (!styleNewName) {
+                jAlert("请输入新格式名称");
+                return;
+            }
+            var ReportCode = $('#ReportCode').val();
+            if (!ReportCode) {
+                jAlert("报表号不存在,请关闭页面后重新打开");
+                return;
+            }
+            var styleSourceName = $("#styleSourceName").data("kendoDropDownList").value();
+            var chineseName = $("#ChineseName").val();
+            $.post("@Url.Action("AddStyle")", { reportCode: ReportCode, sourceStyle: styleSourceName, styleName: styleNewName, chineseName: chineseName }, function (data) {
+                if (data.Success) {
+                    $("#StyleName").append("<option value='" + styleNewName + "'>" + styleNewName + "</option>");
+                    $("#StyleName").val(styleNewName);
+                    $("form")[0].submit();
+                } else {
+                    jAlert(data.Data);
+                    return;
+                }
+            }, 'json');
+
+        }
+        //取消增加
+        function cancelStyle_clicked(e) {
+            if (e) { e.preventDefault(); }
+            $("#addNewStyleWindow").data("kendoWindow").close();
+        }
+    </script>
+}
+<div>
+    <input type="hidden" id="txtOnLoadSuccess" value="0" />
+    @using (Html.BeginForm("Index", "SRBillReportView"))
+    {
+        <input type="hidden" id="ReportCode" name="ReportCode" value="@Model.ReportCode" />
+        <input type="hidden" id="ParameterValues" name="ParameterValues" value="@Model.ParameterValues" />
+        <input type="hidden" id="ChineseName" name="ChineseName" value="@Model.ChineseName" />
+        <input type="hidden" id="ProcedureName" name="ProcedureName" value="@Model.ProcedureName" />
+        <input type="hidden" id="print" name="print" value="@ViewBag.print" />
+        <input type="hidden" id="sType" name="sType" value="@ViewBag.sType" />
+        <input type="hidden" id="regid" name="regid" value="@ViewBag.regid" />
+        <input type="hidden" id="roomNo" name="roomNo" value="@ViewBag.roomNo" />
+        @*格式选择下拉框*@
+        <div id="styleSelectTableWrapper" buttonname="styleSelect" formbutton="False" style="cursor:default;padding:0px 0px 0px 1px;">
+            @Html.DropDownListFor(m => m.StyleName, chooseStyleItems, new { style = "color:black;font-size:12px;height:22px;border:1px solid" })
+        </div>
+        @*电子签名*@
+        if (ViewBag.print == "10")
+        {
+            <div id="SignatureLookButtonTableWrapper" buttonname="SignatureLookButton" formbutton="False" style="cursor: default; padding: 0px 0px 0px 1px;">
+                <table id="SignatureLookButtonTable" cellspacing="0" cellpadding="0" style="border-width: 0px; height: 24px; border-collapse: collapse; cursor: default;">
+                    <tbody>
+                        <tr>
+                            <td style="border-width: 0px; padding: 0px;"><div class="stiLeftHalfButton" style="width: 3px;"></div></td>
+                            <td class="stiMiddleHalfButton" style="white-space: nowrap; font-family: Arial; color: #202020;">查看签名&nbsp;</td>
+                            <td style="border-width: 0px; padding: 0px;"><div class="stiRightHalfButton" style="width: 3px;"></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="SignatureButtonTableWrapper" buttonname="SignatureButton" formbutton="False" style="cursor: default; padding: 0px 0px 0px 1px;">
+                <table id="SignatureButtonTable" cellspacing="0" cellpadding="0" style="border-width: 0px; height: 24px; border-collapse: collapse; cursor: default;">
+                    <tbody>
+                        <tr>
+                            <td style="border-width: 0px; padding: 0px;"><div class="stiLeftHalfButton" style="width: 3px;"></div></td>
+                            <td class="stiMiddleHalfButton" style="white-space: nowrap; font-family: Arial; color: #202020;">开始签名&nbsp;</td>
+                            <td style="border-width: 0px; padding: 0px;"><div class="stiRightHalfButton" style="width: 3px;"></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="DownloadFileButtonTableWrapper" buttonname="DownloadFileButton" formbutton="False" style="cursor: default; padding: 0px 0px 0px 1px;">
+                <table id="DownloadFileButtonTable" cellspacing="0" cellpadding="0" style="border-width: 0px; height: 24px; border-collapse: collapse; cursor: default;">
+                    <tbody>
+                        <tr>
+                            <td style="border-width: 0px; padding: 0px;"><div class="stiLeftHalfButton" style="width: 3px;"></div></td>
+                            <td class="stiMiddleHalfButton" style="white-space: nowrap; font-family: Arial; color: #202020;">下载安装包&nbsp;</td>
+                            <td style="border-width: 0px; padding: 0px;"><div class="stiRightHalfButton" style="width: 3px;"></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="StButtonTableWrapper" buttonname="StButton" formbutton="False" style="cursor: default; padding: 0px 0px 0px 1px;">
+                <table id="StButtonTable" cellspacing="0" cellpadding="0" style="border-width: 0px; height: 24px; border-collapse: collapse; cursor: default;">
+                    <tbody>
+                        <tr>
+                            <td style="border-width: 0px; padding: 0px;"><div class="stiLeftHalfButton" style="width: 3px;"></div></td>
+                            <td class="stiMiddleHalfButton" style="white-space: nowrap; font-family: Arial; color:red;">提示：只有第一次使用签名时才需要下载安装包&nbsp;</td>
+                            <td style="border-width: 0px; padding: 0px;"><div class="stiRightHalfButton" style="width: 3px;"></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
+        @*打印按钮*@
+        <div id="printButtonTableWrapper" buttonname="printButton" formbutton="False" style="cursor:default;padding:0px 0px 0px 1px;">
+            <table id="printButtonTable" cellspacing="0" cellpadding="0" style="border-width:0px;height:24px;border-collapse:collapse;cursor:default;"><tbody><tr><td style="border-width:0px;padding:0px;"><div class="stiLeftHalfButton" style="width:3px;"></div></td><td class="stiMiddleHalfButton" style="font-size:0;"><img src="~/images/print.gif" style="height: 16px; width: 16px; padding: 0px 3px;"></td><td class="stiMiddleHalfButton" style="white-space:nowrap;font-family:Arial;color:#202020;">打印报表&nbsp;</td><td style="border-width:0px;padding:0px;"><div class="stiRightHalfButton" style="width:3px;"></div></td></tr></tbody></table>
+        </div>
+        @*删除自定义格式按钮*@
+        if (hasPermissionToDeleteCustomFormat)
+        {
+            <div id="delCustTplButtonTableWrapper" buttonname="delCustTplButton" formbutton="False" style="cursor: default; padding: 0px 0px 0px 1px;">
+                <table id="delCustTplButtonTable" cellspacing="0" cellpadding="0" style="border-width: 0px; height: 24px; border-collapse: collapse; cursor: default;"><tbody><tr><td style="border-width: 0px; padding: 0px;"><div class="stiLeftHalfButton" style="width: 3px;"></div></td><td class="stiMiddleHalfButton" style="font-size:0;"><img src="~/images/delete.png" style="height: 16px; width: 22px; padding: 0px 3px;"></td><td class="stiMiddleHalfButton" style="white-space: nowrap; font-family: Arial; color: #202020;">删除自定义格式&nbsp;</td><td style="border-width: 0px; padding: 0px;"><div class="stiRightHalfButton" style="width: 3px;"></div></td></tr></tbody></table>
+            </div>
+        }
+        @Html.GetStiMvcViewer((Request.RequestType == "GET") ? Model : null)
+    }
+    <div id="addNewStyleWindow">
+        <table>
+            <tr>
+                <td>源格式名称:</td>
+                <td>@(Html.Kendo().DropDownList().Name("styleSourceName").BindTo(styleItems))</td>
+            </tr>
+            <tr>
+                <td>新格式名称:</td>
+                <td>@(Html.Kendo().TextBox().Name("styleNewName"))</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    @(Html.Kendo().Button().Name("saveStyle").Content("增加").Events(e => e.Click("saveStyle_clicked")))
+                    @(Html.Kendo().Button().Name("cancelStyle").Content("取消").Events(e => e.Click("cancelStyle_clicked")))
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

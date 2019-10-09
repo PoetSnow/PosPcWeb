@@ -1,0 +1,16 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+
+@model List<up_pos_list_ItemActionByItemidResult>
+
+@{
+    if (Model != null && Model.Count > 0)
+    {
+        foreach (var item in Model)
+        {
+            <a class="mui-btn" data-id="@item.id" data-code="@item.ActionCode" data-price="@item.addPrice"
+               data-multiple="@item.multiple" data-IByQuan="@item.isByQuan" data-IByGuest="@item.isByGuest"
+               data-PrtNo="@item.prodPrinter"
+               data-name="@item.ActionName" data-LimitQuan="@item.limitQuan" onclick="updateItemAction(this)">@item.ActionName</a>
+        }
+    }
+}

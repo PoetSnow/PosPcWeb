@@ -1,0 +1,80 @@
+﻿
+@using Gemstar.BSPMS.Hotel.Web.Areas.ResManage.Models.ResOrderFolio;
+@using Gemstar.BSPMS.Hotel.Services.Entities
+
+<style type="text/css">
+    .bnt-active {
+        background-color: #004793;
+        border-color: #004793;
+        color: #ffffff !important;
+    }
+</style>
+<script type="text/javascript">
+    var addItemsContent = 0;
+    function setHeight()
+    {
+        var winheight = $(window).height();
+        if (winheight < 750)
+        {
+            $("#folioAddItemsDiv").height(winheight-50);
+            $("#griditem .k-grid-content").height(winheight - 200);
+        }
+    }
+</script>
+<div id="folioAddItemsDiv" style="height:750px;">
+
+    @(Html.Kendo().ListView<Item>()
+        .Name("itemsListView")
+        .DataSource(d => d.Read(c => c.Action("GetItemsParent", "ResOrderFolio")))
+        .ClientTemplateId("itemsContentTemplate")
+        .TagName("div")
+        .HtmlAttributes(new { @class = "house-state-list", @style = "border:0 none;margin-bottom:5px;" })
+    )
+
+
+    @(Html.Kendo().Grid<ResFolioAddItemsViewModel>().Name("griditem")
+        .Columns(c =>
+        {
+            c.Bound(w => w.Id).Title("商品编号").Width(100);
+            c.Bound(w => w.ItemName).Title("商品名称").Width(100);
+            c.Bound(w => w.ItemQty).Title("数量").Width(60);
+            c.Bound(w => w.ItemPrice).Title("单价").Width(60);
+            c.Bound(w => w.ItemSumPrice).Title("总价").Width(100);
+            c.Bound(w => w.InvoNo).Title("单号").Width(80);
+            c.Bound(w => w.Remark).Title("备注");
+            c.Bound(w => w.ItemId).Hidden();
+        })
+        .DataSource(c =>
+        {
+            c.Ajax().Read(r => r.Action("GetItemInfo", "ResOrderFolio").Data("setItemQueryPara")).PageSize(20)
+            .Events(e => e.Change("onChangeItems")).PageSize(50)
+            .Model(m =>
+            {
+                m.Id(p => p.Id);
+                m.Field(p => p.ItemName).Editable(false);
+                m.Field(p => p.ItemPrice).Editable(false);
+                m.Field(p => p.Id).Editable(false);
+            });
+        })
+        .Scrollable(c => c.Height("600px").Enabled(true))
+        .Pageable(pageable => pageable.PageSizes(Gemstar.BSPMS.Common.Tools.CommonHelper.PageSizes))
+        .Pageable(pageable => pageable.Messages(c => c.ItemsPerPage("")))
+        .Editable(c => c.Mode(GridEditMode.InCell).Enabled(true))
+         .Events(e=>e.DataBound("setHeight"))
+    )
+
+    <div style="margin-top:5px;text-align:center;margin-bottom:10px;">
+        <input type="hidden" id="hidItemsType" />
+        <button id="bntSaveItems" data-role="button" class="k-button" role="button" aria-disabled="false" tabindex="0" onclick="saveItems_click()">保存</button>
+        <button id="bntCloseItems" data-role="button" class="k-button" role="button" aria-disabled="false" tabindex="0" onclick="closeItems_click()">返回</button>
+    </div>
+</div>
+
+
+<script type="text/x-kendo-tmpl" id="itemsContentTemplate">
+    #if(addItemsContent==0){#
+    <button id="bntAll" data-role="button" data-items="all" class="k-button bnt-active" role="button" aria-disabled="false" tabindex="0" onclick="AddItem_click(this)">全部</button>
+    #}#
+    <button id="bnt#:Code#" data-role="button" data-items="#:Id#" class="k-button" role="button" aria-disabled="false" tabindex="0" onclick="AddItem_click(this)">#:Name#</button>
+    #addItemsContent++;#
+</script>

@@ -1,0 +1,47 @@
+﻿
+@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@{
+    ViewBag.Title = "业主展示参数定义";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "TypeId";
+
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("TypeName").Title("项目名称");
+            c.Bound("TypeDesc").Title("项目说明");
+            c.Bound("CalcFormula").Title("项目计算公式");
+            c.Bound("isHidden").Title("是否隐藏");
+            c.Bound("isNeedSum").Title("是否汇总");
+            c.Bound("dataType").Title("数据类型");
+            c.Bound("SeqId").Title("排序号");
+        },
+        RowTemplate = @"<tr>
+                    <td>#: TypeName #</td>
+                    <td>#: TypeDesc #</td>
+                    <td>#: CalcFormula #</td>
+                    <td>#: isHidden == true ? '是':'否' #</td>
+                    <td>#: isNeedSum == true ? '是':'否'  #</td>
+                    <td>#: dataType=='decimal'?'数字':(dataType=='percent'?'百分比':'字符串') #</td>
+                    <td>#: SeqId #</td>
+                </tr>",
+        CustomToolbar = c =>
+        {
+
+
+        }
+    };
+}
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}

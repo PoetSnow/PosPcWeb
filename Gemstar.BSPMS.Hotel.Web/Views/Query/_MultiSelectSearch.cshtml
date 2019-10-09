@@ -1,0 +1,8 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Models.Query.QueryViewModel
+<tr>
+    <td class="textright">@Html.Label(string.Format("p{0}", Model.ParameterIndex), Model.ParameterName)</td>
+    <td>
+        <script> function @(string.Format("p{0}_onAdditionalData", Model.ParameterIndex))() { return { parameterName: $("#pname_@Model.ParameterIndex").val(), parameterValue: "@Model.ParameterValue", parameterValueText: "@Model.ParameterValueText" }; }</script>
+        @Html.Kendo().MultiSelect().Name(string.Format("p{0}", Model.ParameterIndex)).Placeholder("").DataTextField("Text").DataValueField("Value").DataSource(scoure => scoure.Read(read => read.Action("ParameterSearch", "Query").Data(string.Format("p{0}_onAdditionalData", Model.ParameterIndex))).ServerFiltering(true)).Filter(FilterType.Contains).AutoClose(false).Value(Model.CustomViewPara as System.Collections.IEnumerable).HtmlAttributes(new { style = "width:100%;" })
+    </td>
+</tr>

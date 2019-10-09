@@ -1,0 +1,56 @@
+﻿@using System.Collections.Generic;
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+
+@model List<up_pos_list_billByPosidResult>
+<script>
+    function setBillRow() {
+        var grid = $("#gridBill").data("kendoGrid");
+        var dataRows = grid.items();
+        for (var i = 0; i < dataRows.length; i++) {
+            var row = grid.tbody.find(">tr:not(.k-grouping-row)").eq(i);
+            var dataRow = grid.dataItem(dataRows[i]);
+
+            row.removeClass();
+            //根据状态修改背景色
+            if (Number(dataRow["iPrint"]) > 0) {
+                row.addClass("PrintColor");
+            }
+
+        }
+    }
+</script>
+
+@(Html.Kendo().Grid(Model)
+        .Name("gridBill")
+        .Columns(columns =>
+        {
+            columns.Bound(m => m.tabid).Hidden();
+            columns.Bound(m => m.billid).Hidden();
+            columns.Bound(m => m.billNo).Hidden();
+            columns.Bound(m => m.tabFlag).Hidden();
+            columns.Bound(m => m.mBillid).Hidden();
+            columns.Bound(m => m.Refeid).Hidden();
+            columns.Bound(m => m.status).Hidden();
+            columns.Bound(m => m.row).Title("序号").HtmlAttributes(new { @style = "white-space: nowrap;position: relative" }).Width(30).ClientTemplate("<span class='selectRowBorder'></span>#: row #");
+            columns.Bound(m => m.statusStr).Title("付款").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(30);
+            columns.Bound(m => m.tabNoText).Title("台号").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+            columns.Bound(m => m.tabName).Title("台名").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(60);
+            columns.Bound(m => m.refeName).Title("营业点").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(50);
+            columns.Bound(m => m.iPrint).Title("打单").HtmlAttributes(new { @style = "white-space: nowrap;" }).Width(30);
+        })
+        .Sortable()
+        .Scrollable()
+        .Resizable(r => r.Columns(true))
+        .HtmlAttributes(new { style = "height:100%" })
+        .Selectable(s => s.Mode(GridSelectionMode.Single))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .ServerOperation(false)
+        )
+         .Events(e => e.DataBound("setBillRow"))
+)
+<style>
+    .PrintColor {
+        background-color: #39C8DE
+    }
+</style>

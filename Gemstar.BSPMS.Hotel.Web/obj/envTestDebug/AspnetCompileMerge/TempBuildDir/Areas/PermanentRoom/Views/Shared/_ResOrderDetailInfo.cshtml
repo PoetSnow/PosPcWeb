@@ -1,0 +1,293 @@
+﻿@using Gemstar.BSPMS.Common.Extensions;
+@using Gemstar.BSPMS.Common.Enumerator;
+@model Gemstar.BSPMS.Hotel.Services.ResManage.ResMainInfo
+
+<table>
+    <tr style="display:none;">
+        <td>子单ID</td>
+        <td colspan="3">@(Html.Hidden("regId"))</td>
+    </tr>
+    <tr>
+        <td class="control-label"><label for="arriveDate">抵店时间</label></td>
+        <td>
+            @(Html.Kendo().DateTimePicker()
+                .Name("arriveDate")
+                .Format(DateTimeExtension.DateTimeWithoutSecondFormatStr)
+                .Events(e => e.Change("editControl_changed"))
+                .HtmlAttributes(new { style = "width:192px;", onclick = "openKendoDatetimePicker(this)" }))
+        </td>
+        <td class="control-label"><label for="customerSource">客人来源</label></td>
+        <td>
+            @(Html.Kendo().DropDownList()
+                .Name("customerSource")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .DataSource(s => { s.Read(r => r.Url(Url.Action("ListItemsForCustomerSource"))); })
+                .Events(e => e.Change("editControl_changed")))
+        </td>
+        <td rowspan="8" style="vertical-align:top;width:86px;">
+            <div class="toolbar">
+                <h3>子单操作</h3>
+                @(Html.Kendo().Button().Name("btnAddROrderDetail").Content("增加预订").Events(e => e.Click("btnAddROrderDetail_clicked")))
+                @(Html.Kendo().Button().Name("btnAddIOrderDetail").Content("增加入住").Events(e => e.Click("btnAddIOrderDetail_clicked")))
+                @(Html.Kendo().Button().Name("btnCancelOrderDetail").Content("取消子单").Events(e => e.Click("btnCancelOrderDetail_clicked")))
+                @(Html.Kendo().Button().Name("btnRecoveryOrderDetail").Content("恢复子单").Events(e => e.Click("btnRecoveryOrderDetail_clicked")))
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="control-label"><label for="holdTime">保留时间</label></td>
+        <td>
+            @(Html.Kendo().DateTimePicker()
+                .Name("holdDate")
+                .Format(DateTimeExtension.DateTimeWithoutSecondFormatStr)
+                .Events(e => e.Change("editControl_changed"))
+                .HtmlAttributes(new { style = "width:192px;", onclick = "openKendoDatetimePicker(this)" }))
+        </td>
+        <td class="control-label"><label for="marketType">市场分类</label></td>
+        <td>
+            @(Html.Kendo().DropDownList()
+                .Name("marketType")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .DataSource(s => { s.Read(r => r.Url(Url.Action("ListItemsForMarketCategory"))); })
+                .Events(e => e.Change("editControl_changed")))
+        </td>
+    </tr>
+    <tr>
+        <td class="control-label"><label for="depDate">离店时间</label></td>
+        <td>
+            @(Html.Kendo().DateTimePicker()
+                .Name("depDate")
+                .Format(DateTimeExtension.DateTimeWithoutSecondFormatStr)
+                .Events(e => e.Change("editControl_changed"))
+                .HtmlAttributes(new { style = "width:192px;", onclick = "openKendoDatetimePicker(this)" }))
+        </td>
+        <td class="control-label"><label for="profileComboBox">会员</label></td>
+        <td>
+            <script>
+                function onAdditionalData() {
+                    return { nameOrMobile: $("#profileComboBox").data("kendoComboBox").text() };
+                }
+            </script>
+            @(Html.Kendo().ComboBox()
+                .Name("profileComboBox")
+                .Placeholder("姓名或手机号或卡号")
+                .DataTextField("GuestName")
+                .DataValueField("Id")
+                .Template("#= MbrCardNo # | #= GuestName #, #= Mobile #").Filter("contains")
+                .AutoBind(false)
+                .MinLength(3)
+                .DataSource(e => { e.Read(r => r.Url(Url.Action("ListItemsForProfiles")).Data("onAdditionalData")).ServerFiltering(true); })
+                .Events(e => e.Change("editControl_changed")))
+        </td>
+    </tr>
+    <tr>
+        <td class="control-label"><label for="roomType">房间类型</label></td>
+        <td>
+            <script type="text/javascript">
+                function onAdditionalDataRoomType() {
+                    var arriveDateValue = $("#arriveDate").data("kendoDateTimePicker").value();
+                    var depDateValue = $("#depDate").data("kendoDateTimePicker").value();
+                    return {
+                        arrDate: arriveDateValue == null ? null : arriveDateValue.ToDateTimeString(),
+                        depDate: depDateValue == null ? null : depDateValue.ToDateTimeString(),
+                        regId: $("#regId").val(),
+                    };
+                }
+                function roomType_onDataBound() {
+                    var roomTypeId = "@ViewBag.RoomTypeId";
+                    if (roomTypeId != null && roomTypeId != undefined && roomTypeId.length > 0) {
+                        $("#roomType").data("kendoDropDownList").value(roomTypeId);
+                    }
+                }
+            </script>
+            @(Html.Kendo().DropDownList()
+                .Name("roomType")
+                .OptionLabel("请选择房间类型")
+                .DataTextField("name")
+                .DataValueField("id")
+                .Template("#= name # #= roomqty #")
+                .DataSource(s => s.Read(r => r.Action("GetRoomType", "ResOrderCustomer").Data("onAdditionalDataRoomType")))
+                .AutoBind(false)
+                .Events(e => e.DataBound("roomType_onDataBound").Change("editControl_changed")))
+        </td>
+        <td class="control-label"><label for="roomQty">房数</label></td>
+        <td>@(Html.Kendo().NumericTextBox<Int32>().Name("roomQty").Min(1).Format("n0").Decimals(0).HtmlAttributes(new Dictionary<string, object> { { "data-controltype", "editcontrol" } }))</td>
+    </tr>
+    <tr id="trRoomNo">
+        <td class="control-label"><label for="roomNo">房号</label></td>
+        <td>
+            <script type="text/javascript">
+                function onAdditionalDataRoomNo() {
+                    var arriveDateValue = $("#arriveDate").data("kendoDateTimePicker").value();
+                    var depDateValue = $("#depDate").data("kendoDateTimePicker").value();
+                    return {
+                        roomTypeId: $("#roomType").data("kendoDropDownList").value(),
+                        arrDate: arriveDateValue == null ? null : arriveDateValue.ToDateTimeString(),
+                        depDate: depDateValue == null ? null : depDateValue.ToDateTimeString(),
+                        regId: $("#regId").val(),
+                    };
+                }
+                function roomNo_onDataBound() {
+                    var roomId = "@ViewBag.RoomId";
+                    if (roomId != null && roomId != undefined && roomId.length > 0) {
+                        $("#roomNo").data("kendoDropDownList").value(roomId);
+                    }
+                }
+            </script>
+            @(Html.Kendo().DropDownList()
+                .Name("roomNo")
+                .DataTextField("roomno")
+                .DataValueField("Roomid")
+                .Template("#= roomno # #= remark #")
+                .DataSource(s => s.Read(r => r.Action("GetRoomFor", "ResOrderCustomer").Data("onAdditionalDataRoomNo")))
+                .AutoBind(false)
+                .Events(e => e.DataBound("roomNo_onDataBound").Change("editControl_changed")))
+        </td>
+        <td class="control-label"></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td class="control-label"><label for="rateCode">价格代码</label></td>
+        <td>
+            @(Html.Kendo().DropDownList()
+                .Name("rateCode")
+                .OptionLabel("请选择价格代码")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .DataSource(s => { s.Read(r => r.Url(Url.Action("ListItemsForRates"))); })
+                .Events(e => e.Change("editControl_changed")))
+            @(Html.Hidden("rateCodeChangedBbf"))@*是否有早餐（0无，1有）*@
+        </td>
+        <td class="control-label"><label for="breakfastQty">早餐份数</label></td>
+        <td>@(Html.Kendo().NumericTextBox<Int32>().Name("breakfastQty").Min(0).Format("n0").Decimals(0).HtmlAttributes(new Dictionary<string, object> { { "data-controltype", "editcontrol" } }))</td>
+    </tr>
+    <tr>
+        <td class="control-label"><label for="roomPrice">房价</label></td>
+        <td>
+            @(Html.Hidden("roomPriceJson"))
+            <span class="k-widget k-datetimepicker k-header" style="width:192px;"><span class="k-picker-wrap k-state-default"><input id="roomPrice" name="roomPrice" type="text" disabled="disabled" class="k-input k-state-disabled" /><span id="btnRatePlan" class="k-select" style="cursor:pointer;">修改</span></span></span>
+        </td>
+        <td class="control-label"><label for="special">特殊要求</label></td>
+        <td>@(Html.Kendo().TextBox().Name("special").HtmlAttributes(new Dictionary<string, object> { { "data-controltype", "editcontrol" } }))</td>
+    </tr>
+    <tr>
+        <td class="control-label"><label for="remark">备注</label></td>
+        <td colspan="3">@(Html.TextArea("remark", new Dictionary<string, object> { { "class", "k-textbox" }, { "data-controltype", "editcontrol" }, { "style", "width:430px;" } }))</td>
+    </tr>
+    <tr>
+        <td colspan="5" style="height:2px;border-bottom:1px solid #ccc;"></td>
+    </tr>
+    <tr>
+        <td colspan="5" style="height:0px;"></td>
+    </tr>
+    <tr style="display:none;">
+        <td class="control-label"><label for="customerInfoId">客人ID</label></td>
+        <td>@(Html.Hidden("customerInfoId"))</td>
+    </tr>
+    <tr>
+        <td class="control-label"><label for="guestName">客人姓名</label></td>
+        <td>
+            @(Html.Hidden("guestid"))
+            <script>function onAdditionalDataGuests() { return { guestName: $("#guestName").val() }; }</script>
+            @(Html.Kendo().AutoComplete()
+                .Name("guestName")
+                .DataTextField("GuestName")
+                .Template("#: GuestName # #: Mobile #")
+                .Filter("contains")
+                .MinLength(2)
+                .DataSource(e => { e.Read(r => r.Url(Url.Action("ListItemsForGuests")).Data("onAdditionalDataGuests")).ServerFiltering(true); })
+                .Events(e => e.Select("guestName_selected").Change("editControl_changed")))
+        </td>
+        <td class="control-label"><label for="guestMobile">手机号</label></td>
+        <td>@(Html.Kendo().TextBox().Name("guestMobile").HtmlAttributes(new Dictionary<string, object> { { "data-controltype", "editcontrol" } }))</td>
+        <td rowspan="6">
+            <div class="toolbar">
+                <h3>客人操作</h3>
+                <script type="text/x-kendo-tmpl" id="orderDetailCustomersTemplate"><li style="cursor:pointer;text-align:center;" id="#:Id#">#:GuestName#</li></script>
+                @(Html.Kendo().ListView<Gemstar.BSPMS.Hotel.Services.ResManage.ResDetailRegInfo>((Model.ResDetailInfos != null && Model.ResDetailInfos.Count > 0 && Model.ResDetailInfos[0].OrderDetailRegInfos != null) ? Model.ResDetailInfos[0].OrderDetailRegInfos : null)
+                    .Name("orderDetailCustomersListView")
+                    .TagName("ul")
+                    .HtmlAttributes(new { style = "width:84px;height:100px;border:1px solid #ccc;overflow-y:auto;" })
+                    .ClientTemplateId("orderDetailCustomersTemplate")
+                    .DataSource(d => d.ServerOperation(false).AutoSync(false).Batch(false).Model(m => m.Id("Id")))
+                    .BindTo(new List<Gemstar.BSPMS.Hotel.Services.ResManage.ResDetailRegInfo>())
+                    .Pageable(p => p.Enabled(false))
+                    .Editable(e => e.Enabled(false))
+                    .Selectable(s => s.Mode(ListViewSelectionMode.Single))
+                    .Events(e => { e.DataBound("orderDetailCustomersListView_databound"); })
+                )
+                @(Html.Kendo().Button().Name("btnAddOrderDetailRegInfo").Content("增加客人").Events(e => e.Click("btnAddOrderDetailRegInfo_clicked")))<br />
+                @(Html.Kendo().Button().Name("btnCancelOrderDetailRegInfo").Content("移除客人").Events(e => e.Click("btnCancelOrderDetailRegInfo_clicked")))
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="control-label"><label for="cerType">证件类型</label></td>
+        <td>
+            @(Html.Kendo().DropDownList()
+                .Name("cerType")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .DataSource(s => { s.Read(r => r.Url(Url.Action("ListItemsForCerType"))); })
+                .Events(e => e.Change("editControl_changed"))
+                .HtmlAttributes(new { style = "width:132px;" }))
+            @(Html.Kendo().Button().Name("scanIdButton").Content("扫描").Events(e => e.Click("scanIdButton_clicked")))
+        </td>
+        <td class="control-label"><label for="cerId">证件号</label></td>
+        <td>@(Html.Kendo().TextBox().Name("cerId").HtmlAttributes(new Dictionary<string, object> { { "data-controltype", "editcontrol" } }))</td>
+    </tr>
+    <tr>
+        <td class="control-label"><label for="gender">性别</label></td>
+        <td>
+            @(Html.Kendo().DropDownList()
+                .Name("gender")
+                .BindTo(EnumExtension.ToSelectList(typeof(Gender), EnumValueType.Text, EnumValueType.Description))
+                .Events(e => e.Change("editControl_changed")))
+        </td>
+        <td class="control-label"><label for="birthday">生日</label></td>
+        <td>
+            @(Html.Kendo().DatePicker()
+                .Name("birthday")
+                .Format(DateTimeExtension.DateFormatStr)
+                .Events(e => e.Change("editControl_changed")))
+        </td>
+    </tr>
+    <tr>
+        <td class="control-label"><label for="city">籍贯</label></td>
+        <td>@(Html.Kendo().TextBox().Name("city").HtmlAttributes(new Dictionary<string, object> { { "data-controltype", "editcontrol" } }))</td>
+        <td class="control-label"><label for="address">地址</label></td>
+        <td>@(Html.Kendo().TextBox().Name("address").HtmlAttributes(new Dictionary<string, object> { { "data-controltype", "editcontrol" } }))</td>
+    </tr>
+    <tr>
+        <td class="control-label"><label for="qq">QQ</label></td>
+        <td>@(Html.Kendo().TextBox().Name("qq").HtmlAttributes(new Dictionary<string, object> { { "data-controltype", "editcontrol" } }))</td>
+        <td class="control-label"><label for="email">邮箱</label></td>
+        <td>@(Html.Kendo().TextBox().Name("email").HtmlAttributes(new Dictionary<string, object> { { "data-controltype", "editcontrol" } }))</td>
+    </tr>
+    <tr>
+        <td class="control-label"><label for="carNo">车牌</label></td>
+        <td>@(Html.Kendo().TextBox().Name("carNo").HtmlAttributes(new Dictionary<string, object> { { "data-controltype", "editcontrol" } }))</td>
+        <td class="control-label"><label for="love">喜好</label></td>
+        <td>@(Html.Kendo().TextBox().Name("love").HtmlAttributes(new Dictionary<string, object> { { "data-controltype", "editcontrol" } }))</td>
+    </tr>
+    <tr>
+        <td colspan="5" style="height:2px;border-bottom:1px solid #ccc;"></td>
+    </tr>
+    <tr>
+        <td colspan="5" style="height:0px;"></td>
+    </tr>
+    <tr>
+        <td colspan="5">
+            @(Html.Kendo().Button().Name("btnSave").Content("保存").Events(e => e.Click("btnSave_clicked")))
+            @(Html.Kendo().Button().Name("btnSetRoom").Content("分房/入住").Events(e => e.Click("btnSetRoom_clicked")))
+            @(Html.Kendo().Button().Name("btnResReoprt").Content("预订确认单").Events(e => e.Click("resReport_clicked")))
+            @(Html.Kendo().Button().Name("btnLock").Content("门卡").Events(e => e.Click("btnLock_clicked")))
+            @(Html.Kendo().Button().Name("btnChangeRoom").Content("换房").Events(e => e.Click("btnChangeRoom_clicked")))
+            @(Html.Kendo().Button().Name("btnDelay").Content("延期").Events(e => e.Click("btnDelay_clicked")))
+            @(Html.Kendo().Button().Name("btnRelation").Content("关联房").Events(e => e.Click("btnRelation_clicked")))
+            @(Html.Kendo().Button().Name("btnResRCReoprt").Content("RC单").Events(e => e.Click("resReport_clicked")))
+        </td>
+    </tr>
+</table>

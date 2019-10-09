@@ -1,0 +1,73 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+
+
+@{
+    ViewBag.Title = "客户消费明细查询";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForEdit = false,
+        EnableScrollable = true,
+        HtmlAttributes = new { style = "width:97%;height:350px;max-height:350px; margin-top: 20px; margin-right: 20px; " },
+        ColumnConfigurator = c =>
+        {
+            c.Bound("settleBsnsdate").Title("结账营业日").Width(120);
+            c.Bound("name").Title("营业点");
+            c.Bound("regid").Title("账号");
+            c.Bound("arrDate").Title("入住时间").Width(120);
+            c.Bound("depDate").Title("离店时间").Width(120);
+            c.Bound("nights").Title("间夜数");
+            c.Bound("amount").Title("消费金额");
+            c.Bound("rateName").Title("价格代码");
+            c.Bound("rate").Title("房价");
+            c.Bound("roomTypeName").Title("房型");
+            c.Bound("roomNo").Title("房号");
+            c.Bound("remark").Title("备注").Width(130);
+
+        },
+        CustomToolbar = c =>
+        {
+            c.Template("  营业日  <input id='begintime'/>　到 <input id='endtime'/>   <input type='button' value='查询'  class='k-button' onclick = 'queryData()' />  <input type='button'  value='打印' class='k-button' onclick = 'javascript:window.print();' />  ");
+        }
+    };
+}
+
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+    @Html.Partial("_CommonQueryWindow", gridViewModel)
+}
+
+
+<script type="text/javascript">
+    $(document).ready(
+        function () {
+            $("#begintime").kendoDatePicker({ culture: "zh-CN", format: "yyyy-MM-dd" });
+            $("#begintime").val('@ViewData["begintime"]')
+            $("#endtime").kendoDatePicker({ culture: "zh-CN", format: "yyyy-MM-dd" });
+            $("#endtime").val('@ViewData["endtime"]')
+        }
+   );
+    function queryData() {
+        var beginval = $("#begintime").val();
+        var endval = $("#endtime").val();
+        var result = "@@t00客户id=" + '@ViewData["khid"]' + "&@@p01开始时间=" + beginval + "&@@p01结束时间=" + endval;
+        GetControl("#commonQueryParameterValues").val(result);
+        var grid = $("#" + "@gridId").data("kendoGrid");
+        grid.dataSource.read();
+    }
+
+</script>
+

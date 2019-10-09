@@ -1,0 +1,136 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntityProcedures;
+@using Gemstar.BSPMS.Common.Extensions;
+<style type="text/css">
+
+    #gridCancel .k-grouping-row p {
+        width:100%;
+    }
+    #gridCancel .span-r {
+        float:right;
+    }
+     #gridCancel .span-l {
+        vertical-align:sub;
+    }
+    #gridCancel .k-grid-content {
+        height:340px!important;
+    }
+</style>
+    <script type="text/javascript">
+        function onDataBoundRecord() {
+
+            //移除最前面一行核销名称
+            $("#gridCancel tbody tr:first").remove();
+            $("#gridCancel .k-grid-footer").remove();
+            //合计
+            var tr = $("#gridCancel .k-group-footer:last");
+            var consumption = $(tr).find("td:eq(3)");
+            var pay = $(tr).find("td:eq(5)");
+            consumption.text(consumption.text().replace("小", "合"));
+            pay.text(pay.text().replace("小", "合"));
+            $(".k-icon.k-i-collapse").trigger("click");
+        }
+        function SetParamRecord() {
+            var cbegin = $("#CDateBegin").val();
+            var cend = $("#CDateEnd").val();
+            return {
+                companyId: '@ViewBag.companyId',
+                dateBegin:cbegin ,
+                dateEnd: cend
+            }
+        }
+        function edit_changed() {
+            recordgridread();
+        }
+        function recordgridread() {
+            var grid = $("#gridCancel").data("kendoGrid");
+            grid.dataSource.page(1);
+        }
+        function cancelRecord(e) {
+            jConfirm("确定要取消核销", "确定", "取消", function (confirmed) {
+                if (confirmed) {
+                    debugger;
+                    //var arr = [];
+                    var checkNo = $(e).parents("tr").next().find("td:last").text();
+                    //for (var i = 0; i < count; i++) {
+                    //    var id = tr.next().find("td:last").text();
+                    //    tr = tr.next();
+                    //    arr.push(id);
+                    //}
+                    //if (arr.length <= 0) {
+                    //    jAlert("合约账务id不存在");
+                    //    return;
+                    //}
+                    //jAlert(checkNo);
+                    $.post('@Url.Action("CancelRecordLog")', { checkNo: checkNo }, function (data) {
+                        if (data.Success) {
+                            //刷新当前窗口
+                            recordgridread();
+                            //刷新父窗口
+                            grid_read();
+                        }
+                        else {
+                            jAlert(data.Data)
+                        }
+                    },'json')
+                }
+            })
+        }
+        function grid_read() {
+            $("#commonKendoWindow #gridLeft").data("kendoGrid").dataSource.read();
+            $("#commonKendoWindow #gridRight").data("kendoGrid").dataSource.read();
+        }
+        $(function () {
+            //加载默认时间
+            var data = new Date();
+            var time = new Date(data.getTime() - 1000 * 60 * 60 * 24 * 30)
+            $("#CDateBegin").val(time.toLocaleDateString())
+            $("#bntSelect").click(function () {
+                recordgridread();
+            })
+           
+        })
+    </script>
+<div style="height: 460px;padding-left: 5px;padding-right: 5px;">
+    <div style="margin-bottom:10px;">
+        <span>核销开始时间从</span> @(Html.Kendo().DateTimePicker().Name("CDateBegin").Format(DateTimeExtension.DateTimeWithoutSecondFormatStr).Events(e => e.Change("edit_changed")).HtmlAttributes(new { style = "border-bottom: 1px solid rgba(0,0,0,.075)" }))
+        <span>至</span>  @(Html.Kendo().DateTimePicker().Name("CDateEnd").Format(DateTimeExtension.DateTimeWithoutSecondFormatStr).Events(e => e.Change("edit_changed")).HtmlAttributes(new { style = "border-bottom: 1px solid rgba(0,0,0,.075)" }))
+        <button class="k-button" id="bntSelect" role="button" data-role="button">查询</button>
+    </div>
+    <div>
+        @(Html.Kendo().Grid<UpQueryCancelRecord>()
+    .Name("gridCancel")
+    .Columns(c =>
+    {
+        c.Bound(b => b.transDate).Title("发生时间");
+        c.Bound(b => b.cName).Title("营业点");
+        c.Bound(b => b.paytype).Title("项目名称");
+        c.Bound(b => b.consumptionAmount).Title("消费金额").ClientGroupFooterTemplate("小计：#:sum#").ClientGroupHeaderTemplate("#=sum#");
+        c.Bound(b => b.payAmount).Title("付款金额").ClientGroupFooterTemplate("小计：#:sum#");
+        c.Bound(b => b.remark).Title("备注");
+        c.Bound(b => b.checkDate).Title("核销时间").Hidden().ClientGroupHeaderTemplate("<span class='span-l'>核销时间：#:value#　核销金额：#:data.aggregates.payAmount.sum#</span><span class='span-r'><button class='k-button' onclick='cancelRecord(this)'>取消核销</button></span>");
+        c.Bound(b => b.id).Hidden();
+        c.Bound(b => b.checkNo).Hidden();
+    })
+    .Pageable()
+    .Sortable()
+    .Scrollable(c => c.Height("100%").Enabled(true))
+    .DataSource(d =>
+    {
+        d.Ajax().Read(r => r.Action("GetCancelRecord", "ExchangesManage").Data("SetParamRecord")).PageSize(10)
+        .Aggregates(a =>
+        {
+            a.Add(p => p.consumptionAmount).Sum();
+            a.Add(p => p.payAmount).Sum();
+            a.Add(p => p.checkDate).Min();
+            a.Add(p => p.id).Count();
+        })
+         .Group(g => g.Add(p => p.companyName))
+        .Group(g => g.AddDescending(p => p.checkDate))
+
+        ;
+    })
+    .Events(e => e.DataBound("onDataBoundRecord"))
+    .HtmlAttributes(new { style="height:410px;max-height:410px;"})
+        )
+    </div>
+</div>

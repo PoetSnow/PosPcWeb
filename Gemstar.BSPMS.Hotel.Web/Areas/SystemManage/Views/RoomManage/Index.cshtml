@@ -1,0 +1,315 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+@using Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.RoomManage;
+@{
+    var hotelItems = new List<SelectListItem>();
+    if (ViewBag.Hotels != null)
+    {
+        hotelItems.Add(new SelectListItem { Value = "", Text = "全部" });
+        foreach (var hotel in ViewBag.Hotels)
+        {
+            hotelItems.Add(new SelectListItem { Value = hotel.Hid, Text = (string.IsNullOrEmpty(hotel.Hotelshortname) ? hotel.Name : hotel.Hotelshortname) });
+        }
+    }
+}
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+@{
+    ViewBag.Title = "房间";
+
+    //父级
+    var gridFloorId = "gridFloor";
+    var keyFloorColumnName = "Pk";
+    var gridFloorModel = new KendoGridCommonViewModel()
+    {
+        onDataBound = "onDataBoundCh",
+        GridControlId = gridFloorId,
+        KeyColumnName = keyFloorColumnName,
+        JsFuncForGetAjaxQueryPara = "getFloorQueryParas",
+        EnableScrollable = true,
+        EnableFunctionForAdd = ViewBag.ishotel,
+        EnableFunctionForEdit = ViewBag.ishotel,
+        EnableFunctionForDelete = ViewBag.ishotel,
+        EnableFunctionForSave = ViewBag.ishotel,
+        EnableFunctionForQuery = false
+    };
+    var gridFloorHelper = new KendoGridEditInCellHtmlHelper<CodeList>(
+        Html,
+        Url,
+        gridFloorModel,
+        c =>
+        {
+            c.Bound(w => w.Name2).Title("分店").Hidden(ViewBag.ishotel);
+            c.Bound(w => w.Name).Title("楼层名");
+            c.Bound(w => w.Seqid).Title("排序号");
+            c.Command(e => e.Custom("房间列表").HtmlAttributes(new { onclick = "selectFloor(this)", Href = "javascript:void(0);" }))
+            .Width("110px")
+            .Title("操作");
+        },
+    c => c.Id(w => w.Id),
+       c =>
+       {
+           if (!ViewBag.ishotel)
+           {
+               c.Template(@<text>
+        分店
+        @(Html.Kendo().DropDownList().Name("Hotelname").DataTextField("Text").DataValueField("Value").BindTo(hotelItems))
+        楼层名 <input id='fname' style='height:25px;border:1px solid #ccc;width:90px;' /> <input type='button' value='查询' class='k-button k-button-icontext k-grid-commonQuery' onclick='queryData()' />
+            </text>);
+           }
+
+       },
+            null,
+"FloorManage"
+);
+
+    //子级
+
+    var floorColumnName = "@h99floorid";
+    var btnFloorShowId = "floorMemberId";
+    var gridFloorIdCh = "gridCh";
+    var keyFloorColumnNameCh = "id";
+    var gridFloorModelCh = new KendoGridCommonViewModel()
+    {
+        EnableFunctionForEdit = false,
+        onDataBound = "onDataBoundCh",
+        GridControlId = gridFloorIdCh,
+        KeyColumnName = keyFloorColumnNameCh,
+        EnableFunctionForQuery = false,
+        EnableFunctionForAdd = ViewBag.ishotel,
+        EnableFunctionForSave = ViewBag.ishotel,
+        EnableScrollable = true,
+    };
+    var gridFloorHelperCh = new KendoGridEditInCellHtmlHelper<Room>(
+        Html,
+        Url,
+        gridFloorModelCh,
+        c =>
+        {
+            c.Bound(w => w.PreFix).Title("房号前缀").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: PreFix==null?'':PreFix    #</div>").Width(100);
+            c.Bound(w => w.RoomNo).Title("房号").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: RoomNo    #</div>");
+            c.Bound(w => w.RoomTypeid).EditorTemplateName("GridForeignKey").Title("房间类型").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: RoomTypeName    #</div>").HtmlAttributes(new { onchange = "roomTypeChange('#:RoomNo#')" });
+            c.Bound(w => w.Feature).Title("房间特色").EditorTemplateName("GridMultiSelect").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: Feature==null?'':Feature    #</div>");
+            c.Bound(w => w.ChannelCode).Title("销售平台").EditorTemplateName("GridForeignKey").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: ShowChannelCodeName(ChannelCode)    #</div>");
+            c.Bound(w => w.Description).Title("房间描述").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: Description==null?'':Description    #</div>");
+            c.Bound(w => w.Tel).Title("分机号").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: Tel==null?'':Tel    #</div>");
+            c.Bound(w => w.Lockid).Title("门锁号").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: Lockid==null?'':Lockid    #</div>");
+            c.Bound(w => w.LockInfo).Title("门锁接口信息").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: LockInfo==null?'':LockInfo   #</div>");
+            c.Bound(w => w.Remark).Title("备注").ClientTemplate(@" <div  style=#: Status==51?'text-decoration:line-through;color:red;':'' #>#: Remark==null?'':Remark    #</div>");
+        },
+    c =>
+    {
+        c.Id(w => w.Id);
+    },
+    t => t.Template(@<tex>
+
+        <span style="margin-top: 5px; display: inline-block;"> <span style="cursor:default" id="floorMemberId">楼层：0层</span> <span style="cursor:default;margin-left:20px;margin-right:30px;" id="floorRoomTotal">房间数：0</span>  </span>
+        <span style="float:right;margin-right:10px;">
+            @if (ViewBag.ishotel)
+            {
+                <a onclick="batchaddGridItem_Floor()" class="k-button k-button-icontext" href="avascript:void(0);">批量增加</a>
+                <a class="k-button k-button-icontext k-grid-add" href="/SystemManage/RoomManage/AjaxQuery?gridFloor-mode=insert"><span class="k-icon k-add"></span>增加</a>
+                <a class="k-button k-button-icontext k-grid-cancel-changes" href="javascript:void(0)"><span class="k-icon k-cancel"></span>取消修改</a>
+                <a class="k-button k-button-icontext k-grid-save-changes" href="javascript:void(0)"><span class="k-icon k-update"></span>保存修改</a>
+                <a class="k-button k-button-icontext k-grid-batchDelete" href="javascript:void(0);" onclick="batchDelete('gridCh', 'id', '/SystemManage/RoomManage/BatchDelete')"><span class="k-icon k-i-unpin"></span>删除</a>
+                <a class="k-button k-button-icontext k-grid-enable" href="javascript:void(0);" onclick="enable('gridCh', 'id', '/SystemManage/RoomManage/Enable')"><span class="k-icon k-i-unlock"></span>启用</a>
+                <a class="k-button k-button-icontext k-grid-disable" href="javascript:void(0);" onclick="disable('gridCh', 'id', '/SystemManage/RoomManage/Disable')"><span class="k-icon k-i-lock"></span>禁用</a>
+            }
+        </span>
+    </tex>),
+null,
+"RoomManage"
+);
+
+}
+<div style="width:30%;float:left;">
+    @(gridFloorHelper.KendoGridEditInCell())
+</div>
+<div style="width:68%;float:right;">
+    @*@Html.Partial("_KendoGridDataRowView", gridViewModel)*@
+    @(gridFloorHelperCh.KendoGridEditInCell())
+</div>
+<input type="hidden" id="querytext" />
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridFloorModelCh)
+    @Html.Partial("_KendoGridEditInWindow", gridFloorModelCh)
+}
+<script type="text/javascript">
+
+    function queryData() {
+        var Hotelname = $("#Hotelname").val(); var fname = $("#fname").val();
+        var result = "&@@s23分店=" + Hotelname + "&@@t00关键字=" + fname;
+        $("#querytext").val(result);
+        var grid = $("#" + "@gridFloorId").data("kendoGrid");
+        grid.dataSource.read();
+    }
+
+    //显示销售平台名称
+    function ShowChannelCodeName(value) {
+        var text = "";
+        $.ajax({
+            type:"get",
+            url:"@Url.Action("getChannelCodeName")"+"?values="+value,
+            success: function (data) { 
+                text=data.Data;
+            },
+        failure: function (data) { 
+            text = data.Data;
+        },
+        async: false
+    });
+    return text;
+    }  
+
+    $(function () {
+        $(".k-grid-showquery").css("display", "none");
+        window.onresize = onResize; onResize();
+        if ("@ViewBag.ishotel" == "False") {
+            $("#gridFloor .k-grid-header th:eq(3) .k-link").click();
+        } else {
+            $("#gridFloor .k-grid-header th:eq(2) .k-link").click();
+        }
+
+    });
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#gridFloor .k-grid-toolbar").height() + 20 + 30 + 41 + 105;
+        $("#gridFloor .k-grid-content").height(allHeight - showHeight);
+        var showHeight = $("#gridCh .k-grid-toolbar").height() + 20 + 30 + 41 + 105;
+        $("#gridCh .k-grid-content").height(allHeight - showHeight);
+    }
+    function getFloorQueryParas() {
+        var proname = "up_list_pmsCodeList";
+        if ("@ViewBag.ishotel" == "False") {
+            proname = "up_list_pmsCodeList_GrpDistrib";
+        }
+        return {
+            QueryProcedureName: proname,
+            QueryParameterValues: "@@h99typeCode=06" + $("#querytext").val()
+        };
+    }
+    function getFloorQueryParasCh() {
+        return {
+            QueryProcedureName: "up_list_pmsRoom",
+            QueryParameterValues: "@@h99floorid=000000061层"
+        };
+    }
+    function gridFloor_dataBoundEnded() {
+        var firstBtn = $("[onclick='selectFloor(this)']:first");
+        if (firstBtn != null) {
+            firstBtn.click();
+        }
+    }
+    function selectFloor(column) {
+        var gridId = "@gridFloorId";
+        var keyName = "@keyFloorColumnName";
+        var ColumnName = "Name";
+        var grid = $("#" + gridId).data("kendoGrid");
+        var data = grid.dataItem($(column).parent().parent());
+        selectDoCommonQuery(data[keyName], data[ColumnName]);
+    }
+    function selectDoCommonQuery(id, name) {
+
+        document.getElementById('commonQueryParameterValues').value = ("@floorColumnName" + "=" + id);
+        var grid = $("#gridCh").data("kendoGrid");
+        $("#" + "@btnFloorShowId").html("<span></span>楼层：<font style='font-weight:bold;'>" + name + "</font>");
+        grid.dataSource.read();
+        $("#floorRoomTotal").html("<span></span>房间数：<font style='font-weight:bold;'>" + grid.dataSource.total() + "</font>");
+        GetFloorId();
+    }
+    function batchaddGridItem_Floor() {
+        var floorId = document.getElementById('commonQueryParameterValues').value;
+        floorId = floorId.replace(("@floorColumnName" + "="), "");
+        top.openKendoWindow("批量增加" + "@ViewBag.Title", "/SystemManage/RoomManage/BatchAdd", { floorId: floorId });
+    }
+    function gridread() {
+        var grid = $("#gridCh").data("kendoGrid").dataSource.read();
+        closeEditFormWindow();
+    }
+    function GetFloorId() {
+        var floorId = document.getElementById('commonQueryParameterValues').value
+        floorId = floorId.replace(("@floorColumnName" + "="), "");
+
+        if (floorId != "0") {
+            $.post('@Url.Action("GetFloorId")', { floorId: floorId }, function (e) {
+            })
+        }
+    }
+    function onDataBoundCh(e) {
+        $(".k-grid-batchDelete").find("span").addClass("k-icon k-i-unpin");
+        $(".k-grid-commonQuery").find("span").addClass("k-icon k-i-search");
+        $(".k-grid-addGridItem").find("span").addClass("k-icon k-add");
+        $(".k-grid-disable").find("span").addClass("k-icon k-i-lock");
+        $(".k-grid-enable").find("span").addClass("k-icon k-i-unlock");
+        $(".k-grid-roleMember").find("span").addClass("k-icon k-i-folder-add");
+        $(".k-grid-roleAuth").find("span").addClass("k-icon k-i-ungroup");
+        $(".k-grid-reportAuth").find("span").addClass("k-icon k-i-folder-up");
+        //取到触发事件的grid控件id传进去，以便同一界面上有多个grid时，触发不同的后续事件
+        var gridId = e.sender.wrapper.attr("id");
+        dataBoundEnd(gridId);
+        // $(".k-grid-cancel-changes").insertBefore($(".k-grid-save-changes"));
+        var cancels = $(".k-grid-cancel-changes");
+        var saves = $(".k-grid-save-changes");
+        for (var i = 0; i < cancels.length; i++) {
+            var cancel = $(cancels[i]);
+            var save = $(saves[i]);
+            cancel.insertBefore(save);
+        }
+        if (e.sender._cellId.indexOf("Ch") > 0) {
+            var grid = $("#gridCh").data("kendoGrid");
+            $("#floorRoomTotal").html("<span></span>房间数：<font style='font-weight:bold;'>" + grid.dataSource.total() + "</font>");
+        }
+    }
+    function roomTypeChange(id) {
+        var item = $("#RoomTypeid_listbox .k-state-hover");
+        SelectEvent(id, item, 0);
+    }
+    function featureClose() {
+
+        var items = $("#Feature").val()
+        if (items == null)
+            return;
+        var id = $($("#Feature").parents("tr").find("td")[1]).text().trim();
+        SelectEvent(id, items, 1);
+
+    }
+    function featureOpen() {
+
+        var id = $($("#Feature").parents("tr").find("td")[1]).text().trim();
+        var datas = $("#gridCh").data("kendoGrid").dataItems();
+        SelectEvent(id, this, 2)
+    
+    }
+    function SelectEvent(id, items, type) {
+        console.log(id+'------------'+items+'------------'+type)
+        var datas = $("#gridCh").data("kendoGrid").dataItems();
+        for (var i = 0; i < datas.length; i++) {
+            var data = datas[i];
+            if (id == "" || data.RoomNo == id) {
+                if (type == 2 && data.Feature != null) {
+                    var arr = data.Feature.split(',')
+                    if (arr.length > 0) {
+                        items.value(arr);
+                        console.log(arr);
+                    }
+                }
+                else if (type == 1) {
+                    data.Feature = items.join(',');
+                }
+                else if (type == 0) {
+                    data.RoomTypeName = items.text();
+                }
+                break;
+            }
+        }
+    }
+    function gridread() {
+        var grid = $("#gridCh").data("kendoGrid");
+        grid.dataSource.read();
+        closeEditFormWindow();
+    }
+</script>

@@ -1,0 +1,21 @@
+﻿@using Gemstar.BSPMS.Hotel.Services.EntitiesPosProcedures;
+
+@model List<up_pos_MScrollItemListResult>
+
+@{
+    if (Model != null && Model.Count > 0)
+    {
+        foreach (var temp in Model)
+        {
+
+    <div class="swiper-slide">
+
+        <img src="@temp.fileName" onclick="addQuantityImg(this)" data-id="@temp.itemId" data-code="@temp.itemCode" data-name="@temp.itemName" data-isDiscount="@temp.IsDiscount" data-isService="@temp.IsService" data-unitId="@temp.UnitId" data-unitCode="@temp.UnitCode" data-UnitName="@temp.unitName" data-price="@temp.Price " data-subclassid="@temp.SubClassid" />
+        <div class="scorlDiv">@temp.itemName</div>
+        <div class="scorlDivprice">￥@temp.Price/@temp.unitName</div>
+
+    </div>
+
+        }
+    }
+}

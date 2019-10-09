@@ -1,0 +1,134 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.RoleManage.RoleMemberViewModelGroup
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.RoleId)
+    <div id="roleMemberHotel">
+        <h3>分店列表</h3>
+        <select multiple="multiple" id="hotelSelect">
+            @foreach (var u in Model.Hotels)
+            {
+                <option value="@u.Hid">@(string.IsNullOrWhiteSpace(u.Hotelshortname) ? u.Name : u.Hotelshortname)</option>
+            }
+        </select>
+    </div>
+    <div id="roleMemberNotInSingle">
+        <h3>操作员列表</h3>
+        <select multiple="multiple" id="usersNotInRoleSelect">
+            @foreach (var u in Model.GroupUsers)
+            {
+                <option value="@u.Id">@u.Name</option>
+            }
+        </select>
+    </div>
+    <div id="roleMemberButtons">
+        <button class="k-primary k-button addSelected">&gt;添加</button>
+        <button class="k-primary k-button removeSelected">&lt;移除</button>
+        <button class="k-primary k-button addAll">&gt;&gt;添加全部</button>
+        <button class="k-primary k-button removeAll">&lt;&lt;移除全部</button>
+    </div>
+    <div id="roleMemberInSingle">
+        <h3>角色成员列表</h3>
+        <select multiple="multiple" name="roleMembers" id="usersInRoleSelect">
+            @foreach (var ur in Model.RoleMembers)
+            {
+                var h = Model.Hotels.SingleOrDefault(w => w.Hid == ur.Hid);
+                var u = Model.GroupUsers.SingleOrDefault(w => w.Id == ur.Userid);
+                if (h != null && u != null)
+                {
+                    var value = string.Format("{0}|{1}", ur.Hid, ur.Userid);
+                    var text = string.Format("{0}--{1}", (string.IsNullOrWhiteSpace(h.Hotelshortname) ? h.Name : h.Hotelshortname), u.Name);
+                <option value="@value">@text</option>
+                }
+            }
+        </select>
+    </div>
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveRoleMember($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+        $(".addSelected").click(function (e) {
+            e.preventDefault();
+            addSelected();
+        });
+        $(".removeSelected").click(function (e) {
+            e.preventDefault();
+            removeSelected();
+        });
+        $(".addAll").click(function (e) {
+            e.preventDefault();
+            addAll();
+        });
+        $(".removeAll").click(function (e) {
+            e.preventDefault();
+            removeAll();
+        });
+    });
+    function saveRoleMember(btn, successCallback) {
+        var f = $(btn)[0].form;
+        var validator = $(f).validate();
+        var roleId = $("#RoleId").val();
+        var roleMembers = [];
+        $("#usersInRoleSelect option").each(function (i, o) { roleMembers.push(o.value);});
+        if (validator.form()) {
+            $.post(
+                "@Url.Action("MemberGroup")",
+                { roleId: roleId, roleMembers: roleMembers },
+                function (data) {
+                    if (data.Success) {
+                        jAlert("保存成功");
+                    } else {
+                        //jAlert(data.Data,"知道了");
+                        ajaxErrorHandle(data);
+                    }
+                },
+                "json");
+        }
+    }
+
+    function addSelected() {
+        var $hotelSelected = $("#hotelSelect option:checked");
+        var $roleSelected = $("#usersNotInRoleSelect option:checked");
+        $hotelSelected.each(function (i, h) {
+            $roleSelected.each(function (j, r) {
+                var value = h.value + '|' + r.value;
+                var $exists = $("#usersInRoleSelect option[value='" + value + "']");
+                if ($exists.length == 0) {
+                    $("#usersInRoleSelect").append("<option value='" + value + "'>" + h.text + '--' + r.text + "</option>");
+                }
+            });
+        });
+    }
+    function addAll() {
+        var $hotelSelected = $("#hotelSelect option");
+        var $roleSelected = $("#usersNotInRoleSelect option");
+        $hotelSelected.each(function (i, h) {
+            $roleSelected.each(function (j, r) {
+                var value = h.value + '|' + r.value;
+                var $exists = $("#usersInRoleSelect option[value='" + value + "']");
+                if ($exists.length == 0) {
+                    $("#usersInRoleSelect").append("<option value='" + value + "'>" + h.text + '--' + r.text + "</option>");
+                }
+            });
+        });
+    }
+    function removeSelected() {
+        var $selected = $("#usersInRoleSelect option:checked");
+        $selected.remove();
+    }
+    function removeAll() {
+        var $selected = $("#usersInRoleSelect option");
+        $selected.remove();
+    }
+</script>

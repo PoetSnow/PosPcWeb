@@ -1,0 +1,222 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.CRM.Models.ExchangesManage.ExchangesAddViewModel
+
+<script type="text/javascript">
+    //计算金额，根据原币金额*汇率
+    function calculateCurrencyAmount(e) {
+        var item = $("#ItemId").data("kendoDropDownList").dataItem();
+        if (item != null && item != undefined && item.DcFlag == "C") {
+            var currencyAmount = $("#currencyAmount");
+            currencyAmount.val("");
+            var rate = parseFloat(item.Rate);
+            if (isNaN(rate) || rate <= 0) {
+                rate = 1.0;
+            }
+            var amount = parseFloat($("#Amount").val());
+            if (isNaN(amount)) {
+                amount = 0;
+            }
+            currencyAmount.val((amount * rate).toFixed(2));
+        }
+    }
+    //付款方式
+    function companyca_payItem_changed(e) {
+        if (e) { e.preventDefault(); }
+        //删除所有动态增加的付款处理方式参数行
+        $("#folioDynamicScript").empty();
+        $("tr.folioAddPayment").remove();
+        
+        var item = $("#ItemId").data("kendoDropDownList").dataItem();
+        if (item != null && item != undefined && item.DcFlag == "C") {
+            companyca_payActionHandle(item.Action);
+            calculateCurrencyAmount();
+        }
+    }
+    //根据入账项目的处理方式动态加载对应的界面和js方法
+    function companyca_payActionHandle(actionValue) {
+        if (actionValue == undefined)//第一次加载默认选中请选择项目，不需要加载
+            return;
+        $.post("@Url.Action("Check", "Pay",new { area= "PayManage" })", { payAction: actionValue }, function (data) {
+            if (data.Success) {
+                var payAction = createPayByAction(actionValue, { selectorForSaveButton: "#saveEditFormButton_AddSave", selectorForItem: "#ItemId", selectorForWindow: "#newCommonKendoWindow" });
+                if (payAction) {
+                    payAction.PayInit();
+                }
+            } else {
+                //jAlert(data.Data);
+                ajaxErrorHandle(data);
+            }
+        }, 'json');
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.CompanyId)
+    @Html.HiddenFor(m => m.Type)
+    @Html.HiddenFor(m=>m.Payable)
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.CompanyName)</td>
+            <td colspan="3">@Html.TextBoxFor(m => m.CompanyName, new { @class = "k-textbox k-state-disabled", style = "width:100%;", disabled = "disabled" })</td>
+            @*<td>@Html.ValidationMessageFor(m => m.CompanyName, "*")</td>*@
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Payable)</td>
+            <td colspan="3">@Html.TextBoxFor(m => m.Payable, new { @class = "k-textbox k-state-disabled", style = "width:100%;", disabled = "disabled" })</td>
+            @*<td>@Html.ValidationMessageFor(m => m.Payable, "*")</td>*@
+        </tr>
+        @if (ViewBag.Type == "D")
+        {
+            <tr>
+                <td class="textright">@Html.LabelFor(m => m.Outletcode)</td>
+                <td colspan="3">
+                    @Html.Kendo().DropDownListFor(e => e.Outletcode).DataSource(e=>e.Read(r=>r.Action("GetCodeList", "ExchangesManage"))).DataTextField("name").DataValueField("code").HtmlAttributes(new { style = " width:100%" })
+                </td>
+                @*<td>@Html.ValidationMessageFor(m => m.Outletcode, "*")</td>*@
+            </tr>
+        }   
+        <tr>
+            @if (ViewBag.Type == "C")
+            {
+                <td class="textright">@Html.Label("付款方式")</td>
+            }
+            else if (ViewBag.Type == "D")
+            {
+                <td class="textright">@Html.Label("消费项目")</td>
+            }
+            <td colspan="3">
+                @Html.Kendo().DropDownListFor(e => e.ItemId).OptionLabel(" ").HtmlAttributes(new { style = " width:100%" }).Template("#= Code #-#= Name #").DataTextField("Name").DataValueField("Id").DataSource(e => { e.Read(r => r.Action("GetItemSelectList", "ExchangesManage", new { type = ViewBag.Type, rnd = new Random().NextDouble() })); }).Events(e => e.Change("companyca_payItem_changed"))
+            </td>
+            @*<td>@Html.ValidationMessageFor(m => m.ItemId, "*")</td>*@
+        </tr>
+        <tr>
+            <td class="textright">@Html.Label(ViewBag.Type=="C" ? "原币付款金额" : "消费金额")</td>
+            <td colspan="3">@Html.TextBoxFor(m => m.Amount, new { @class = "k-textbox", style = "width:100%;", AutoComplete = "off" })</td>
+            @*<td>@Html.ValidationMessageFor(m => m.Amount, "*")</td>*@
+        </tr>
+        @if (ViewBag.Type == "C")
+        {
+            <tr class="folioAddAmountForC">
+                <td class="textright">@Html.Label("付款金额")</td>
+                <td colspan="3">@Html.TextBox("currencyAmount", "", new { @class = "k-textbox k-state-disabled", style = "width:100%;", AutoComplete = "off", disabled = "disabled" })</td>
+            </tr>
+        }
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Invno)</td>
+            <td colspan="3">@Html.TextBoxFor(m => m.Invno, new { @class = "k-textbox", style = "width:100%;", AutoComplete = "off" })</td>
+            @*<td>@Html.ValidationMessageFor(m => m.Invno, "*")</td>*@
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Remark)</td>
+            <td colspan="3">@Html.TextAreaFor(m => m.Remark, new { @class = "k-textbox", style = "width:100%;", AutoComplete = "off" })</td>
+            @*<td>@Html.ValidationMessageFor(m => m.Remark, "*")</td>*@
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" type="button" id="saveEditFormButton_AddSave" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" type="button" id="closeEditFormButton_AddSave" role="button" data-role="button">返回</button>
+    </div>
+
+    <div id="folioPayResultDiv" style="margin:5px;"></div>
+    <script type="text/javascript" src="~/Scripts/qrcode.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.qrcode.min.js"></script>
+}
+
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton_AddSave").click(function (e) {
+            e.preventDefault();
+            if ($("#Type").val() == "D") {
+                saveSecondFormData($("#saveEditFormButton_AddSave"), function () {
+                    exchangeDetail.init();
+                });
+            } else {
+                saveEditFormButton_AddSave_clicked();
+            }
+        });
+        $("#closeEditFormButton_AddSave").click(function (e) {
+            e.preventDefault();
+            closeSecondEditFormWindow();
+        });
+        document.getElementById('Amount').value = "";
+        document.getElementById('Amount').focus();
+
+        
+        $("#Amount").change(function (e) { calculateCurrencyAmount(e); });
+
+        //保存按钮点击事件，保存入账和收款
+        function saveEditFormButton_AddSave_clicked(e) {
+            if (e) {
+                e.preventDefault();
+            }
+            var f = $("#saveEditFormButton_AddSave")[0].form;
+            var validator = $(f).validate();
+            if (!validator.form()) {
+                return;
+            }
+            var item = $("#ItemId").data("kendoDropDownList").dataItem();
+            var actionValue = item.Action;
+            var addModel = {
+                CompanyId: $("#CompanyId").val(),
+                Type: $("#Type").val(),
+                CompanyName: $("#CompanyName").val(),
+                Payable: $("#Payable").val(),
+                ItemId: item.Id,
+                Amount: $("#Amount").val(),
+                Invno: $("#Invno").val(),
+                Remark: $("#Remark").val(),
+                Outletcode: " ",
+
+                FolioAmount: $("#Amount").val(),
+                FolioItemId: item.Id,
+                PayBody: "合约单位收款",
+                PayItemId: item.Id,
+                FolioRegId: " ",
+                FolioInvoNo: $("#Invno").val(),
+                FolioRemark: $("#Remark").val(),
+            };
+            //检查支付处理方式检验是否成功
+            if (actionValue) {
+                addModel.FolioItemAction = actionValue;
+                var payAction = createPayByAction(actionValue);
+                var beforeFuncResult = true;
+
+                if (payAction) {
+                    try {
+                        beforeFuncResult = payAction.PayCheck();
+                    } catch (e) { }
+                }
+
+                if (!beforeFuncResult) {
+                    return;//如果方法返回false，则不继续保存
+                }
+                //设置处理方式提交到后台的参数
+                try {
+                    payAction.PaySetPara(addModel);
+                } catch (e) { }
+            }
+            $("#saveEditFormButton_AddSave").attr("disabled", "disabled");
+            $.post("@Url.Action("Add")", addModel, function (data) {
+                if (data.Success) {
+                    //如果是待支付，并且有返回回调函数，则调用回调函数进行处理
+                    if (data.Data.Statu == "WaitPay" && data.Data.Callback !== "" && actionValue) {
+                        var payAction = createPayByAction(actionValue);
+                        try {
+                            payAction.PayAfterSave(data);
+                        } catch (e) {
+
+                        }
+                    } else {
+                        //如果是已经支付成功，则按支付成功的进行处理
+                        closeSecondEditFormWindow();
+                        exchangeDetail.init();
+                    }
+                } else {
+                    ajaxErrorHandle(data);
+                }
+            }, 'json');
+        }
+    });
+</script>

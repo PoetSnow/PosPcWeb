@@ -1,0 +1,4 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.RoleManage.AuthManageViewModel
+
+@Html.Kendo().TreeView().Name("authTree").BindTo(new List<TreeViewItemModel> { ViewBag.rootTreeNode }).Checkboxes(c => c.CheckChildren(true))@*.Events(events=>events.Check("onCheck"))*@
+

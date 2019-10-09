@@ -1,0 +1,51 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+
+@{
+    ViewBag.Title = "班次";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForEnable = true,
+        EnableFunctionForDisable = true,
+        ColumnConfigurator = c =>
+        { 
+            c.Bound("hotelName").Title("分店");
+            c.Bound("Code").Title("班次代码");
+            c.Bound("ShiftName").Title("班次名");
+            c.Bound("BeginTime").Title("开始时间");
+            c.Bound("EndTime").Title("结束时间");
+            c.Bound("LoginStatus").Title("登录状态");
+            c.Bound("Seqid").Title("排序号");
+        },
+        RowTemplate = @"<tr style=#: status==51?'text-decoration:line-through;color:red;':'' #>
+                                        <td>#: hotelname #</td>
+                                        <td>#: code #</td>
+                                        <td>#: shiftName #</td>
+                                        <td>#: beginTime #</td> 
+                                        <td>#: endTime #</td>
+                                        <td>#: loginStatus #</td>
+                                        <td>#:  seqid==null?'':seqid  #</td> 
+                                   </tr>",
+        CustomToolbar = c =>
+        {
+            //c.Custom().Name("comfirmtext").Text("<span style='float:right;display:inline-block;color:red;margin-right:50px;padding-top:8px;'>双击可修改</span>").HtmlAttributes(new { id = "comfirmtext", href = "javascript:void(0);", style = "cursor:default;" });
+        }
+    };
+}
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+   
+
+</script>

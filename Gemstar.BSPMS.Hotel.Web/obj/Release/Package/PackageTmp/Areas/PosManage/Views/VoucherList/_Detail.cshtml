@@ -1,0 +1,69 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Services.Entities;
+@using Gemstar.BSPMS.Hotel.Services.EntitiesPos
+@using System.Data;
+<style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+</style>
+<table style="margin:10px auto; width:90%;">
+    <tr>
+        <td style=" width:45%;">凭证类型：@ViewBag.vouchertype</td>
+        <td></td>
+        <td>凭证号：@ViewBag.varcharno</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>凭证日期：@ViewBag.voucherDate</td>
+        <td></td>
+        <td>备注：@ViewBag.remark</td>
+        <td></td>
+    </tr>
+</table>
+@(Html.Kendo().Grid<WhVoucherdetail>
+    ()
+    .Name("Voucherid")
+    .Columns(columns =>
+    {
+        columns.Bound("Ssubjectcode").Title("科目代码") ;
+        columns.Bound("SSubjectName").Title("科目代码名称").ClientFooterTemplate("合计:"); ;
+        columns.Bound("Saccountcode").Title("核算项目");
+        columns.Bound("SaccountName").Title("核算项目名称");
+        columns.Bound("SamountD").Title("借方金额").Format("{0:N}")
+        .ClientFooterTemplate("<div style='text-align:right;'>#=formatMoney(data.SamountD.sum)#</div>").HtmlAttributes(new { style = "text-align:right;" });
+        columns.Bound("SamountC").Title("贷方金额").Format("{0:N}")
+        .ClientFooterTemplate("<div style='text-align:right;'>#=formatMoney(data.SamountC.sum)#</div>").HtmlAttributes(new { style = "text-align:right;" });
+    })
+    .HtmlAttributes(new { style = "height: 400px;" })
+    .Scrollable()
+    .Sortable()
+    .Pageable(pageable => pageable
+    .Refresh(true)
+    .PageSizes(true)
+    .ButtonCount(5))
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .Read(read => read.Action("List", "VoucherList", new { id = ViewBag.Id }))
+    .Aggregates(a => { a.Add(w => w.SamountD).Sum(); a.Add(w => w.SamountC).Sum(); })
+    .PageSize(10)
+    )
+
+    )
+
+
+
+    <script>
+
+        function formatMoney(number, places, symbol, thousand, decimal) {
+            number = number || 0;
+            places = !isNaN(places = Math.abs(places)) ? places : 2;
+            symbol = symbol !== undefined ? symbol : "";
+            thousand = thousand || ",";
+            decimal = decimal || ".";
+            var negative = number < 0 ? "-" : "",
+                i = parseInt(number = Math.abs(+number || 0).toFixed(places), 10) + "",
+                j = (j = i.length) > 3 ? j % 3 : 0;
+            return symbol + negative + (j ? i.substr(0, j) + thousand : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "1" + thousand) + (places ? decimal + Math.abs(number - i).toFixed(places).slice(2) : "");
+        }
+    </script>

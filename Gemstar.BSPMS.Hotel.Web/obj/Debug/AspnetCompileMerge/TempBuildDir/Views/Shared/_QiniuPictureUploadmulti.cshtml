@@ -1,0 +1,108 @@
+﻿
+@Html.Hidden("ImgUploading")
+@Html.Hidden("Delimg")
+@{
+    <tr>
+        <td class="textright">添加图片</td>
+        <td colspan="4"><a id="btnUpload" class="k-button">选择图片</a><font color="red">（建议图片大小在100KB以内）</font></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td class="textright">图片预览</td>
+        <td colspan="5">
+            <div id="container" style="border:1px dashed #017dae; height:200px; width:100%; overflow-y:auto;">
+
+            </div>
+        </td>
+    </tr>
+}
+<style type="text/css">
+    .imgs {
+        border: 1px solid rgb(248,248,248);
+        height: 160px;
+        width: 160px;
+    }
+
+    .image_close {
+        position: relative;
+        left: -27px;
+        top: -139px;
+        height: 22px;
+        width: 22px;
+        cursor: pointer;
+    }
+</style>
+
+<script src="~/Qiniu/Plupload/plupload.full.min.js" type="text/javascript"></script>
+<script src="~/Qiniu/qiniu.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        var str = "@ViewBag.FileName";
+        var arr = str.split('&');
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i].replace("amp;", "") == "") {
+                continue;
+            }
+            $("#container").append("<img class='imgs' src='" + arr[i].replace("amp;", "") + "' />  <img class='image_close' title='删除' id='a_" + arr[i].replace("amp;", "") + "'  src='..\\Content\\images\\sc.png' onclick=delimg('" + arr[i].replace("amp;", "") + "') />  ");
+        }
+        var uploads = [];
+        function newUpload() {
+            //当前是第几份
+            var index = uploads.length;
+            //根据当前第几份改变绑定区域 比如第一份 绑定 class= "upImg_1"  第二份绑定 class = "upImg_2"
+            var onlyUploader = Qiniu.uploader({
+                runtimes: 'html5,flash,html4', //上传模式,依次退化
+                browse_button: 'btnUpload', //上传选择的点选按钮，**必需**
+                uptoken_url: '/Qiniu/GetUptoken',
+                unique_names: true,
+                domain: '@ViewBag.Domain',
+                max_file_size: '100mb', //最大文件体积限制
+                flash_swf_url: '/js/plupload/Moxie.swf', //引入flash,相对路径
+                max_retries: 1, //上传失败最大重试次数
+                //dragdrop: true, //开启可拖曳上传
+                //drop_element: 'upImg', //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+                chunk_size: '4mb', //分块上传时，每片的体积
+                auto_start: true, //选择文件后自动上传，若关闭需要自己绑定事件触发上传
+                init: {
+                    'Error': function (up, err, errTip) {
+                        jAlert(errTip);
+                    },
+                    'FileUploaded': function (up, file, info) {
+                        var domain = up.getOption('domain');
+                        var res = $.parseJSON(info);
+                        var sourceLink = domain + res.key;
+                        $("#container").append("<img class='imgs' src='" + sourceLink + "' />  <img class='image_close' title='删除' id='a_" + sourceLink + "'  src='..\\Content\\images\\sc.png' onclick=delimg('" + sourceLink + "') />  ");
+                        $("#FileName").val($("#FileName").val() + ($("#FileName").val() == "" ? "" :( $("#FileName").val().substring( $("#FileName").val().length-1,1)=="&"?"":"&")) + sourceLink); //保存多张图片
+                    }
+                }
+            });
+            uploads.push(onlyUploader);
+            return onlyUploader;
+        }
+        newUpload();
+
+    });
+
+    function delimg(arg)
+    {
+        $("img[src='" + arg + "']").next().remove();
+        $("img[src='" + arg + "']").remove();
+        $("#FileName").val($("#FileName").val().replace(arg + "&", "").replace(arg, ""));
+        $("#Delimg").val($("#Delimg").val() + ($("#Delimg").val() == "" ? "" : "&") + arg + "&");
+    }
+    function Savadelimg()
+    {
+        var str = $("#Delimg").val();
+        var arr = str.split('&');
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i].replace("amp;", "") == "") {
+                continue;
+            }
+            QiniuImgDelete(arr[i].replace("amp;", ""));
+        }
+    }
+    function QiniuImgDelete(arg) {
+        $.post('@Url.Action("QiniuDelete","Qiniu", new { area = "" })', { path: arg }, function (data) {
+        }, 'json');
+    }
+</script>

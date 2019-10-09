@@ -1,0 +1,123 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Areas.SystemManage.Models.CommonCodeManage.CodeListEditViewModel
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.OriginJsonData)
+    @Html.HiddenFor(m => m.Hid)
+    @Html.HiddenFor(m => m.Pk) 
+    <table class="editFormTable">
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Code)</td>
+            <td>@Html.TextBoxFor(m => m.Code, new { @class = "k-textbox", style = "width:100%;background-color:rgb(245,245,245)", @readonly= "readonly" }) </td>
+            <td>@Html.ValidationMessageFor(m => m.Code, "*")</td>
+        </tr>
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Name)</td>
+            <td>@Html.TextBoxFor(m => m.Name, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Name, "*")</td>
+        </tr>
+        @if (ViewBag.Name2 != null && ViewBag.Name2 != "税率" && ViewBag.Name2 != "免费/自用标志" && ViewBag.Name2 != "账单代码")
+        {
+            <tr>
+                <td class="textright"><label for="Name2">@ViewBag.Name2</label></td>
+                <td>@Html.TextBoxFor(m => m.Name2, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Name2, "*")</td>
+            </tr>
+        }
+        else if (ViewBag.Name2 == "税率")
+        {
+            <tr>
+                <td class="textright"><label for="Name2">@ViewBag.Name2</label></td>
+                <td>@Html.TextBoxFor(m => m.Name2, new { @class = "k-textbox", style = "width:80px;" }) %</td>
+                <td>@Html.ValidationMessageFor(m => m.Name2, "*")</td>
+            </tr>
+        }
+        else if (ViewBag.Name2 == "免费/自用标志")
+        {
+            <tr>
+                <td class="textright"><label for="Name2">@ViewBag.Name2</label></td>
+                <td>
+                    @Html.Kendo().DropDownListFor(m => m.Name2).HtmlAttributes(new { style = " width:100%" }).DataTextField("Text").DataValueField("Value").DataSource(e => { e.Read(r => r.Action("GetMakeList", "CommonCodeManage")); })
+                </td>
+
+                <td>@Html.ValidationMessageFor(m => m.Name2, "*")</td>
+            </tr>
+        }
+        else if (ViewBag.Name2 == "账单代码")
+        {
+            <tr>
+                <td class="textright"><label for="Name2">@ViewBag.Name2</label></td>
+                <td>
+                    @Html.Kendo().DropDownListFor(m => m.Name2).HtmlAttributes(new { style = " width:80px;" }).DataTextField("Text").DataValueField("Value").BindTo(new SelectListItem[] {
+                new SelectListItem { Text = "B", Value = "B" },
+                new SelectListItem { Text = "C", Value = "C" },
+                new SelectListItem { Text = "D", Value = "D" },
+                new SelectListItem { Text = "E", Value = "E" },
+                new SelectListItem { Text = "F", Value = "F" },
+                new SelectListItem { Text = "G", Value = "G" },
+                new SelectListItem { Text = "H", Value = "H" },
+                new SelectListItem { Text = "I", Value = "I" },
+                new SelectListItem { Text = "G", Value = "G" },
+                new SelectListItem { Text = "K", Value = "K" },
+                new SelectListItem { Text = "L", Value = "L" },
+                new SelectListItem { Text = "M", Value = "M" },
+                new SelectListItem { Text = "N", Value = "N" },
+                new SelectListItem { Text = "O", Value = "O" },
+                new SelectListItem { Text = "P", Value = "P" },
+                new SelectListItem { Text = "Q", Value = "Q" },
+                new SelectListItem { Text = "R", Value = "R" },
+                new SelectListItem { Text = "S", Value = "S" },
+                new SelectListItem { Text = "T", Value = "T" },
+                new SelectListItem { Text = "U", Value = "U" },
+                new SelectListItem { Text = "V", Value = "V" },
+                new SelectListItem { Text = "W", Value = "W" },
+                new SelectListItem { Text = "X", Value = "X" },
+                new SelectListItem { Text = "Y", Value = "Y" },
+                new SelectListItem { Text = "Z", Value = "Z" }
+            })
+                </td>
+
+                <td>@Html.ValidationMessageFor(m => m.Name2, "*")</td>
+            </tr>
+        }
+        @if (ViewBag.Name3 != null)
+        {
+            <tr>
+                <td class="textright"><label for="Name3">@ViewBag.Name3</label></td>
+                <td>@Html.TextBoxFor(m => m.Name3, new { @class = "k-textbox", style = "width:100%;" }) </td>
+                <td>@Html.ValidationMessageFor(m => m.Name3, "*")</td>
+            </tr>
+        }
+        
+        @if (ViewBag.Name4 != null)
+        {
+            <tr>
+                <td class="textright"><label for="Name4">@ViewBag.Name4</label></td>
+                <td>@Html.TextBoxFor(m => m.Name4, new { @class = "k-textbox", style = "width:100%;" })</td>
+                <td>@Html.ValidationMessageFor(m => m.Name4, "*")</td>
+            </tr>
+        }
+        <tr>
+            <td class="textright">@Html.LabelFor(m => m.Seqid)</td>
+            <td>@Html.TextBoxFor(m => m.Seqid, new { @class = "k-textbox", style = "width:100%;" })</td>
+            <td>@Html.ValidationMessageFor(m => m.Seqid, "*")</td>
+        </tr>
+    </table>
+    @Html.ValidationSummary()
+    <div class="formButtons">
+        <button class="k-primary k-button" id="saveEditFormButton" role="button" data-role="button">保存</button>&nbsp;&nbsp;
+        <button class="k-primary k-button" id="closeEditFormButton" role="button" data-role="button">返回</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#saveEditFormButton").click(function (e) {
+            e.preventDefault();
+            saveFormData($("#saveEditFormButton"));
+        });
+        $("#closeEditFormButton").click(function (e) {
+            e.preventDefault();
+            closeEditFormWindow();
+        });
+    });
+</script>

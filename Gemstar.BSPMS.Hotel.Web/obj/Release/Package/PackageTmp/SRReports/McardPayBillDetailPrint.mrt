@@ -1,0 +1,520 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StiSerializer version="1.02" type="Net" application="StiReport">
+  <Dictionary Ref="1" type="Dictionary" isKey="true">
+    <BusinessObjects isList="true" count="0" />
+    <Databases isList="true" count="0" />
+    <DataSources isList="true" count="1">
+      <up_pos_PosMemberCardPrint Ref="2" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
+        <Alias>up_pos_PosMemberCardPrint</Alias>
+        <Columns isList="true" count="13">
+          <value>营业点名称,System.String</value>
+          <value>会员卡号,System.String</value>
+          <value>付款类型,System.String</value>
+          <value>会员名称,System.String</value>
+          <value>原储值金额,System.String</value>
+          <value>原增值金额,System.String</value>
+          <value>支付方式,System.String</value>
+          <value>扣款金额,System.String</value>
+          <value>现储值金额,System.String</value>
+          <value>现增值金额,System.String</value>
+          <value>扣款时间,System.String</value>
+          <value>操作员,System.String</value>
+          <value>会员卡类型,System.String</value>
+        </Columns>
+        <CommandTimeout>30</CommandTimeout>
+        <Dictionary isRef="1" />
+        <Name>up_pos_PosMemberCardPrint</Name>
+        <NameInSource>192.168.1.111\server2008</NameInSource>
+        <Parameters isList="true" count="0" />
+        <SqlCommand>exec up_pos_PosMemberCardPrint '000388',12,12,'111',11,11,'0003880017',15262</SqlCommand>
+      </up_pos_PosMemberCardPrint>
+    </DataSources>
+    <Relations isList="true" count="0" />
+    <Report isRef="0" />
+    <Variables isList="true" count="0" />
+  </Dictionary>
+  <EngineVersion>EngineV2</EngineVersion>
+  <GlobalizationStrings isList="true" count="0" />
+  <MetaTags isList="true" count="0" />
+  <Pages isList="true" count="1">
+    <Page1 Ref="3" type="Page" isKey="true">
+      <Border>None;Black;2;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <Components isList="true" count="27">
+        <Text1 Ref="4" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>1.2,0.4,4.6,1.2</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,15,Bold,Point,False,134</Font>
+          <HorAlignment>Center</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text1</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>{HotelName}</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text1>
+        <Text2 Ref="5" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>1.8,1.8,3.6,1</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,12,Bold,Point,False,0</Font>
+          <HorAlignment>Center</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text2</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>消费单据</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text2>
+        <Text11 Ref="6" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0.8,5.6,2,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>8034c1a2973a49c69ae763b2adff6a35</Guid>
+          <HorAlignment>Right</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text11</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>客人名：</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text11>
+        <Text12 Ref="7" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>2.8,5.6,3.8,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>6fe903ebbde34c4bb31efd4eb56cfe25</Guid>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text12</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>{up_pos_PosMemberCardPrint.会员名称}</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text12>
+        <Text3 Ref="8" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>1,3.2,1.8,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>6b6c5d7025c148dfb4eb119cfb3acf6f</Guid>
+          <HorAlignment>Right</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text3</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>营业点：</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text3>
+        <Text4 Ref="9" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>2.8,3.2,3.8,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>4dd459516d8a42a290d0acb236ff7b54</Guid>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text4</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>{up_pos_PosMemberCardPrint.营业点名称}</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text4>
+        <Text5 Ref="10" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0.8,4,2,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>f71f9d67413f436f895a29a6103317ae</Guid>
+          <HorAlignment>Right</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text5</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>会员卡号：</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text5>
+        <Text6 Ref="11" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>2.8,4,3.8,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>6944d8dff3a448b7a90f960962d616b5</Guid>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text6</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>{up_pos_PosMemberCardPrint.会员卡号}</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text6>
+        <Text7 Ref="12" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0.8,4.8,2,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>596b0298c68840e68315b5c3e14a56f5</Guid>
+          <HorAlignment>Right</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text7</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>会员卡类型：</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text7>
+        <Text8 Ref="13" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>2.8,4.8,3.8,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>52ae2143945c4a8ab0f3a15ed0bd17e1</Guid>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text8</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>{up_pos_PosMemberCardPrint.会员卡类型}</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text8>
+        <Text9 Ref="14" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0.4,6.4,2.4,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>c48e6f70cef045f09073c78636b4b056</Guid>
+          <HorAlignment>Right</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text9</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>原储值金额：</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text9>
+        <Text10 Ref="15" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>2.8,6.4,3.8,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>bbe63e6fe343458c8da8fbda9a1bd7a0</Guid>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text10</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>{up_pos_PosMemberCardPrint.原储值金额}</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text10>
+        <Text13 Ref="16" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0.4,7.2,2.4,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>76a2f664fd1a4604987f305a4bd4380e</Guid>
+          <HorAlignment>Right</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text13</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>原增值金额：</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text13>
+        <Text14 Ref="17" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>2.8,7.2,3.8,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>86bb3e8bcf7e49e0bdff47e2bde475a5</Guid>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text14</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>{up_pos_PosMemberCardPrint.原增值金额}</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text14>
+        <Text15 Ref="18" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,11.2,2.8,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>8ee96dcbd00c4f23bd2c7a8074aec88f</Guid>
+          <HorAlignment>Right</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text15</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>当前增值金额：</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text15>
+        <Text16 Ref="19" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>2.8,11.2,3.8,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>d3dc491e72e04f8a924efd4e491506ac</Guid>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text16</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>{up_pos_PosMemberCardPrint.现增值金额}</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text16>
+        <Text17 Ref="20" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0.8,8.8,2,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>34cbb06f0a6b40abb8eb625f9ba08aca</Guid>
+          <HorAlignment>Right</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text17</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>扣款类型：</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text17>
+        <Text18 Ref="21" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>2.8,8.8,3.8,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>95fb0a639ab840589e3d854b904da532</Guid>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text18</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>{up_pos_PosMemberCardPrint.付款类型}</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text18>
+        <Text19 Ref="22" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0.8,9.6,2,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>6b73acb3af9a4e63a36a8a4bd5131f11</Guid>
+          <HorAlignment>Right</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text19</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>扣款金额：</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text19>
+        <Text20 Ref="23" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>2.8,9.6,3.8,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>00f35efb7ddd4fb0b99b02d14435bc14</Guid>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text20</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>{up_pos_PosMemberCardPrint.扣款金额}</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text20>
+        <Text21 Ref="24" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0.4,10.4,2.4,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>2b24a4a5c8434f6984f92beb0f697e31</Guid>
+          <HorAlignment>Right</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text21</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>当前储值金额：</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text21>
+        <Text22 Ref="25" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>2.8,10.4,3.8,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>251f8f2ba11a4eb48f363fc7b1bdf80e</Guid>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text22</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>{up_pos_PosMemberCardPrint.现储值金额}</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text22>
+        <Text23 Ref="26" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0.8,12,2,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>89cb19d44459495eb41f695670458436</Guid>
+          <HorAlignment>Right</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text23</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>扣款时间：</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text23>
+        <Text24 Ref="27" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>2.8,12,3.8,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>993b1e749e084d4db43d7a07c3fd480f</Guid>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text24</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>{up_pos_PosMemberCardPrint.扣款时间}</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text24>
+        <Text25 Ref="28" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0.8,12.8,2,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>b1c989afe1704ffaa1f93a919e0a56eb</Guid>
+          <HorAlignment>Right</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text25</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>操作员：</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text25>
+        <Text26 Ref="29" type="Text" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>2.8,12.8,3.8,0.8</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>宋体,9.75,Regular,Point,False,0</Font>
+          <Guid>6b9990c832ff4fc389c4e9a2c9c7d24a</Guid>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text26</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <Text>{up_pos_PosMemberCardPrint.操作员}</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text26>
+        <HorizontalLinePrimitive1 Ref="30" type="HorizontalLinePrimitive" isKey="true">
+          <ClientRectangle>0,8.4,7.2,0.0254</ClientRectangle>
+          <Color>Black</Color>
+          <EndCap Ref="31" type="Cap" isKey="true">
+            <Color>Black</Color>
+          </EndCap>
+          <Name>HorizontalLinePrimitive1</Name>
+          <Page isRef="3" />
+          <Parent isRef="3" />
+          <StartCap Ref="32" type="Cap" isKey="true">
+            <Color>Black</Color>
+          </StartCap>
+          <Style>Dash</Style>
+        </HorizontalLinePrimitive1>
+      </Components>
+      <Conditions isList="true" count="0" />
+      <Guid>b28f3f3c30c44368829bd7e0dde79cfa</Guid>
+      <Margins>1,1,1,1</Margins>
+      <Name>Page1</Name>
+      <PageHeight>29.7</PageHeight>
+      <PageWidth>10</PageWidth>
+      <Report isRef="0" />
+      <Watermark Ref="33" type="Stimulsoft.Report.Components.StiWatermark" isKey="true">
+        <Font>Arial,100</Font>
+        <TextBrush>[50:0:0:0]</TextBrush>
+      </Watermark>
+    </Page1>
+  </Pages>
+  <PreviewSettings>268435455</PreviewSettings>
+  <PrinterSettings Ref="34" type="Stimulsoft.Report.Print.StiPrinterSettings" isKey="true" />
+  <ReferencedAssemblies isList="true" count="8">
+    <value>System.Dll</value>
+    <value>System.Drawing.Dll</value>
+    <value>System.Windows.Forms.Dll</value>
+    <value>System.Data.Dll</value>
+    <value>System.Xml.Dll</value>
+    <value>Stimulsoft.Controls.Dll</value>
+    <value>Stimulsoft.Base.Dll</value>
+    <value>Stimulsoft.Report.Dll</value>
+  </ReferencedAssemblies>
+  <ReportAlias>Report</ReportAlias>
+  <ReportChanged>12/18/2018 3:28:07 PM</ReportChanged>
+  <ReportCreated>12/11/2018 11:40:02 AM</ReportCreated>
+  <ReportDescription>up_pos_PosMemberCardPrint</ReportDescription>
+  <ReportFile>C:\Users\Huxr\Desktop\McardPayBillDetailPrint.mrt</ReportFile>
+  <ReportGuid>d83c47aeea2d49969a4ba535e68b17a2</ReportGuid>
+  <ReportName>Report</ReportName>
+  <ReportUnit>Centimeters</ReportUnit>
+  <ReportVersion>2016.1.0</ReportVersion>
+  <Script>using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Data;
+using Stimulsoft.Controls;
+using Stimulsoft.Base.Drawing;
+using Stimulsoft.Report;
+using Stimulsoft.Report.Dialogs;
+using Stimulsoft.Report.Components;
+
+namespace Reports
+{
+    public class Report : Stimulsoft.Report.StiReport
+    {
+        public Report()        {
+            this.InitializeComponent();
+        }
+
+        #region StiReport Designer generated code - do not modify
+		#endregion StiReport Designer generated code - do not modify
+    }
+}
+</Script>
+  <ScriptLanguage>CSharp</ScriptLanguage>
+  <Styles isList="true" count="0" />
+</StiSerializer>

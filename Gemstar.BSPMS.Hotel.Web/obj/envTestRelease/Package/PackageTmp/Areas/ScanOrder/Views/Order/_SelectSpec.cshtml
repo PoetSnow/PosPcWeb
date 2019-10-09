@@ -1,0 +1,110 @@
+﻿@using Gemstar.BSPMS.Hotel.Web.Areas.ScanOrder.Models;
+@using Newtonsoft.Json;
+
+@model SelectSpecModel
+
+<style>
+    .layui-m-layer {
+        position: fixed !important;
+        z-index: 99999999 !important;
+    }
+</style>
+
+<input id="billDetailActions" type="hidden" value='@(JsonConvert.SerializeObject(Model.PosBillDetailActions))' />
+<input id="actionGroups" type="hidden" value='@(JsonConvert.SerializeObject(Model.ActionGroups))' />
+<input id="billDetail" type="hidden" value='@(JsonConvert.SerializeObject(Model.BillDetail))' />
+<input id="igroupid" type="hidden" value='1' />
+
+<div class="selectSpec">
+    <div class="shopCart-top"><strong style="float: left;padding: 0 15px;display: block;line-height: 30px;">选规格</strong><a href="javascript:void(0);" onclick="closeSelectSpec();"><i class="fa fa-close fa-2x" aria-hidden="true"></i></a></div>
+    @{
+        if (Model != null)
+        {
+            <ul class="mui-table-view">
+                @if (Model.PosItemPrices != null && Model.PosItemPrices.Count > 0)
+                {
+                    <li class="mui-table-view-cell selectSpec-unit">
+                        <div class="title">
+                            单位
+                        </div>
+                        <div class="list">
+                            @foreach (var item in Model.PosItemPrices)
+                            {
+                                if (item.UnitCode == Model.BillDetail.UnitCode)
+                                {
+                                    <a id="price_@item.Id" class="mui-btn spec-active" onclick="selectUnit(this)" data-id="@item.Id" data-code="@item.UnitCode" data-name="@item.Unit" data-price="@item.Price" data-default="@item.IsDefault" data-selloutstatus="@item.SelloutStatus" data-itemid="@Model.BillDetail.Itemid" data-unitId="@item.Unitid">@item.Unit</a>
+                                }
+                                else
+                                {
+                                    <a id="price_@item.Id" class="mui-btn" onclick="selectUnit(this)" data-id="@item.Id" data-code="@item.UnitCode" data-name="@item.Unit" data-price="@item.Price" data-default="@item.IsDefault" data-selloutstatus="@item.SelloutStatus" data-itemid="@Model.BillDetail.Itemid" data-unitId="@item.Unitid">@item.Unit</a>
+                                }
+                            }
+                        </div>
+                    </li>
+                }
+
+                @if (Model.PosItemActions != null && Model.PosItemActions.Count > 0)
+                {
+                    <li class="mui-table-view-cell selectSpec-action">
+                        <div class="title">
+                            作法
+                        </div>
+                        <div class="list">
+                            @Html.Partial("_ItemActionList", Model.PosItemActions)
+                        </div>
+                    </li>
+                    <li class="mui-table-view-cell selectSpec-actionGroup">
+                        <div class="title">
+                            作法分组
+                        </div>
+                        <div class="list">
+                            @Html.Partial("_ActionGroupList", Model.ActionGroups)
+                        </div>
+                    </li>
+                }
+
+                @if (Model.PosRequests != null && Model.PosRequests.Count > 0)
+                {
+                    <li class="mui-table-view-cell selectSpec-request">
+                        <div class="title">
+                            要求
+                        </div>
+                        <div class="list">
+                            @foreach (var item in Model.PosRequests)
+                            {
+                                if (item.Cname == Model.BillDetail.Request)
+                                {
+
+                                    <a class="mui-btn spec-active" onclick="selectRequest(this)" data-id="@item.Id" data-name="@item.Cname" data-iTagOperator="@item.ITagOperator">@item.Cname</a>
+                                }
+                                else
+                                {
+                                    <a class="mui-btn" onclick="selectRequest(this)" data-id="@item.Id" data-name="@item.Cname" data-iTagOperator="@item.ITagOperator">@item.Cname</a>
+                                    
+                                }
+
+
+                            }
+                        </div>
+                    </li>
+                }
+
+                <li class="mui-table-view-cell" style="padding-bottom: 0px;">
+                    <div class="title">
+                        数量
+                    </div>
+                    <div class="mui-numbox" data-numbox-min='0'>
+                        <button class="mui-btn mui-btn-numbox-minus" type="button"  >-</button>
+                        <input id="item_@Model.BillDetail.Itemid" class="mui-input-numbox" type="number" onchange="numberChange(this)"  value="@Model.BillDetail.Quantity" data-subclassid="@Model.Subclassid"  data-id="@Model.BillDetail.Itemid" data-code="@Model.BillDetail.ItemCode" data-name="@Model.BillDetail.ItemName" data-unitId="@Model.BillDetail.Unitid" data-unitCode="@Model.BillDetail.UnitCode" data-UnitName="@Model.BillDetail.UnitName" data-price="@Model.BillDetail.Price"/>
+                        <button class="mui-btn mui-btn-numbox-plus" type="button"  >+</button>
+                    </div>
+                </li>
+            </ul>
+        }
+    }
+    <div class="selectSpecSumit">
+        <button style="float:left;" type="button" class="mui-btn mui-btn" onclick=""><i class="fa fa-rmb" aria-hidden="true" style="margin-left:10px;"></i> <strong class="price">@string.Format("{0:F2}", Model.BillDetail.Amount)</strong></button>
+        <button style="float:right;" type="button" class="mui-btn mui-btn-success" onclick="addShoppingCart()">加入购物车</button>
+    </div>
+</div>
+

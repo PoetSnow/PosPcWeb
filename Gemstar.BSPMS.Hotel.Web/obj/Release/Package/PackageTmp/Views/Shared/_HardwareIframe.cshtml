@@ -1,0 +1,76 @@
+﻿<iframe id="localInterfaceFrame" src="" style="display:none"></iframe>
+<script type="text/javascript">
+    function callHardware(hardwareCallPara) {
+        postMessageToLocalInterface(hardwareCallPara);
+        console.log("开始调用硬件:");
+        console.log(hardwareCallPara);
+    }
+    function postMessageToLocalInterface(arg) {
+        var interfaceFrame = document.getElementById('localInterfaceFrame');
+        var url = "http://localhost:7800/Home";
+        if (interfaceFrame.src != url) {
+            interfaceFrame.src = url;
+            return;
+        }
+        var win = interfaceFrame.contentWindow;
+        var jsonStr = JSON.stringify(arg);
+        win.postMessage(jsonStr, "*");
+    }
+    window.onmessage = function (e) {
+        e = e || event;
+        console.log("收到从硬件调用后返回的内容:");
+        console.log(e);
+        var data = e.data;
+        if(data.Success){
+            var callbackMethodName = "hardwareCallback_" + data.Type + "_" + data.Operate;
+            console.log("硬件调用成功，开始调用回调函数:" + callbackMethodName);
+            var callbackMethod = eval(callbackMethodName);
+            if (callbackMethod) {
+                callbackMethod(data.Data);
+            }
+        }else{
+            //jAlert(data.Data, "知道了");
+            if (data.Data == "硬件接口程序版本过低") {
+                //回调函数返回失败消息，需要下载硬件接口升级包进行接口升级处理
+                console.log("下载硬件接口升级包");
+                downloadFile('@Url.Action("DownloadFile", "InterfaceSetting",new {area= "SystemManage" })')
+            } else {
+                try {//错误自定义显示
+                    var obj = $("#hardwareCallback_Error");
+                    if (obj != null && obj != undefined && obj.length > 0) {
+                        var funcName = obj.val();
+                        if ($.trim(funcName).length > 0) {
+                            var func = eval(funcName);
+                            if (typeof (func) == "function") {
+                                func(data);
+                                return;
+                            }
+                        }
+                    }
+                } catch (e) { }
+                jAlert(data.Data, "知道了");
+            }
+        }
+    }
+    function downloadFile(url) {
+        $.ajax({
+            type: "post",
+            url: url,
+            async: false,
+            success: function (data) {
+                if (data.Data == "你没有权限访问此模块，请与系统管理员联系") {
+                    jAlert("硬件接口版本过低，需要下载，你的账号没有权限下载硬件接口，请与系统管理员联系", "OK");
+                    return;
+                }
+                var hyperlink = '<a>点击确定，自动下载最新的升级包</a>'
+                jAlert(hyperlink, "确定", function () {
+                    window.open(data);
+                });
+               
+            }
+        })
+    }
+    $(document).ready(function () {
+        callHardware(null);
+    });
+</script>

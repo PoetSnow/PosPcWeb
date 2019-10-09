@@ -1,0 +1,536 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StiSerializer version="1.02" type="Net" application="StiReport">
+  <Dictionary Ref="1" type="Dictionary" isKey="true">
+    <BusinessObjects isList="true" count="0" />
+    <Databases isList="true" count="1">
+      <pos Ref="2" type="Stimulsoft.Report.Dictionary.StiSqlDatabase" isKey="true">
+        <Alias>pos</Alias>
+        <ConnectionStringEncrypted>49jzCUYF091sTKHMxGC3Xot2cy7jS/OA53ihqeFxJQONOmXrVU9RjMBcsYnoBGVei3D/Ke9cUYBHGf2NSyjgY8PEYWBPXUtt6U3dhA==</ConnectionStringEncrypted>
+        <Name>pos</Name>
+      </pos>
+    </Databases>
+    <DataSources isList="true" count="1">
+      <up_pos_rpt_BarCounterDrinkForPosShift Ref="3" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
+        <Alias>up_pos_rpt_BarCounterDrinkForPosShift</Alias>
+        <Columns isList="true" count="11">
+          <value>ORIGINAL,itemCode,编号,编号,System.String</value>
+          <value>ORIGINAL,itemid,项目id,项目id,System.String</value>
+          <value>ORIGINAL,price,单价,单价,System.String</value>
+          <value>ORIGINAL,sumQuantity,总数,总数,System.String</value>
+          <value>ORIGINAL,sumAmount,本位币金额,本位币金额,System.Decimal</value>
+          <value>ORIGINAL,sumDueamount,原币金额,原币金额,System.Decimal</value>
+          <value>ORIGINAL,sumServiceAmt,服务费,服务费,System.Decimal</value>
+          <value>ORIGINAL,itemName,项目名称,项目名称,System.String</value>
+          <value>ORIGINAL,ShuffleName,市别名称,市别名称,System.String</value>
+          <value>ORIGINAL,itemClassName,大类,大类,System.String</value>
+          <value>ORIGINAL,itemClassSeqid,大类排序,大类排序,System.String</value>
+        </Columns>
+        <CommandTimeout>30</CommandTimeout>
+        <Dictionary isRef="1" />
+        <IsCloud>False</IsCloud>
+        <Name>up_pos_rpt_BarCounterDrinkForPosShift</Name>
+        <NameInSource>pos</NameInSource>
+        <Parameters isList="true" count="0" />
+        <SqlCommand>exec up_pos_rpt_BarCounterDrinkForPosShift '000388','1','2019-01-01','2019-05-31'</SqlCommand>
+      </up_pos_rpt_BarCounterDrinkForPosShift>
+    </DataSources>
+    <Relations isList="true" count="0" />
+    <Report isRef="0" />
+    <Variables isList="true" count="5">
+      <value>,UserName,操作员,System.String,,False,False</value>
+      <value>,HotelName,酒店名称,System.String,,False,False</value>
+      <value>,QueryCondition,查询条件,System.String,,False,False</value>
+      <value>,HotelId,酒店代码,System.String,,False,False</value>
+      <value>,ReportCode,报表编号,System.String,,False,False</value>
+    </Variables>
+  </Dictionary>
+  <EngineVersion>EngineV2</EngineVersion>
+  <GlobalizationStrings isList="true" count="0" />
+  <MetaTags isList="true" count="0" />
+  <Pages isList="true" count="1">
+    <Page1 Ref="4" type="Page" isKey="true">
+      <Border>None;Black;2;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <Components isList="true" count="2">
+        <PageHeaderBand1 Ref="5" type="PageHeaderBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,0.4,27.7,2.8</ClientRectangle>
+          <Components isList="true" count="7">
+            <rptTitle Ref="6" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>8.6,0.8,6.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,14,Bold</Font>
+              <Guid>e5ea2ace4897408e9c223194da47a457</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>rptTitle</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{ReportName}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>SystemVariables</Type>
+              <VertAlignment>Center</VertAlignment>
+            </rptTitle>
+            <Text1 Ref="7" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0,2.2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,12</Font>
+              <Guid>76ef4f3cb5594416845792a0a1c456b9</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text1</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{ReportCode}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text1>
+            <Text49 Ref="8" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6.6,0,11.4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,12</Font>
+              <Guid>241634655bbf47e3a18ebe630e4acc7c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text49</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{HotelName}</Text>
+              <TextBrush>Black</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Text49>
+            <Text50 Ref="9" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0.8,3.8,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>f82fb9ca35014cb6a251b29dc59f1e8c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text50</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>打印人：{UserName}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text50>
+            <Text51 Ref="10" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>0,1.8,27.6,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>8adb30ed1dc64aa8a51869195c20ccbd</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text51</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{QueryCondition}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextOptions>HotkeyPrefix=None, LineLimit=False, RightToLeft=False, Trimming=None, WordWrap=True, Angle=0, FirstTabOffset=40, DistanceBetweenTabs=20,</TextOptions>
+              <VertAlignment>Center</VertAlignment>
+            </Text51>
+            <Text3 Ref="11" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>24.4,0,3.2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>d53815e7369a421ea5e40c98cd23558c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text3</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{PageNofM}</Text>
+              <TextBrush>Black</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Text3>
+            <Text52 Ref="12" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>22.6,0.8,5,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>微软雅黑,10</Font>
+              <Guid>7b076d24d456430d968920a1b7690b1c</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text52</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>打印时间：{Format("{0:yyyy-MM-dd HH:mm}", Time)}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text52>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Guid>7be5f959a97e4e8ebf559560ae5ec25b</Guid>
+          <Name>PageHeaderBand1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </PageHeaderBand1>
+        <CrossTab1 Ref="13" type="Stimulsoft.Report.CrossTab.StiCrossTab" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,3.4,27.6,4</ClientRectangle>
+          <Components isList="true" count="17">
+            <CrossTab1_Row1_Title Ref="14" type="CrossTitle" isKey="true">
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>0,0.45,2,0.8</ClientRectangle>
+              <Font>Arial,8</Font>
+              <Guid>8329bb5b17644a59a49d13533d5e81f7</Guid>
+              <Margins>0,0,0,0</Margins>
+              <MinSize>2,0</MinSize>
+              <Name>CrossTab1_Row1_Title</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>大类名称</Text>
+              <TextBrush>[105:105:105]</TextBrush>
+              <TypeOfComponent>Row:CrossTab1_Row1</TypeOfComponent>
+            </CrossTab1_Row1_Title>
+            <CrossTab1_RowTotal2 Ref="15" type="CrossRowTotal" isKey="true">
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>[255:255:255]</Brush>
+              <ClientRectangle>2,1.7,3.4,0.4</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8</Font>
+              <Guid>70a5f17a1ad042adb0335c69c8d731b9</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>CrossTab1_RowTotal2</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>大类合计</Text>
+              <TextBrush>Black</TextBrush>
+            </CrossTab1_RowTotal2>
+            <CrossTab1_RowTotal3 Ref="16" type="CrossRowTotal" isKey="true">
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>[255:255:255]</Brush>
+              <ClientRectangle>4,1.7,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8</Font>
+              <Guid>2571715f9c0d4408820ced1af7c0fd15</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>CrossTab1_RowTotal3</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>Total</Text>
+              <TextBrush>Black</TextBrush>
+            </CrossTab1_RowTotal3>
+            <CrossTab1_Row2_Title Ref="17" type="CrossTitle" isKey="true">
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>2,0.45,2,0.8</ClientRectangle>
+              <Font>Arial,8</Font>
+              <Guid>b687b782c54b4693bc225f07ab72a7ec</Guid>
+              <Margins>0,0,0,0</Margins>
+              <MinSize>2,0</MinSize>
+              <Name>CrossTab1_Row2_Title</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>编号</Text>
+              <TextBrush>[105:105:105]</TextBrush>
+              <TypeOfComponent>Row:CrossTab1_Row2</TypeOfComponent>
+            </CrossTab1_Row2_Title>
+            <CrossTab1_ColTotal1 Ref="18" type="CrossColumnTotal" isKey="true">
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>[255:255:255]</Brush>
+              <ClientRectangle>9.45,0.45,4,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8</Font>
+              <Guid>8946b6971fe6452f8ccc3c95e12aad8a</Guid>
+              <Margins>0,0,0,0</Margins>
+              <MinSize>2,0</MinSize>
+              <Name>CrossTab1_ColTotal1</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>实销数          实销额</Text>
+              <TextBrush>Black</TextBrush>
+            </CrossTab1_ColTotal1>
+            <CrossTab1_LeftTitle Ref="19" type="CrossTitle" isKey="true">
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>0,0,5.4,0.4</ClientRectangle>
+              <Enabled>False</Enabled>
+              <Font>Arial,8</Font>
+              <Guid>69a66b0f0c994763921b38d3a5721842</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>CrossTab1_LeftTitle</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>up_pos_rpt_BarCounterDrinkForPosShift</Text>
+              <TextBrush>[105:105:105]</TextBrush>
+              <TypeOfComponent>LeftTitle</TypeOfComponent>
+            </CrossTab1_LeftTitle>
+            <CrossTab1_RowTotal1 Ref="20" type="CrossRowTotal" isKey="true">
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>[255:255:255]</Brush>
+              <ClientRectangle>0,2.1,5.4,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8</Font>
+              <Guid>9d7615ede27e447f8c81bf092ad217af</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>CrossTab1_RowTotal1</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>总计</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </CrossTab1_RowTotal1>
+            <CrossTab1_Row3_Title Ref="21" type="CrossTitle" isKey="true">
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>4,0.45,1.4,0.8</ClientRectangle>
+              <Font>Arial,8</Font>
+              <Guid>20e65935340049d3936ca19091462024</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>CrossTab1_Row3_Title</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>项目名称</Text>
+              <TextBrush>[105:105:105]</TextBrush>
+              <TypeOfComponent>Row:CrossTab1_Row3</TypeOfComponent>
+            </CrossTab1_Row3_Title>
+            <CrossTab1_SumHeader1 Ref="22" type="Stimulsoft.Report.CrossTab.StiCrossSummaryHeader" isKey="true">
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>5.45,0.85,2,0.4</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8</Font>
+              <Guid>40c3aaa5bcae45868290359e8a47f162</Guid>
+              <Margins>0,0,0,0</Margins>
+              <MinSize>2,0</MinSize>
+              <Name>CrossTab1_SumHeader1</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>总数</Text>
+              <TextBrush>[105:105:105]</TextBrush>
+            </CrossTab1_SumHeader1>
+            <CrossTab1_SumHeader2 Ref="23" type="Stimulsoft.Report.CrossTab.StiCrossSummaryHeader" isKey="true">
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>7.45,0.85,2,0.4</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8</Font>
+              <Guid>9e19d0516ac4436b93a5a71b5b559196</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>CrossTab1_SumHeader2</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>金额</Text>
+              <TextBrush>[105:105:105]</TextBrush>
+            </CrossTab1_SumHeader2>
+            <CrossTab1_RightTitle Ref="24" type="CrossTitle" isKey="true">
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>5.45,0,8,0.4</ClientRectangle>
+              <Font>Arial,8</Font>
+              <Guid>9e4bc58ba93d44deb6993f0834965845</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>CrossTab1_RightTitle</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>市别名称</Text>
+              <TextBrush>[105:105:105]</TextBrush>
+              <TypeOfComponent>RightTitle</TypeOfComponent>
+            </CrossTab1_RightTitle>
+            <CrossTab1_Row1 Ref="25" type="CrossRow" isKey="true">
+              <Alias>大类</Alias>
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>0,1.3,2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <DisplayValue>{up_pos_rpt_BarCounterDrinkForPosShift.大类}</DisplayValue>
+              <Font>Arial,8</Font>
+              <Guid>8579e68721454b6ca697d74232a813f2</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>CrossTab1_Row1</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <ShowTotal>False</ShowTotal>
+              <Text>大类</Text>
+              <TextBrush>[105:105:105]</TextBrush>
+              <TotalGuid>9d7615ede27e447f8c81bf092ad217af</TotalGuid>
+              <Value>{up_pos_rpt_BarCounterDrinkForPosShift.大类}</Value>
+            </CrossTab1_Row1>
+            <CrossTab1_Row2 Ref="26" type="CrossRow" isKey="true">
+              <Alias>编号</Alias>
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>2,1.3,2,0.4</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <DisplayValue>{up_pos_rpt_BarCounterDrinkForPosShift.编号}</DisplayValue>
+              <Font>Arial,8</Font>
+              <Guid>4eee7a7829aa43849917f8c635441718</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>CrossTab1_Row2</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>编号</Text>
+              <TextBrush>[105:105:105]</TextBrush>
+              <TotalGuid>70a5f17a1ad042adb0335c69c8d731b9</TotalGuid>
+              <Value>{up_pos_rpt_BarCounterDrinkForPosShift.编号}</Value>
+            </CrossTab1_Row2>
+            <CrossTab1_Row3 Ref="27" type="CrossRow" isKey="true">
+              <Alias>项目名称</Alias>
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>4,1.3,1.4,0.4</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <DisplayValue>{up_pos_rpt_BarCounterDrinkForPosShift.项目名称}</DisplayValue>
+              <Font>Arial,8</Font>
+              <Guid>0fe983dc03514998bdd2d8e2c353dff3</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>CrossTab1_Row3</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <ShowTotal>False</ShowTotal>
+              <Text>项目名称</Text>
+              <TextBrush>[105:105:105]</TextBrush>
+              <TotalGuid>2571715f9c0d4408820ced1af7c0fd15</TotalGuid>
+              <Value>{up_pos_rpt_BarCounterDrinkForPosShift.项目名称}</Value>
+            </CrossTab1_Row3>
+            <CrossTab1_Column1 Ref="28" type="CrossColumn" isKey="true">
+              <Alias>市别名称</Alias>
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>5.45,0.45,4,0.4</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <DisplayValue>{up_pos_rpt_BarCounterDrinkForPosShift.市别名称}</DisplayValue>
+              <Font>Arial,8</Font>
+              <Guid>85d334df5d6943ccaca6eaf0b971b723</Guid>
+              <Margins>0,0,0,0</Margins>
+              <MinSize>2,0</MinSize>
+              <Name>CrossTab1_Column1</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>市别名称</Text>
+              <TextBrush>[105:105:105]</TextBrush>
+              <TotalGuid>8946b6971fe6452f8ccc3c95e12aad8a</TotalGuid>
+              <Value>{up_pos_rpt_BarCounterDrinkForPosShift.市别名称}</Value>
+            </CrossTab1_Column1>
+            <CrossTab1_Sum1 Ref="29" type="CrossSummary" isKey="true">
+              <Alias>总数</Alias>
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>[255:255:255]</Brush>
+              <ClientRectangle>5.45,1.3,2,0.4</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8</Font>
+              <Guid>11f1439c8f0d4f48b6104cba199099cb</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>CrossTab1_Sum1</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>0</Text>
+              <TextBrush>Black</TextBrush>
+              <Value>{up_pos_rpt_BarCounterDrinkForPosShift.总数}</Value>
+            </CrossTab1_Sum1>
+            <CrossTab1_Sum2 Ref="30" type="CrossSummary" isKey="true">
+              <Alias>本位币金额</Alias>
+              <Border>All;[155:155:155];1;Solid;False;4;Black</Border>
+              <Brush>[255:255:255]</Brush>
+              <ClientRectangle>7.45,1.3,2,0.4</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,8</Font>
+              <Guid>66f2dd4d6c30468999eb0cda560e5180</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>CrossTab1_Sum2</Name>
+              <Page isRef="4" />
+              <Parent isRef="13" />
+              <Restrictions>AllowMove, AllowResize, AllowSelect, AllowChange</Restrictions>
+              <Text>0</Text>
+              <TextBrush>Black</TextBrush>
+              <Value>{up_pos_rpt_BarCounterDrinkForPosShift.本位币金额}</Value>
+            </CrossTab1_Sum2>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <DataRelationName />
+          <DataSourceName>up_pos_rpt_BarCounterDrinkForPosShift</DataSourceName>
+          <EmptyValue />
+          <Filters isList="true" count="0" />
+          <Name>CrossTab1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+          <Sort isList="true" count="0" />
+          <SummaryDirection>LeftToRight</SummaryDirection>
+        </CrossTab1>
+      </Components>
+      <Conditions isList="true" count="0" />
+      <Guid>5a71a3331abf4965b1d3080032e7eb0d</Guid>
+      <Margins>1,1,1,1</Margins>
+      <Name>Page1</Name>
+      <Orientation>Landscape</Orientation>
+      <PageHeight>21</PageHeight>
+      <PageWidth>29.7</PageWidth>
+      <Report isRef="0" />
+      <Watermark Ref="31" type="Stimulsoft.Report.Components.StiWatermark" isKey="true">
+        <Font>Arial,100</Font>
+        <TextBrush>[50:0:0:0]</TextBrush>
+      </Watermark>
+    </Page1>
+  </Pages>
+  <PrinterSettings Ref="32" type="Stimulsoft.Report.Print.StiPrinterSettings" isKey="true" />
+  <ReferencedAssemblies isList="true" count="8">
+    <value>System.Dll</value>
+    <value>System.Drawing.Dll</value>
+    <value>System.Windows.Forms.Dll</value>
+    <value>System.Data.Dll</value>
+    <value>System.Xml.Dll</value>
+    <value>Stimulsoft.Controls.Dll</value>
+    <value>Stimulsoft.Base.Dll</value>
+    <value>Stimulsoft.Report.Dll</value>
+  </ReferencedAssemblies>
+  <ReportAlias>Report</ReportAlias>
+  <ReportChanged>5/29/2019 5:49:47 PM</ReportChanged>
+  <ReportCreated>12/28/2017 2:57:33 PM</ReportCreated>
+  <ReportDescription>up_pos_rpt_BarCounterDrinkForPosShift</ReportDescription>
+  <ReportFile>D:\BSPMS\Gemstar.BSPMS.Hotel.Web\SRReports\BarCounterDrinkForPosShift.mrt</ReportFile>
+  <ReportGuid>71ccb6fd94ff4a9cb7f51cc5235766b1</ReportGuid>
+  <ReportName>Report</ReportName>
+  <ReportUnit>Centimeters</ReportUnit>
+  <ReportVersion>2014.2.2000</ReportVersion>
+  <Script>using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Data;
+using Stimulsoft.Controls;
+using Stimulsoft.Base.Drawing;
+using Stimulsoft.Report;
+using Stimulsoft.Report.Dialogs;
+using Stimulsoft.Report.Components;
+
+namespace Reports
+{
+    public class Report : Stimulsoft.Report.StiReport
+    {
+        public Report()        {
+            this.InitializeComponent();
+        }
+
+        #region StiReport Designer generated code - do not modify
+		#endregion StiReport Designer generated code - do not modify
+    }
+}
+</Script>
+  <ScriptLanguage>CSharp</ScriptLanguage>
+  <Styles isList="true" count="0" />
+</StiSerializer>

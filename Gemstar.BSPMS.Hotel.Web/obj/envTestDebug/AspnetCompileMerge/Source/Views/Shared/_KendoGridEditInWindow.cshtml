@@ -1,0 +1,128 @@
+﻿@model Gemstar.BSPMS.Hotel.Web.Models.KendoGridBaseViewModel
+@*@Html.Partial("_KendoCommonWindow")*@@*由于通用窗口的html和js脚本已经统一放到最上层的页面中来加载，所以此处就不再加载了*@
+<script type="text/javascript">
+    $(function () {
+        var allowEdit = '@Model.EnableFunctionForEdit'.toLowerCase();
+        if (allowEdit == 'true') {
+            $("#@Model.GridControlId").on("dblclick", "tr.k-state-selected", function (e) {
+                e.preventDefault();
+                editGridItem(this);
+            });
+        }
+    });
+    function addGridItem() {
+        top.openKendoWindow("增加" + "@ViewBag.Title", "@Url.Action("Add")");
+    }
+    function saveFormData(btn, successCallback) {
+        top.saveKendoWindowFormData(btn, function () {
+            closeEditFormWindow();
+            if (typeof (successCallback) == "function") {
+                successCallback();
+            } else {
+                var grid = $("#@Model.GridControlId").data("kendoGrid");
+                grid.dataSource.read();
+            }
+        });
+    }
+    function saveSecondFormData(btn, callback) {
+        top.saveSecondKendoWindowFormData(btn, function () {
+            closeSecondEditFormWindow();
+            if (callback) callback();
+            DoRefresh();
+        });
+    }
+
+    function DoRefresh() {
+        //刷新第一个窗口中的内容
+    }
+
+    function editGridItem(row) {
+        var gridId = "@Model.GridControlId";
+        var keyName = "@Model.KeyColumnName";
+        var grid = $("#" + gridId).data("kendoGrid");
+        var data = grid.dataItem($(row)); 
+        top.openKendoWindow("修改" + "@ViewBag.Title", "@Url.Action("Edit")", { id: data[keyName] });
+    }
+
+    function gridItemDetail(column) {
+        var gridId = "@Model.GridControlId";
+        var keyName = "@Model.KeyColumnName";
+        var grid = $("#" + gridId).data("kendoGrid");
+        var data = grid.dataItem($(column).parent().parent());
+        top.openKendoWindow("@ViewBag.Title" + "详细", "@Url.Action("Detail")", { id: data[keyName] });
+    }
+     //会员卡有效期延期
+    function delayValidDate(gridId, keyName, url) {
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要延期的数据行");
+        } else {
+            var ids = [];
+            for (var i = 0; i < selectedRows.length; i++) {
+                var row = selectedRows[i];
+                var data = grid.dataItem(row);
+                ids.push(data[keyName]);
+            }
+            top.openKendoWindow("批量延期", "@Url.Action("Delay")", { id: ids.join(",") });
+        }
+    }
+
+    //更换业务员
+    function updateSale(gridId, keyName, url) {
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要更换业务员的数据行");
+        } else {
+            var ids = [];
+            for (var i = 0; i < selectedRows.length; i++) {
+                var row = selectedRows[i];
+                var data = grid.dataItem(row);
+                ids.push(data[keyName]);
+            }
+            top.openKendoWindow("更换业务员", "@Url.Action("UpdateSales")", { id: ids.join(",") });
+        }
+    }
+
+    //批量积分调整
+    function updateScore(gridId, keyName, url) {
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要积分调整的数据行");
+        } else {
+            var ids = [];
+            for (var i = 0; i < selectedRows.length; i++) {
+                var row = selectedRows[i];
+                var data = grid.dataItem(row);
+                ids.push(data[keyName]);
+            }
+            top.openKendoWindow("批量积分调整", "@Url.Action("UpdateScore")", { id: ids.join(",") });
+        }
+    }
+    //批量发放优惠券
+    function giveCoupon(gridId, keyName, url) {
+        var grid = $("#" + gridId).data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length == 0) {
+            jAlert("请选择要发放的数据行");
+        } else {
+            var ids = [];
+            for (var i = 0; i < selectedRows.length; i++) {
+                var row = selectedRows[i];
+                var data = grid.dataItem(row);
+                ids.push(data[keyName]);
+            }
+            //jAlert(ids.join(","));
+            top.openKendoWindow("批量发放优惠券", "@Url.Action("GiveCoupon")", { id: ids.join(",") });
+        }
+    }
+    function closeEditFormWindow() {
+        top.closeKendoWindow();
+    }
+    function closeSecondEditFormWindow() {
+        top.closeSecondKendoWindow();
+    }
+
+</script>

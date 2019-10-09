@@ -1,0 +1,89 @@
+﻿@using Gemstar.BSPMS.Common.Tools;
+@using Gemstar.BSPMS.Hotel.Web.Models;
+
+<style type="text/css">
+    body {
+        overflow-y:hidden;
+    }
+</style>
+@{
+    ViewBag.Title = "应收账往来";
+
+    var queryModel = ViewBag.commonQueryModel as CommonQueryModel;
+    var gridId = queryModel == null ? "grid" : queryModel.GridControlId;
+    var keyColumnName = "id";
+    var gridViewModel = new KendoGridForDataRowViewModel
+    {
+        GridControlId = gridId,
+        KeyColumnName = keyColumnName,
+        EnableFunctionForEnable = false,
+        EnableFunctionForDisable = false,
+        EnableFunctionForAdd = false,
+        EnableFunctionForDelete = false,
+        EnableFunctionForEdit = true,
+        EnableFunctionForQuery = false,
+        EnableScrollable=true,
+        ColumnConfigurator = c =>
+        {
+            c.Bound("code").Title("单位代码");
+            c.Bound("name").Title("单位名称");
+            c.Bound("amount").Title("未核销挂账");
+            c.Bound("payamount").Title("未核销付款");
+            c.Bound("balance").Title("期末余额");
+        },
+        CustomToolbar = c =>
+        {
+            c.Template(@"<span class='span-sub'>挂账截止日期</span> <input id='enddate' style='height:24px;' />　 
+                           <span class='span-sub'>模糊查询：</span> 
+                           <span><input class='k-textbox' id='companyname' type='text' placeholder='代码/名称' style='height: 31px;'/></span>
+                           <a class='select-icon' href='javascript: queryData(); '></a>
+                           <input type='text' style='display:none;' id='tpval'/>
+                           <font style='color:red;float: right; margin-right: 10px;margin-top:8px;'>双击进入往来操作</font>");
+        }
+    };
+}
+
+@Html.Partial("_KendoGridDataRowView", gridViewModel)
+
+
+@section scripts{
+    @Html.Partial("_KendoGridEvents", gridViewModel)
+    @Html.Partial("_KendoGridEditInWindow", gridViewModel)
+}
+<script type="text/javascript">
+    //报表查询
+    $(function () {
+        window.onresize = onResize; onResize();
+        $("#enddate").kendoDatePicker({ culture: "zh-CN", format: "yyyy-MM-dd" });
+        $("#enddate").change(function () {
+            queryData();
+        })
+    });
+    function queryData() {
+        var Enddate = $("#enddate").val();
+        var Companyname = $("#companyname").val();
+        var result = "@@t00挂账截止日期=" + Enddate + "&@@t00合约单位名称=" + Companyname;
+        GetControl("#commonQueryParameterValues").val(result);
+        Gridread();
+    }
+    function Gridread() {
+        var grid = $("#" + "@gridId").data("kendoGrid");
+        grid.dataSource.page(1);
+        grid.dataSource.read();
+    }
+    function exchangesGridread()
+    {
+        var grid = $("#" + "@gridId").data("kendoGrid");
+        grid.dataSource.read();
+    }
+    $("#companyname").keydown(function (e) {
+        if (e.keyCode == 13) {
+            queryData();
+        }
+    });
+    function onResize() {
+        var allHeight = $("#mainContent", window.top.document).height();
+        var showHeight = $("#" + "@gridId"+" .k-grid-toolbar").height() + 20 + 30 + 170;
+        $("#" + "@gridId" + " .k-grid-content").height(allHeight - showHeight);
+    }
+</script>
